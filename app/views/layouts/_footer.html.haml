@@ -1,0 +1,37 @@
+%footer.footer
+  .footer-logo
+    = link_to image_tag(asset_pack_path('media/mi_classrooms/images/mi_classrooms_logo.png'),alt: "#{(t :sitename)} Logo, link to home page.", id: root_path(anchor: 'page-bottom')), root_path
+
+  %nav.footer-links
+    .main-links
+      = link_to 'About', about_path
+      = link_to 'Contact', contact_path
+      = link_to 'Privacy', privacy_path
+
+      -# - if current_user
+      -#   = link_to("Log out.", destroy_user_session_path, method: :delete)
+      -# - else
+      -#   = link_to('Login', new_user_session_path)
+
+    .copyright
+      = link_to about_path do
+        .statement= "© 2019 - Copyright - #{t :sitename}"
+        / .all-rights-reserved= "All Rights Reserved"
+  .footer-social
+    %nav.social-links
+
+      = link_to twitter_path, target: '_blank' do
+        .social
+          %i.fab.fa-twitter
+      = link_to contact_path do
+        .social
+          %i.fas.fa-envelope
+      .social
+        %i.fas.fa-podcast
+      = link_to github_path, target: '_blank' do
+        .social
+          %i.fab.fa-github
+
+      = link_to linkedin_path, target: '_blank' do
+        .social
+          %i.fab.fa-linkedin-in

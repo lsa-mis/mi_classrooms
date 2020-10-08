@@ -1,0 +1,9 @@
+.flash-messages
+  - flash.each do |key, value|
+    %div{:class => "#{flash_class(key.to_sym)} alert "}
+      .alert-close{"aria-label" => "Close", "data-dismiss" => "alert", :onclick => "this.parentElement.style.display='none'"}
+        x
+      .alert-severity
+        %i{:class => "fas fa-#{severity_icon(key.to_sym)}"}
+        = "#{key.to_s.titleize}"
+      = value

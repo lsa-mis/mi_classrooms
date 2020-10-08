@@ -1,0 +1,48 @@
+footer
+  @apply bottom-0 w-full bg-gray-400 p-2 flex flex-col content-center self-center justify-around
+  @screen sm
+    @apply flex-row
+  @screen md
+    // @apply bg-green
+
+.footer-logo
+  @apply mx-auto
+  img
+    @apply h-12 w-12 rounded-full
+  @screen sm
+    @apply w-1/4 mx-0
+
+.footer-links
+  @apply w-auto flex flex-col content-center self-center justify-center
+  a
+    @apply no-underline
+  .main-links
+    @apply  content-center self-center justify-center
+    a
+      @apply px-3 text-lg text-blue-800
+      &:hover
+        @apply no-underline text-blue-700
+      @screen sm
+        @apply text-sm px-1
+  .copyright
+    a
+      @apply text-gray-700 text-sm font-light block self-center
+      &:hover
+        @apply no-underline text-blue-800
+.footer-social
+  @apply  w-1/4 flex content-center self-center justify-center
+.social-links
+  @apply flex flex-row mr-2
+.social
+  @apply flex items-center justify-center text-gray-700 font-semibold border text-sm border-blue-700 rounded-full mx-1 h-8 w-8 bg-white
+  &:hover
+    @apply bg-blue-700 text-white
+
+.footer-social
+  @apply  w-1/4 flex content-center self-center justify-center
+.social-links
+  @apply flex flex-row mr-2
+.social
+  @apply flex items-center justify-center text-gray-700 font-semibold border-2 text-xs border-blue-500 rounded-full mx-1 h-8 w-8 bg-blue-100
+  &:hover
+    @apply bg-blue-300 text-white
