@@ -35,3 +35,5 @@
 yarn-debug.log*
 .yarn-integrity
 working_files/
+
+uploads/
