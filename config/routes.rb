@@ -16,4 +16,5 @@ Rails.application.routes.draw do
   get 'pages/project_status'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   resources 'feedbacks', only: [:create]
+  resources :buildings
 end

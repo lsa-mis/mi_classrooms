@@ -1,0 +1,43 @@
+= form_for @building do |f|
+  - if @building.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@building.errors.count, "error")} prohibited this building from being saved:"
+      %ul
+        - @building.errors.full_messages.each do |message|
+          %li= message
+
+  .field
+    = f.label :bldrecnbr
+    = f.number_field :bldrecnbr
+  .field
+    = f.label :latitude
+    = f.text_field :latitude
+  .field
+    = f.label :longitude
+    = f.text_field :longitude
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :nick_name
+    = f.text_field :nick_name
+  .field
+    = f.label :abbreviation
+    = f.text_field :abbreviation
+  .field
+    = f.label :address
+    = f.text_field :address
+  .field
+    = f.label :city
+    = f.text_field :city
+  .field
+    = f.label :state
+    = f.text_field :state
+  .field
+    = f.label :zip
+    = f.text_field :zip
+  .field
+    = f.label :country
+    = f.text_field :country
+  .actions
+    = f.submit 'Save'
