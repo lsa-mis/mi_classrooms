@@ -16,11 +16,19 @@ Things you may want to cover:
 
 
 * Ruby version
+  ## Ruby 2.7.2
+  ## Rails 6.1 (edge)
 
 * System dependencies
 
-    ## Authorization - DEVISE
-     This application uses Devise for user authorization.
+    ## Authorization
+     - Devise:  This application uses Devise for user authorization.
+     - omniauth-google-oauth2 (OAth configured for local domain)
+     - ldap_lookup used to gather user information (especially group affiliation)
+
+    ## Background Jobs
+      Sidekiq 6.x
+      Redis 6.x
 
 
 * Configuration
