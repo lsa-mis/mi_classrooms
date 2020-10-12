@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/rails/rails.git
-  revision: e44b3419d44b5fa6e66305fe703f34bb63932593
+  revision: 9492339979e94570dee00d071be0ef255065837a
   specs:
     actioncable (6.1.0.alpha)
       actionpack (= 6.1.0.alpha)
@@ -90,9 +90,9 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     airbrussh (1.4.0)
       sshkit (>= 1.6.1, != 1.7.0)
-    annotate (2.7.5)
+    annotate (3.1.1)
       activerecord (>= 3.2, < 7.0)
-      rake (>= 10.4, < 13.0)
+      rake (>= 10.4, < 14.0)
     ast (2.4.1)
     bcrypt (3.1.16)
     bindex (0.8.1)
@@ -153,6 +153,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     ffaker (2.17.0)
     ffi (1.13.1)
+    geocoder (1.6.4)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     haml (5.2.0)
@@ -231,8 +232,6 @@ GEM
     puma (4.3.6)
       nio4r (~> 2.0)
     rack (2.2.3)
-    rack-protection (2.1.0)
-      rack
     rack-proxy (0.6.5)
       rack
     rack-test (1.1.0)
@@ -243,11 +242,11 @@ GEM
     rails-html-sanitizer (1.3.0)
       loofah (~> 2.3)
     rainbow (3.0.0)
-    rake (12.3.3)
+    rake (13.0.1)
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    redis (4.1.4)
+    redis (4.2.2)
     regexp_parser (1.8.1)
     responders (3.0.1)
       actionpack (>= 5.0)
@@ -287,11 +286,10 @@ GEM
     sexp_processor (4.15.1)
     shoulda-matchers (4.4.1)
       activesupport (>= 4.2.0)
-    sidekiq (5.2.9)
-      connection_pool (~> 2.2, >= 2.2.2)
+    sidekiq (6.1.2)
+      connection_pool (>= 2.2.2)
       rack (~> 2.0)
-      rack-protection (>= 1.5.0)
-      redis (>= 3.3.5, < 4.2)
+      redis (>= 4.2.0)
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -344,7 +342,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  annotate (~> 2.7)
+  annotate (~> 3.1.1)
   bootsnap (>= 1.4.3)
   capistrano
   capistrano-bundler
@@ -358,6 +356,7 @@ DEPENDENCIES
   erb2haml
   factory_bot_rails
   ffaker
+  geocoder
   haml-rails
   jbuilder (~> 2.7)
   listen (>= 3.0.5, < 3.2)
@@ -370,7 +369,7 @@ DEPENDENCIES
   rubocop-performance
   sassc-rails
   shoulda-matchers
-  sidekiq (~> 5.0)
+  sidekiq (~> 6.1.0)
   spring
   spring-watcher-listen (~> 2.0.0)
   standard

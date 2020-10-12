@@ -26,19 +26,16 @@ gem "bootsnap", ">= 1.4.3", require: false
 # gem 'administrate', '~> 0.8.1'
 gem "haml-rails"
 gem 'sassc-rails'
-gem "sidekiq", "~> 5.0"
+gem "sidekiq", "~> 6.1.0"
 gem "uglifier"
-# gem 'devise', '~> 4.6.2'
+gem "geocoder"
 # gem 'gravatar_image_tag', github: 'mdeering/gravatar_image_tag'
-# gem 'omniauth-facebook', '~> 4.0'
-# gem 'omniauth-twitter', '~> 1.4'
-# gem 'omniauth-github', '~> 1.3'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "pry"
   gem "factory_bot_rails"
-  gem "annotate", "~> 2.7"
+  gem "annotate", "~> 3.1.1"
   gem "standard"
   gem "rubocop-performance"
 end
