@@ -11,9 +11,8 @@ var Turbolinks = require("turbolinks")
 Turbolinks.start()
 
 // Specific frontend applications
-import 'mi_classrooms'
+// import 'mi_classrooms'
 
-import 'mi_classrooms/stylesheets/_variables.sass'
 import 'mi_classrooms/stylesheets/application.sass'
 import 'mi_classrooms/stylesheets/_header.sass'
 import 'mi_classrooms/stylesheets/_flash_errors.sass'
@@ -27,19 +26,5 @@ require.context('../mi_classrooms/images/', true, /.(gif|jpg|jpeg|png|svg)$/)
 // require('trix')
 // require('@rails/actiontext')
 // import 'trix/dist/trix.css'
-
-document.addEventListener('turbolinks:load', () => {
-
-  FontAwesome.dom.i2svg();
-  function highlightCurrent() {
-    const curPage = document.URL;
-    const links = document.getElementsByTagName('a');
-    for (let link of links) {
-      if (link.href == curPage) {
-        link.classList.add("current");
-      }
-    }
-  }
-});
 
 import "controllers"
