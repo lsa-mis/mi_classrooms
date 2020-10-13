@@ -32,33 +32,42 @@ class BuildingsImporter
     end
   end
 
-  def update_geocoding(building)
-    if building.address != "#{row["BLDSTREETNBR"]}  #{row["BLDSTREETDIR"]}  #{row["BLDSTREETNAME"]}".gsub(/\s+/, " ")
-      GeocodeBuildingJob.perform_later(@building.id)
-    end
-  end
-
-  def geocode_buildings
-    Building.find_each { |b| GeocodeBuildingJob.perform_later(b.id) }
-  end
 
   def update_building(row)
+
     @building = Building.find_by(bldrecnbr: row["BLDRECNBR"].to_i)
+
+
     if @building.update(bldrecnbr: row["BLDRECNBR"], name: row["BLD_DESCR50"], nick_name: row["BLD_DESCR"], abbreviation: row["BLD_DESCRSHORT"], address: " #{row["BLDSTREETNBR"]}  #{row["BLDSTREETDIR"]}  #{row["BLDSTREETNAME"]}".strip.gsub(/\s+/, " "), city: row["BLDCITY"], state: row["BLDSTATE"], zip: row["BLDPOSTAL"], country: row["BLDCOUNTRY"])
-      # puts "UPDATED #{row['BLDRECNBR']}"
-      GeocodeBuildingJob.perform_later(@building.id)
+
+      if @building.save
+        GeocodeBuildingJob.perform_later @building
+        building_logger.info "Created: #{row["BLDRECNBR"]}"
+      else
+        building_logger.debug "Could not save #{row["BLDRECNBR"]} because : #{@building.errors.messages}"
+      end
     end
   end
 
   def create_building(row)
-    @building = Building.new(id: row["BLDRECNBR"], bldrecnbr: row["BLDRECNBR"], name: row["BLD_DESCR50"], nick_name: row["BLD_DESCR"], abbreviation: row["BLD_DESCRSHORT"], address: "#{row["BLDSTREETNBR"]}  #{row["BLDSTREETDIR"]}  #{row["BLDSTREETNAME"]}".strip.gsub(/\s+/, " "), city: row["BLDCITY"], state: row["BLDSTATE"], zip: row["BLDPOSTAL"], country: row["BLDCOUNTRY"])
+    @building = Building.new( bldrecnbr: row["BLDRECNBR"], name: row["BLD_DESCR50"], nick_name: row["BLD_DESCR"], abbreviation: row["BLD_DESCRSHORT"], address: "#{row["BLDSTREETNBR"]}  #{row["BLDSTREETDIR"]}  #{row["BLDSTREETNAME"]}".strip.gsub(/\s+/, " "), city: row["BLDCITY"], state: row["BLDSTATE"], zip: row["BLDPOSTAL"], country: row["BLDCOUNTRY"])
 
     if @building.save
-      GeocodeBuildingJob.perform_later(@building.id)
+      GeocodeBuildingJob.perform_later(@building)
       building_logger.info "Created: #{row["BLDRECNBR"]}"
     else
       building_logger.debug "Could not save #{row["BLDRECNBR"]} because : #{@building.errors.messages}"
     end
+  end
+
+  def update_geocoding(building)
+    if building.address != "#{row["BLDSTREETNBR"]}  #{row["BLDSTREETDIR"]}  #{row["BLDSTREETNAME"]}".gsub(/\s+/, " ")
+      GeocodeBuildingJob.perform_later(building)
+    end
+  end
+
+  def geocode_buildings
+    Building.find_each { |b| GeocodeBuildingJob.perform_later(b) }
   end
 
   def find_building(row_bldrecnbr)
