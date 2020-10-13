@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_12_144235) do
+ActiveRecord::Schema.define(version: 2020_10_13_193636) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,8 +43,7 @@ ActiveRecord::Schema.define(version: 2020_10_12_144235) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "buildings", id: false, force: :cascade do |t|
-    t.integer "bldrecnbr"
+  create_table "buildings", primary_key: "bldrecnbr", force: :cascade do |t|
     t.float "latitude"
     t.float "longitude"
     t.string "name"
@@ -73,6 +72,22 @@ ActiveRecord::Schema.define(version: 2020_10_12_144235) do
     t.index ["user_id"], name: "index_omni_auth_services_on_user_id"
   end
 
+  create_table "rooms", primary_key: "rmrecnbr", force: :cascade do |t|
+    t.string "floor"
+    t.string "room_number"
+    t.string "rmtyp_description"
+    t.integer "dept_id"
+    t.string "dept_grp"
+    t.string "dept_description"
+    t.integer "square_feet"
+    t.integer "instructional_seating_count"
+    t.boolean "visible"
+    t.bigint "buidling_bldrecnbr", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["buidling_bldrecnbr"], name: "index_rooms_on_buidling_bldrecnbr"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -89,4 +104,5 @@ ActiveRecord::Schema.define(version: 2020_10_12_144235) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "omni_auth_services", "users"
+  add_foreign_key "rooms", "buildings", column: "buidling_bldrecnbr", primary_key: "bldrecnbr"
 end

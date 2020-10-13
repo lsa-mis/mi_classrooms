@@ -1,0 +1,41 @@
+%h1 Listing rooms
+
+%table
+  %thead
+    %tr
+      %th Rmrecnbr
+      %th Floor
+      %th Room number
+      %th Rmtyp description
+      %th Dept
+      %th Dept grp
+      %th Dept description
+      %th Square feet
+      %th Instructional seating count
+      %th Visible
+      %th Buidling
+      %th
+      %th
+      %th
+
+  %tbody
+    - @rooms.each do |room|
+      %tr
+        %td= room.rmrecnbr
+        %td= room.floor
+        %td= room.room_number
+        %td= room.rmtyp_description
+        %td= room.dept_id
+        %td= room.dept_grp
+        %td= room.dept_description
+        %td= room.square_feet
+        %td= room.instructional_seating_count
+        %td= room.visible
+        %td= room.buidling
+        %td= link_to 'Show', room
+        %td= link_to 'Edit', edit_room_path(room)
+        %td= link_to 'Destroy', room, method: :delete, data: { confirm: 'Are you sure?' }
+
+%br
+
+= link_to 'New Room', new_room_path
