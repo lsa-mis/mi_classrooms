@@ -29,6 +29,7 @@ gem 'sassc-rails'
 gem "sidekiq", "~> 6.1.0"
 gem "uglifier"
 gem "geocoder"
+gem "pagy"
 # gem 'gravatar_image_tag', github: 'mdeering/gravatar_image_tag'
 
 group :development, :test do

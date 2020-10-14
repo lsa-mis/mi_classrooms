@@ -1,10 +1,12 @@
 class BuildingsController < ApplicationController
+
   before_action :set_building, only: [:show, :edit, :update, :destroy]
 
   # GET /buildings
   # GET /buildings.json
   def index
     @buildings = Building.all
+    @pagy, @buildings = pagy(@buildings)
   end
 
   # GET /buildings/1

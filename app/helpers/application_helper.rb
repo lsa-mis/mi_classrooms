@@ -1,4 +1,6 @@
 module ApplicationHelper
+  include Pagy::Frontend
+
   # Returns the full title on a per-page basis.
   def page_title
     base_title = (t :site_name)
@@ -8,6 +10,7 @@ module ApplicationHelper
       "#{@page_title} | #{base_title}"
     end
   end
+
 
   def flash_class(level)
     case level
