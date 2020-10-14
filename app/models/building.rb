@@ -18,7 +18,8 @@
 #
 class Building < ApplicationRecord
   self.primary_key = 'bldrecnbr'
-  # has_many :rooms, primary_key: 'bldrecnbr', foreign_key: 'building_bldrecnbr'
+  has_many :rooms, primary_key: 'bldrecnbr', foreign_key: 'building_bldrecnbr'
+
   geocoded_by :address # can also be an IP address
 
 end
