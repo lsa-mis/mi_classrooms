@@ -4,36 +4,37 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "2.7.2"
 
 # Bundle edge Rails instead:
-gem 'rails', github: 'rails/rails'
-# gem 'rails', '~> 6.0.3'
+gem "rails", github: "rails/rails"
+# gem "rails", "~> 6.0.3"
 
 # Use postgresql as the database for Active Record
 gem "pg", ">= 0.18", "< 2.0"
 # Use Puma as the app server
 gem "puma"
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-# gem 'webpacker', git: 'https://github.com/rails/webpacker.git'
-gem 'webpacker', '~> 5.2.1'
+# gem "webpacker", git: "https://github.com/rails/webpacker.git"
+gem "webpacker", "~> 5.2.1"
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jbuilder", "~> 2.7"
 # Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 4.0'
+# gem "redis", "~> 4.0"
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+# gem "bcrypt", "~> 3.1.7"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.3", require: false
-# gem 'administrate', '~> 0.8.1'
+# gem "administrate", "~> 0.8.1"
 gem "haml-rails"
-gem 'sassc-rails'
+gem "sassc-rails"
 gem "sidekiq", "~> 6.1.0"
 gem "uglifier"
 gem "geocoder"
 gem "pagy"
-# gem 'gravatar_image_tag', github: 'mdeering/gravatar_image_tag'
+gem "pg_search"
+# gem "gravatar_image_tag", github: "mdeering/gravatar_image_tag"
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  # Call "byebug" anywhere in the code to stop execution and get a debugger console
   gem "pry"
   gem "factory_bot_rails"
   gem "annotate", "~> 3.1.1"
@@ -69,5 +70,5 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem 'devise'
-gem 'omniauth-google-oauth2'
+gem "devise"
+gem "omniauth-google-oauth2"
