@@ -248,10 +248,12 @@ CREATE TABLE public.rooms (
     dept_id integer,
     dept_grp character varying,
     dept_description character varying,
+    facility_code_heprod character varying,
     square_feet integer,
     instructional_seating_count integer,
+    characteristics text[] DEFAULT '{}'::text[],
     visible boolean,
-    buidling_bldrecnbr bigint NOT NULL,
+    building_bldrecnbr bigint NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
@@ -507,10 +509,10 @@ CREATE INDEX index_pg_search_documents_on_searchable_type_and_searchable_id ON p
 
 
 --
--- Name: index_rooms_on_buidling_bldrecnbr; Type: INDEX; Schema: public; Owner: -
+-- Name: index_rooms_on_building_bldrecnbr; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_rooms_on_buidling_bldrecnbr ON public.rooms USING btree (buidling_bldrecnbr);
+CREATE INDEX index_rooms_on_building_bldrecnbr ON public.rooms USING btree (building_bldrecnbr);
 
 
 --
@@ -535,11 +537,11 @@ CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON public.buildings FOR EA
 
 
 --
--- Name: rooms fk_rails_1ac38479b3; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: rooms fk_rails_0b29405d74; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.rooms
-    ADD CONSTRAINT fk_rails_1ac38479b3 FOREIGN KEY (buidling_bldrecnbr) REFERENCES public.buildings(bldrecnbr);
+    ADD CONSTRAINT fk_rails_0b29405d74 FOREIGN KEY (building_bldrecnbr) REFERENCES public.buildings(bldrecnbr);
 
 
 --
