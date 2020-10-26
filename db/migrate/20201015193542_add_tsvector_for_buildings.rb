@@ -1,4 +1,4 @@
-class AddTsvectorColumns < ActiveRecord::Migration[6.1]
+class AddTsvectorForBuildings < ActiveRecord::Migration[6.1]
 
   def up
     add_column :buildings, :tsv, :tsvector

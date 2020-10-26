@@ -13,6 +13,7 @@
 #  rmtyp_description           :string
 #  room_number                 :string
 #  square_feet                 :integer
+#  tsv                         :tsvector
 #  visible                     :boolean
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
@@ -21,6 +22,7 @@
 # Indexes
 #
 #  index_rooms_on_building_bldrecnbr  (building_bldrecnbr)
+#  index_rooms_on_tsv                 (tsv) USING gin
 #
 # Foreign Keys
 #
@@ -28,12 +30,13 @@
 #
 class Room < ApplicationRecord
   include PgSearch::Model
-
-  belongs_to :building, foreign_key: :building_bldrecnbr
   self.primary_key = 'rmrecnbr'
 
+  belongs_to :building, foreign_key: :building_bldrecnbr
+  has_many :room_characteristics, foreign_key: :rmrecnbr
+
   multisearchable(
-    against: [:rmrecnbr, :room_number, :abbreviation, :bldrecnbr],
+    against: [:rmrecnbr, :room_number, :abbreviation, :building_bldrecnbr],
     update_if: :updated_at_changed?
   )
 

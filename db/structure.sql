@@ -237,6 +237,42 @@ ALTER SEQUENCE public.pg_search_documents_id_seq OWNED BY public.pg_search_docum
 
 
 --
+-- Name: room_characteristics; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.room_characteristics (
+    id bigint NOT NULL,
+    rmrecnbr bigint NOT NULL,
+    chrstc integer,
+    chrstc_eff_status integer,
+    chrstc_descrshort character varying,
+    chrstc_descr character varying,
+    chrstc_desc254 character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: room_characteristics_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.room_characteristics_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: room_characteristics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.room_characteristics_id_seq OWNED BY public.room_characteristics.id;
+
+
+--
 -- Name: rooms; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -255,7 +291,8 @@ CREATE TABLE public.rooms (
     visible boolean,
     building_bldrecnbr bigint NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    tsv tsvector
 );
 
 
@@ -366,6 +403,13 @@ ALTER TABLE ONLY public.pg_search_documents ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
+-- Name: room_characteristics id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.room_characteristics ALTER COLUMN id SET DEFAULT nextval('public.room_characteristics_id_seq'::regclass);
+
+
+--
 -- Name: rooms rmrecnbr; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -433,6 +477,14 @@ ALTER TABLE ONLY public.omni_auth_services
 
 ALTER TABLE ONLY public.pg_search_documents
     ADD CONSTRAINT pg_search_documents_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: room_characteristics room_characteristics_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.room_characteristics
+    ADD CONSTRAINT room_characteristics_pkey PRIMARY KEY (id);
 
 
 --
@@ -509,10 +561,24 @@ CREATE INDEX index_pg_search_documents_on_searchable_type_and_searchable_id ON p
 
 
 --
+-- Name: index_room_characteristics_on_rmrecnbr; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_room_characteristics_on_rmrecnbr ON public.room_characteristics USING btree (rmrecnbr);
+
+
+--
 -- Name: index_rooms_on_building_bldrecnbr; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_rooms_on_building_bldrecnbr ON public.rooms USING btree (building_bldrecnbr);
+
+
+--
+-- Name: index_rooms_on_tsv; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_rooms_on_tsv ON public.rooms USING gin (tsv);
 
 
 --
@@ -534,6 +600,13 @@ CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING bt
 --
 
 CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON public.buildings FOR EACH ROW EXECUTE FUNCTION tsvector_update_trigger('tsv', 'pg_catalog.english', 'name', 'nick_name', 'abbreviation');
+
+
+--
+-- Name: rooms tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON public.rooms FOR EACH ROW EXECUTE FUNCTION tsvector_update_trigger('tsv', 'pg_catalog.english', 'room_number', 'facility_code_heprod');
 
 
 --
@@ -569,6 +642,14 @@ ALTER TABLE ONLY public.active_storage_attachments
 
 
 --
+-- Name: room_characteristics fk_rails_d00a2d31b3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.room_characteristics
+    ADD CONSTRAINT fk_rails_d00a2d31b3 FOREIGN KEY (rmrecnbr) REFERENCES public.rooms(rmrecnbr);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -582,6 +663,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20201012144235'),
 ('20201013193636'),
 ('20201015185412'),
-('20201015193542');
+('20201015193542'),
+('20201022165543'),
+('20201023153614');
 
 
