@@ -51,7 +51,7 @@ class RoomCharacteristicsImporter
 
   def import_room_characteristics(room_characteristics)
     RoomCharacteristic.delete_all
-    RoomCharacteristic.insert_all(room_characteristics)
+    RoomCharacteristic.upsert_all(room_characteristics)
   end
 
   def find_file(file)
