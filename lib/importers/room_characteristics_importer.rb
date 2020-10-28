@@ -52,6 +52,9 @@ class RoomCharacteristicsImporter
   def import_room_characteristics(room_characteristics)
     RoomCharacteristic.delete_all
     RoomCharacteristic.upsert_all(room_characteristics)
+
+    # Update room.characteristics array job.
+    UpdateRoomCharacteristicsArrayJob.perform_later
   end
 
   def find_file(file)
