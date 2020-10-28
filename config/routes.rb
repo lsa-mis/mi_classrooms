@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   resources :rooms
   devise_for :users  , controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
@@ -19,12 +21,9 @@ Rails.application.routes.draw do
   resources 'feedbacks', only: [:create]
   resources :buildings
 
-  require 'sidekiq/web'
 
-  Rails.application.routes.draw do
-  resources :rooms
-    mount Sidekiq::Web => '/sidekiq'
-  end
+
+  mount Sidekiq::Web => '/sidekiq'
 
 
 end
