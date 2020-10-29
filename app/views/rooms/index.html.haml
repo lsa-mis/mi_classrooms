@@ -31,7 +31,7 @@
         %td= room.square_feet
         %td= room.instructional_seating_count
         %td= room.visible
-        %td= room.building
+        %td= room.building.name
         %td= link_to 'Show', room
         %td= link_to 'Edit', edit_room_path(room)
         %td= link_to 'Destroy', room, method: :delete, data: { confirm: 'Are you sure?' }
@@ -39,3 +39,6 @@
 %br
 
 = link_to 'New Room', new_room_path
+
+-unless @pagy.page == @pagy.count
+  = pagy_nav(@pagy).html_safe
