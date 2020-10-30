@@ -79,24 +79,15 @@ class Room < ApplicationRecord
     }
   )
 
-# import the
+  scope :classrooms, -> {
+    where(rmtyp_description: ["Classroom"])
+  }
 
+  scope :classroom_labs, -> {
+  where(rmtyp_description: ["Class Laboratory"])
+  }
 
-# rmrecnbr: 2045698,
-# chrstc: 19,
-# chrstc_descrshort: "VCR",
-# chrstc_descr: "Equipment: VCR",
-# chrstc_desc254: "Room contains VCR",
-
-
-# room_characteristics_importer
-  # create the constant (or at least check that it hasn't changed?)
-  #
-
-
-  # ROOM_CHARACTERISTICS = {
-  #   "DocCam" => {chrstc_descrshort: "DocCam", chrstc_descr: "Equipment: Document Camera", chrstc_desc254: "Room contains a specialized camera for the real-time displaying of documents, texts, or small objects" },
-
-  #   "VCR" => {chrstc_descrshort: "VCR", chrstc_descr: "Equipment: VCR", chrstc_desc254: "Room contains VCR" }
-
-  # }
+scope :classrooms_including_labs, -> {
+  where(rmtyp_description: ["Classroom", "Class Laboratory"])
+}
+end
