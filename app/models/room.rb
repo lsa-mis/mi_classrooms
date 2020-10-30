@@ -55,17 +55,17 @@ class Room < ApplicationRecord
     }
   )
 
-  # pg_search_scope(
-  #   :with_all_characteristics,
-  #   against: %i(:characteristics),
-  #   using: {
-  #     tsearch:{
-  #       dictionary: "english",
-  #       prefix: true,
-  #       any_word: true,
-  #     }
-  #   }
-  # )
+  pg_search_scope(
+    :with_characteristic,
+    against: [:characteristics],
+    using: {
+      tsearch:{
+        dictionary: "english",
+        prefix: true,
+        any_word: true,
+      }
+    }
+  )
 
 end
 
