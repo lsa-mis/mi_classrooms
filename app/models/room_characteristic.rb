@@ -21,5 +21,5 @@
 #  fk_rails_...  (rmrecnbr => rooms.rmrecnbr)
 #
 class RoomCharacteristic < ApplicationRecord
-  belongs_to :room, foreign_key: :rmrecnbr
+  belongs_to :room, foreign_key: :rmrecnbr, dependent: :destroy
 end
