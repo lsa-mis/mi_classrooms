@@ -67,7 +67,17 @@ class Room < ApplicationRecord
     }
   )
 
-end
+  pg_search_scope(
+    :with_all_characteristics,
+    against: [:characteristics],
+    using: {
+      tsearch:{
+        dictionary: "english",
+        prefix: true,
+        any_word: false,
+      }
+    }
+  )
 
 # import the
 
