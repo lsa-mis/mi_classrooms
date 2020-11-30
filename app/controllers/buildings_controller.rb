@@ -5,8 +5,14 @@ class BuildingsController < ApplicationController
   # GET /buildings
   # GET /buildings.json
   def index
-    @buildings = Building.all
-    @pagy, @buildings = pagy(@buildings)
+    if params[:query].present?
+      session[:query] = params[:query]
+      @buildings = Building.with_name(params[:query])
+      @pagy, @buildings = pagy(@buildings)
+    else
+      @buildings = Building.all
+      @pagy, @buildings = pagy(@buildings)
+    end
   end
 
   # GET /buildings/1
@@ -71,6 +77,6 @@ class BuildingsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def building_params
-      params.require(:building).permit(:bldrecnbr, :latitude, :longitude, :name, :nick_name, :abbreviation, :address, :city, :state, :zip, :country)
+      params.require(:building).permit(:bldrecnbr, :latitude, :longitude, :name, :nick_name, :abbreviation, :address, :city, :state, :zip, :country, :query)
     end
 end
