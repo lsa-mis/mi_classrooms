@@ -37,3 +37,4 @@ yarn-debug.log*
 working_files/
 
 uploads/
+.DS_Store
