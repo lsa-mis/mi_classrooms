@@ -1,9 +1,9 @@
 require "csv"
 require "benchmark"
 require "importers/buildings_importer"
-# require "../importers/rooms_importer"
-# require "../importers/room_characteristics_importer"
-# require "../importers/room_contacts_importer"
+require "importers/rooms_importer"
+require "importers/room_characteristics_importer"
+# require "importers/room_contacts_importer"
 
 namespace :import do
   desc "Import Buildings from CSV"
@@ -23,21 +23,21 @@ namespace :import do
     puts "Buildings Geocoded Time: #{time}"
   end
 
-  # desc "Import Rooms from CSV file"
-  # task rooms: [:environment] do
-  #   time = Benchmark.measure {
-  #     RoomsImporter.new.import_rooms
-  #   }
-  #   puts "Rooms Time: #{time}"
-  # end
+  desc "Import Rooms from CSV file"
+  task rooms: [:environment] do
+    time = Benchmark.measure {
+      RoomsImporter.new
+    }
+    puts "Rooms Time: #{time}"
+  end
 
-  # desc "Import Room Characteristics from CSV file"
-  # task room_characteristics: [:environment] do
-  #   time = Benchmark.measure {
-  #     RoomCharacteristicsImporter.new
-  #   }
-  #   puts "Room Characteristics Time: #{time}"
-  # end
+  desc "Import Room Characteristics from CSV file"
+  task room_characteristics: [:environment] do
+    time = Benchmark.measure {
+      RoomCharacteristicsImporter.new
+    }
+    puts "Room Characteristics Time: #{time}"
+  end
 
   # desc "Import Room Contacts from CSV file"
   # task room_contacts: [:environment] do

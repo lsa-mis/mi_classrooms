@@ -3,9 +3,9 @@
   :concurrency: 4
   :pidfile: tmp/pids/sidekiq.pid
   :queues:
-    - default
-    - low
-    - [critical, 2]
+    - mi_classrooms_development_default
+    - mi_classrooms_staging_default
+    - mi_classrooms_production_default
 
   production:
     :concurrency: 25

@@ -8,16 +8,18 @@ class CreateRooms < ActiveRecord::Migration[6.1]
       t.integer :dept_id
       t.string :dept_grp
       t.string :dept_description
+      t.string :facility_code_heprod
       t.integer :square_feet
       t.integer :instructional_seating_count
+      t.text :characteristics, array: true, default: []
       t.boolean :visible
-      t.references :buidling_bldrecnbr, references: :buildings, null: false
+      t.references :building_bldrecnbr, references: :buildings, null: false
 
       t.timestamps
     end
 
-    rename_column :rooms, :buidling_bldrecnbr_id, :buidling_bldrecnbr
-    add_foreign_key :rooms, :buildings, column: 'buidling_bldrecnbr', primary_key: 'bldrecnbr'
+    rename_column :rooms, :building_bldrecnbr_id, :building_bldrecnbr
+    add_foreign_key :rooms, :buildings, column: 'building_bldrecnbr', primary_key: 'bldrecnbr'
 
   end
 end
