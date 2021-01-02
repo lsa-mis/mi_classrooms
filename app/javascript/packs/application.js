@@ -11,17 +11,14 @@ var Turbolinks = require("turbolinks")
 Turbolinks.start()
 
 // Specific frontend applications
-// import 'mi_classrooms'
+require('mi_classrooms/stylesheets/application.sass')
+require('mi_classrooms/stylesheets/_header.sass')
+require('mi_classrooms/stylesheets/_flash_errors.sass')
+require('mi_classrooms/stylesheets/_footer.sass')
+require('mi_classrooms/stylesheets/_feedback.sass')
+require('mi_classrooms/stylesheets/ribbons.sass')
 
-import 'mi_classrooms/stylesheets/application.sass'
-import 'mi_classrooms/stylesheets/_header.sass'
-import 'mi_classrooms/stylesheets/_flash_errors.sass'
-import 'mi_classrooms/stylesheets/_footer.sass'
-import 'mi_classrooms/stylesheets/_feedback.sass'
-import 'mi_classrooms/stylesheets/ribbons.sass'
-
-import '@fortawesome/fontawesome-free/js/all';
-require.context('../mi_classrooms/images/', true, /.(gif|jpg|jpeg|png|svg)$/)
+require.context('mi_classrooms/images/', true, /.(gif|jpg|jpeg|png|svg)$/)
 
 // require('trix')
 // require('@rails/actiontext')
