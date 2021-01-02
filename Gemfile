@@ -1,10 +1,10 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "2.7.2"
+ruby "3.0.0"
 
 # Bundle edge Rails instead:
-gem "rails", github: "rails/rails"
+gem "rails", "6.1.0"
 # gem "rails", "~> 6.0.3"
 
 # Use postgresql as the database for Active Record
@@ -32,6 +32,7 @@ gem "geocoder"
 gem "pagy"
 gem "pg_search"
 # gem "gravatar_image_tag", github: "mdeering/gravatar_image_tag"
+gem "listen"
 
 group :development, :test do
   # Call "byebug" anywhere in the code to stop execution and get a debugger console
@@ -44,7 +45,6 @@ end
 
 group :development do
   gem "web-console", ">= 3.3.0"
-  gem "listen", ">= 3.0.5", "< 3.2"
   # Invoke rake tasks on remote server.
   # example use: cap staging    invoke:rake TASK=db:seed
   gem "capistrano",         require: false
@@ -56,7 +56,7 @@ group :development do
   gem "erb2haml"
   gem "pry-rails"
   gem "spring"
-  gem "spring-watcher-listen", "~> 2.0.0"
+  gem "spring-watcher-listen"
 end
 
 group :test do
