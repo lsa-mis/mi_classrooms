@@ -45,10 +45,7 @@
       @apply text-sm px-2
     @screen md
       @apply text-2xl font-light px-4
-    @screen xl
-      @apply text-gray-900
-        &:hover
-          @applybg-gray-200
+
 
 .user-actions
   @apply  px-5 py-5 relative
@@ -64,11 +61,15 @@
 
 .user-action-dropdown
   @apply mt-2 bg-gray-200 rounded-lg absolute right-0 w-48 z-10
-
-  @screen sm
-    @apply
   .user-action-link
-    @apply
+    a
+      @apply  block text-blue-800 px-2
+      &:hover
+        @apply text-blue-700 bg-yellow-400 rounded
+
+.user-action-dropdown
+  @apply mt-2 bg-gray-200 rounded-lg absolute right-0 w-48 z-10
+  .user-action-link
     a
       @apply  block text-blue-800 px-2
       &:hover
