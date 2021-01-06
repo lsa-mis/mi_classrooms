@@ -1,0 +1,4 @@
+.filter-item-label{data: {"tippy-content" => "#{tooltip}"}}
+  = check_box_tag "room_characteristics[]", "#{filter_item}", params[:room_characteristics].try(:include?, "#{filter_item}"), {multiple: true, class: 'form-checkbox', data: { action: "autosubmit#checkboxSubmit"} }
+  %span
+    = "#{label}"

@@ -36,7 +36,7 @@ class Room < ApplicationRecord
   has_many :room_characteristics, foreign_key: :rmrecnbr
 
   multisearchable(
-    against: [:rmrecnbr, :room_number, :abbreviation, :building_bldrecnbr],
+    against: [:rmrecnbr, :room_number, :building_bldrecnbr],
     update_if: :updated_at_changed?
   )
 
