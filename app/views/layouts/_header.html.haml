@@ -1,6 +1,6 @@
 %div.xl:flex-shrink-0{ "data-controller" => "toggle", "data-action" => "resize@window->toggle#hideuseractions"}
   %header.header
-    .flex.justify-between.px-4.py-3.xl:w-72.xl:justify-center.xl:py-5
+    .flex.justify-between.px-4.py-3.xl:justify-center.xl:py-5
       %div
         = link_to root_path, class: 'flex flex-row  ' do
           = image_tag(asset_pack_path('media/mi_classrooms/images/mi_classrooms_logo.png'), alt: "#{(t :sitename).titleize} Logo, link to home page.", class: 'header-logo h-16 w-16', id: root_path(anchor: 'page-top'))
@@ -16,6 +16,10 @@
 
     %nav.header-nav.hidden{ "data-target" => "toggle.mainnav" }
       .header-links
+        .header-link
+          = link_to "Buildings", buildings_path
+        .header-link
+          = link_to "Classrooms", rooms_path
         .header-link
           = link_to "About Us", about_path
         .header-link
