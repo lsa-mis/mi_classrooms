@@ -141,6 +141,10 @@ GEM
       html2haml (>= 1.0.1)
       railties (>= 5.1)
     hashie (4.1.0)
+    hotwire-rails (0.1.2)
+      rails (>= 6.0.0)
+      stimulus-rails
+      turbo-rails
     html2haml (2.2.0)
       erubis (~> 2.7.0)
       haml (>= 4.0, < 6)
@@ -307,9 +311,13 @@ GEM
     standard (0.10.2)
       rubocop (= 1.4.2)
       rubocop-performance (= 1.9.1)
+    stimulus-rails (0.1.2)
+      rails (>= 6.0.0)
     temple (0.8.2)
     thor (1.0.1)
     tilt (2.0.10)
+    turbo-rails (0.5.3)
+      rails (>= 6.0.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     uglifier (4.2.0)
@@ -359,6 +367,7 @@ DEPENDENCIES
   ffaker
   geocoder
   haml-rails
+  hotwire-rails
   jbuilder (~> 2.7)
   listen
   omniauth-google-oauth2

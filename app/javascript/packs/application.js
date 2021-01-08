@@ -7,8 +7,7 @@ require("@rails/ujs").start()
 require("@rails/activestorage").start()
 require("channels")
 
-var Turbolinks = require("turbolinks")
-Turbolinks.start()
+
 
 // Specific frontend applications
 require('mi_classrooms/stylesheets/application.sass')
@@ -25,3 +24,7 @@ require.context('mi_classrooms/images/', true, /.(gif|jpg|jpeg|png|svg)$/)
 // import 'trix/dist/trix.css'
 
 import "controllers"
+
+document.addEventListener("turbo:load", function() {
+  console.log("Hello")
+})
