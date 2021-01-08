@@ -1,0 +1,14 @@
+%td= room.rmrecnbr
+%td= room.floor
+%td= room.room_number
+%td= room.rmtyp_description
+%td= room.dept_id
+%td= room.dept_grp
+%td= room.dept_description
+%td= room.square_feet
+%td= room.instructional_seating_count
+%td= room.visible
+%td= room.building.name
+%td= link_to 'Show', room
+%td= link_to 'Edit', edit_room_path(room)
+%td= link_to 'Destroy', room, method: :delete, data: { confirm: 'Are you sure?' }
