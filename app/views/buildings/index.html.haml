@@ -30,9 +30,9 @@
       %th
       %th
 
-  %tbody
+  %tbody{class: "divide-y divide-gray-500 "}
     - @buildings.each do |building|
-      %tr
+      %tr{class: "#{cycle('row-even', 'row-odd')}"}
         %td= building.bldrecnbr
         %td= building.latitude
         %td= building.longitude

@@ -6,7 +6,7 @@
       %svg.h-5.w-5.text-gray-600{fill: "currentColor", viewbox: "0 0 20 20", xmlns: "http://www.w3.org/2000/svg"}
         %path{"clip-rule" => "evenodd", d: "M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z", "fill-rule" => "evenodd"}
     .form-input.block.w-full.pl-10{class: "sm:leading-5"}
-      = text_field_tag :query
+      = text_field_tag :query, params[:query]
       -# = check_box_tag 'room_characteristics[]', "DocCam", is_checked?("DocCam")
       -# = check_box_tag 'room_characteristics[]', "VCR", is_checked?("VCR")
       = render partial: './search/filter_checkbox', locals: {filter_item: "DocCam", label: "DocCam", tooltip: "Room contains a lecture capture device to record instructor, digital presentation, or audio/voice. Must record voice at a minimum."}, cached: true
@@ -14,7 +14,7 @@
       = render partial: './search/filter_checkbox', locals: {filter_item: "LectureCap", label: "Lecture Capture", tooltip: "Room contains a lecture capture device to record instructor, digital presentation, or audio/voice. Must record voice at a minimum."}, cached: true
       = submit_tag "Submit"
   = "#{@pagy.count} Results"
-%table
+%table{class: "divide-y divide-gray-800"}
   %thead
     %tr
       %th Rmrecnbr
@@ -32,9 +32,9 @@
       %th
       %th
 
-  %tbody
+  %tbody{class: "divide-y divide-gray-500 "}
     - @rooms.each do |room|
-      %tr
+      %tr{class: "#{cycle('row-even', 'row-odd')}"}
         = render 'room_row', room: room
 
 %br
