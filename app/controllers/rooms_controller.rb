@@ -4,7 +4,7 @@ class RoomsController < ApplicationController
   # GET /rooms
   # GET /rooms.json
   def index
-    @rooms = Room.all
+    @rooms = Room.classrooms.includes([:building])
 
     @rooms = @rooms.classrooms.with_building_name(params[:query]) if params[:query].present?
 
