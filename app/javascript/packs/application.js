@@ -16,6 +16,7 @@ require('mi_classrooms/stylesheets/_flash_errors.sass')
 require('mi_classrooms/stylesheets/_footer.sass')
 require('mi_classrooms/stylesheets/_feedback.sass')
 require('mi_classrooms/stylesheets/ribbons.sass')
+require('mi_classrooms/stylesheets/search.sass')
 
 require.context('mi_classrooms/images/', true, /.(gif|jpg|jpeg|png|svg)$/)
 
