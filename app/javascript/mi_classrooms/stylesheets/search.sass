@@ -1,19 +1,55 @@
-.characteristic-checkbox
-  @apply  -m-2 px-2 py-1 flex items-center rounded-md text-base font-medium text-gray-700 transition ease-in-out duration-150
-  &:hover
-    @apply bg-blue-100
-    svg
-      @apply text-blue-500
+.filters-button-group
+  @apple text-gray-700 max-w-7xl mx-auto flex px-4 py-6 sm:px-6 lg:px-8
 
+.filters-button
+  @apply group mt-3 bg-white rounded-md text-gray-500 inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
+
+.characteristic-checkbox
+  @apply  -m-2 px-2 py-1 flex items-center rounded text-base font-medium text-blue-700 transition ease-in-out duration-150 border border-blue-50 bg-blue-50
+  svg
+    @apply text-blue-600
+  &:hover
+    @apply bg-gray-50 text-blue-400
+    svg
+      @apply text-blue-400
+
+.projection-list
+  @apply flex justify-items-stretch flex-wrap
+
+.projection-item
+  @apply  bg-blue-100 justify-center w-auto h-8 align-middle rounded-2xl border p-2 text-xs border-blue-400 mx-1 mt-4 whitespace-nowrap truncate border-2
+  label
+    @apply flex flex-row
+    span
+      @apply ml-1
+  svg
+    @apply h-3 w-3 text-gray-700
+  &:hover
+    @apply bg-blue-200
 
 .characteristic-icon
-  @apply flex-shrink-0 h-5 w-5 text-gray-400 fill-current
+  @apply flex-shrink-0 h-5 w-5 text-gray-500 fill-current
 
 .characteristics-list
-  @apply mt-2 space-y-4
+  @apply mt-4 space-y-6
 
 .filters-group-heading
-  @apply text-sm font-medium tracking-wide text-gray-500 uppercase
+  @apply text-base font-bold tracking-wide text-gray-900 uppercase border-b border-gray-400 mt-6
 
 .icon
   @apply h-4 w-4
+
+.check-box
+
+  input[type="checkbox"]:checked + label
+    @apply bg-blue-500 text-blue-100 border border-2
+    svg
+      @apply text-blue-100
+    &:hover
+      @apply bg-blue-400
+.view-all-link
+  @apply pb-8 pr-8 text-sm font-medium object-right-bottom self-end float-right self-end text-right sm:mt-auto
+  a
+    @apply text-blue-600 p-2
+    &:hover
+      @apply text-blue-800 bg-blue-100 rounded-lg
