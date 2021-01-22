@@ -1,16 +1,22 @@
 footer
-  @apply bottom-0 w-full bg-gray-400 p-2 flex flex-col content-center self-center justify-around bottom-0
+  @apply bottom-0 w-full bg-gray-400 p-2  bottom-0  absolute inset-x-0 bottom-0
   @screen sm
     @apply flex-row
   @screen md
     // @apply bg-green
 
+.footer-content
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col content-center self-center justify-around
+  @screen sm
+    @apply flex-row
 .footer-logo
   @apply mx-auto
   img
-    @apply h-12 w-12 rounded-full
+    @apply h-8 w-8 rounded-full
   @screen sm
     @apply w-1/4 mx-0
+    img
+      @apply h-10 w-10
 
 .footer-links
   @apply w-auto flex flex-col content-center self-center justify-center
