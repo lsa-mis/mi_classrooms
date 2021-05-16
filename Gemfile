@@ -1,10 +1,10 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.0.0"
+ruby "3.0.1"
 
 # Bundle edge Rails instead:
-gem "rails", "6.1.0"
+gem "rails", "~> 6.1.0"
 # gem "rails", "~> 6.0.3"
 
 # Use postgresql as the database for Active Record
@@ -73,5 +73,5 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem "devise"
+gem 'devise', github: 'heartcombo/devise'
 gem "omniauth-google-oauth2"
