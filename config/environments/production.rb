@@ -7,10 +7,15 @@ Rails.application.configure do
 
   config.action_mailer.smtp_settings = {address: "mi_classrooms"}
   config.action_mailer.smtp_settings = {
-    address: Rails.application.credentials.production_mail[:STANDARDRB_EMAIL_SERVER],
-    domain: Rails.application.credentials.production_mail[:STANDARDRB_EMAIL_DOMAIN],
-    user_name: Rails.application.credentials.production_mail[:STANDARDRB_EMAIL_USERNAME],
-    password: Rails.application.credentials.production_mail[:STANDARDRB_EMAIL_PASSWORD],
+    # address: Rails.application.credentials.production_mail[:STANDARDRB_EMAIL_SERVER],
+    # domain: Rails.application.credentials.production_mail[:STANDARDRB_EMAIL_DOMAIN],
+    # user_name: Rails.application.credentials.production_mail[:STANDARDRB_EMAIL_USERNAME],
+    # password: Rails.application.credentials.production_mail[:STANDARDRB_EMAIL_PASSWORD],
+
+    address: localhost,
+    domain: localhost,
+    user_name: emailuser,
+    password: emailuserpw,
     authentication: :login,
     enable_starttls_auto: "true",
     port: "587",
