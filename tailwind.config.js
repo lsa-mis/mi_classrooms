@@ -1,4 +1,5 @@
 module.exports = {
+  mode: 'jit',
   purge: [
     './app/**/*.html.haml',
     './app/**/*.html.erb',
@@ -93,8 +94,8 @@ module.exports = {
     extend: {},
   },
   plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/aspect-ratio'),
+    // require('@tailwindcss/forms'),
+    // require('@tailwindcss/typography'),
+    // require('@tailwindcss/aspect-ratio'),
   ],
 }

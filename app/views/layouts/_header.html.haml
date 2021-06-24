@@ -4,7 +4,7 @@
       .flex.items-center
         = link_to root_path, class: "flex-shrink-0" do
 
-          .header-logo
+          -# .header-logo
             = link_to image_tag(asset_pack_path('media/mi_classrooms/images/mi_classrooms_logo.png'),alt: "#{(t :sitename)} Logo, link to home page.", id: root_path(anchor: 'page-bottom')), root_path
         .hidden{class: "md:block"}
 

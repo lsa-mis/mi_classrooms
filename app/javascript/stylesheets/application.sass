@@ -1,0 +1,45 @@
+@import "tailwindcss/base"
+@import "tailwindcss/components"
+@import "tailwindcss/utilities"
+
+.modal-backdrop
+  z-index: -1 !important
+// You Forgot The Alt Message
+body[data-environment="development"]
+  img[alt=""], img:not([alt])
+    border: 5px dashed #c00
+    @apply border-4 border-red-700 border-dotted p-2
+main
+  @apply max-w-7xl mx-auto 
+.mobile-menu-button
+  @apply bg-blue-600 inline-flex items-center justify-center p-2 rounded-md text-blue-200 hover:text-white hover:bg-blue-500 hover:bg-opacity-75 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-600 focus:ring-white
+
+.profile-dropdown
+  @apply absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-blue-50 ring-1 ring-black ring-opacity-5 divide-y divide-blue-300 z-50
+
+h1
+  @apply text-3xl mb-2
+
+.container
+  @apply bg-green-500 flex flex-col min-h-screen
+
+.content
+  @apply flex-grow px-10 py-4  h-screen
+
+.row-even
+  @apply bg-blue-50
+.row-odd
+  @apply bg-blue-200
+
+
+.debug_dump
+  @apply bg-blue-100 border-4 border-red-800 rounded-lg p-4 text-sm font-mono text-blue-900 mx-auto my-4 max-w-2xl w-auto
+
+// /*! debug.css | MIT License | https://gist.github.com/zaydek/6b2e55258734deabbd2b4a284321d6f6 */
+// // To use add a {:debug => ""} to any element you want to understand better
+// [debug], [debug] *:not(g):not(path)
+// 	color:hsla(210, 100%, 100%, 0.9) !important
+// 	background: hsla(210, 100%,  50%, 0.5) !important
+// 	outline: solid 0.25rem hsla(210, 100%, 100%, 0.5) !important
+// 	box-shadow: none !important
+// 	filter:     none !important

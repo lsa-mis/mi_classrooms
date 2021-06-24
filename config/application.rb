@@ -28,5 +28,5 @@ module MiClassrooms
   ActiveStorage::Engine.config.active_storage.content_types_to_serve_as_binary.delete("image/svg+xml")
 
   ActiveStorage::Engine.config.active_storage.content_types_allowed_inline.append("image/svg+xml")
-
+  Webpacker::Compiler.env["TAILWIND_MODE"] = "build"
 end

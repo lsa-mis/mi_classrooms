@@ -3,22 +3,29 @@
 // a relevant structure within app/javascript and only use these pack files to reference
 // that code so it'll be compiled.
 
-require("@rails/ujs").start()
-require("@rails/activestorage").start()
-require("channels")
+import Rails from "@rails/ujs"
+import * as ActiveStorage from "@rails/activestorage"
+import "channels"
+
+
+import "../stylesheets/application.sass"
+import '../stylesheets/_header.sass'
+import '../stylesheets/_flash_errors.sass'
+import '../stylesheets/_footer.sass'
+import '../stylesheets/_feedback.sass'
+import '../stylesheets/ribbons.sass'
+import '../stylesheets/search.sass'
 
 
 
-// Specific frontend applications
-require('mi_classrooms/stylesheets/application.sass')
-require('mi_classrooms/stylesheets/_header.sass')
-require('mi_classrooms/stylesheets/_flash_errors.sass')
-require('mi_classrooms/stylesheets/_footer.sass')
-require('mi_classrooms/stylesheets/_feedback.sass')
-require('mi_classrooms/stylesheets/ribbons.sass')
-require('mi_classrooms/stylesheets/search.sass')
+// import.context '../mi_classrooms/images/', true, /.(gif|jpg|jpeg|png|svg)$/
 
-require.context('mi_classrooms/images/', true, /.(gif|jpg|jpeg|png|svg)$/)
+function importAll(r) {
+  r.keys().forEach(r);}
+
+// Add relevant file extensions as needed below.
+importAll(require.context('../mi_classrooms/images/', true, /\.(svg|jpg|gif|png)$/));
+
 
 // require('trix')
 // require('@rails/actiontext')
