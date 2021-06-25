@@ -7,7 +7,6 @@ import Rails from "@rails/ujs"
 import * as ActiveStorage from "@rails/activestorage"
 import "channels"
 
-
 import "../stylesheets/application.sass"
 import '../stylesheets/_header.sass'
 import '../stylesheets/_flash_errors.sass'
@@ -16,16 +15,12 @@ import '../stylesheets/_feedback.sass'
 import '../stylesheets/ribbons.sass'
 import '../stylesheets/search.sass'
 
-
-
-// import.context '../mi_classrooms/images/', true, /.(gif|jpg|jpeg|png|svg)$/
-
 function importAll(r) {
-  r.keys().forEach(r);}
+  r.keys().forEach(r);
+}
 
 // Add relevant file extensions as needed below.
-importAll(require.context('../mi_classrooms/images/', true, /\.(svg|jpg|gif|png)$/));
-
+importAll(require.context('../media/images/', true, /\.(svg|jpg|gif|png)$/));
 
 // require('trix')
 // require('@rails/actiontext')
