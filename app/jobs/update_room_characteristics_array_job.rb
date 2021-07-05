@@ -8,7 +8,6 @@ class UpdateRoomCharacteristicsArrayJob < ApplicationJob
   end
 
   def update_room_characteristics_array
-    puts "HI DAVE - I'm a job"
     rmrecnbrs = RoomCharacteristic.pluck(:rmrecnbr).uniq
     rmrecnbrs.each do |rmrecnbr|
       room = Room.find_by(rmrecnbr: rmrecnbr)
