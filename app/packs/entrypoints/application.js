@@ -3,9 +3,11 @@
 // a relevant structure within app/javascript and only use these pack files to reference
 // that code so it'll be compiled.
 
-import Rails from "@rails/ujs"
-import * as ActiveStorage from "@rails/activestorage"
+import "@hotwired/turbo-rails"
 import "channels"
+import "controllers"
+import * as ActiveStorage from "@rails/activestorage"
+import Rails from "@rails/ujs"
 
 import "../stylesheets/application.sass"
 import '../stylesheets/_header.sass'
@@ -18,16 +20,14 @@ import '../stylesheets/search.sass'
 function importAll(r) {
   r.keys().forEach(r);
 }
-
 // Add relevant file extensions as needed below.
-importAll(require.context('../media/images/', true, /\.(svg|jpg|gif|png)$/));
+importAll(require.context('../images/', true, /\.(svg|jpg|gif|png)$/));
+
 
 // require('trix')
 // require('@rails/actiontext')
 // import 'trix/dist/trix.css'
 
 import "controllers"
-
-document.addEventListener("turbo:load", function() {
-  console.log("Hello")
-})
+Rails.start()
+ActiveStorage.start()

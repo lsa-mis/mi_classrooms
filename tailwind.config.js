@@ -1,8 +1,8 @@
 module.exports = {
   mode: 'jit',
   purge: [
-    './app/**/*.html.haml',
-    './app/**/*.html.erb',
+    './app/**/*.*.haml',
+    './app/**/*.*.erb',
     './app/helpers/**/*.rb',
     './src/**/*.html',
     './src/**/*.js',

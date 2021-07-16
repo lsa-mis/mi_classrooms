@@ -1,5 +1,12 @@
 .search-by-building-name
-  @apply shadow-sm focus:ring-blue-500 focus:border-blue-500 block  sm:text-sm border-gray-300 rounded-md
+  @apply shadow-sm block h-10 w-full max-w-4xl flex flex-row border-gray-300 border-l border-t border-b rounded-l-md
+  &:focus
+    @apply outline-none ring-2 ring-blue-500 border-transparent
+  input
+    @apply block border-none h-full 
+  .submit-search
+    @apply bg-blue-300 rounded-r-md w-24 text-blue-800 text-lg font-medium border border-gray-300 h-10
+
 .filters-button-group
   @apple text-gray-700  max-w-7xl mx-auto flex px-4 py-6 sm:px-6 lg:px-8
 
