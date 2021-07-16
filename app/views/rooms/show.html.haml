@@ -1,42 +1,42 @@
-%p#notice= notice
+= turbo_frame_tag "room" do 
+  %p#notice= notice
+  %p
+    %b Rmrecnbr:
+    = @room.rmrecnbr
+  %p
+    %b Floor:
+    = @room.floor
+  %p
+    %b Room number:
+    = @room.room_number
+  %p
+    %b facility_code_heprod:
+    = @room.facility_code_heprod
+  %p
+    %b Rmtyp description:
+    = @room.rmtyp_description
+  %p
+    %b Dept:
+    = @room.dept_id
+  %p
+    %b Dept grp:
+    = @room.dept_grp
+  %p
+    %b Dept description:
+    = @room.dept_description
+  %p
+    %b Square feet:
+    = @room.square_feet
+  %p
+    %b Instructional seating count:
+    = @room.instructional_seating_count
+  %p
+    %b Visible:
+    = @room.visible
+  %p
+    %b building:
+    = @room.building.name
 
-%p
-  %b Rmrecnbr:
-  = @room.rmrecnbr
-%p
-  %b Floor:
-  = @room.floor
-%p
-  %b Room number:
-  = @room.room_number
-%p
-  %b facility_code_heprod:
-  = @room.facility_code_heprod
-%p
-  %b Rmtyp description:
-  = @room.rmtyp_description
-%p
-  %b Dept:
-  = @room.dept_id
-%p
-  %b Dept grp:
-  = @room.dept_grp
-%p
-  %b Dept description:
-  = @room.dept_description
-%p
-  %b Square feet:
-  = @room.square_feet
-%p
-  %b Instructional seating count:
-  = @room.instructional_seating_count
-%p
-  %b Visible:
-  = @room.visible
-%p
-  %b building:
-  = @room.building.name
-
-= link_to 'Edit', edit_room_path(@room)
-\|
-= link_to 'Back', rooms_path
+  = link_to 'Edit', edit_room_path(@room)
+  \|
+  = link_to 'Back', rooms_path

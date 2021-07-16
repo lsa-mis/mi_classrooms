@@ -1,7 +1,8 @@
-%h1 Editing room
+= turbo_frame_tag "room" do 
 
-= render 'form'
+  = render 'form', room: @room
 
-= link_to 'Show', @room
-\|
-= link_to 'Back', rooms_path
+  = link_to 'Show', @room
+  \|
+  = link_to 'Back', rooms_path, data: { "turbo-frame": "_top" }
+
