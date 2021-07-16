@@ -5,8 +5,8 @@
     %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}
     %title= (t :sitename)
     = csrf_meta_tags
-    = stylesheet_packs_with_chunks_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
-    = javascript_packs_with_chunks_tag 'application', 'data-turbolinks-track': 'reload'
+    = stylesheet_packs_with_chunks_tag 'application', media: 'all', 'data-turbo-track': 'reload'
+    = javascript_packs_with_chunks_tag 'application', 'data-turbo-track': 'reload'
 
     - if content_for? :head
       = yield :head
@@ -28,5 +28,6 @@
 
       - unless action_name == 'contact'
         = render 'feedback/feedback_modal'
-      = debug(params) if Rails.env.development?
-      = render 'layouts/footer'
+      -# = debug(params) if Rails.env.development?
+      -# = render 'layouts/footer'
+-# = console
