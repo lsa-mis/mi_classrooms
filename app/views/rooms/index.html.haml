@@ -40,5 +40,4 @@
 
 = link_to 'New Room', new_room_path
 
--unless @pagy.page == @pagy.count
-  = pagy_nav(@pagy).html_safe
+= render 'room_results_count'
