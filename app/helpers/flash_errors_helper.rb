@@ -9,7 +9,12 @@ module FlashErrorsHelper
     end
   end
 
-  SEVERITY_ICONS = {notice: "info-circle", danger: "triangle-exclamation", error: "exclamation", success: "check-circle", warning: "bullhorn"}
+  SEVERITY_ICONS = {
+    danger: "shield-exclamation",
+    error: "triangle-exclamation", 
+    notice: "circle-check", 
+    success: "thumbs-up", 
+    warning: "siren-on"}
 
   def severity_icon(severity)
     SEVERITY_ICONS[severity]

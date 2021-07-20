@@ -1,15 +1,16 @@
-#flash-message{:class => "#{flash_class(message_type.to_sym)}"}
+-# .h-6.w-6= image_pack_tag("#{severity_icon(message_type.to_sym)}.svg", alt: message_type)
+-# = "Message Type = #{severity_icon(message_type.to_sym)}"
+#flash-message{:class => "alert #{flash_class(message_type.to_sym)}"}
   .fixed.inset-0.flex.px-4.py-6.pointer-events-none.sm:p-6.sm:items-start.z-50{"aria-live" => "assertive"}
     .w-full.flex.flex-col.items-center.space-y-4.sm:items-end
       .max-w-sm.w-full.bg-white.shadow-lg.rounded-lg.pointer-events-auto.ring-1.ring-black.ring-opacity-5.overflow-hidden{data: {controller: "alert"}}
         .p-4
           .flex.items-start
             .flex-shrink-0
-              -# .h-6.w-6
-                -# = severity_icon(message_type.to_sym)
-              / Heroicon name: outline/check-circle
-              %svg.h-6.w-6{"aria-hidden" => "true", fill: "none", stroke: "currentColor", viewbox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg"}
-                %path{d: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z", "stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-width" => "2"}
+              .flash-icon= image_pack_tag("#{severity_icon(message_type.to_sym)}.svg", alt: message_type, class: "#{flash_class(message_type.to_sym)} ")
+              -# %svg.h-6.w-6{"aria-hidden" => "true", fill: "none", stroke: "currentColor", viewbox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg"}
+                -# %path{d: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z", "stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-width" => "2"}
+                
             .ml-3.w-0.flex-1{class: "pt-0.5"}
               %p.alert-message 
                 = "#{message}"
