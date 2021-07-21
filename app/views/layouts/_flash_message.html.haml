@@ -1,22 +1,19 @@
--# .h-6.w-6= image_pack_tag("#{severity_icon(message_type.to_sym)}.svg", alt: message_type)
--# = "Message Type = #{severity_icon(message_type.to_sym)}"
 #flash-message{:class => "alert #{flash_class(message_type.to_sym)}"}
-  .fixed.inset-0.flex.px-4.py-6.pointer-events-none.sm:p-6.sm:items-start.z-50{"aria-live" => "assertive"}
+  .fixed.inset-0.mt-16.flex.px-4.py-6.pointer-events-none.sm:p-6.sm:items-start.z-50{"aria-live" => "assertive"}
     .w-full.flex.flex-col.items-center.space-y-4.sm:items-end
       .max-w-sm.w-full.bg-white.shadow-lg.rounded-lg.pointer-events-auto.ring-1.ring-black.ring-opacity-5.overflow-hidden{data: {controller: "alert"}}
         .p-4
           .flex.items-start
             .flex-shrink-0
-              .flash-icon= image_pack_tag("#{severity_icon(message_type.to_sym)}.svg", alt: message_type, class: "#{flash_class(message_type.to_sym)} ")
-              -# %svg.h-6.w-6{"aria-hidden" => "true", fill: "none", stroke: "currentColor", viewbox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg"}
-                -# %path{d: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z", "stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-width" => "2"}
+              .flash-icon{class: "#{flash_class(message_type.to_sym)}"}
+                = svg("#{severity_icon(message_type.to_sym)}")
                 
             .ml-3.w-0.flex-1{class: "pt-0.5"}
               %p.alert-message 
                 = "#{message}"
  
             .ml-4.flex-shrink-0.flex
-              %button.bg-white.rounded-md.inline-flex.text-gray-400.hover:text-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-indigo-500{data: {action: "alert#close"}}
+              %button.bg-white.rounded-md.inline-flex.text-gray-600.hover:text-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-indigo-800{data: {action: "alert#close"}}
                 %span.sr-only Close
                 / Heroicon name: solid/x
                 %svg.h-5.w-5{"aria-hidden" => "true", fill: "currentColor", viewbox: "0 0 20 20", xmlns: "http://www.w3.org/2000/svg"}
