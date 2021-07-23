@@ -1,11 +1,16 @@
 .search-by-building-name
-  @apply shadow-sm block h-10 w-full max-w-4xl flex flex-row border-gray-300 border-l border-t border-b rounded-l-md
+  @apply shadow-sm h-10 w-full  flex flex-row border-gray-300 border-l border-t border-b 
   &:focus
     @apply outline-none ring-2 ring-blue-500 border-transparent
   input
     @apply block border-none h-full 
   .submit-search
     @apply bg-blue-300 rounded-r-md w-24 text-blue-800 text-lg font-medium border border-gray-300 h-10
+
+.search-by-building-name
+  @apply block rounded-none rounded-l-md pl-10 sm:text-sm border-gray-300
+  &:focus
+    @apply ring-blue-500 border-blue-500
 
 .filters-button-group
   @apple text-gray-700  max-w-7xl mx-auto flex
@@ -53,7 +58,7 @@
   @apply text-base font-bold tracking-wide text-gray-900 uppercase border-b border-gray-400 mt-6
 
 .filters-dropdown
-  @apply min-w-full  transform shadow-lg  absolute z-10 inset-x-0 transform shadow-lg pb-10
+  @apply min-w-full  transform shadow-lg  absolute inset-x-0 transform shadow-lg pb-10
 
 .filters-inner
   @apply relative inset-0 flex
