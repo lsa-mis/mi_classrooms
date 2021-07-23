@@ -1,14 +1,12 @@
-
 / This example requires Tailwind CSS v2.0+
-.z-0.relative.w-full{
-  data:{
-    controller: "dropdown"}
-  }
+.z-0.relative.w-full
   .relative.z-10.bg-white{"data-dropdown-active-target" => '#filtersTarget'}
 
     %div
       -# .mt-0
-        %input#building-name{class: " shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md", :name => "building-name", :placeholder => "Undergraduate Sciences Building", :type => "text"}
+        %input#building-name{class: "building-name", :name => "building-name", :placeholder => "Undergraduate Sciences Building", :type => "text"}
+
+
 
     .filters-button-group
       / Item active: "text-gray-900", Item inactive: "text-gray-500"
@@ -43,8 +41,8 @@
         %div{class: "grid  px-4  bg-white sm:grid-cols-2 sm:gap-x-8  sm:px-6 lg:px-8 lg:py-12 xl:pr-12"}
           = render './search/room_characteristics'
 
-          .view-all-link
-            %a{class: "", :href => "#"}
-              View all classrooms
-              %span{"aria-hidden" => "true"} →
+        .view-all-link
+          %a{class: "", :href => "#"}
+            View all classrooms
+            %span{"aria-hidden" => "true"} →
         = submit_tag "Submit", "data-autosubmit-target" => "form"

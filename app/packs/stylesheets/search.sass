@@ -8,68 +8,63 @@
     @apply bg-blue-300 rounded-r-md w-24 text-blue-800 text-lg font-medium border border-gray-300 h-10
 
 .filters-button-group
-  @apple text-gray-700  max-w-7xl mx-auto flex px-4 py-6 sm:px-6 lg:px-8
-
+  @apple text-gray-700  max-w-7xl mx-auto flex
 .filters-button
   @apply mt-3 ml-4 bg-white rounded-md text-gray-500 inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
-  // @apply 
+
+.characteristics-list
+  @apply mt-4 space-y-4
+  
 .characteristic-checkbox
-  @apply  -m-2 px-2 py-1 flex items-center rounded text-base font-medium text-blue-700 transition ease-in-out duration-150 border border-blue-50 bg-blue-50
+  @apply -m-2 px-2 py-1 flex items-center rounded text-blue-700 transition ease-in-out duration-150 border border-blue-300 bg-blue-100
   svg
     @apply text-blue-600
   &:hover
-    @apply bg-gray-50 text-blue-400
+    @apply bg-yellow-100 text-blue-800
     svg
-      @apply text-blue-400
+      @apply text-blue-800
+
+.characteristic-icon
+  @apply flex-shrink-0 h-5 w-5 text-gray-500 fill-current
 
 .projection-list
-  @apply flex justify-items-stretch flex-wrap
+  @apply flex justify-items-stretch flex-wrap  space-y-2
 
-.projection-item
-  @apply  bg-blue-100 justify-center w-auto h-8 align-middle rounded-2xl border p-2 text-xs border-blue-400 mx-1 mt-4 whitespace-nowrap truncate border-2
+.rounded-checkbox
+  @apply justify-center align-middle mt-2 mx-1 whitespace-nowrap truncate  px-2 py-1 flex items-center rounded-2xl text-sm text-blue-700 transition ease-in-out duration-150 border border-blue-400 bg-blue-100 
   label
-    @apply flex flex-row
+    @apply flex flex-row 
     span
       @apply ml-1
   svg
-    @apply h-3 w-3 text-gray-700
+    @apply h-3 w-3 
   &:hover
     @apply bg-blue-200
+
+.check-box
   input[type="checkbox"]:checked + label
-    @apply bg-blue-500 text-blue-100 border border-2
+    @apply bg-blue-500 text-blue-100  
     svg
       @apply text-blue-100
     &:hover
       @apply bg-blue-400
-.characteristic-icon
-  @apply flex-shrink-0 h-5 w-5 text-gray-500 fill-current
-
-.characteristics-list
-  @apply mt-4 space-y-6
 
 .filters-group-heading
   @apply text-base font-bold tracking-wide text-gray-900 uppercase border-b border-gray-400 mt-6
 
 .filters-dropdown
-  @apply  absolute z-30 mt-10  min-w-full  transform shadow-lg
+  @apply min-w-full  transform shadow-lg  absolute z-10 inset-x-0 transform shadow-lg pb-10
 
 .filters-inner
-  @apply absolute inset-0 flex
-
-.icon
-  @apply h-4 w-4
-
-.check-box
-  input[type="checkbox"]:checked + label
-    @apply bg-blue-500 text-blue-100 border border-2
-    svg
-      @apply text-blue-100
-    &:hover
-      @apply bg-blue-400
+  @apply relative inset-0 flex
 
 .view-all-link
-  @apply pb-8 pr-8 text-sm font-medium object-right-bottom self-end float-right self-end text-right sm:mt-auto
+  // @apply pb-8 pr-8 text-sm font-medium mt-6 sm:mt-auto
+  @apply bg-green-400 relative bottom-0 right-0 
   a
     @apply text-blue-600 p-2
     &:hover
       @apply text-blue-800 bg-blue-100 rounded-lg
+
+.link-to-all-classrooms
+  @apply absolute bottom-0 right-6 mt-10
