@@ -1,28 +1,42 @@
+-# = form_tag(rooms_path, method: :get) do
+-#   .mt-1.relative.rounded-md.shadow-sm
+-#     .absolute.inset-y-0.left-0.pl-3.flex.items-center.pointer-events-none
+-#       %svg.h-5.w-5.text-gray-600{fill: "currentColor", viewbox: "0 0 20 20", xmlns: "http://www.w3.org/2000/svg"}
+-#         %path{"clip-rule" => "evenodd", d: "M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z", "fill-rule" => "evenodd"}
+-#     .form-input.block.w-full.pl-10{class: "sm:leading-5"}
+-#       = text_field_tag :query
+-#       = submit_tag "Submit"
 %h1 Listing rooms
 
-= form_tag rooms_path, method: :get, data: { controller: "toggle", turbo_frame: "search_results"} do
-  .mt-1.relative.rounded-md.shadow-sm
-    .absolute.inset-y-0.left-0.pl-3.flex.items-center.pointer-events-none
-      %svg.h-5.w-5.text-gray-600{fill: "currentColor", viewbox: "0 0 20 20", xmlns: "http://www.w3.org/2000/svg"}
-        %path{"clip-rule" => "evenodd", d: "M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z", "fill-rule" => "evenodd"}
-    .form-input.block.w-full.pl-10{class: "sm:leading-5"}
-      .flex
-        = text_field_tag :query, params[:query], class: "search-by-building-name", id: "building-name", :name => "building-name", :placeholder => "Undergraduate Sciences Building", :type => "text"
-        = render partial: './search/filters'
+
+= form_with url: rooms_path, method: :get, class: "" do |form|
+  .relative.top-0.left-0.pl-4.flex.items-center.pointer-events-none
+    %svg.h-5.w-5.text-gray-600{fill: "currentColor", viewbox: "0 0 20 20", xmlns: "http://www.w3.org/2000/svg"}
+      %path{"clip-rule" => "evenodd", d: "M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z", "fill-rule" => "evenodd"}
+
+  - if params[:query].blank? 
+    = form.text_field :query, class: "search-by-building-name", :placeholder => "Undergraduate Sciences Building"
+  - else
+    = form.text_field :query, class: 'search-by-building-name', value: params[:query]
 
 
-  = "#{@pagy.count} Results"
-%table{class: "divide-y divide-gray-800"}
+
+  = render partial: './search/filters'
+
+= "#{@pagy.count} Results"
+
+
+-# %table{class: "divide-y divide-gray-800"}
   %thead
     %tr
       %th Rmrecnbr
       %th Floor
       %th Room number
       %th Rmtyp description
-      %th Dept
+      -# %th Dept
       %th Dept grp
-      %th Dept description
-      %th Square feet
+      -# %th Dept description
+      -# %th Square feet
       %th Instructional seating count
       %th Visible
       %th building
@@ -31,13 +45,14 @@
       %th
 
   %tbody{class: "divide-y divide-gray-500"}
-    = turbo_frame_tag "search_results" do
-      - @rooms.each do |room|
-        %tr{class: "#{cycle('row-even', 'row-odd')}"}
-          = render 'room_row', room: room
+
+    - @rooms.each do |room|
+      %tr{class: "#{cycle('row-even', 'row-odd')}"}
+        = render 'room_row', room: room
 
 %br
 
 = link_to 'New Room', new_room_path
+
 
 = render 'room_results_count'
