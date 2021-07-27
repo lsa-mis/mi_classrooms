@@ -8,6 +8,11 @@ Bundler.require(*Rails.groups)
 
 module MiClassrooms
   class Application < Rails::Application
+
+    # remove Turbo from Asset Pipeline precompilation
+    config.after_initialize do
+      config.assets.precompile.delete("turbo")
+    end
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
     config.generators do |g|
