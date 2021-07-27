@@ -1,35 +1,11 @@
 %div
   %h3.filters-group-heading
     Student Capacity
-  %ul.mt-2.space-y-6
-    %li.flow-root
-      %a{class: "-m-3 p-3 flex rounded-lg hover:bg-gray-100 transition ease-in-out duration-150", :href => "#"}
-        -# .hidden.sm:block.flex-shrink-0
-          %img.w-32.h-20.object-cover.rounded-md{:alt => "", :src => "https://images.unsplash.com/photo-1558478551-1a378f63328e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2849&q=80"}/
-        .min-w-0{class: "flex-1 "}
-          .flex.justify-between
-            %svg.characteristic-icon{:viewbox => "0 0 448 512", :xmlns => "http://www.w3.org/2000/svg"}
-              %path{:d => "M224 256C294.695 256 352 198.691 352 128S294.695 0 224 0C153.312 0 96 57.309 96 128S153.312 256 224 256ZM274.664 304H173.336C77.609 304 0 381.602 0 477.332C0 496.477 15.523 512 34.664 512H413.336C432.477 512 448 496.477 448 477.332C448 381.602 370.398 304 274.664 304Z"}
-            0   ========>   600
-            %svg.characteristic-icon{:viewbox => "0 0 640 512", :xmlns => "http://www.w3.org/2000/svg"}
-              %path{:d => "M319.859 320C377.273 320 423.814 273.436 423.814 216C423.814 158.562 377.273 112 319.859 112C262.451 112 215.904 158.562 215.904 216C215.904 273.436 262.451 320 319.859 320ZM369.887 352H270.113C191.631 352 128 411.693 128 485.332C128 500.059 140.727 512 156.422 512H483.578C499.273 512 512 500.059 512 485.332C512 411.693 448.377 352 369.887 352ZM512 160C556.184 160 592 124.182 592 80S556.184 0 512 0C467.82 0 432 35.818 432 80S467.82 160 512 160ZM183.906 216C183.906 210.551 184.889 205.371 185.516 200.088C174.613 194.967 162.613 192 149.92 192H88.08C39.438 192 0 233.785 0 285.332C0 295.641 7.887 304 17.615 304H217.07C196.688 280.211 183.906 249.715 183.906 216ZM128 160C172.184 160 208 124.182 208 80S172.184 0 128 0C83.82 0 48 35.818 48 80S83.82 160 128 160ZM551.92 192H490.08C477.279 192 465.195 195.037 454.221 200.24C454.834 205.475 455.814 210.604 455.814 216C455.814 249.715 443.033 280.211 422.65 304H622.385C632.113 304 640 295.641 640 285.332C640 233.785 600.566 192 551.92 192Z"}
 
-          %p.mt-1.text-sm.text-gray-500
-            Show classrooms that can seat between X and XXX students.
-%div.mt-6
-  %h3.filters-group-heading
-    School or College
-  %ul.mt-2.space-y-6
-    %li.flow-root
-      %a.-m-3.p-3.flex.rounded-lg.hover:bg-gray-100.transition.ease-in-out.duration-150{:href => "#"}
-        .hidden.sm:block.flex-shrink-0
-          %img.w-32.h-20.object-cover.rounded-md{:alt => "fix", :src => "https://images.unsplash.com/photo-1558478551-1a378f63328e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2849&q=80"}/
-        .min-w-0.flex-1.sm:ml-8
-        %div
+.filter-by-student-capacaity{data: { controller: "capacity-slider", "capacity-slider-minimum" => "#{capacity_slider_minimum}", "capacity-slider-maximum" => "#{capacity_slider_maximum}" }}
+  .capacity-slider{data: {"tippy-content" => "Only show rooms with a capacity between #{capacity_slider_minimum} and #{capacity_slider_maximum}"}}
 
-          %select#location{class: " mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md", :name => "location"}
-            %option{:selected => "selected"} Start typing name
-            %option Academic & Budget Affairs
-            %option College of LSA
-          %p.mt-1.text-sm.text-gray-500
-            Only show classrooms owned by these schools and/or colleges.
+    #slider{data: { action:  "click->capacity-slider#updateSlider click->autosubmit#change", target: "capacity-slider.slider"}}
+
+    -# = form.hidden_field :instructional_seating_count_gteq, {value: "#{capacity_slider_minimum}", data: {target: "capacity-slider.minimum" }, id: 'seating-capacity--min'}
+    -# = form.hidden_field :instructional_seating_count_lteq, {value: "#{capacity_slider_maximum}", data: {target: "capacity-slider.maximum" }, id: 'seating-capacity--max'}

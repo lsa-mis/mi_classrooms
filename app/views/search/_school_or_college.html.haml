@@ -1,0 +1,17 @@
+%div.mt-6
+  %h3.filters-group-heading
+    School or College
+  %ul.mt-2.space-y-6
+    %li.flow-root
+      %a.-m-3.p-3.flex.rounded-lg.hover:bg-gray-100.transition.ease-in-out.duration-150{:href => "#"}
+        .hidden.sm:block.flex-shrink-0
+          %img.w-32.h-20.object-cover.rounded-md{:alt => "fix", :src => "https://images.unsplash.com/photo-1558478551-1a378f63328e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2849&q=80"}/
+        .min-w-0.flex-1.sm:ml-8
+        %div
+
+          %select#location{class: " mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md", :name => "location"}
+            %option{:selected => "selected"} Start typing name
+            %option Academic & Budget Affairs
+            %option College of LSA
+          %p.mt-1.text-sm.text-gray-500
+            Only show classrooms owned by these schools and/or colleges.

@@ -33,7 +33,7 @@
   @apply flex-shrink-0 h-5 w-5 text-gray-500 fill-current
 
 .projection-list
-  @apply flex justify-items-stretch flex-wrap  space-y-2
+  @apply flex justify-items-stretch flex-wrap  space-y-2 max-w-full lg:max-w-xl
 
 .rounded-checkbox
   @apply justify-center align-middle mt-2 mx-1 whitespace-nowrap truncate  px-2 py-1 flex items-center rounded-2xl text-sm text-blue-700 transition ease-in-out duration-150 border border-blue-400 bg-blue-100 
@@ -55,10 +55,10 @@
       @apply bg-blue-400
 
 .filters-group-heading
-  @apply text-base font-bold tracking-wide text-gray-900 uppercase border-b border-gray-400 mt-6
+  @apply text-base font-bold tracking-wide text-gray-900 uppercase border-b border-gray-400 mt-6 pb-1
 
 .filters-dropdown
-  @apply min-w-full  transform shadow-lg  absolute inset-x-0 transform shadow-lg pb-10
+  @apply min-w-full  transform shadow-lg border-b absolute inset-x-0 transform shadow-lg pb-20 bg-gray-50
 
 .filters-inner
   @apply relative inset-0 flex
@@ -72,4 +72,57 @@
       @apply text-blue-800 bg-blue-100 rounded-lg
 
 .link-to-all-classrooms
-  @apply absolute bottom-0 right-6 mt-10
+  @apply absolute bottom-0 right-6 text-blue-600 underline 
+
+
+
+.choices
+  @apply  text-left
+  .choices__inner
+    @apply bg-blue-100 p-0 rounded min-h-0 h-10 border-none
+    .choices__input
+      @apply bg-blue-100 text-blue-800 font-semibold  ml-1 mt-2 z-50
+
+.choices__item
+  @apply bg-blue-200
+
+.choices__input
+  &::-webkit-input-placeholder
+    @apply text-gray-700 opacity-75 font-light text-lg
+  &:-moz-placeholder
+    @apply text-gray-700 opacity-75 font-light text-lg
+
+// Selected item styling
+.choices__inner
+  @apply z-50
+  .choices__list
+    .choices__item
+      @apply bg-blue-700 z-50
+      &:hover
+        @apply bg-blue-800
+      @screen xl
+        @apply mt-0
+
+.filter-by-student-capacaity
+  @apply w-full mx-auto  pr-8 h-auto w-auto
+
+#slider
+  @apply h-2 mt-10 z-0 
+  @screen xl
+    @apply ml-2 mr-4
+  .noUi-connect
+    @apply bg-blue-700 h-1 z-0
+  .noUi-base
+    @apply bg-blue-400 z-0 
+  .noUi-handle
+    @apply bg-yellow-500 rounded-full h-4 w-4 border-2 border-blue-700 z-0 
+    &:before
+      @apply hidden
+    &:after
+      @apply hidden
+    &:focus
+      @apply border-blue-600
+  .noUi-tooltip
+    @apply bg-blue-100 text-blue-800 text-xs rounded  w-10 h-6 mb-2 pb-4
+    &:focus
+      @apply bg-green-400 outline-none

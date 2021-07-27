@@ -5,9 +5,8 @@
 
 import "@hotwired/turbo-rails"
 import "channels"
-import "controllers"
+
 import * as ActiveStorage from "@rails/activestorage"
-import Rails from "@rails/ujs"
 
 import "../stylesheets/application.sass"
 import '../stylesheets/_header.sass'
@@ -23,11 +22,10 @@ function importAll(r) {
 // Add relevant file extensions as needed below.
 importAll(require.context('../images/', true, /\.(svg|jpg|gif|png)$/));
 
-
 // require('trix')
 // require('@rails/actiontext')
 // import 'trix/dist/trix.css'
 
 import "controllers"
-Rails.start()
+
 ActiveStorage.start()

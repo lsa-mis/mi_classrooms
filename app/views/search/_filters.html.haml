@@ -18,7 +18,7 @@
           %path{"clip-rule" => "evenodd", :d => "M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z", "fill-rule" => "evenodd"}
 
 
-    .filters-dropdown.hidden{
+    .filters-dropdown{
       data: {"dropdown-target" => "menu",
               "dropdown-invisible-class" => "opacity-0 -translate-y-1 scale-95",
               "dropdown-visible-class" => "opacity-100  -translate-y-0",
@@ -35,11 +35,13 @@
           %h2#characteristicsHeading.sr-only Room Characteristic checkboxes
 
           = render './search/capacity_college'
-
+          = render './search/school_or_college'
         -# Secondary
 
-        %div{class: "grid  px-4  bg-white sm:grid-cols-2 sm:gap-x-8  sm:px-6 lg:px-8 lg:py-12 xl:pr-12"}
+        %div{class: "grid  px-4  bg-white sm:grid-cols-2 sm:gap-x-8  sm:px-6 lg:px-8  xl:pr-12"}
           = render './search/room_characteristics'
+
+          = render './search/projection_list'
 
       .link-to-all-classrooms 
         = link_to "Show all classrooms", rooms_path
