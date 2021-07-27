@@ -35,7 +35,10 @@ class Building < ApplicationRecord
 
   pg_search_scope(
     :with_name,
-    against: %i(name nick_name abbreviation),
+    against: { 
+      nick_name: 'A',
+      abbreviation: 'B',
+      name: 'C'},
     using: {
       tsearch: {
         dictionary: "english",
@@ -45,6 +48,14 @@ class Building < ApplicationRecord
       }
     }
   )
+
+  scope :ann_arbor_campus, -> {
+    where("zip ILIKE ANY ( array[?] )", ["48103%", "48104%", "48105%", "48109%"])
+  }
+
+  scope :with_classrooms, -> {
+                            joins(:rooms).merge(Room.classrooms)
+                          }
 
 
 end
