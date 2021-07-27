@@ -43,7 +43,9 @@ class Room < ApplicationRecord
   pg_search_scope(
     :with_building_name,
     associated_against: {
-      building: [:name]
+      building: {nick_name: 'A',
+      abbreviation: 'B',
+      name: 'C'}
     },
     using: {
       tsearch: {
