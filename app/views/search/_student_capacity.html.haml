@@ -3,9 +3,9 @@
     Student Capacity
 
 .filter-by-student-capacaity{data: { controller: "capacity-slider", "capacity-slider-minimum" => "#{capacity_slider_minimum}", "capacity-slider-maximum" => "#{capacity_slider_maximum}" }}
-  .capacity-slider{data: {"tippy-content" => "Only show rooms with a capacity between #{capacity_slider_minimum} and #{capacity_slider_maximum}"}}
+  -# .capacity-slider{data: {"tippy-content" => "Only show rooms with a capacity between #{capacity_slider_minimum} and #{capacity_slider_maximum}"}}
 
-    #slider{data: { action:  "click->capacity-slider#updateSlider click->autosubmit#change", target: "capacity-slider.slider"}}
+  #slider{data: { action:  "click->capacity-slider#updateSlider click->autosubmit#change", target: "capacity-slider.slider"}}
 
     -# = form.hidden_field :instructional_seating_count_gteq, {value: "#{capacity_slider_minimum}", data: {target: "capacity-slider.minimum" }, id: 'seating-capacity--min'}
     -# = form.hidden_field :instructional_seating_count_lteq, {value: "#{capacity_slider_maximum}", data: {target: "capacity-slider.maximum" }, id: 'seating-capacity--max'}
