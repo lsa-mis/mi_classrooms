@@ -36,29 +36,20 @@
 = "#{@pagy.count} Results"
 
 
-%table{class: "divide-y divide-gray-800 z-0"}
-  %thead
-    %tr
-      %th Rmrecnbr
-      %th Floor
-      %th Room number
-      %th Rmtyp description
-      -# %th Dept
-      %th Dept grp
-      -# %th Dept description
-      -# %th Square feet
-      %th Instructional seating count
-      %th Visible
-      %th building
-      %th
-      %th
-      %th
+.flex.flex-col
+  .-my-2.overflow-x-auto.sm:-mx-6.lg:-mx-8
+    .py-2.align-middle.inline-block.min-w-full.sm:px-6.lg:px-8
+      .shadow.overflow-hidden.border-b.border-gray-200.sm:rounded-lg
+        %table.min-w-full.divide-y.divide-gray-200.max-w-5xl
+          %thead.bg-gray-50
+            
 
-  %tbody{class: "divide-y divide-gray-500"}
+          %tbody.bg-white.divide-y.divide-gray-200
 
-    - @rooms.each do |room|
-      %tr{class: "#{cycle('row-even', 'row-odd')}"}
-        = render 'room_row', room: room
+
+            - @rooms.each do |room|
+              %tr{class: "#{cycle('row-even', 'row-odd')}"}
+                = render 'room_row', room: room
 
 %br
 

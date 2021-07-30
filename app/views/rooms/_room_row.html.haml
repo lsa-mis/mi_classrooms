@@ -1,14 +1,41 @@
-%td= room.rmrecnbr
-%td= room.floor
-%td= room.room_number
-%td= room.rmtyp_description
-%td= room.dept_id
-%td= room.dept_grp
-%td= room.dept_description
-%td= room.square_feet
-%td= room.instructional_seating_count
-%td= room.visible
-%td= room.building.name
-%td= link_to 'Show', room
-%td= link_to 'Edit', edit_room_path(room)
-%td= link_to 'Destroy', room, method: :delete, data: { confirm: 'Are you sure?' }
+%tr.flex.flex-wrap.justify-between.py-42
+  -# basic info
+  %td.px-6.py-4.whitespace-nowrap
+    .flex.items-center
+      .flex-shrink-0.h-16.w-auto
+        -# %img.h-12.w-12.rounded-full{alt: "head", src: "https://images.unsplash.com/photo-1585637071663-799845ad5212?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8Y2xhc3Nyb29tfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"}
+        
+        %img.h-14.w-14.rounded-full{alt: "head", src: "https://images.unsplash.com/photo-1606761568499-6d2451b23c66?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjJ8fGNsYXNzcm9vbXxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"}
+
+
+        %span.px-1.-ml-1.inline-flex.text-xs.leading-5.font-semibold.rounded-full.bg-green-100.text-green-800
+          Alerts?
+
+      .ml-4.max-w-xs.w-screen
+        .text-md.font-medium.text-gray-900
+          = "#{room.room_number} #{room.building.name.titleize}"
+      
+          %span.flex.justify-between
+            .text-md.text-gray-500
+              = "#{room.building.address}"
+            .text-sm.font-medium Capacity: 23
+          
+        
+          
+
+  %td.px-6.py-4.whitespace-nowrap.justify-between
+    .text-sm.text-gray-900.relative.right-0.text-right 
+
+      = "#{room.dept_grp}"
+    .text-xs.text-gray-500.flex.flex-col.relative.right-0.text-right.sm:ml-20
+      %span Schedule this room
+      %span Tech Support
+
+
+  -# %td.px-6.py-4.whitespace-nowrap
+    
+  %td.px-6.pt-3.whitespace-nowrap.text-sm.text-blue-600.hover:text-blue-500.text-right.float-right.right-0.relative
+    Details
+    .hiddens.whitespace-nowrap.text-right
+      %a.text-blue-600.hover:text-red-600{href: "#"} Edit
+
