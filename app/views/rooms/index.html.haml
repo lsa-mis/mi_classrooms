@@ -48,8 +48,7 @@
 
 
             - @rooms.each do |room|
-              %tr{class: "#{cycle('row-even', 'row-odd')}"}
-                = render 'room_row', room: room
+              = render 'room_row', room: room
 
 %br
 
