@@ -2,8 +2,7 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
   resources :rooms
-  devise_for :users  , controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
-
+  devise_for :users, controllers: {omniauth_callbacks: "users/omniauth_callbacks"}
   get '/linkedin' => redirect('https://www.linkedin.com/in/mi_classrooms/')
   get '/github' => redirect('https://github.com/mi_classrooms')
   get '/twitter' => redirect('https://twitter.com/mi_classrooms')
