@@ -67,6 +67,7 @@ class BuildingsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to buildings_url, notice: 'Building was successfully destroyed.' }
       format.json { head :no_content }
+      format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@building))}
     end
   end
 

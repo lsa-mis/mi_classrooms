@@ -44,7 +44,8 @@
 
   %tbody{class: "divide-y divide-gray-500 "}
     - @buildings.each do |building|
-      %tr{class: "#{cycle('row-even', 'row-odd')}"}
+
+      %tr{class: "#{cycle('row-even', 'row-odd')}", id: dom_id(building)}
         %td= building.bldrecnbr
         %td= building.latitude
         %td= building.longitude
@@ -59,6 +60,7 @@
         %td= link_to 'Show', building
         %td= link_to 'Edit', edit_building_path(building)
         %td= link_to 'Destroy', building, method: :delete, data: { confirm: 'Are you sure?' }
+        %td= link_to 'Destroy', building, data: {"turbo-method": :delete, controller: "confirmation", "confirmation-message-value": 'Are you sure?', action: "confirmation#confirm"}
 
 %br
 
