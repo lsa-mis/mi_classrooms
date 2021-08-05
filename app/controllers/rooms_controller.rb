@@ -1,5 +1,6 @@
 class RoomsController < ApplicationController
-  before_action :set_room, only: [:show, :edit, :update, :destroy]
+include ActionView::RecordIdentifier
+  before_action :set_room, only: [:show, :edit, :update, :destroy, :toggle_visibile]
 
   # GET /rooms
   # GET /rooms.json
@@ -65,6 +66,15 @@ class RoomsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to rooms_url, notice: 'Room was successfully destroyed.' }
       format.json { head :no_content }
+      format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@room))}
+    end
+  end
+
+  def toggle_visibile
+    @room.toggle! :visible
+    respond_to do |format|
+      format.html { redirect_to rooms_url, notice: 'Room was successfully updated.' }
+      format.turbo_stream { render turbo_stream: turbo_stream.update(dom_id(@room)), notice: 'Room was successfully updated.' }
     end
   end
 
