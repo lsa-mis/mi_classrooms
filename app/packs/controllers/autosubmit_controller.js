@@ -1,18 +1,22 @@
 import { Controller } from 'stimulus'
 export default class extends Controller {
   static targets = ['form', 'status']
+	static values = { duration: String }
 
   connect() {
     this.timeout = null
-    this.duration = this.data.get('duration') || 200
+    this.duration = fetch(this.durationValue) || 400
+
   }
 
+	
   save() {
     clearTimeout(this.timeout)
-
+		
     this.timeout = setTimeout(() => {
       this.statusTarget.textContent = 'Updating...'
-      this.formTarget.submit()
+      // this.formTarget.submit()
+			this.element.requestSubmit()
     }, this.duration)
   }
 
@@ -21,10 +25,7 @@ export default class extends Controller {
     this.save()
 
   }
-  checkboxSubmit() {
-    preventDefault()
-    this.save()
-  }
+
   success() {
     this.timeout = setTimeout(() => {
       this.statusTarget.textContent = 'Updated'

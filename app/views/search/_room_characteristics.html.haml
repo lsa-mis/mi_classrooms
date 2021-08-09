@@ -4,7 +4,7 @@
 
   %ul.characteristics-list
     %li.check-box
-      = check_box_tag "room_characteristics[]", "InstrComp", params[:room_characteristics].try(:include?, "InstrComp"), id: "instructor-computer", class: "opacity-0 hidden"
+      = check_box_tag "room_characteristics[]", "InstrComp", params[:room_characteristics].try(:include?, "InstrComp"), id: "instructor-computer", class: "opacity-0 hidden", data: { action: "input->autosubmit#save","autosubmit-duration-value" => "0" }
 
       %label{:for => "instructor-computer", class:"characteristic-checkbox"}
         %svg{class: "characteristic-icon",  "aria-hidden" => "true", :fill => "none", :stroke => "currentColor", :viewbox => "0 0 640 512", :xmlns => "http://www.w3.org/2000/svg"}
@@ -12,7 +12,7 @@
         %span.ml-4.whitespace-nowrap.overflow-hidden Instructor Computer
 
     %li.check-box
-      = check_box_tag "room_characteristics[]", "DocCam", params[:room_characteristics].try(:include?, "DocCam"), id: "doccam", class: "opacity-0 hidden"
+      = check_box_tag "room_characteristics[]", "DocCam", params[:room_characteristics].try(:include?, "DocCam"), id: "doccam", class: "opacity-0 hidden", data: { action: "input->autosubmit#save","autosubmit-duration-value" => "0" }
       %label{:for => "doccam", class:"characteristic-checkbox"}
         %svg{class: "characteristic-icon",  "aria-hidden" => "true", :fill => "none", :stroke => "currentColor", :viewbox => "0 0 512 512", :xmlns => "http://www.w3.org/2000/svg"}
           -# inbox icon
@@ -20,28 +20,28 @@
         %span.ml-4.whitespace-nowrap.overflow-hidden Document Camera
 
     %li.check-box
-      = check_box_tag "room_characteristics[]", "LectureCap", params[:room_characteristics].try(:include?, "LectureCap"), id: "lectcap", class: "opacity-0 hidden"
+      = check_box_tag "room_characteristics[]", "LectureCap", params[:room_characteristics].try(:include?, "LectureCap"), id: "lectcap", class: "opacity-0 hidden", data: { action: "input->autosubmit#save","autosubmit-duration-value" => "0" }
       %label{:for => "lectcap", class:"characteristic-checkbox"}
         %svg{class: "characteristic-icon",  "aria-hidden" => "true", :fill => "none", :stroke => "currentColor", :viewbox => "0 0 448 512", :xmlns => "http://www.w3.org/2000/svg"}
           %path{:d => "M224 0C100.289 0 0 100.289 0 224C0 316.223 55.766 395.365 135.389 429.713C131.908 408.963 129.219 388.125 128.391 371.559C80.082 340.148 48 285.793 48 224C48 126.953 126.953 48 224 48S400 126.953 400 224C400 285.795 367.918 340.148 319.607 371.559C318.773 388.055 316.066 408.924 312.572 429.73C392.215 395.393 448 316.238 448 224C448 100.289 347.713 0 224 0ZM224 312C191.125 312 160 320.625 160 355.75C160 388.875 172.875 460.125 180.625 488.625C185.75 507.625 205.125 512 224 512S262.25 507.625 267.375 488.625C275.125 459.875 288 388.75 288 355.75C288 320.625 256.875 312 224 312ZM224 280C254.953 280 280 254.953 280 224S254.953 168 224 168S168 193.047 168 224S193.047 280 224 280ZM368 224C368 144.471 303.529 80 224 80S80 144.471 80 224C80 268.834 100.92 308.381 133.045 334.791C137.902 322.137 147.172 308.916 165.098 299.756C165.064 299.73 165.441 299.707 165.57 299.682C142.871 282.125 128 254.92 128 224C128 170.98 170.98 128 224 128S320 170.98 320 224C320 254.918 305.129 282.125 282.43 299.682C282.561 299.707 282.937 299.73 282.904 299.756C300.83 308.916 310.098 322.137 314.955 334.791C347.08 308.381 368 268.834 368 224Z"}
         %span.ml-4.whitespace-nowrap.overflow-hidden Lecture Capture
 
     %li.check-box
-      = check_box_tag "room_characteristics[]", "VideoConf", params[:room_characteristics].try(:include?, "VideoConf"), id: "video-conferencing", class: "opacity-0 hidden"
+      = check_box_tag "room_characteristics[]", "VideoConf", params[:room_characteristics].try(:include?, "VideoConf"), id: "video-conferencing", class: "opacity-0 hidden", data: { action: "input->autosubmit#save","autosubmit-duration-value" => "0" }
       %label{:for => "video-conferencing", class:"characteristic-checkbox"}
         %svg{class: "characteristic-icon",  "aria-hidden" => "true", :fill => "none", :stroke => "currentColor", :viewbox => "0 0 512 512", :xmlns => "http://www.w3.org/2000/svg"}
           %path{:d => "M215.999 104C202.749 104 191.999 114.75 191.999 128S202.749 152 215.999 152C295.406 152 359.999 216.594 359.999 296C359.999 309.25 370.749 320 383.999 320S407.999 309.25 407.999 296C407.999 190.125 321.874 104 215.999 104ZM223.999 0C206.327 0 191.999 14.312 191.999 32S206.327 64 223.999 64C347.515 64 447.999 164.5 447.999 288C447.999 305.688 462.327 320 479.999 320S511.999 305.688 511.999 288C511.999 129.188 382.796 0 223.999 0ZM188.865 346.008L216.238 318.637C218.863 319.262 221.238 320.137 223.988 320.137C241.736 320.137 255.986 305.887 255.986 288.141C255.986 270.516 241.736 256.141 223.988 256.141C206.363 256.141 191.988 270.516 191.988 288.141C191.988 291.016 192.863 293.391 193.613 296.016L166.24 323.387L49.368 206.516C42.118 199.266 29.245 200.516 24.37 209.516C-17.378 287.391 -5.505 386.258 60.118 451.883C125.741 517.504 224.736 529.379 302.484 487.633C311.609 482.633 312.859 469.883 305.484 462.633L188.865 346.008Z"}
         %span.ml-4.whitespace-nowrap.overflow-hidden Video Conferencing
 
     %li.check-box
-      = check_box_tag "room_characteristics[]", "IntrScreen", params[:room_characteristics].try(:include?, "IntrScreen"), id: "interavtive-screen", class: "opacity-0 hidden"
+      = check_box_tag "room_characteristics[]", "IntrScreen", params[:room_characteristics].try(:include?, "IntrScreen"), id: "interavtive-screen", class: "opacity-0 hidden", data: { action: "input->autosubmit#save","autosubmit-duration-value" => "0" }
       %label{:for => "interavtive-screen", class:"characteristic-checkbox"}
         %svg{class: "characteristic-icon",  "aria-hidden" => "true", :fill => "none", :stroke => "currentColor", :viewbox => "0 0 576 512", :xmlns => "http://www.w3.org/2000/svg"}
           %path{:d => "M292.727 342.305C289.701 345.312 288 349.398 288 353.66V416H350.34C354.604 416 358.689 414.297 361.693 411.273L518.625 253.25L450.75 185.375L292.727 342.305ZM568.5 167.375L536.625 135.5C526.75 125.5 510.625 125.5 500.625 135.5L473.375 162.75L541.25 230.625L568.5 203.375C578.5 193.375 578.5 177.25 568.5 167.375ZM256 0V128H384L256 0ZM256 447.898C239.932 447.613 225.385 438.641 218.125 424.125C215.25 418.25 210.125 417.625 208 417.625S200.75 418.25 197.999 423.75L190.25 439.125C187.625 444.625 181.999 448 176 448H174.875C168.375 447.5 162.875 443.25 160.875 437L144 386.625L133.375 418.5C127.502 436.117 111.016 448 92.445 448H80C71.125 448 64 440.875 64 432S71.125 416 80 416H92.375C97.25 416 101.5 412.875 103 408.375L121.25 353.75C124.5 343.875 133.625 337.25 144 337.25S163.5 343.875 166.75 353.75L180.625 395.375C200.375 379.125 234.75 385.625 246.625 409.5C248.496 413.242 252.16 415.477 256 415.773V347C256 338.477 259.402 330.301 265.451 324.293L384 206.562V160H256C238.326 160 224 145.672 224 128V0H48C21.49 0 0 21.492 0 48V464C0 490.508 21.49 512 48 512H336C362.51 512 384 490.508 384 464V448H256V447.898Z"}
         %span.ml-4.whitespace-nowrap.overflow-hidden Interactive Screen
 
     %li.check-box
-      = check_box_tag "room_characteristics[]", "BluRay", params[:room_characteristics].try(:include?, "BluRay"), id: "bluray", class: "opacity-0 hidden"
+      = check_box_tag "room_characteristics[]", "BluRay", params[:room_characteristics].try(:include?, "BluRay"), id: "bluray", class: "opacity-0 hidden", data: { action: "input->autosubmit#save","autosubmit-duration-value" => "0" }
       %label{:for => "bluray", class:"characteristic-checkbox"}
         %svg{class: "characteristic-icon",  "aria-hidden" => "true", :fill => "none", :stroke => "currentColor", :viewbox => "0 0 512 512", :xmlns => "http://www.w3.org/2000/svg"}
           %path{:d => "M256 16C123.461 16 16 123.419 16 256S123.461 496 256 496S496 388.581 496 256S388.539 16 256 16ZM80.715 256H79.627C70.549 256 63.229 247.99 64.065 238.658C72.364 146.017 146.49 72.06 239.274 64.055C248.291 63.278 256 70.791 256 80.132V80.132C256 88.482 249.786 95.363 241.727 96.077C164.745 102.898 103.148 164.347 96.153 241.354C95.401 249.634 88.771 256 80.715 256ZM256 352C202.976 352 160 309 160 256S202.976 160 256 160S352 203 352 256S309.024 352 256 352ZM256 224C238.303 224 224 238.25 224 256S238.303 288 256 288C273.697 288 288 273.75 288 256S273.697 224 256 224Z"}
@@ -51,21 +51,21 @@
     Team Learning
   %ul.characteristics-list
     %li.check-box
-      = check_box_tag "room_characteristics[]", "TeamBoard", params[:room_characteristics].try(:include?, "TeamBoard"), id: "team-board", class: "opacity-0 hidden"
+      = check_box_tag "room_characteristics[]", "TeamBoard", params[:room_characteristics].try(:include?, "TeamBoard"), id: "team-board", class: "opacity-0 hidden", data: { action: "input->autosubmit#save","autosubmit-duration-value" => "0" }
       %label{:for => "team-board", class:"characteristic-checkbox"}
         %svg{class: "characteristic-icon",  "aria-hidden" => "true", :fill => "none", :stroke => "currentColor", :viewbox => "0 0 24 24", :xmlns => "http://www.w3.org/2000/svg"}
           %path{:d => "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z", "stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-width" => "2"}
         %span.ml-4.whitespace-nowrap.overflow-hidden Team Board
 
     %li.check-box
-      = check_box_tag "room_characteristics[]", "TeamTables", params[:room_characteristics].try(:include?, "TeamTables"), id: "team-tables", class: "opacity-0 hidden"
+      = check_box_tag "room_characteristics[]", "TeamTables", params[:room_characteristics].try(:include?, "TeamTables"), id: "team-tables", class: "opacity-0 hidden", data: { action: "input->autosubmit#save","autosubmit-duration-value" => "0" }
       %label{:for => "team-tables", class:"characteristic-checkbox"}
         %svg{class: "characteristic-icon",  "aria-hidden" => "true", :fill => "none", :stroke => "currentColor", :viewbox => "0 0 640 512", :xmlns => "http://www.w3.org/2000/svg"}
           %path{:d => "M488.039 191.996H336.039L336.039 243.86C336.039 281.523 308.959 315.861 271.487 319.629C228.397 323.961 192.038 290.208 192.038 247.999V126.366L167.529 141.101C123.171 167.769 96.038 215.741 96.038 267.501V267.501L16.038 313.754C0.788 322.505 -4.587 342.131 4.288 357.382L84.288 496.016C93.163 511.267 112.788 516.518 128.038 507.767L231.413 448.013H368.039C403.289 448.013 432.039 419.261 432.039 384.009H432.039C458.548 384.009 480.039 362.517 480.039 336.005V288.002H488.039C501.289 288.002 512.039 277.251 512.039 264.001V215.997C512.039 202.742 501.294 191.996 488.039 191.996ZM635.741 154.535L555.789 15.984C546.914 0.733 527.289 -4.518 512.039 4.233L408.664 63.987H346.093C308.247 63.987 271.159 74.597 239.039 94.614L239.038 94.614C229.709 100.428 224.038 110.644 224.038 121.637V247.999C224.038 270.126 241.913 288.002 264.038 288.002C286.164 288.002 304.039 270.126 304.039 247.999V159.993H488.039C518.967 159.993 544.039 185.067 544.039 215.997V244.499L624.039 198.246C639.267 189.441 644.533 169.772 635.741 154.535Z"}
         %span.ml-4.whitespace-nowrap.overflow-hidden Team Tables
 
     %li.check-box
-      = check_box_tag "room_characteristics[]", "TeamTech", params[:room_characteristics].try(:include?, "TeamTech"), id: "team-technology", class: "opacity-0 hidden"
+      = check_box_tag "room_characteristics[]", "TeamTech", params[:room_characteristics].try(:include?, "TeamTech"), id: "team-technology", class: "opacity-0 hidden", data: { action: "input->autosubmit#save","autosubmit-duration-value" => "0" }
       %label{:for => "team-technology", class:"characteristic-checkbox"}
         %svg{class: "characteristic-icon",  "aria-hidden" => "true", :fill => "none", :stroke => "currentColor", :viewbox => "0 0 576 512", :xmlns => "http://www.w3.org/2000/svg"}
           %path{:d => "M96 304.078C96 291.918 100.971 280.252 109.641 272.07L181.771 203.994C183.422 202.439 185.545 201.684 187.383 200.416C177.98 176.768 155 160 128 160H64C28.654 160 0 188.652 0 224V320C0 337.672 14.328 352 32 352V480C32 497.672 46.328 512 64 512H128C145.674 512 160 497.672 160 480V383.613L109.639 336.084C100.971 327.902 96 316.236 96 304.078ZM480 128C515.375 128 544 99.375 544 64S515.375 0 480 0S416 28.625 416 64S444.625 128 480 128ZM96 128C131.375 128 160 99.375 160 64S131.375 0 96 0S32 28.625 32 64S60.625 128 96 128ZM444.396 295.344L372.275 227.277C368.785 223.984 363.668 223.084 359.262 224.979C354.857 226.877 352 231.219 352 236.012V272H224V236.012C224 231.217 221.143 226.879 216.738 224.979C212.332 223.086 207.215 223.984 203.725 227.275L131.604 295.342C126.799 299.877 126.799 308.277 131.604 312.813L203.725 380.879C207.215 384.17 212.332 385.07 216.738 383.176C221.143 381.277 224 376.938 224 372.143V336H352V372.143C352 376.938 354.857 381.277 359.262 383.178C363.668 385.07 368.785 384.17 372.275 380.879L444.396 312.812C449.201 308.277 449.201 299.877 444.396 295.344ZM512 160H448C421.002 160 398.02 176.77 388.617 200.418C390.459 201.689 392.586 202.445 394.24 204.006L466.357 272.068C475.025 280.248 480 291.912 480 304.072C480.002 316.234 475.031 327.902 466.361 336.084L416 383.615V480C416 497.672 430.328 512 448 512H512C529.674 512 544 497.672 544 480V352C561.674 352 576 337.672 576 320V224C576 188.652 547.348 160 512 160Z"}
@@ -78,14 +78,14 @@
   %ul.characteristics-list
 
     %li.check-box
-      = check_box_tag "room_characteristics[]", "Whtbrd", params[:room_characteristics].try(:include?, "Whtbrd"), id: "whiteboard", class: "opacity-0 hidden"
+      = check_box_tag "room_characteristics[]", "Whtbrd", params[:room_characteristics].try(:include?, "Whtbrd"), id: "whiteboard", class: "opacity-0 hidden", data: { action: "input->autosubmit#save","autosubmit-duration-value" => "0" }
       %label{:for => "whiteboard", class:"characteristic-checkbox"}
         %svg.characteristic-icon{:viewbox => "0 0 640 512", :xmlns => "http://www.w3.org/2000/svg"}
           %path{:d => "M592.002 0H208.002C181.502 0 160.002 22.25 160.002 49.625V96C183.42 96 205.098 102.781 224.002 113.807V64H576.002V352H512.002V304C512.002 295.162 504.838 288 496.002 288H400.002C391.166 288 384.002 295.162 384.002 304V352H287.314C309.389 368.484 326.85 390.496 338.074 416H592.002C618.5 416 640 393.75 640 366.375V49.625C640 22.25 618.5 0 592.002 0ZM160 320C213.02 320 256 277.018 256 224C256 170.98 213.02 128 160 128C106.982 128 64 170.98 64 224C64 277.018 106.982 320 160 320ZM192 352H128C57.307 352 0 409.307 0 480C0 497.672 14.326 512 32 512H288C305.674 512 320 497.672 320 480C320 409.307 262.693 352 192 352Z"}
         %span.ml-4.whitespace-nowrap.overflow-hidden Whiteboard
 
     %li.check-box
-      = check_box_tag "room_characteristics[]", "Chkbrd", params[:room_characteristics].try(:include?, "Chkbrd"), id: "chalkboard", class: "opacity-0 hidden"
+      = check_box_tag "room_characteristics[]", "Chkbrd", params[:room_characteristics].try(:include?, "Chkbrd"), id: "chalkboard", class: "opacity-0 hidden", data: { action: "input->autosubmit#save","autosubmit-duration-value" => "0" }
       %label{:for => "chalkboard", class:"characteristic-checkbox"}
         %svg{class: "characteristic-icon",  "aria-hidden" => "true", :fill => "none", :stroke => "currentColor", :viewbox => "0 0 640 512", :xmlns => "http://www.w3.org/2000/svg"}
           %path{:d => "M592.002 0H208.002C181.502 0 160.002 22.25 160.002 49.625V96C183.42 96 205.098 102.781 224.002 113.807V64H576.002V352H512.002V304C512.002 295.162 504.838 288 496.002 288H400.002C391.166 288 384.002 295.162 384.002 304V352H287.314C309.389 368.484 326.85 390.496 338.074 416H592.002C618.5 416 640 393.75 640 366.375V49.625C640 22.25 618.5 0 592.002 0ZM160 320C213.02 320 256 277.018 256 224C256 170.98 213.02 128 160 128C106.982 128 64 170.98 64 224C64 277.018 106.982 320 160 320ZM192 352H128C57.307 352 0 409.307 0 480C0 497.672 14.326 512 32 512H288C305.674 512 320 497.672 320 480C320 409.307 262.693 352 192 352Z"}
