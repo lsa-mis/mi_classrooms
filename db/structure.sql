@@ -273,6 +273,27 @@ ALTER SEQUENCE public.room_characteristics_id_seq OWNED BY public.room_character
 
 
 --
+-- Name: room_contacts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.room_contacts (
+    rmrecnbr bigint NOT NULL,
+    rm_schd_cntct_name character varying,
+    rm_schd_email character varying,
+    rm_schd_cntct_phone character varying,
+    rm_det_url character varying,
+    rm_usage_guidlns_url character varying,
+    rm_sppt_deptid character varying,
+    rm_sppt_dept_descr character varying,
+    rm_sppt_cntct_email character varying,
+    rm_sppt_cntct_phone character varying,
+    rm_sppt_cntct_url character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
 -- Name: rooms; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -568,6 +589,13 @@ CREATE INDEX index_room_characteristics_on_rmrecnbr ON public.room_characteristi
 
 
 --
+-- Name: index_room_contacts_on_rmrecnbr; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_room_contacts_on_rmrecnbr ON public.room_contacts USING btree (rmrecnbr);
+
+
+--
 -- Name: index_rooms_on_building_bldrecnbr; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -626,6 +654,14 @@ ALTER TABLE ONLY public.omni_auth_services
 
 
 --
+-- Name: room_contacts fk_rails_40b2d3daf6; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.room_contacts
+    ADD CONSTRAINT fk_rails_40b2d3daf6 FOREIGN KEY (rmrecnbr) REFERENCES public.rooms(rmrecnbr);
+
+
+--
 -- Name: active_storage_variant_records fk_rails_993965df05; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -665,6 +701,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20201015185412'),
 ('20201015193542'),
 ('20201022165543'),
-('20201023153614');
+('20201023153614'),
+('20210816183531');
 
 
