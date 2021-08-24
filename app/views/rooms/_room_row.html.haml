@@ -1,5 +1,5 @@
 = turbo_frame_tag dom_id(room) do 
-  %tr.flex.flex-wrap.justify-between{class: "#{cycle('row-even', 'row-odd')}"}
+  %tr.flex.flex-wrap.justify-between.h-32{class: "#{cycle('row-even', 'row-odd')}"}
     -# basic info
     %td.px-6.pt-2.pb-6.whitespace-nowrap
       .flex.items-center
@@ -14,16 +14,17 @@
 
         .ml-4.max-w-xs.w-screen
           .text-md.font-medium.text-gray-900
-            = "#{room.room_number} #{room.building.name.titleize}"
+            = "#{room.title} "
         
             %span.flex.justify-between
               .text-md.text-gray-600
-                = "#{room.building.address}"
-              .text-sm.font-medium.text-orange-700 
-                = "Capacity: #{room.instructional_seating_count}"
-              .text-sm.font-medium.text-orange-700 
-                = link_to toggle_visibile_path(room), data: {"turbo-method": :toggle_visibile} do 
-                  = room.visible ? "visible" : "hidden"
+                = "#{room.address}"
+              %span.ml-10
+                .text-sm.font-medium.text-orange-700 
+                  = "Capacity: #{room.student_capacity}"
+                .text-sm.font-medium.text-orange-700 
+                  = link_to toggle_visibile_path(room), data: {"turbo-method": :toggle_visibile} do 
+                    = room.visible ? "visible" : "hidden"
                 
 
                 -# = button_to toggle_visibility_room_path, remote: true do
@@ -37,11 +38,10 @@
     %td.px-6.py-4.whitespace-nowrap.justify-between
       .text-sm.text-gray-900.text-right
 
-        = "#{room.dept_grp}"
+        = "#{room.department_name}"
       .text-xs.text-gray-500.flex.flex-col.sm:ml-20
-        %span Schedule this room
-        %span Tech Support
-
+        %span= "Scheduling: #{room.room_schedule_contact}"
+        %span= "Support: #{room.room_support_contact}"
 
       -# %td.px-6.py-4.whitespace-nowrap
       
@@ -51,5 +51,4 @@
         .hidden.whitespace-nowrap.text-right
           %a.text-blue-600.hover:text-red-600{href: "#"} Edit
           
-
 

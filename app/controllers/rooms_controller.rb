@@ -5,12 +5,13 @@ include ActionView::RecordIdentifier
   # GET /rooms
   # GET /rooms.json
   def index
-    @rooms = Room.classrooms.includes([:building])
+    @rooms = Room.classrooms.includes([:building, :room_contact])
 
     @rooms = @rooms.classrooms.with_building_name(params[:query]) if params[:query].present?
 
     @rooms = @rooms.classrooms.with_all_characteristics(params[:room_characteristics]) if params[:room_characteristics].present?
 
+    @rooms = RoomDecorator.decorate_collection(@rooms)
     @pagy, @rooms = pagy(@rooms)
 
   end
@@ -18,6 +19,11 @@ include ActionView::RecordIdentifier
   # GET /rooms/1
   # GET /rooms/1.json
   def show
+    respond_to do |format|
+      # format.js
+      format.html
+      format.json { render json: @room, serializer: RoomSerializer }
+    end
   end
 
   # GET /rooms/new
