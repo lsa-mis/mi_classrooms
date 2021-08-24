@@ -42,7 +42,6 @@ group :development, :test do
   gem "bullet"
   gem "pry"
   gem "factory_bot_rails"
-  gem "annotate", "~> 3.1.1"
   gem "standard"
   gem "rubocop-performance"
 end
@@ -70,9 +69,10 @@ group :test do
   gem "ffaker"
   gem "database_cleaner"
 end
-
+gem "annotate", "~> 3.1.1"
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'devise', github: 'heartcombo/devise'
 gem "omniauth-google-oauth2"
+gem "draper", "~> 4.0"
