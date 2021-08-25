@@ -57,5 +57,7 @@ class Building < ApplicationRecord
                             joins(:rooms).merge(Room.classrooms)
                           }
 
-
+  def self.classrooms?
+    where(room.classrooms.any?)
+  end
 end
