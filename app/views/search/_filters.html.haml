@@ -1,9 +1,8 @@
 / This example requires Tailwind CSS v2.0+
-.z-0.relative.w-full{data:
-    {controller: "dropdownz"}
+.relative.w-full{data:
+    {controller: "dropdown "}
     }
   .relative.z-10.bg-white
-
     %div
       -# .mt-0
 
@@ -35,7 +34,7 @@
           %h2#characteristicsHeading.sr-only Room Characteristic checkboxes
 
           = render './search/student_capacity'
-          = render './search/school_or_college'
+          = render partial: './search/school_or_college', locals: {form: form}
         -# Secondary
 
         %div{class: "grid  px-4  bg-white sm:grid-cols-2 sm:gap-x-8  sm:px-6 lg:px-8  xl:pr-12"}
@@ -45,3 +44,4 @@
 
       .link-to-all-classrooms 
         = link_to "Show all classrooms", rooms_path
+      

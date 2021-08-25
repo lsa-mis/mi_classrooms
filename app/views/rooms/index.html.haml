@@ -32,9 +32,10 @@
       %span Sort
     -# = form.submit
 
-  .flex.flex-row.justify-between.mb-4{data: {controller: "dropdown"}}
+  .flex.flex-row.justify-between.mb-4
     
-    = render partial: './search/filters'
+    = render partial: './search/filters', rooms: @rooms, locals: {form: form}
+    -# render partial: 'form', session: @session, locals: { form: form }
     -# = render partial: './search/sort_options'
    
 
@@ -53,11 +54,13 @@
 
 
             - @rooms.each do |room|
-              = render 'room_row', room: room
+              -# = render 'room_row', room: room
+              = render 'room_row_2', room: room
+              -# = render './pages/room_row', room: room
 
 %br
 
 = link_to 'New Room', new_room_path
 
 
-= render 'room_results_count'
+= render 'room_results_pagination'
