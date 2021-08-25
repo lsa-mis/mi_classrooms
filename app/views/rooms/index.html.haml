@@ -20,7 +20,6 @@
         = form.text_field :query, {class: "search-by-building-name", 
         :placeholder => "Undergraduate Sciences Building", data: { action: "input->autosubmit#save","autosubmit-duration-value" => "5000" }}
 
-        
       - else
         = form.text_field :query, class: 'search-by-building-name', value: params[:query], data: { action: "keyup->autosubmit#save" }
     %span.text-muted{"data-autosubmit-target" => "status"}
@@ -35,12 +34,6 @@
   .flex.flex-row.justify-between.mb-4
     
     = render partial: './search/filters', rooms: @rooms, locals: {form: form}
-    -# render partial: 'form', session: @session, locals: { form: form }
-    -# = render partial: './search/sort_options'
-   
-
-
-
 
 .flex.flex-col
   .-my-2.overflow-x-auto.sm:-mx-6.lg:-mx-8
@@ -55,7 +48,7 @@
 
             - @rooms.each do |room|
               -# = render 'room_row', room: room
-              = render 'room_row_2', room: room
+              = render 'room_row', room: room
               -# = render './pages/room_row', room: room
 
 %br
