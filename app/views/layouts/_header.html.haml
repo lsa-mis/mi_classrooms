@@ -5,7 +5,7 @@
         = link_to root_path, class: "flex-shrink-0" do
 
           .header-logo
-            = link_to image_tag(image_pack_path('mi_classrooms_logo.png'), alt: "#{(t :sitename)} Logo, link to home page.", id: root_path(anchor: 'page-bottom')), root_path
+            = link_to image_tag(asset_path('mi_classrooms_logo.png'), alt: "#{(t :sitename)} Logo, link to home page.", id: root_path(anchor: 'page-bottom')), root_path
         .hidden{class: "md:block"}
 
           .header-links
@@ -53,7 +53,18 @@
               }
               %a{class: "block px-4 py-2 text-sm text-gray-700 hover:bg-white", :href => "#", :role => "menuitem"} Your Profile
               %a{class: "block px-4 py-2 text-sm text-gray-700 hover:bg-white", :href => "#", :role => "menuitem"} Settings
-              %a{class: "block px-4 py-2 text-sm text-gray-700 hover:bg-white", :href => "#", :role => "menuitem"} Sign out
+              -# %a{class: "block px-4 py-2 text-sm text-gray-700 hover:bg-white", :href => "#", :role => "menuitem"} Sign out
+              .user-actions
+                .flex.items-center{class: "block px-4 py-2 text-sm text-gray-700 hover:bg-white"}
+                  - if user_signed_in?
+                    %img.user-avatar{:alt => "User Photo", :src => current_user.avatar_url, "data-action" => "click->toggle#dropdowntoggle" }
+                    %span.user-name
+                      = current_user.uniqname
+                  - else
+                    .user-action-link{class: "block px-4 py-2 text-sm text-gray-700 hover:bg-white"}
+                      = link_to user_google_oauth2_omniauth_authorize_path do
+                        %i.fas.fa-user-plus
+                        Sign In
 
 
       .flex
