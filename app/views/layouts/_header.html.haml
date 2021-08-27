@@ -1,11 +1,12 @@
 %nav.bg-blue-600{data: {controller: "dropdown"}}
   .max-w-7xl{class: "mx-auto px-4 sm:px-6 lg:px-8"}
     .flex.items-center.justify-between.h-16
-      .flex.items-center
-        = link_to root_path, class: "flex-shrink-0" do
+     
+     
 
-          .header-logo
-            = link_to image_tag(asset_path('mi_classrooms_logo.png'), alt: "#{(t :sitename)} Logo, link to home page.", id: root_path(anchor: 'page-bottom')), root_path
+      .header-logo.flex.items-center.align-middle
+        = link_to image_tag(asset_path('mi_classrooms_logo.png'), alt: "#{(t :sitename)} Logo, link to home page.", id: root_path(anchor: 'page-bottom')), root_path
+        
         .hidden{class: "md:block"}
 
           .header-links
