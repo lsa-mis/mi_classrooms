@@ -18,7 +18,7 @@ export default class extends Controller {
     // const resetSlider = this.resetTarget;
     const minimumCapacity = parseInt(this.data.get("minimum"))
     const maximumCapacity = parseInt(this.data.get("maximum"))
-
+    
     noUiSlider.create(slider, {
       range: {
         'min': 1,
@@ -27,12 +27,9 @@ export default class extends Controller {
       step: 5,
       // Handles start at ...
       start: [minimumCapacity , maximumCapacity],
-      // Display colored bars between handles
       connect: true,
-      // Put '0' at the bottom of the slider
       direction: 'ltr',
       orientation: 'horizontal',
-      // Move handle on tap, bars are draggable
       behaviour: 'tap-drag',
       tooltips: true,
       format: {
