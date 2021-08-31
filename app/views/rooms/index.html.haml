@@ -6,6 +6,10 @@
 -#     .form-input.block.w-full.pl-10{class: "sm:leading-5"}
 -#       = text_field_tag :query
 -#       = submit_tag "Submit"
+- content_for :head do
+  %link{href: "https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css", rel: "stylesheet"}
+
+= console
 %h1 Listing Classrooms
 = "#{@pagy.count} Results"
 = form_with url: rooms_path, method: :get, class: "", data: { controller: "autosubmit", target: "autosubmit.form", action: "ajax:success->autosubmit#success ajax:error->autosubmit#error" } do |form|
@@ -18,11 +22,23 @@
 
       - if params[:query].blank? 
         = form.text_field :query, {class: "search-by-building-name", 
-        :placeholder => "Undergraduate Sciences Building", data: { action: "input->autosubmit#save","autosubmit-duration-value" => "5000" }}
-
+        :placeholder => "Undergraduate Sciences Building", data: { action: "input->autosubmit#save","autosubmit-duration-value" => 5000 }}
+        %div{"data-controller" => "autosubmit", "data-autosubmit-duration-value" => "5000"}
       - else
-        = form.text_field :query, class: 'search-by-building-name', value: params[:query], data: { action: "keyup->autosubmit#save" }
+        = form.text_field :query, class: 'search-by-building-name', value: params[:query], data: { action: "keyup->autosubmit#save", "data-autosubmit-duration-value" => "5000" }
     %span.text-muted{"data-autosubmit-target" => "status"}
+
+
+
+    -# .search-for-buildings-container
+
+      // %label.filters-section-header-building{for: "building_name"} Buildings
+      .flex.mt-1.shadow-sm
+        .relative.flex-grow{class: "focus-within:z-10"}
+          .search-by-building-name#buidling_name{class: "block w-full  transition duration-150 ease-in-out  form-input py-0 rounded-md sm:text-sm sm:leading-5", "data-tippy-content" => "Filter by building name"}
+            = form.select :query, @searchable_buildings, {:prompt => 'Building Name'}, {multiple: true, data: {controller: "choices", target: "choices.choice", action: "autosubmit#change"}}
+          
+          %div{"data-controller" => "autosubmit", "data-autosubmit-duration-value" => "/messages"}
 
     -# %button.-ml-px.relative.inline-flex.items-center.space-x-2.px-4.py-2.border.border-gray-300.text-sm.font-medium.rounded-r-md.text-gray-700.bg-gray-50.hover:bg-gray-100.focus:outline-none.focus:ring-1.focus:ring-indigo-500.focus:border-indigo-500
       / Heroicon name: solid/sort-ascending
@@ -47,9 +63,8 @@
 
 
             - @rooms.each do |room|
-              -# = render 'room_row', room: room
+              
               = render 'room_row', room: room
-              -# = render './pages/room_row', room: room
 
 %br
 
