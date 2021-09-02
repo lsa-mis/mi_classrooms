@@ -9,7 +9,6 @@
 - content_for :head do
   %link{href: "https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css", rel: "stylesheet"}
 
-= console
 %h1 Listing Classrooms
 = "#{@pagy.count} Results"
 = form_with url: rooms_path, method: :get, class: "", data: { controller: "autosubmit", target: "autosubmit.form", action: "ajax:success->autosubmit#success ajax:error->autosubmit#error" } do |form|
