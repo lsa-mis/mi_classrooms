@@ -1,36 +1,40 @@
 = turbo_frame_tag dom_id(room) do 
   -# %tr.flex.flex-wrap.justify-between{class: "#{cycle('row-even', 'row-odd')}"}
-  %div{data: {controller: "dropdown"}}
-    .max-w-2xl.mx-auto.py-4.px-4.sm:py-2.sm:px-6.md:max-w-7xl.lg:px-8
+  %div
+    .max-w-2xl.mx-2.py-4.px-2.sm:py-2.sm:px-0.md:max-w-7xl.lg:px-8
       %h2.sr-only Classroom
       .grid.grid-cols-1.gap-y-4.sm:grid-cols-1.sm:gap-x-6.sm:gap-y-10.lg:grid-cols-2.lg:gap-x-8
         
-        .group.relative.bg-white.border.border-gray-300.rounded-lg.flex.flex-col.sm:flex-row.overflow-hidden.sm:h-28.sm:leading-tight
-          .aspect-w-3.aspect-h-4.bg-gray-200.group-hover:opacity-75.sm:aspect-none.sm:w-48
+        .relative.bg-white.border.border-gray-300.rounded-lg.flex.flex-col.sm:flex-row.overflow-hidden.sm:h-28.sm:leading-tight{class: "#{cycle('row-even', 'row-odd')}"}
 
-            %img.object-center.object-fill{alt: "#{room.title}", src: "https://images.unsplash.com/photo-1606761568499-6d2451b23c66?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjJ8fGNsYXNzcm9vbXxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"}
-          .flex-1.sm:px-4.sm:py-2.space-y-4.flex.flex-col
-            %h3.text-sm.font-medium.text-gray-900
-              %a{href: "#"}
-                %span.absolute.inset-0.truncate{"aria-hidden" => "true"}
-                .truncate= room.title 
-              %span.text-sm.text-blue-700
-                = room.address
-            .flex.flex-row
+          
+          %img{alt: "#{room.title}", src: "https://images.unsplash.com/photo-1606761568499-6d2451b23c66?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjJ8fGNsYXNzcm9vbXxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"}
 
+
+          .flex-1.px-2.sm:pt-0.sm:pl-2.py-2.space-y-4.flex.flex-col.sm:flex-col.sm:justify-between
+            %div.flex.flex-row.justify-between.w-full.sm:pt-2.sm:pl-2
+              %h3.text-sm.font-medium.text-gray-900
+                %a{href: "#"}
+                  %span.absolute.inset-0.truncate{"aria-hidden" => "true"}
+                  .truncate= room.title 
+                %span.text-sm.text-blue-700
+                  = room.address
+              %p.text-sm.italic.text-gray-500=  "Capacity: #{room.instructional_seating_count}"
+
+            .flex.flex-row.justify-between.sm:pl-2
               .flex-1.flex.flex-col
-                %p.text-sm.text-gray-500 Scheduling
-                %p.text-sm.text-gray-500 Support
-              .flex-1.flex.flex-col.justify-end
-                %p.text-sm.italic.text-gray-500=  "Capacity: #{room.instructional_seating_count}"
-                %p.text-base.font-medium.text-gray-900{"data-action" => "click->dropdown#show ", "data-dropdown-target" => "button", role: "button", tabindex: "0"}
-                .inline-block.select-none{"data-action" => "click->dropdown#toggle click@window->dropdown#hide", "data-dropdown-target" => "button", role: "button", tabindex: "0"}
-                  %span.appearance-none.flex.items-center.inline-block.text-gray-700
-                    %svg.h-4.w-4{viewbox: "0 0 20 20", xmlns: "http://www.w3.org/2000/svg"}
-                      %path{d: "M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"}
-                    Details
+                %p.text-sm.text-gray-600 Scheduling
+                %p.text-sm.text-gray-600 Support
+              .flex.flex-col.justify-end
+                %p.hidden.text-sm.italic.text-gray-500=  "Capacity: #{room.instructional_seating_count}"
+                %p.text-base.font-medium.text-gray-800
+                  .inline-block.select-none
+                    %span.appearance-none.flex.items-center.inline-block.text-gray-700{"data-action" => "click->dropdown#toggle click@window->dropdown#hide", "data-dropdown-target" => "button", role: "button", tabindex: "0"}
+                      %svg.h-4.w-4{viewbox: "0 0 20 20", xmlns: "http://www.w3.org/2000/svg"}
+                        %path{d: "M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"}
+                      Details
 
-      %div.hidden.h-56{data: {"dropdown-target" => "menu"}}
+      %div.hidden.h-56
         Please sign in to see additional information about this room
 
 
