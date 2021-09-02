@@ -46,7 +46,7 @@ class RoomDecorator < Draper::Decorator
   # `helpers` (aka `h`). You can override attributes, for example:
   #
   def title
-    "#{room.room_number} #{room.building.nick_name.titleize}"
+    "#{room.room_number} #{room.building.name.titleize}"
   end
 
   def address
