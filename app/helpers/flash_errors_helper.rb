@@ -1,6 +1,7 @@
 module FlashErrorsHelper
   def flash_class(level)
     case level
+    when :alert then "alert-danger"
     when :danger then "alert-danger"
     when :error   then "alert-error"
     when :notice  then "alert-notice"
@@ -10,6 +11,7 @@ module FlashErrorsHelper
   end
 
   SEVERITY_ICONS = {
+    alert: "shield-exclamation",
     danger: "shield-exclamation",
     error: "triangle-exclamation", 
     notice: "circle-check", 
