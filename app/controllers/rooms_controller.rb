@@ -6,7 +6,7 @@ include ActionView::RecordIdentifier
   # GET /rooms.json
   def index
 
-    @rooms = Room.classrooms.includes([:building, :room_contact]).where('instructional_seating_count > ?', 1) 
+    @rooms = Room.classrooms.includes([:building, :room_contact, :room_characteristics]).where('instructional_seating_count > ?', 1) 
 
     @rooms = @rooms.classrooms.with_building_name(params[:query]) if params[:query].present?
     @rooms = @rooms.classrooms.with_school_or_college_name(params[:school_or_college_name]) if params[:school_or_college_name].present?
