@@ -131,3 +131,69 @@
   @apply   bg-blue-400 absolute
 .sort-otpions-inner
   @apply relative w-screen max-w-xs right-0
+
+
+
+.h-highlights
+  @apply  grid grid-cols-3 gap-x-1 gap-y-2 px-2 
+  @screen md
+    @apply grid-cols-5
+  @screen lg
+    @apply grid-cols-3
+  .h-capacity
+    @apply  col-start-1
+  .h-layout
+    @apply  col-start-2
+
+.h-highlight-item
+  @apply inline-flex text-sm rounded-lg text-blue-700 whitespace-nowrap items-center font-semibold
+  svg
+    @apply h-5 w-5
+
+  @screen md
+    @apply text-base
+    svg
+      @apply h-5 w-5
+  @screen lg
+    @apply text-sm
+    svg
+      @apply h-4 w-4
+
+
+.classroom-row-dropdown-toggle
+  @apply text-sm text-gray-600 font-light inline-flex
+
+.classroom-row-dropdown-toggle-button
+  @apply inline-flex
+  span
+    @apply justify-center align-middle
+  svg
+    @apply ml-1 transform rotate-90 fill-current
+
+.classroom-row-dropdown
+  @apply  pt-4 bg-blue-50
+
+.classroom-row-dropdown-features-section
+  @apply w-full max-w-2xl
+
+.classroom-row-dropdown-features-group
+  @apply  px-4
+  hr
+    @apply  flex-1 border-t border-blue-600 mr-4 mt-3
+    @screen md
+      @apply mr-10
+
+.classroom-row-dropdown-top-matter
+  @apply w-full
+
+.classroom-row-dropdown-features
+  @apply mt-2 pl-6 grid grid-cols-3 gap-3 grid-flow-row
+  @screen lg
+    @apply  grid-cols-4
+  li
+    @apply whitespace-nowrap truncate
+  svg
+    @apply h-4 w-4
+
+.classroom-row-dropdown-feature
+  @apply flex items-start text-blue-700 mr-2 whitespace-nowrap min-w-full max-w-xs

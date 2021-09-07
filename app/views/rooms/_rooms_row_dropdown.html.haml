@@ -1,0 +1,123 @@
+.h-highlights{data: {controller: "modal"}}
+  .h-capacity.h-highlight-item
+ 
+    .icon.text-gray-500= svg("users")
+    %p.ml-3
+      = "#{room.instructional_seating_count} Students"
+  .h-layout.h-highlight-item
+    .h-4.w-4.text-gray-500= svg("chair")
+    .ml-3
+      Room Layout
+  .h-floorplan.h-highlight-item
+    .h-4.w-4.text-gray-500= svg("layer_group")
+
+    %p.ml-3
+      %a{"data-action" => "click->modal#open", :href => "#"}
+        Floor Map
+        
+-# - if controller.controller_name == "show"
+-#   = render 'room_layout', cached: true, locals:  {:room =>room}
+
+.classroom-row-dropdown
+
+  %div
+    .relative{class: ""}
+      .mx-auto.rounded-lg.shadow-lg.overflow-hidden.pb-10{class: "md:max-w-none md:flex "}
+
+        .classroom-row-dropdown-features-section
+          - if room.room_characteristics
+            .classroom-row-dropdown-features-group
+              %h4.features-header
+                Features
+              %hr
+              = "Support Contact: #{room.room_support_contact}"
+            %ul.classroom-row-dropdown-features
+              - room.room_characteristics.select{ |c| c.feature?}.each do |characteristic|
+                = render partial: 'room_characteristic', locals:  {characteristic: characteristic}, cached: true
+
+-#                 - room.room_characteristics.select{ |c| c.teamboard_feature?}.each do |characteristic|
+-#                   = render partial: 'room_characteristic', locals:  {characteristic: characteristic}, cached: true
+
+-#               - if room.room_characteristics.select{ |c| c.teamlearning_feature?}
+-#                 - room.room_characteristics.select{ |c| c.teamlearning_feature?}.each do |characteristic|
+-#                   = render partial: 'room_characteristic', locals:  {characteristic: characteristic}, cached: true
+
+-#               - if room.room_characteristics.select{ |c| c.instructor_computer?}
+-#                 - room.room_characteristics.select{ |c| c.instructor_computer?}.each do |characteristic|
+-#                   = render partial: 'room_characteristic', locals:  {characteristic: characteristic}, cached: true
+
+
+-#             .classroom-row-dropdown-features-group
+-#               %h4.features-header
+-#                 Additional characteristics
+-#               %hr
+-#             %ul.classroom-row-dropdown-features
+-#               - if room.room_characteristics.select{ |c| c.teamlearning_feature?}
+-#                 - room.room_characteristics.select{ |c| c.teamlearning_feature?}.each do |characteristic|
+-#                   .flex-shrink-0= render partial: 'room_characteristic', locals:  {characteristic: characteristic}, cached: true
+
+-#               - if room.room_characteristics.select{ |c| c.chalkboard_feature?}
+-#                 - room.room_characteristics.select{ |c| c.chalkboard_feature?}.each do |characteristic|
+-#                   .flex-shrink-0= render partial: 'room_characteristic', locals:  {characteristic: characteristic}, cached: true
+
+-#               - if room.room_characteristics.select{ |c| c.whiteboard_feature?}
+-#                 - room.room_characteristics.select{ |c| c.whiteboard_feature?}.each do |characteristic|
+-#                   .flex-shrink-0= render partial: 'room_characteristic', locals:  {characteristic: characteristic}, cached: true
+
+-#               - if room.room_characteristics.select{ |c| c.projection_feature?}
+-#                 - room.room_characteristics.select{ |c| c.projection_feature?}.each do |characteristic|
+-#                   .flex-shrink-0= render partial: 'room_characteristic', locals:  {characteristic: characteristic}, cached: true
+
+-#         .classroom-row-contact-items
+-#           .classroom-row-contact-item.classroom-row-scheduling-contact
+
+-#             .flex
+-#               .flex-shrink-0
+-#                 .classroom-row-contact-icon.bg-blue-700
+
+-#                   %svg{fill: "none", stroke: "currentColor",viewbox: "0 0 448 512", xmlns: "http://www.w3.org/2000/svg"}
+-#                     %path{d: "M0 464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V192H0v272zm320-196c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zm0 128c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zM192 268c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zm0 128c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zM64 268c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12H76c-6.6 0-12-5.4-12-12v-40zm0 128c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12H76c-6.6 0-12-5.4-12-12v-40zM400 64h-48V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48H160V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48H48C21.5 64 0 85.5 0 112v48h448v-48c0-26.5-21.5-48-48-48z"}
+-#               .ml-4
+-#                 %h5.text-base.leading-6.font-medium.text-gray-900.truncate
+
+-#                   = room.room_schedule_contact
+-#                 %p.text-base.leading-6
+
+-#                   %ul
+-#                     %li.flex
+-#                       .icon.self-center= render "icons/phone_icon", cached: true
+-#                       = "#{room.room_schedule_phone}"
+-#                     %li.flex
+-#                       .icon.self-center= render "icons/envelope_icon", cached: true
+-#                       = "Email #{room.room_schedule_email}"
+-#                     %li
+-#                       = link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{room.facility_code_heprod }", target: "_blank", class: "flex" do
+-#                         .icon.self-center= render "icons/calendar-alt_icon", cached: true
+-#                         .self-center View room availability
+
+-#           .classroom-row-contact-item.classroom-row-support-contact
+
+-#             .flex
+-#               .flex-shrink-0
+-#                 .classroom-row-contact-icon.bg-red-700
+-#                   %svg{fill: "none", stroke: "currentColor", viewbox: "0 0 512 512", xmlns: "http://www.w3.org/2000/svg"}
+-#                     %path{d: "M256 504c136.967 0 248-111.033 248-248S392.967 8 256 8 8 119.033 8 256s111.033 248 248 248zm-103.398-76.72l53.411-53.411c31.806 13.506 68.128 13.522 99.974 0l53.411 53.411c-63.217 38.319-143.579 38.319-206.796 0zM336 256c0 44.112-35.888 80-80 80s-80-35.888-80-80 35.888-80 80-80 80 35.888 80 80zm91.28 103.398l-53.411-53.411c13.505-31.806 13.522-68.128 0-99.974l53.411-53.411c38.319 63.217 38.319 143.579 0 206.796zM359.397 84.72l-53.411 53.411c-31.806-13.505-68.128-13.522-99.973 0L152.602 84.72c63.217-38.319 143.579-38.319 206.795 0zM84.72 152.602l53.411 53.411c-13.506 31.806-13.522 68.128 0 99.974L84.72 359.398c-38.319-63.217-38.319-143.579 0-206.796z"}
+-#               .ml-4
+-#                 %h5
+-#                   = "Support provided by #{room.department_name}"
+-#                 %p.text-base.leading-6
+
+-#                   %ul
+
+-#                     %li.flex
+-#                       .icon.self-center= render "icons/phone_icon", cached: true
+-#                       = "#{room.room_support_phone}"
+-#                     %li.flex
+-#                       .icon.self-center= render "icons/envelope_icon", cached: true
+-#                       = "#{room.room_support_email}"
+-#           .mt-6
+-#             - unless action_name == 'show'
+-#               .rounded-md.shadow
+
+
+-#                 .flex.items-center.justify-center.px-5.py-3.border.border-transparent.text-base.leading-6.font-medium.rounded-md.text-green-900.bg-green-400{class: "hover:bg-green-500 hover:text-green-100focus:outline-none focus:ring transition duration-150 ease-in-out", href: "#"}= link_to "More Details", room
