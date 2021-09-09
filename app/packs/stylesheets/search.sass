@@ -132,8 +132,6 @@
 .sort-otpions-inner
   @apply relative w-screen max-w-xs right-0
 
-
-
 .h-highlights
   @apply  grid grid-cols-3 gap-x-1 gap-y-2 px-2 
   @screen md
@@ -174,26 +172,64 @@
   @apply  pt-4 bg-blue-50
 
 .classroom-row-dropdown-features-section
-  @apply w-full max-w-2xl
+  @apply w-full max-w-2xl 
+  @screen lg  
+    
 
-.classroom-row-dropdown-features-group
-  @apply  px-4
+.classroom-row-dropdown-features-group 
   hr
-    @apply  flex-1 border-t border-blue-600 mr-4 mt-3
-    @screen md
-      @apply mr-10
+    @apply flex-1 border-t border-blue-600 mt-1 mx-2
+  @screen md 
+    @apply mr-4
 
+
+    
 .classroom-row-dropdown-top-matter
-  @apply w-full
+  @apply w-full 
 
 .classroom-row-dropdown-features
-  @apply mt-2 pl-6 grid grid-cols-3 gap-3 grid-flow-row
-  @screen lg
-    @apply  grid-cols-4
+  @apply  grid grid-cols-4  grid-flow-row mx-4 mt-4
+  @screen md 
+    @apply grid-cols-3 
   li
     @apply whitespace-nowrap truncate
   svg
     @apply h-4 w-4
 
 .classroom-row-dropdown-feature
-  @apply flex items-start text-blue-700 mr-2 whitespace-nowrap min-w-full max-w-xs
+  @apply flex items-start text-blue-700 truncate mt-1 ml-1 whitespace-nowrap items-center 
+
+.classroom-row-contact-icon
+  @apply flex items-center justify-center h-8 w-8 rounded-md  text-blue-100
+  svg
+    @apply h-5 w-5 fill-current text-blue-100
+
+.classroom-row-contact-items
+  @apply truncate text-left
+  @screen md
+    @apply flex-shrink-0 flex flex-col justify-start -mt-4 w-1/3 mr-4
+  @screen lg   
+    @apply w-full mt-4
+  
+
+.classroom-row-contact-item
+  @apply bg-white rounded py-4 pr-6 pl-2 truncate mt-2
+
+  h5
+    @apply  truncate text-lg text-gray-600 leading-tight -mt-1 
+  ul
+    @apply leading-tight
+    li
+      @apply font-light leading-loose align-middle items-center leading-tight flex
+      svg
+        @apply h-5 w-5  text-blue-700 px-1 fill-current flex-shrink-0 align-middle mr-1
+  @screen md
+    @apply mb-1
+    h5
+      @apply text-sm
+    ul
+      li
+        @apply text-xs leading-tight
+
+.features-header
+  @apply  flex-shrink-0 pr-4 text-sm tracking-wider font-semibold uppercase text-blue-600 pt-2
