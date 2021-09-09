@@ -18,6 +18,7 @@ include ActionView::RecordIdentifier
     @rooms = @rooms.with_school_or_college_name(params[:school_or_college_name]) if params[:school_or_college_name].present?  
 
     @rooms = RoomDecorator.decorate_collection(@rooms)
+    # @rooms = @rooms.decorate 
     @pagy, @rooms = pagy(@rooms)
 
   end
@@ -92,10 +93,18 @@ include ActionView::RecordIdentifier
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_room
-      @room = Room.includes([:building]).find(params[:id])
-    end
+    # def set_room
+    #   @room = Room.includes([:building]).find(params[:id])
+    # end
 
+    def set_room
+      fresh_when @room
+      @room = Room.includes(:building, :room_characteristics, :room_panorama_attachment, :room_contact).find(params[:id])
+      # authorize @room
+      # @room_json = serialize_rooms([@room])
+      @room = @room.decorate
+      # @room = Room.find_by facility_code_heprod:(params[:id].upcase) || Room.find(params[:id])
+    end
     
     # Only allow a list of trusted parameters through.
     def room_params

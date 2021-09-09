@@ -32,6 +32,8 @@ class Room < ApplicationRecord
   include PgSearch::Model
   self.primary_key = 'rmrecnbr'
 
+  
+
   belongs_to :building, foreign_key: :building_bldrecnbr
   has_many :room_characteristics, foreign_key: :rmrecnbr
   has_one :room_contact, foreign_key: :rmrecnbr
@@ -72,9 +74,33 @@ class Room < ApplicationRecord
     }
   )
 
+    pg_search_scope(
+    :with_characteristic,
+    against: [:characteristics],
+    using: {
+      tsearch:{
+        dictionary: "english",
+        prefix: true,
+        any_word: true,
+      }
+    }
+  )
+
   pg_search_scope(
     :with_all_characteristics,
     against: [:characteristics],
+    using: {
+      tsearch:{
+        dictionary: "english",
+        prefix: true,
+        any_word: false,
+      }
+    }
+  )
+
+  pg_search_scope(
+    :with_school_or_college_name,
+    against: [:dept_description],
     using: {
       tsearch:{
         dictionary: "english",

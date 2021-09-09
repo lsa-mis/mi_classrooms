@@ -3,7 +3,9 @@ class RoomDecorator < Draper::Decorator
     PaginatingDecorator
   end
   delegate_all
-  # decorates_association :room_characteristics
+  decorates_finders
+  decorates_association :room_characteristics
+  
   DEPARTMENTS = {
     "" => "All Units",
     "ACAD_&_BDGT_AFFAIRS" => "Academic and Budget Affairs",
@@ -46,7 +48,7 @@ class RoomDecorator < Draper::Decorator
   # `helpers` (aka `h`). You can override attributes, for example:
   #
   def title
-    "#{room.room_number} #{room.building.name.titleize}"
+    "#{room.room_number} #{room.building.nick_name.titleize}"
   end
 
   def address
@@ -70,11 +72,12 @@ class RoomDecorator < Draper::Decorator
   end
 
   def student_capacity
-    helpers.pluralize(room.instructional_seating_count, "Seats")
+    helpers.pluralize(room.instructional_seating_count, "Student")
   end
 
   def room_schedule_contact
-    if room.room_contact&.rm_schd_cntct_name
+    if
+room.room_contact&.rm_schd_cntct_name
       "#{room.room_contact.rm_schd_cntct_name.titleize}"
     else
       "Not Available"
@@ -82,7 +85,8 @@ class RoomDecorator < Draper::Decorator
   end
 
   def room_schedule_email
-    if room.room_contact&.rm_schd_email
+    if
+room.room_contact&.rm_schd_email
       "#{room.room_contact.rm_schd_email.downcase}"
     else
       "Not Available"
@@ -100,7 +104,8 @@ room.room_contact&.rm_schd_cntct_phone
 
   def room_support_contact
     #  rm_sppt_cntct_url    :string
-    if room.room_contact&.rm_sppt_cntct_url
+    if
+room.room_contact&.rm_sppt_cntct_url
       "#{room.room_contact.rm_sppt_cntct_url} \n #{room.room_contact.rm_schd_email}".titleize
     else
       "Not Available"
@@ -109,7 +114,8 @@ room.room_contact&.rm_schd_cntct_phone
 
   def room_support_email
     #  rm_sppt_cntct_url    :string
-    if room.room_contact&.rm_sppt_cntct_email
+    if
+room.room_contact&.rm_sppt_cntct_email
       "#{room.room_contact.rm_sppt_cntct_email}"
     else
       "Not Available"
@@ -118,7 +124,8 @@ room.room_contact&.rm_schd_cntct_phone
 
   def room_support_phone
     #  rm_sppt_cntct_url    :string
-    if room.room_contact&.rm_sppt_cntct_phone
+    if
+room.room_contact&.rm_sppt_cntct_phone
       "#{room.room_contact.rm_sppt_cntct_phone}"
     else
       "Not Available"
