@@ -22,5 +22,10 @@ task update_buildings: :environment do
   auth_token = AuthTokenApi.new
   @access_token = auth_token.get_auth_token
   puts @access_token
-  puts "The task ran at #{DateTime.now}"
+
+  building = BuildingsApi.new('1005046', @access_token)
+  # building_data = building.get_building_data
+
+  building_room_data = building.get_building_room_data
+  # puts "The task ran at #{DateTime.now}"
 end

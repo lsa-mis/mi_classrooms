@@ -4,6 +4,7 @@ class AuthTokenApi
   end
 
   def get_auth_token
+    puts "in get auth token"
     begin
       url = URI("https://apigw.it.umich.edu/um/bf/oauth2/token")
       http = Net::HTTP.new(url.host, url.port)
@@ -14,10 +15,11 @@ class AuthTokenApi
       request["content-type"] = 'application/x-www-form-urlencoded'
       request["accept"] = 'application/json'
       # request.body = "grant_type=client_credentials&client_id=#{Rails.application.credentials.um_api[:tdx_client_id]}&client_secret=#{Rails.application.credentials.um_api[:tdx_client_secret]}&scope=tdxticket"
-      request.body = "grant_type=client_credentials&client_id=378e3cfb-b8a3-4e83-a154-eb307b7d9618&client_secret=U2aI2dT4lM1hC8yL8iM2yR3dY5rT3sK4jS3qO5sX3hT6xK8jT2&scope=building"
+      request.body = "grant_type=client_credentials&client_id=378e3cfb-b8a3-4e83-a154-eb307b7d9618&client_secret=U2aI2dT4lM1hC8yL8iM2yR3dY5rT3sK4jS3qO5sX3hT6xK8jT2&scope=buildings"
 
       response = http.request(request)
       return @access_token = JSON.parse(response.read_body)['access_token']
+      # return @access_token = JSON.parse(response.read_body)
       rescue => @error
         puts @error.inspect
       return false
@@ -27,66 +29,60 @@ end
 
 class BuildingsApi
 
-  def initialize(search_field, access_token)
-      @search_field = search_field
-      @device_tdx = {'result' => {'success' => false}, 'data' => {}}
+  def initialize(bldrecnbr, access_token)
+      @bldrecnbr = bldrecnbr
+      @building_data = {'result' => {'success' => false}, 'data' => {}}
       @access_token = access_token
   end
 
-  def get_device_data
-    url = URI("https://apigw.it.umich.edu/um/it/48/assets/search")
-
+  def get_building_data
+    url = URI("https://apigw.it.umich.edu/um/bf/BuildingInfoById/#{@bldrecnbr}")
+    puts "in get_building_data"
+    puts url
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
-    request = Net::HTTP::Post.new(url)
-    request["x-ibm-client-id"] = "#{Rails.application.credentials.um_api[:tdx_client_id]}"
+    request = Net::HTTP::Get.new(url)
+    request["x-ibm-client-id"] = "378e3cfb-b8a3-4e83-a154-eb307b7d9618"
     request["authorization"] = "Bearer #{@access_token}"
-    request["content-type"] = 'application/json'
+    # request["content-type"] = 'application/json'
     request["accept"] = 'application/json'
-    request.body = "{\"SerialLike\":\"#{@search_field}\"}"
 
     response = http.request(request)
-    asset_info = JSON.parse(response.read_body)
+    @building_data = JSON.parse(response.read_body)
     # check if response is not empty and returns only one result
-    if asset_info.present? && asset_info.count == 1
-      @device_tdx['result']['success'] = true
-      @device_tdx['data']['serial'] = asset_info[0]['SerialNumber']
-      @device_tdx['data']['hostname'] = asset_info[0]['Name']
+    # if asset_info.present? && asset_info.count == 1
+    
+    puts @building_data 
+  end
 
-      @device_tdx['data']['building'] = asset_info[0]['LocationName']
-      @device_tdx['data']['room'] = asset_info[0]['LocationRoomName']
-      @device_tdx['data']['owner'] = asset_info[0]['OwningCustomerName']
-      @device_tdx['data']['department'] = asset_info[0]['OwningDepartmentName']
-      @device_tdx['data']['manufacturer'] = asset_info[0]['ManufacturerName']
-      @device_tdx['data']['model'] = asset_info[0]['ProductModelName']
-      asset_id = asset_info[0]['ID']
+  def get_building_room_data
+    url = URI("https://apigw.it.umich.edu/um/bf/RoomInfo/#{@bldrecnbr}")
+    puts "in get_building_room_data"
+    puts url
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
-      # get attributes (to get a mac address) by asset_id
-      url = URI("https://apigw.it.umich.edu/um/it/48/assets/#{asset_id}")
+    request = Net::HTTP::Get.new(url)
+    request["x-ibm-client-id"] = "378e3cfb-b8a3-4e83-a154-eb307b7d9618"
+    request["authorization"] = "Bearer #{@access_token}"
+    # request["content-type"] = 'application/json'
+    request["accept"] = 'application/json'
 
-      request = Net::HTTP::Get.new(url)
-      request["x-ibm-client-id"] = "#{Rails.application.credentials.um_api[:tdx_client_id]}"
-      request["authorization"] = "Bearer #{@access_token}"
-      request["accept"] = 'application/json'
-
-      response = http.request(request)
-      asset_info = JSON.parse(response.read_body)
-
-      if asset_info.present? 
-        mac_info = asset_info['Attributes'].select {|attrib| attrib["Name"] == "MAC Address(es)"}
-        if mac_info.empty?
-          @device_tdx['data']['mac'] = "" 
-        else 
-          @device_tdx['data']['mac'] = mac_info[0]["Value"]
-        end
+    response = http.request(request)
+    data = JSON.parse(response.read_body)
+    @building_data = []
+    # puts data['ListOfRooms']['RoomData'].first['RoomTypeDescription']
+    data['ListOfRooms']['RoomData'].each do |room|
+      if room['RoomTypeDescription'] == 'Classroom'
+        @building_data << room
       end
-    elsif asset_info.present? && asset_info.count > 1
-        @device_tdx['result']['more-then_one_result'] = "More than one result returned for serial or hostname [#{@search_field}]."
-    else 
-        @device_tdx['result']['device_not_in_tdx'] = "This device is not present in the TDX Assets database."
     end
-    @device_tdx
+    # check if response is not empty and returns only one result
+    # if asset_info.present? && asset_info.count == 1
+    
+    puts @building_data 
   end
 end
