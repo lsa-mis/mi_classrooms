@@ -7,17 +7,16 @@
 # https://en.wikipedia.org/wiki/Cron
 # https://medium.com/@pawlkris/scheduling-tasks-in-rails-with-cron-and-using-the-whenever-gem-34aa68b992e3
 
-desc "This will update buildings"
-task update_buildings: :environment do
+desc "This will update classroom"
+task update_classroom: :environment do
 
-  auth_token = AuthTokenApi.new("bf", "buildings")
+  auth_token = AuthTokenApi.new("aa", "classrooms")
   @access_token = auth_token.get_auth_token
 
-  building = BuildingsApi.new('1005046', @access_token)
-  # building_data = building.get_building_data
-  # buildings_for_current_fiscal_year = building.get_buildings_for_current_fiscal_year
+  classroom = ClassroomApi.new('USB1230', @access_token)
 
-  # building_room_data = building.get_building_room_data
-  building_room_data_for_fiscal_year = building.get_building_room_data_for_fiscal_year
+  # classroom_characteristics = classroom.get_classroom_characteristics
+
+  classroom_contact  = classroom.get_classroom_contact
 
 end
