@@ -1,13 +1,11 @@
 - content_for :head do
   %link{href: "https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/styles/choices.min.css", rel: "stylesheet"}
-%h1 Listing buildings 
+%h1 Listing buildings
 -# = form_with url: buildings_path, method: :get, remote: true, data: { controller: "autosubmit", target: "autosubmit.form", action: "ajax:success->autosubmit#success", :"autosubmit-duration-value" => "800" } do |form|
 = form_with url: buildings_path, method: :get, data: { controller: "autosubmit", target: "autosubmit.form" } do |form|
 
   %label.block.text-sm.font-medium.text-gray-700{for: "search-by-building-name"} 
     Search building names
-
-    %span.text-muted{"data-autosubmit-target" => "status"}
 
   .mt-1.flex.rounded-md.shadow-sm
     .relative.flex.items-stretch.flex-grow.focus-within:z-10
