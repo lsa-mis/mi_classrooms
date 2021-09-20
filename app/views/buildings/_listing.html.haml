@@ -10,3 +10,5 @@
               %tbody.bg-white.divide-y.divide-gray-200
                 - @buildings.each do |building|
                   = render 'building_row', building: building
+
+  = render 'partials/room_results_pagination'
