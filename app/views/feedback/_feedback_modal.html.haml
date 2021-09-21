@@ -1,11 +1,10 @@
--# %div{"data-controller" => "modal", "data-modal-allow-background-close" => "false"}
 .feedback-modal-button
   #feedbackHolder
-    %a{"data-action" => "click->modal#open", :href => "#"}
+    -# %a{"data-action" => "click->modal#open", :href => "#"}
       %span Feedback
 
 / Modal Container
-.feedback-modal-container.hidden.animated.fadeIn.fixed{"data-action" => "click->modal#closeBackground keyup@window->modal#closeWithKeyboard", "data-target" => "modal.container", :style => "z-index: 9999;"}
+-# .feedback-modal-container.hidden.animated.fadeIn.fixed{"data-action" => "click->modal#closeBackground keyup@window->modal#closeWithKeyboard", "data-target" => "modal.container", :style => "z-index: 9999;"}
   / Modal Inner Container
   .feedback-modal-inner-container
     / Modal Card
