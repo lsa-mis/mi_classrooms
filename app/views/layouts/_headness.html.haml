@@ -1,0 +1,131 @@
+/ This example requires Tailwind CSS v2.0+
+%nav.bg-white.shadow{data: 
+                    {controller: "dropdown"}}
+  .max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8
+    .flex.justify-between.h-16
+      .flex
+        .flex-shrink-0.flex.items-center
+          %img.block.lg:hidden.h-8.w-auto{alt: "Workflow", src: "https://tailwindui.com/img/logos/workflow-mark-blue-600.svg"}/
+          %img.hidden.lg:block.h-8.w-auto{alt: "Workflow", src: "https://tailwindui.com/img/logos/workflow-logo-blue-600-mark-gray-800-text.svg"}/
+          -# .hidden.lg:block.h-8.w-auto= link_to image_tag(asset_path('mi_classrooms_logo.png'), alt: "#{(t :sitename)} Logo, link to home page.", id: root_path(anchor: 'page-bottom')), root_path
+
+        .hidden.sm:ml-6.sm:flex.sm:space-x-8
+          / Current: "border-blue-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+          .border-blue-500.text-gray-900.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "About", about_path
+          .border-transparent.text-gray-500.hover:border-gray-300.hover:text-gray-700.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to 'Contact', contact_path
+          .border-transparent.text-gray-500.hover:border-gray-300.hover:text-gray-700.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "Buildings", buildings_path
+          .border-transparent.text-gray-500.hover:border-gray-300.hover:text-gray-700.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "Classrooms", rooms_path
+
+
+
+      .hidden.sm:ml-6.sm:flex.sm:items-center
+        
+        / Notification Button
+        -# %button.bg-white.p-1.rounded-full.text-gray-400.hover:text-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-blue-500{
+          type: "button", 
+          role: "button"
+          }
+          %span.sr-only View notifications
+          / Heroicon name: outline/bell
+          %svg.h-6.w-6{"aria-hidden" => "true", fill: "none", stroke: "currentColor", viewbox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg"}
+            %path{d: "M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9", "stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-width" => "2"}
+
+
+       
+        / Profile dropdown
+        .ml-3.relative{
+          data: {
+            action: "click->dropdown#show  click@window->dropdown#hide"}}
+          %div
+            - if user_signed_in?
+              %button#user-menu-button.bg-white.rounded-full.flex.text-sm.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-blue-500{"aria-expanded" => "false", "aria-haspopup" => "true", type: "button"}
+                %span.sr-only Open user menu
+                %img.user-avatar{:alt => "User Photo", :src => current_user.avatar_url }
+
+
+            - else
+              .user-action-links 
+                = button_to user_google_oauth2_omniauth_authorize_path, data: {turbo: "false"} do
+                  .h-8.rounded-full.text-blue-200.text-xl.flex
+                    .mx-2 Sign In 
+                    = svg("sign_on")
+
+            /
+              Dropdown menu, show/hide based on menu state.
+              
+              Entering: "transition ease-out duration-200"
+              From: "transform opacity-0 scale-95"
+              To: "transform opacity-100 scale-100"
+              Leaving: "transition ease-in duration-75"
+              From: "transform opacity-100 scale-100"
+              To: "transform opacity-0 scale-95"
+          .origin-top-right.absolute.right-0.mt-2.w-48.rounded-md.shadow-lg.py-1.bg-white.ring-1.ring-black.ring-opacity-5.focus:outline-none{
+            aria: {"labelledby" => "user-menu-button",
+                    "orientation" => "vertical"},
+            role: "menu", 
+            tabindex: "-1",
+            data: 
+                {"dropdown-target" => "menu",
+                "dropdown-invisible-class" => "opacity-0 -translate-y-1 scale-95",
+                "dropdown-visible-class" => "opacity-100  -translate-y-0",
+                "dropdown-entering-class" => "transition ease-out duration-200",
+                "dropdown-leaving-class" => "transition ease-in duration-150"
+                }}
+            / Active: "bg-gray-100", Not Active: ""
+            -# %a#user-menu-item-0.block.px-4.py-2.text-sm.text-gray-700{href: "#", role: "menuitem", tabindex: "-1"} Your Profile
+            -# %a#user-menu-item-1.block.px-4.py-2.text-sm.text-gray-700{href: "#", role: "menuitem", tabindex: "-1"} Settings
+
+            - if user_signed_in?
+              #user-menu-item-2.block.px-4.py-2.text-sm.text-gray-700= button_to "Sign out", destroy_user_session_path, method: :delete, role: "menuitem", tabindex: "-1", data: {turbo: "false"}
+
+      .sm:hidden= render './layouts/headness_mobile_menu_toggle.html.haml'
+
+    %div.-mr-2.flex.items-center.sm:hidden{   
+                                    data: 
+                                    {action: "mouseover->dropdown#toggle click@window->dropdown#hide"}}   
+      / Mobile menu, show/hide based on menu state.
+      #mobile-menu{
+                            aria: {"labelledby" => "header-nav-menu-button",
+                                    "orientation" => "vertical"},
+                            role: "menu", 
+                            tabindex: "-1",
+                            data: 
+                                {"dropdown-target" => "menu",
+                                "dropdown-invisible-class" => "opacity-0 -translate-y-1 scale-95",
+                                "dropdown-visible-class" => "opacity-100  -translate-y-0",
+                                "dropdown-entering-class" => "transition ease-out duration-200",
+                                "dropdown-leaving-class" => "transition ease-in duration-150"
+                                }}
+        .pt-2.pb-3.space-y-1
+          / Current: "bg-blue-50 border-blue-500 text-blue-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700"
+          .bg-blue-50.border-blue-500.text-blue-700.block.pl-3.pr-4.py-2.border-l-4.text-base.font-medium= link_to "About - mobile", about_path
+          .border-transparent.text-gray-500.hover:bg-gray-50.hover:border-gray-300.hover:text-gray-700.block.pl-3.pr-4.py-2.border-l-4.text-base.font-medium= link_to 'Contact', contact_path
+          .border-transparent.text-gray-500.hover:bg-gray-50.hover:border-gray-300.hover:text-gray-700.block.pl-3.pr-4.py-2.border-l-4.text-base.font-medium= link_to "Buildings", buildings_path
+          .border-transparent.text-gray-500.hover:bg-gray-50.hover:border-gray-300.hover:text-gray-700.block.pl-3.pr-4.py-2.border-l-4.text-base.font-medium= link_to "Classrooms", rooms_path
+          .flex.items-center.px-4
+            .flex-shrink-0
+              - if user_signed_in?
+                -# %img.h-8.w-8.rounded-full{alt: "Current User", src: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"}/
+                %img.user-avatar{:alt => "User Photo", :src => current_user.avatar_url }
+            .ml-3
+              -if user_signed_in?
+                .leading-tight.text-base.font-medium.text-gray-800 Dave Chmura  
+                .leading-tight.text-sm.font-medium.text-gray-500=current_user.email
+            -# %button.ml-auto.flex-shrink-0.bg-white.p-1.rounded-full.text-gray-400.hover:text-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-blue-500{type: "button"}
+              %span.sr-only View notifications
+              / Heroicon name: outline/bell
+              %svg.h-6.w-6{"aria-hidden" => "true", fill: "none", stroke: "currentColor", viewbox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg"}
+                %path{d: "M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9", "stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-width" => "2"}
+          .mt-3.space-y-1
+            -# %a.block.px-4.py-2.text-base.font-medium.text-gray-500.hover:text-gray-800.hover:bg-gray-100{href: "#"} Your Profile
+            -# %a.block.px-4.py-2.text-base.font-medium.text-gray-500.hover:text-gray-800.hover:bg-gray-100{href: "#"} Settings
+            -# %a.block.px-4.py-2.text-base.font-medium.text-gray-500.hover:text-gray-800.hover:bg-gray-100{href: "#"} Sign out
+            - if user_signed_in?
+              #user-menu-item-2.block.px-4.py-2.text-base.font-medium.text-gray-500.hover:text-gray-800.hover:bg-gray-100= button_to "Sign out", destroy_user_session_path, method: :delete, role: "menuitem", tabindex: "-1", data: {turbo: "false"}
+
+            - else
+              .user-action-links 
+                = button_to user_google_oauth2_omniauth_authorize_path, data: {turbo: "false"} do
+                  .h-8.rounded-full.text-blue-200.text-xl.flex
+                    .mx-2 Sign In 
+                    = svg("sign_on")
