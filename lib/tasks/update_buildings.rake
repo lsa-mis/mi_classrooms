@@ -11,13 +11,53 @@ desc "This will update buildings"
 task update_buildings: :environment do
 
   auth_token = AuthTokenApi.new("bf", "buildings")
-  @access_token = auth_token.get_auth_token
+  result = auth_token.get_auth_token
+  if result['success']
+    access_token = result['access_token']
+  else
+    puts "No access_token. Error: " + result['error']
+    exit
+  end
 
-  building = BuildingsApi.new('1005046', @access_token)
-  # building_data = building.get_building_data
-  # buildings_for_current_fiscal_year = building.get_buildings_for_current_fiscal_year
+  building = BuildingsApi.new(access_token)
 
-  # building_room_data = building.get_building_room_data
-  building_room_data_for_fiscal_year = building.get_building_room_data_for_fiscal_year
+  # result = building.get_building_data_by_id('1005046')
+  # if result['success']
+  #   building_data_by_id = result['data']
+  #   puts building_data_by_id
+  # else 
+  #   puts result['error']
+  #   exit
+  # end
+
+  # result = building.get_buildings_for_current_fiscal_year
+  # if result['success']
+  #   buildings_for_current_fiscal_year = result['data']
+  #   puts buildings_for_current_fiscal_year
+  #   puts buildings_for_current_fiscal_year['ListOfBldgs']['Buildings'].count
+  # else 
+  #   puts result['error']
+  #   exit
+  # end
+
+  # result = building.get_building_classroom_data('1005046')
+  # if result['success']
+  #   building_classroom_data = result['data']
+  #   puts building_classroom_data
+  #   puts building_classroom_data.count
+  # else 
+  #   puts result['error']
+  #   exit
+  # end
+
+  # result = building.get_building_classroom_data_for_fiscal_year('1005046', '2020')
+  # if result['success']
+  #   building_classroom_data_for_fiscal_year = result['data']
+  #   puts building_classroom_data_for_fiscal_year
+  #   puts building_classroom_data_for_fiscal_year.count
+  # else 
+  #   puts result['error']
+  #   exit
+  # end
 
 end

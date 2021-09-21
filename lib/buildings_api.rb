@@ -1,29 +1,12 @@
 class BuildingsApi
 
-  def initialize(bldrecnbr, access_token)
-      @bldrecnbr = bldrecnbr
-      @building_data = {'result' => {'success' => false}, 'data' => {}}
+  def initialize(access_token)
+      @result = {'success' => false, 'error' => '', 'data' => {}}
       @access_token = access_token
   end
 
-  def get_building_data
-    url = URI("https://apigw.it.umich.edu/um/bf/BuildingInfoById/#{@bldrecnbr}")
-    puts "in get_building_data"
-    puts url
-    http = Net::HTTP.new(url.host, url.port)
-    http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-    request = Net::HTTP::Get.new(url)
-    request["x-ibm-client-id"] = "#{Rails.application.credentials.um_api[:buildings_client_id]}"
-    request["authorization"] = "Bearer #{@access_token}"
-    request["accept"] = 'application/json'
-
-    response = http.request(request)
-    @building_data = JSON.parse(response.read_body)
-
-    puts @building_data 
-  end
+  # API to return list of campuses
+  # We can add it if we need it
 
   def get_buildings_for_current_fiscal_year
     url = URI("https://apigw.it.umich.edu/um/bf/BuildingInfo")
@@ -37,12 +20,45 @@ class BuildingsApi
     request["accept"] = 'application/json'
 
     response = http.request(request)
-    data = JSON.parse(response.read_body)
-    puts data['ListOfBldgs']['Buildings'].count
+    response_json = JSON.parse(response.read_body)
+    if response_json['httpCode'].present?
+      @result['error'] = response_json['httpMessage'] + ". " + response_json['moreInformation']
+    else
+      @result['success'] = true
+      @result['data'] = response_json
+    end
+    return @result
+
   end
 
-  def get_building_room_data
-    url = URI("https://apigw.it.umich.edu/um/bf/RoomInfo/#{@bldrecnbr}")
+  def get_building_data_by_id(bldrecnbr)
+    url = URI("https://apigw.it.umich.edu/um/bf/BuildingInfoById/#{bldrecnbr}")
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+    request = Net::HTTP::Get.new(url)
+    request["x-ibm-client-id"] = "#{Rails.application.credentials.um_api[:buildings_client_id]}"
+    request["authorization"] = "Bearer #{@access_token}"
+    request["accept"] = 'application/json'
+
+    response = http.request(request)
+    response_json = JSON.parse(response.read_body)
+    if response_json['httpCode'].present?
+      @result['error'] = response_json['httpMessage'] + ". " + response_json['moreInformation']
+    else
+      @result['success'] = true
+      @result['data'] = response_json
+    end
+    return @result
+ 
+  end
+
+  # API to get building data by Short Name
+  # API to buildings info for Fiscal Year
+
+  def get_building_classroom_data(bldrecnbr)
+    url = URI("https://apigw.it.umich.edu/um/bf/RoomInfo/#{bldrecnbr}")
     puts "in get_building_room_data"
     puts url
     http = Net::HTTP.new(url.host, url.port)
@@ -55,19 +71,25 @@ class BuildingsApi
     request["accept"] = 'application/json'
 
     response = http.request(request)
-    data = JSON.parse(response.read_body)
-    @building_data = []
-    data['ListOfRooms']['RoomData'].each do |room|
-      if room['RoomTypeDescription'] == 'Classroom'
-        @building_data << room
+    response_json = JSON.parse(response.read_body)
+    if response_json['httpCode'].present?
+      @result['error'] = response_json['httpMessage'] + ". " + response_json['moreInformation']
+    else
+      @result['success'] = true
+      building_data = []
+      response_json['ListOfRooms']['RoomData'].each do |room|
+        if room['RoomTypeDescription'] == 'Classroom'
+          building_data << room
+        end
       end
+      @result['data'] = building_data
     end
+    return @result
 
-    puts @building_data 
   end
 
-  def get_building_room_data_for_fiscal_year
-    url = URI("https://apigw.it.umich.edu/um/bf/RoomInfo/2021/#{@bldrecnbr}")
+  def get_building_classroom_data_for_fiscal_year(bldrecnbr, fiscal_year)
+    url = URI("https://apigw.it.umich.edu/um/bf/RoomInfo/#{fiscal_year}/#{bldrecnbr}")
     puts "in get_building_room_data"
     puts url
     http = Net::HTTP.new(url.host, url.port)
@@ -80,15 +102,21 @@ class BuildingsApi
     request["accept"] = 'application/json'
 
     response = http.request(request)
-    data = JSON.parse(response.read_body)
-    @building_data = []
-    data['ListOfRooms']['RoomData'].each do |room|
-      if room['RoomTypeDescription'] == 'Classroom'
-        @building_data << room
-      end
-    end
+    response_json = JSON.parse(response.read_body)
+    if response_json['httpCode'].present?
+      @result['error'] = response_json['httpMessage'] + ". " + response_json['moreInformation']
+    else
+      @result['success'] = true
 
-    puts @building_data 
+      building_data = []
+      response_json['ListOfRooms']['RoomData'].each do |room|
+        if room['RoomTypeDescription'] == 'Classroom'
+          building_data << room
+        end
+      end
+      @result['data'] = building_data
+    end
+    return @result
   end
   
 end

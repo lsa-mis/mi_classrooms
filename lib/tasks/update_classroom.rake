@@ -15,8 +15,16 @@ task update_classroom: :environment do
 
   classroom = ClassroomApi.new('USB1230', @access_token)
 
-  # classroom_characteristics = classroom.get_classroom_characteristics
+  # classroom_info  = classroom.get_classroom_info
+  # puts classroom_info
 
-  classroom_contact  = classroom.get_classroom_contact
+  # classroom_characteristics = classroom.get_classroom_characteristics
+  # puts classroom_characteristics
+
+  # classroom_contact  = classroom.get_classroom_contact
+  # puts classroom_contact
+
+  # classroom_meetings  = classroom.get_classroom_meetings("09/01/2021", "10/20/2021")
+  # puts classroom_meetings
 
 end
