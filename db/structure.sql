@@ -204,6 +204,44 @@ ALTER SEQUENCE public.omni_auth_services_id_seq OWNED BY public.omni_auth_servic
 
 
 --
+-- Name: omniauth_services; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.omniauth_services (
+    id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    provider character varying,
+    uid character varying,
+    access_token character varying,
+    access_token_secret character varying,
+    refresh_token character varying,
+    expires_at timestamp without time zone,
+    auth text,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: omniauth_services_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.omniauth_services_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: omniauth_services_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.omniauth_services_id_seq OWNED BY public.omniauth_services.id;
+
+
+--
 -- Name: pg_search_documents; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -358,7 +396,9 @@ CREATE TABLE public.users (
     remember_created_at timestamp without time zone,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    avatar_url character varying
+    avatar_url character varying,
+    provider character varying,
+    uid character varying
 );
 
 
@@ -414,6 +454,13 @@ ALTER TABLE ONLY public.buildings ALTER COLUMN bldrecnbr SET DEFAULT nextval('pu
 --
 
 ALTER TABLE ONLY public.omni_auth_services ALTER COLUMN id SET DEFAULT nextval('public.omni_auth_services_id_seq'::regclass);
+
+
+--
+-- Name: omniauth_services id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.omniauth_services ALTER COLUMN id SET DEFAULT nextval('public.omniauth_services_id_seq'::regclass);
 
 
 --
@@ -490,6 +537,14 @@ ALTER TABLE ONLY public.buildings
 
 ALTER TABLE ONLY public.omni_auth_services
     ADD CONSTRAINT omni_auth_services_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: omniauth_services omniauth_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.omniauth_services
+    ADD CONSTRAINT omniauth_services_pkey PRIMARY KEY (id);
 
 
 --
@@ -575,6 +630,13 @@ CREATE INDEX index_omni_auth_services_on_user_id ON public.omni_auth_services US
 
 
 --
+-- Name: index_omniauth_services_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_omniauth_services_on_user_id ON public.omniauth_services USING btree (user_id);
+
+
+--
 -- Name: index_pg_search_documents_on_searchable; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -646,6 +708,14 @@ ALTER TABLE ONLY public.rooms
 
 
 --
+-- Name: omniauth_services fk_rails_185801cf32; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.omniauth_services
+    ADD CONSTRAINT fk_rails_185801cf32 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
 -- Name: omni_auth_services fk_rails_2f283dbddd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -702,6 +772,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20201015193542'),
 ('20201022165543'),
 ('20201023153614'),
-('20210816183531');
+('20210816183531'),
+('20210910182654'),
+('20210910182736');
 
 

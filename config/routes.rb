@@ -1,12 +1,13 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  devise_for :users, controllers: {omniauth_callbacks: "users/omniauth_callbacks"} do
+    delete 'sign_out', :to => 'devise/sessions#destroy', :as => :destroy_user_session
+  end
   resources :rooms do
-
   end
   match "toggle_visibile/:id" => "rooms#toggle_visibile", :via => [:get, :post], :as => :toggle_visibile
   
-  devise_for :users, controllers: {omniauth_callbacks: "users/omniauth_callbacks"}
   get '/linkedin' => redirect('https://www.linkedin.com/in/mi_classrooms/')
   get '/github' => redirect('https://github.com/mi_classrooms')
   get '/twitter' => redirect('https://twitter.com/mi_classrooms')
@@ -26,7 +27,9 @@ Rails.application.routes.draw do
 
   get "legacy_crdb" => redirect("https://rooms.lsa.umich.edu")
 
-  mount Sidekiq::Web => '/sidekiq'
 
 
+  authenticate :user, lambda { |u| u.email == "dschmura@umich.edu" } do
+    mount Sidekiq::Web => "/sidekiq"
+  end
 end
