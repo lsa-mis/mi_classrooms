@@ -22,7 +22,7 @@ const manifestPlugin =
 }
 
 const customConfig = {
-  context: path.resolve(__dirname, '../../app/packs/images'), // Default webpacker setup, old setup was app/javascripts, this is the value from webpacker.yml "source_path"
+  context: path.resolve(__dirname, '../../app/packs'), // Default webpacker setup, old setup was app/javascripts, this is the value from webpacker.yml "source_path"
   // ...rest of your customConfig goes here
 }
 
