@@ -1,20 +1,21 @@
 / This example requires Tailwind CSS v2.0+
-%nav.bg-white.shadow{data: 
+%nav.bg-blue-900.shadow{data: 
                     {controller: "dropdown"}}
   .max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8
     .flex.justify-between.h-16
       .flex
         .flex-shrink-0.flex.items-center
-          %img.block.lg:hidden.h-8.w-auto{alt: "Workflow", src: "https://tailwindui.com/img/logos/workflow-mark-blue-600.svg"}/
-          -# %img.hidden.lg:block.h-8.w-auto{alt: "Workflow", src: "https://tailwindui.com/img/logos/workflow-logo-blue-600-mark-gray-800-text.svg"}/
-          -# .hidden.lg:block.h-8.w-auto= link_to image_tag(asset_path('mi_classrooms_logo.png'), alt: "#{(t :sitename)} Logo, link to home page.", id: root_path(anchor: 'page-bottom')), root_path
 
+          .block.md:hidden.h-8= svg("MiClassroomsLogo")
+          -# %img.hidden.lg:block.h-8.w-auto{alt: "Workflow", src: "https://tailwindui.com/img/logos/workflow-logo-blue-600-mark-gray-800-text.svg"}/
+          -# .hidden.md:block.h-8.w-auto= link_to image_tag(asset_path('mi_classrooms_logo.png'), alt: "#{(t :sitename)} Logo, link to home page.", id: root_path(anchor: 'page-bottom')), root_path
+          .hidden.md:block.h-8= svg("MiClassroomsNamePlate")
         .hidden.sm:ml-6.sm:flex.sm:space-x-8
           / Current: "border-blue-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-          .border-blue-500.text-gray-900.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "About", about_path
-          .border-transparent.text-gray-500.hover:border-gray-300.hover:text-gray-700.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to 'Contact', contact_path
-          .border-transparent.text-gray-500.hover:border-gray-300.hover:text-gray-700.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "Buildings", buildings_path
-          .border-transparent.text-gray-500.hover:border-gray-300.hover:text-gray-700.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "Classrooms", rooms_path
+          .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "About", about_path, class: "#{class_names(active: current_page?(about_path))}"
+          .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to 'Contact', contact_path, class: "#{class_names(active: current_page?(contact_path))}"
+          .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "Buildings", buildings_path, class: "#{class_names(active: current_page?(buildings_path))}"
+          .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "Classrooms", rooms_path, class: "#{class_names(active: current_page?(rooms_path))}"
 
 
 
@@ -98,10 +99,10 @@
                                 }}
         .pt-2.pb-3.space-y-1
           / Current: "bg-blue-50 border-blue-500 text-blue-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700"
-          .bg-blue-50.border-blue-500.text-blue-700.block.pl-3.pr-4.py-2.border-l-4.text-base.font-medium= link_to "About - mobile", about_path
-          .border-transparent.text-gray-500.hover:bg-gray-50.hover:border-gray-300.hover:text-gray-700.block.pl-3.pr-4.py-2.border-l-4.text-base.font-medium= link_to 'Contact', contact_path
-          .border-transparent.text-gray-500.hover:bg-gray-50.hover:border-gray-300.hover:text-gray-700.block.pl-3.pr-4.py-2.border-l-4.text-base.font-medium= link_to "Buildings", buildings_path
-          .border-transparent.text-gray-500.hover:bg-gray-50.hover:border-gray-300.hover:text-gray-700.block.pl-3.pr-4.py-2.border-l-4.text-base.font-medium= link_to "Classrooms", rooms_path
+          .border-transparent.text-gray-500.hover:bg-gray-50.hover:border-gray-300.hover:text-gray-700.block.pl-3.pr-4.py-2.border-l-4.text-base.font-medium= link_to "About - mobile", about_path, class: "#{class_names(active: current_page?(about_path))}"
+          .border-transparent.text-gray-500.hover:bg-gray-50.hover:border-gray-300.hover:text-gray-700.block.pl-3.pr-4.py-2.border-l-4.text-base.font-medium= link_to 'Contact', contact_path, class: "#{class_names(active: current_page?(contact_path))}"
+          .border-transparent.text-gray-500.hover:bg-gray-50.hover:border-gray-300.hover:text-gray-700.block.pl-3.pr-4.py-2.border-l-4.text-base.font-medium= link_to "Buildings", buildings_path, class: "#{class_names(active: current_page?(buildings_path))}"
+          .border-transparent.text-gray-500.hover:bg-gray-50.hover:border-gray-300.hover:text-gray-700.block.pl-3.pr-4.py-2.border-l-4.text-base.font-medium= link_to "Classrooms", rooms_path, class: "#{class_names(active: current_page?(rooms_path))}"
           .flex.items-center.px-4
             .flex-shrink-0
               - if user_signed_in?
@@ -109,7 +110,7 @@
                 %img.user-avatar{:alt => "User Photo", :src => current_user.avatar_url }
             .ml-3
               -if user_signed_in?
-                .leading-tight.text-base.font-medium.text-gray-800 Dave Chmura  
+                .leading-tight.text-base.font-medium.text-blue-50 Dave Chmura  
                 .leading-tight.text-sm.font-medium.text-gray-500=current_user.email
             -# %button.ml-auto.flex-shrink-0.bg-white.p-1.rounded-full.text-gray-400.hover:text-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-blue-500{type: "button"}
               %span.sr-only View notifications
