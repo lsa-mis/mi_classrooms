@@ -1,16 +1,16 @@
 / This example requires Tailwind CSS v2.0+
-%nav.bg-blue-900.shadow{data: {controller: "dropdown"}}
+%nav.bg-blue-900.shadow.min-w-screen{data: {controller: "dropdown"}}
   .max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8
     .flex.justify-between.h-16
       .flex
         .flex-shrink-0.flex.items-center
-
-          .block.md:hidden.h-8= svg("MiClassroomsLogo")
-          -# %img.hidden.lg:block.h-8.w-auto{alt: "Workflow", src: "https://tailwindui.com/img/logos/workflow-logo-blue-600-mark-gray-800-text.svg"}/
-          -# .hidden.md:block.h-8.w-auto= link_to image_tag(asset_path('mi_classrooms_logo.png'), alt: "#{(t :sitename)} Logo, link to home page.", id: root_path(anchor: 'page-bottom')), root_path
-          .hidden.md:block.h-8= svg("MiClassroomsNamePlate")
-        .hidden.sm:ml-6.sm:flex.sm:space-x-8
-          / Current: "border-blue-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+          = link_to root_path do
+            .block.md:hidden.h-8= svg("MiClassroomsLogo")
+            -# %img.hidden.lg:block.h-8.w-auto{alt: "Workflow", src: "https://tailwindui.com/img/logos/workflow-logo-blue-600-mark-gray-800-text.svg"}/
+            -# .hidden.md:block.h-8.w-auto= link_to image_tag(asset_path('mi_classrooms_logo.png'), alt: "#{(t :sitename)} Logo, link to home page.", id: root_path(anchor: 'page-bottom')), root_path
+            .hidden.md:block.h-8= svg("MiClassroomsNamePlate")
+          .hidden.sm:ml-6.sm:flex.sm:space-x-8
+            / Current: "border-blue-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
           .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "About", about_path, class: "#{class_names(active: current_page?(about_path))}"
           .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to 'Contact', contact_path, class: "#{class_names(active: current_page?(contact_path))}"
           .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "Buildings", buildings_path, class: "#{class_names(active: current_page?(buildings_path))}"
