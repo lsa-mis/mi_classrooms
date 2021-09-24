@@ -11,4 +11,18 @@ export default class extends Controller {
     }, 600)
   }
 
+  checkboxSubmit() {
+    clearTimeout(this.timeout)
+
+    this.timeout = setTimeout(() => {
+      this.statusTarget.textContent = 'Updating...'
+      this.element.requestSubmit()
+    }, 0)
+  }
+
+  change(event) {
+    event.preventDefault()
+    this.element.requestSubmit()
+  }
+
 }
