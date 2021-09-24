@@ -9,10 +9,8 @@ body[data-environment="development"]
   img[alt=""], img:not([alt])
     @apply border-4 border-red-700 border-dotted p-2
   
-main
-  @apply max-w-7xl mx-auto 
-.mobile-menu-button
-  @apply bg-blue-600 inline-flex items-center justify-center p-2 rounded-md text-blue-200 hover:text-white hover:bg-blue-500 hover:bg-opacity-75 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-600 focus:ring-white
+// .mobile-menu-button
+//   @apply bg-blue-600 inline-flex items-center justify-center p-2 rounded-md text-blue-200 hover:text-white hover:bg-blue-500 hover:bg-opacity-75 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-600 focus:ring-white
 
 .profile-dropdown
   @apply absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-blue-50 ring-1 ring-black ring-opacity-5 divide-y divide-blue-300 z-50
@@ -20,16 +18,11 @@ main
 h1
   @apply text-3xl mb-2
 
-.container
-  @apply bg-green-500 flex flex-col min-h-screen
-
-.content
-  @apply flex-grow px-10 py-4  h-screen
-
 .row-even
   @apply bg-gray-50
   @screen sm
     @apply bg-blue-50
+    
 .row-odd
   @apply bg-gray-50
 
