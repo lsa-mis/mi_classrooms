@@ -15,12 +15,12 @@ class BuildingsController < ApplicationController
       @pagy, @buildings = pagy(@buildings)
     end
 
-    unless params[:query].nil?
-      render turbo_stream: turbo_stream.replace(
-      :buildingListing,
-      partial: "buildings/listing"
-    )
-    end
+    # unless params[:query].nil?
+    #   render turbo_stream: turbo_stream.replace(
+    #   :buildingListing,
+    #   partial: "buildings/listing"
+    # )
+    # end
 
   end
 
