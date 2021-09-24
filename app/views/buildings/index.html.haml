@@ -1,21 +1,18 @@
 - content_for :head do
   %link{href: "https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/styles/choices.min.css", rel: "stylesheet"}
-%h1 Listing buildings 
+%h1 Listing buildings
+-# = form_with url: buildings_path, method: :get, remote: true, data: { controller: "autosubmit", target: "autosubmit.form", action: "ajax:success->autosubmit#success", :"autosubmit-duration-value" => "800" } do |form|
+= form_with url: buildings_path, method: :get, data: { controller: "autosubmit", target: "autosubmit.form" } do |form|
 
-= form_with url: buildings_path, method: :get, remote: true, data: { controller: "autosubmit", target: "autosubmit.form", action: "ajax:success->autosubmit#success ajax:error->autosubmit#error" } do |form|
-
-  -# = form.select :name_or_nick_name_or_abbreviation_in, @searchable_buildings.collect{ |building| [building[0].titleize, building[1] ] }, {:prompt => 'Building Name'}, {multiple: true, data: {controller: "choices", target: "choices.choice", action: "autosubmit#change"}}
   %label.block.text-sm.font-medium.text-gray-700{for: "search-by-building-name"} 
     Search building names
-
-    %span.text-muted{"data-autosubmit-target" => "status"}
 
   .mt-1.flex.rounded-md.shadow-sm
     .relative.flex.items-stretch.flex-grow.focus-within:z-10
       .absolute.inset-y-0.left-0.pl-3.flex.items-center.pointer-events-none
         .h-5.w-5.text-gray-400= svg("magnifying-glass")
         
-      = text_field_tag :query, params[:query], class: "search-by-building-name", :placeholder => "Undergraduate Sciences Building", data: {action: "input->autosubmit#save"}
+      = text_field_tag :query, params[:query], class: "search-by-building-name", :placeholder => "Undergraduate Sciences Building", data: {action: "input->autosubmit#search"}
 
 
     %button.-ml-px.relative.inline-flex.items-center.space-x-2.px-4.py-2.border.border-gray-300.text-sm.font-medium.rounded-r-md.text-gray-700.bg-gray-50.hover:bg-gray-100.focus:outline-none.focus:ring-1.focus:ring-indigo-500.focus:border-indigo-500
@@ -23,39 +20,6 @@
       %svg.h-5.w-5.text-gray-400{"aria-hidden" => "true", fill: "currentColor", viewbox: "0 0 20 20", xmlns: "http://www.w3.org/2000/svg"}
         %path{d: "M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM13 16a1 1 0 102 0v-5.586l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 101.414 1.414L13 10.414V16z"}
       %span Sort
-  
-.flex.flex-col
-  .-my-2.overflow-x-auto.sm:-mx-6.lg:-mx-8
-    .py-2.align-middle.inline-block.min-w-full.sm:px-6.lg:px-8
-      .shadow.overflow-hidden.border-b.border-gray-200.sm:rounded-lg
-        %table.min-w-full.divide-y.divide-gray-200.max-w-5xl
-          %thead.bg-gray-50
-            
 
-          %tbody.bg-white.divide-y.divide-gray-200
-            - @buildings.each do |building|
-              = render 'building_row', building: building
-
-      -# %tr{class: "#{cycle('row-even', 'row-odd')}", id: dom_id(building)}
-        %td= building.bldrecnbr
-        %td= building.latitude
-        %td= building.longitude
-        %td= building.name
-        %td= building.nick_name
-        %td= building.abbreviation
-        %td= building.address
-        %td= building.city
-        %td= building.state
-        %td= building.zip
-        %td= building.country
-        %td= link_to 'Show', building
-        %td= link_to 'Edit', edit_building_path(building)
-        %td= link_to 'Destroy', building, method: :delete, data: { confirm: 'Are you sure?' }
-        %td= link_to 'Destroy', building, data: {"turbo-method": :delete, controller: "confirmation", "confirmation-message-value": 'Are you sure?', action: "confirmation#confirm"}
-
+  = render 'listing'
 %br
-
-= link_to 'New Building', new_building_path
-
--unless @pagy.page == @pagy.count
-  = pagy_nav(@pagy).html_safe
