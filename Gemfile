@@ -75,4 +75,5 @@ gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'devise', github: 'heartcombo/devise'
 gem "omniauth-google-oauth2"
+gem 'omniauth-rails_csrf_protection'
 gem "draper", "~> 4.0"

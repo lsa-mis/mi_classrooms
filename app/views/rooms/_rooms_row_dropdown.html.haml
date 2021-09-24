@@ -1,4 +1,4 @@
-.h-highlights{data: {controller: "modal"}}
+.h-highlights
 
   .h-layout.h-highlight-item
     .h-4.w-4.text-gray-500= svg("chair")
@@ -8,7 +8,7 @@
     .h-4.w-4.text-gray-500= svg("layer_group")
 
     %p.ml-3
-      %a{"data-action" => "click->modal#open", :href => "#"}
+      %a{ :href => "#"}
         Floor Map
         
 -# - if controller.controller_name == "show"

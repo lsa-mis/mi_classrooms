@@ -4,7 +4,7 @@
 
   %ul.projection-list
     %li.rounded-checkbox.check-box
-      = check_box_tag "room_characteristics[]", "Proj16mm", params[:room_characteristics].try(:include?, "Proj16mm"), id: "projector-16mm", class: "opacity-0 hidden", data: { action: "input->autosubmit#save","autosubmit-duration-value" => "0" }
+      = check_box_tag "room_characteristics[]", "Proj16mm", params[:room_characteristics].try(:include?, "Proj16mm"), id: "projector-16mm", class: "opacity-0 hidden", data: { action: "input->autosubmit#checkboxSubmit" }
 
       %label{:for => "projector-16mm", class:"characteristic-checkbox"}
         %svg{class: "characteristic-icon",  "aria-hidden" => "true", :fill => "none", :stroke => "currentColor", :viewbox => "0 0 512 512", :xmlns => "http://www.w3.org/2000/svg"}
@@ -12,7 +12,7 @@
         %span 16mm Film
 
     %li.rounded-checkbox.check-box
-      = check_box_tag "room_characteristics[]", "Proj35mm", params[:room_characteristics].try(:include?, "Proj35mm"), id: "projector-35mm", class: "opacity-0 hidden", data: { action: "input->autosubmit#save","autosubmit-duration-value" => "0" }
+      = check_box_tag "room_characteristics[]", "Proj35mm", params[:room_characteristics].try(:include?, "Proj35mm"), id: "projector-35mm", class: "opacity-0 hidden", data: { action: "input->autosubmit#checkboxSubmit" }
 
       %label{:for => "projector-35mm", class:"characteristic-checkbox"}
         %svg{class: "characteristic-icon",  "aria-hidden" => "true", :fill => "none", :stroke => "currentColor", :viewbox => "0 0 512 512", :xmlns => "http://www.w3.org/2000/svg"}
@@ -21,7 +21,7 @@
 
 
     %li.rounded-checkbox.check-box
-      = check_box_tag "room_characteristics[]", "ProjD-Cin", params[:room_characteristics].try(:include?, "ProjD-Cin"), id: "projector-cin", class: "opacity-0 hidden", data: { action: "input->autosubmit#save","autosubmit-duration-value" => "0" }
+      = check_box_tag "room_characteristics[]", "ProjD-Cin", params[:room_characteristics].try(:include?, "ProjD-Cin"), id: "projector-cin", class: "opacity-0 hidden", data: { action: "input->autosubmit#checkboxSubmit" }
 
       %label{:for => "projector-cin", class:"characteristic-checkbox"}
         %svg{class: "characteristic-icon",  "aria-hidden" => "true", :fill => "none", :stroke => "currentColor", :viewbox => "0 0 512 512", :xmlns => "http://www.w3.org/2000/svg"}
@@ -29,7 +29,7 @@
         %span Digital Cinema (DCP)
 
     %li.rounded-checkbox.check-box
-      = check_box_tag "room_characteristics[]", "ProjDigit", params[:room_characteristics].try(:include?, "ProjDigit"), id: "projector-digital", class: "opacity-0 hidden", data: { action: "input->autosubmit#save","autosubmit-duration-value" => "0" }
+      = check_box_tag "room_characteristics[]", "ProjDigit", params[:room_characteristics].try(:include?, "ProjDigit"), id: "projector-digital", class: "opacity-0 hidden", data: { action: "input->autosubmit#checkboxSubmit" }
 
       %label{:for => "projector-digital", class:"characteristic-checkbox"}
         %svg{class: "characteristic-icon",  "aria-hidden" => "true", :fill => "none", :stroke => "currentColor", :viewbox => "0 0 512 512", :xmlns => "http://www.w3.org/2000/svg"}
@@ -37,7 +37,7 @@
         %span Digital Data & Video
 
     %li.rounded-checkbox.check-box
-      = check_box_tag "room_characteristics[]", "ProjSlide", params[:room_characteristics].try(:include?, "ProjSlide"), id: "projector-slide", class: "opacity-0 hidden", data: { action: "input->autosubmit#save","autosubmit-duration-value" => "0" }
+      = check_box_tag "room_characteristics[]", "ProjSlide", params[:room_characteristics].try(:include?, "ProjSlide"), id: "projector-slide", class: "opacity-0 hidden", data: { action: "input->autosubmit#checkboxSubmit" }
 
       %label{:for => "projector-slide", class:"characteristic-checkbox"}
         %svg{class: "characteristic-icon",  "aria-hidden" => "true", :fill => "none", :stroke => "currentColor", :viewbox => "0 0 512 512", :xmlns => "http://www.w3.org/2000/svg"}
