@@ -6,13 +6,13 @@
         .flex-shrink-0.flex.items-center
           = link_to root_path do
             .block.md:hidden.h-8= svg("MiClassroomsLogo")
-            -# .hidden.md:block.h-8.w-auto= link_to image_tag(asset_path('mi_classrooms_logo.png'), alt: "#{(t :sitename)} Logo, link to home page.", id: root_path(anchor: 'page-bottom')), root_path
+            -# .hidden.md:block.h-8.w-auto= link_to image_tag(asset_path('mi_classrooms_logo.png'), alt: "#{(t :sitename)} Logo, link to home   page.", id: root_path(anchor: 'page-bottom')), root_path
             .hidden.md:block.h-8= svg("MiClassroomsNamePlate")
           .hidden.sm:ml-6.sm:flex.sm:space-x-8
-          .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "About", about_path, class: "#{class_names(active: current_page?(about_path))}"
-          .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to 'Contact', contact_path, class: "#{class_names(active: current_page?(contact_path))}"
-          .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "Buildings", buildings_path, class: "#{class_names(active: current_page?(buildings_path))}"
-          .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "Classrooms", rooms_path, class: "#{class_names(active: current_page?(rooms_path))}"
+            .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "About", about_path, class: "#{class_names(active: current_page?(about_path))}"
+            .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to 'Contact', contact_path, class: "#{class_names(active: current_page?(contact_path))}"
+            .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "Buildings", buildings_path, class: "#{class_names(active: current_page?(buildings_path))}"
+            .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "Classrooms", rooms_path, class: "#{class_names(active: current_page?(rooms_path))}"
 
 
 
@@ -44,7 +44,7 @@
             - else
               .user-action-links 
                 = button_to user_google_oauth2_omniauth_authorize_path, data: {turbo: "false"} do
-                  .h-8.rounded-full.text-blue-200.text-xl.flex
+                  .h-8.text-blue-200.text-xl.flex
                     .mx-2 Sign In 
                     = svg("sign_on")
 
@@ -57,13 +57,9 @@
               Leaving: "transition ease-in duration-75"
               From: "transform opacity-100 scale-100"
               To: "transform opacity-0 scale-95"
-          .origin-top-right.absolute.right-0.mt-2.w-48.rounded-md.shadow-lg.py-1.bg-white.ring-1.ring-black.ring-opacity-5.focus:outline-none{aria: {"labelledby" => "user-menu-button",
+          - if user_signed_in?
+            .origin-top-right.absolute.right-0.mt-2.w-48.rounded-md.shadow-lg.py-1.bg-white.ring-1.ring-black.ring-opacity-5.focus:outline-none{aria: {"labelledby" => "user-menu-button",
                     "orientation" => "vertical"}, role: "menu", tabindex: "-1"}
-            / Active: "bg-gray-100", Not Active: ""
-            -# %a#user-menu-item-0.block.px-4.py-2.text-sm.text-gray-700{href: "#", role: "menuitem", tabindex: "-1"} Your Profile
-            -# %a#user-menu-item-1.block.px-4.py-2.text-sm.text-gray-700{href: "#", role: "menuitem", tabindex: "-1"} Settings
-
-            - if user_signed_in?
               #user-menu-item-2.block.px-4.py-2.text-sm.text-gray-700= button_to "Sign out", destroy_user_session_path, method: :delete, role: "menuitem", tabindex: "-1", data: {turbo: "false"}
 
       .sm:hidden= render './layouts/headness_mobile_menu_toggle.html.haml'
