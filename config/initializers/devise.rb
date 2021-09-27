@@ -66,7 +66,7 @@ Devise.setup do |config|
       manager.failure_app = TurboFailureApp
     end
 
-  config.omniauth :google_oauth2, Rails.application.credentials.google_client_id,  Rails.application.credentials.google_client_secret, scope: 'userinfo.email, userinfo.profile', prompt: 'select_account', image_aspect_ratio: 'square', image_size: 50, hd: %w(umich.edu lsa.umich.edu )
+  config.omniauth :google_oauth2, Rails.application.credentials.google_client_id,  Rails.application.credentials.google_client_secret, scope: 'userinfo.email, userinfo.profile', prompt: 'select_account', image_aspect_ratio: 'square', image_size: 50, hd: %w(umich.edu lsa.umich.edu hatchbox.io)
 
 
   # ==> Mailer Configuration
