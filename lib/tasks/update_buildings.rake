@@ -30,15 +30,15 @@ task update_buildings: :environment do
   #   exit
   # end
 
-  # result = building.get_buildings_for_current_fiscal_year
-  # if result['success']
-  #   buildings_for_current_fiscal_year = result['data']
-  #   puts buildings_for_current_fiscal_year
-  #   puts buildings_for_current_fiscal_year['ListOfBldgs']['Buildings'].count
-  # else 
-  #   puts result['error']
-  #   exit
-  # end
+  result = building.get_buildings_for_current_fiscal_year
+  if result['success']
+    buildings_for_current_fiscal_year = result['data']
+    puts buildings_for_current_fiscal_year
+    puts buildings_for_current_fiscal_year['ListOfBldgs']['Buildings'].count
+  else 
+    puts result['error']
+    exit
+  end
 
   # result = building.get_building_classroom_data('1005046')
   # if result['success']

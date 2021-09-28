@@ -11,9 +11,15 @@ desc "This will update classroom"
 task update_classroom: :environment do
 
   auth_token = AuthTokenApi.new("aa", "classrooms")
-  @access_token = auth_token.get_auth_token
+  result = auth_token.get_auth_token
+  if result['success']
+    access_token = result['access_token']
+  else
+    puts "No access_token. Error: " + result['error']
+    exit
+  end
 
-  classroom = ClassroomApi.new('USB1230', @access_token)
+  classroom = ClassroomApi.new('USB1230', access_token)
 
   # classroom_info  = classroom.get_classroom_info
   # puts classroom_info
@@ -24,7 +30,7 @@ task update_classroom: :environment do
   # classroom_contact  = classroom.get_classroom_contact
   # puts classroom_contact
 
-  # classroom_meetings  = classroom.get_classroom_meetings("09/01/2021", "10/20/2021")
-  # puts classroom_meetings
+  classroom_meetings  = classroom.get_classroom_meetings("09/01/2021", "10/20/2021")
+  puts classroom_meetings
 
 end
