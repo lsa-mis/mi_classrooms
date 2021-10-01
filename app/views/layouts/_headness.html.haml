@@ -64,7 +64,7 @@
 
       .sm:hidden= render './layouts/headness_mobile_menu_toggle.html.haml'
 
-    %div.-mr-2.flex.items-center.sm:hidden{   data: {action: "mouseover->dropdown#toggle click@window->dropdown#hide"}}   
+    %div.-mr-2.flex.items-center.sm:hidden   
       / Mobile menu, show/hide based on menu state.
       #mobile-menu{aria: {"labelledby" => "header-nav-menu-button",
                                     "orientation" => "vertical"},
