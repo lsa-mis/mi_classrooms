@@ -61,6 +61,6 @@
                     "orientation" => "vertical"}, role: "menu", tabindex: "-1"}
               #user-menu-item-2.block.px-4.py-2.text-sm.text-gray-700= button_to "Sign out", destroy_user_session_path, method: :delete, role: "menuitem", tabindex: "-1", data: {turbo: "false"}
 
-      .sm:hidden= render './layouts/headness_mobile_menu_toggle.html.haml'
+      .sm:hidden.items-center.mt-1= render './layouts/headness_mobile_menu_toggle.html.haml'
 
     = render './layouts/headness_mobile_menu_dropdown'
