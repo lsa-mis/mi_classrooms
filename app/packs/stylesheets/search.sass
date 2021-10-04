@@ -137,16 +137,16 @@
   @screen md
     @apply grid-cols-5
   @screen lg
-    @apply grid-cols-3
+    @apply grid-cols-4
   .h-capacity
     @apply  col-start-1
   .h-layout
     @apply  col-start-2
 
 .h-highlight-item
-  @apply inline-flex text-sm rounded-lg text-blue-700 whitespace-nowrap items-center font-semibold
+  @apply inline-flex text-sm text-blue-700 whitespace-nowrap items-center font-semibold mx-2
   svg
-    @apply h-5 w-5
+    @apply h-5 w-5 mr-1
 
   @screen md
     @apply text-base
@@ -155,7 +155,14 @@
   @screen lg
     @apply text-sm
     svg
-      @apply h-4 w-4
+      @apply h-4 w-4 
+  @screen xl 
+    @apply  mx-1
+    svg
+      @apply h-3 w-3 mr-1
+  &:hover
+    @apply text-blue-400
+    
 
 
 .classroom-row-dropdown-toggle

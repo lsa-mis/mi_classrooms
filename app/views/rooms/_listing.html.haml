@@ -3,11 +3,11 @@
   = "#{@pagy.count} Results"
   .flex.flex-col
     .-my-2.overflow-x-auto.sm:-mx-6.lg:-mx-8
-      .py-2.align-middle.inline-block.min-w-full.sm:px-6.lg:px-8
+      .py-2.align-middle.inline-block.min-w-full.sm:px-6.lg:px-2
         .shadow.overflow-hidden.border-b.border-gray-200.sm:rounded-lg
           %table.min-w-full.divide-y.divide-gray-200.max-w-5xl
             %thead.bg-gray-50
               %tbody.bg-white.divide-y.divide-gray-200
                 - @rooms.each do |room|
                   = render 'room_row', room: room
-  = render 'partials/results_pagination'
+    = render 'partials/results_pagination'
