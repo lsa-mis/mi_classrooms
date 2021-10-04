@@ -17,10 +17,12 @@
       = link_to "Buildings", buildings_path, class: "#{class_names(active: current_page?(buildings_path))} mobile-dropdown-link"
       = link_to "Classrooms", rooms_path, class: "#{class_names(active: current_page?(rooms_path))} mobile-dropdown-link"
       .flex.items-center.px-4
-        .flex-shrink-0
+
+
+        .flex.flex-row
           - if user_signed_in?
             %img.user-avatar{:alt => "User Photo", :src => current_user.avatar_url }
-            .ml-3
+            .ml-3.float-right.right-0.absolute.mr-4.w-auto
           
               .leading-tight.text-base.font-medium.text-blue-50 User Name  
               .leading-tight.text-sm.font-medium.text-gray-500=current_user.email
@@ -30,6 +32,8 @@
             / Heroicon name: outline/bell
             %svg.h-6.w-6{"aria-hidden" => "true", fill: "none", stroke: "currentColor", viewbox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg"}
               %path{d: "M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9", "stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-width" => "2"}
+
+
       .pt-6.pb-3.space-y-1.w-screen
         - if user_signed_in?
           #user-menu-item-2= button_to "Sign Out", destroy_user_session_path, method: :delete, role: "menuitem", tabindex: "-1", class: "sign-out-button ", data: {turbo: "false"}
@@ -38,7 +42,7 @@
 
         - else
           .user-action-links 
-            = button_to user_google_oauth2_omniauth_authorize_path, data: {turbo: "false"} do
+            = button_to user_google_oauth2_omniauth_authorize_path, class: "w-full", data: {turbo: "false"} do
               .h-8.rounded-full.text-blue-200.text-xl.flex
                 .mx-2 Sign In 
                 = svg("sign_on")
