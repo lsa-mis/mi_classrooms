@@ -27,12 +27,15 @@
 
             .flex.flex-row.justify-between.sm:pl-36.lg:overflow-scroll
               .flex.flex-1.items-center.text-sm.font-medium.highlights
-                .h-layout.h-highlight-item
-                  = svg("calendar_days") 
-                  %span Scheduling
+                = link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{room.facility_code_heprod }", target: "_blank" do
+                  .h-layout.h-highlight-item
+                    = svg("calendar_days") 
+                    %span Scheduling
+
                 .h-layout.h-highlight-item
                   = svg("message_question") 
                   %span Support
+                  
                 .h-layout.h-highlight-item
                   = svg("chair")
                   .span Room Layout
