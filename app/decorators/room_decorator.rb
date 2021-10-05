@@ -85,8 +85,7 @@ room.room_contact&.rm_schd_cntct_name
   end
 
   def room_schedule_email
-    if
-room.room_contact&.rm_schd_email
+    if room.room_contact&.rm_schd_email
       "#{room.room_contact.rm_schd_email.downcase}"
     else
       "Not Available"
