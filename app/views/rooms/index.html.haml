@@ -1,7 +1,7 @@
 - content_for :head do
   %link{href: "https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css", rel: "stylesheet"}
 
-%h1 Listing Classrooms
+%h1 Classrooms
 = form_with url: rooms_path, method: :get, class: "", data: { controller: "autosubmit", target: "autosubmit.form" } do |form|
 
   %label.block.text-sm.font-medium.text-gray-700{for: "building_name"}
