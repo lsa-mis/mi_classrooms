@@ -21,7 +21,7 @@
                 =  "#{room.student_capacity}"
                 
                 - if user_signed_in?
-                  .text-sm.font-medium.text-orange-700.items-endjustify-end.absolute.right-0.mr-8
+                  .text-sm.font-medium.text-orange-700.items-endjustify-end.absolute.right-0.mr-2.mt-7
                     = link_to toggle_visibile_path(room), data: {"turbo-method": :toggle_visibile} do 
                       = room.visible ? "visible" : "hidden"
 
