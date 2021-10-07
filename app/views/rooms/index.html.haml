@@ -28,7 +28,7 @@
       - else
         .font-bold.text-yellow-800.text-base.w-auto.block.w-full.mt-4.w-56 Please sign in to see results.
 
-- if user_signed_in?
-  = render 'listing'
+  - if user_signed_in?
+    = render 'listing'
 
 

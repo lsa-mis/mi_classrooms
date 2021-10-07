@@ -21,9 +21,7 @@
     -#     %path{d: "M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM13 16a1 1 0 102 0v-5.586l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 101.414 1.414L13 10.414V16z"}
     -#   %span Sort
   .flex.flex-row.justify-end
-    - if user_signed_in?
-      = render 'listing'
-    - else
-      .font-bold.text-yellow-800.text-2xl.ml-4.mt-4 Please sign in to see results.
-
+    %span.text-muted{"data-autosubmit-target" => "status"}
+    .mt-2.text-sm.font-bold.text-blue-700.inline-flex.w-28.object-contain= "#{@pagy.count} Results"
+= render 'listing'
 
