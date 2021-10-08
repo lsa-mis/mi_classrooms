@@ -5,14 +5,14 @@
 
       .flex-shrink-0.flex.items-center
         = link_to root_path do
-          .block.md:hidden.h-10.w-16= svg("MiClassroomsLogo")
+          .block.md:hidden.h-8= svg("MiClassroomsLogo")
           -# .hidden.md:block.h-8.w-auto= link_to image_tag(asset_path('mi_classrooms_logo.png'), alt: "#{(t :sitename)} Logo, link to home   page.", id: root_path(anchor: 'page-bottom')), root_path
-          .hidden.md:block.h-8.justify-self-start.content-start.items-start= svg("MiClassroomsNamePlate")
-        .hidden.sm:ml-6.sm:flex.sm:space-x-8
-          .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "About", about_path, class: "#{class_names(active: current_page?(about_path))}"
-          .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to 'Contact', contact_path, class: "#{class_names(active: current_page?(contact_path))}"
-          .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "Buildings", buildings_path, class: "#{class_names(active: current_page?(buildings_path))}"
-          .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "Classrooms", rooms_path, class: "#{class_names(active: current_page?(rooms_path))}"
+          .hidden.md:block.h-8= svg("MiClassroomsNamePlateRevised")
+          .hidden.sm:ml-6.sm:flex.sm:space-x-8
+            .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "About", about_path, class: "#{class_names(active: current_page?(about_path))}"
+            .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to 'Contact', contact_path, class: "#{class_names(active: current_page?(contact_path))}"
+            .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "Buildings", buildings_path, class: "#{class_names(active: current_page?(buildings_path))}"
+            .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "Classrooms", rooms_path, class: "#{class_names(active: current_page?(rooms_path))}"
 
 
       .hidden.sm:ml-6.sm:flex.sm:items-center
@@ -68,6 +68,7 @@
                             }}
               #user-menu-item-mobile-sign-out.block.px-4.py-2.text-sm.text-gray-700= button_to "Sign Out", destroy_user_session_path, method: :delete, role: "menuitem", tabindex: "-1", data: {turbo: "false"}
 
-      .sm:hidden.items-center.mt-1= render './layouts/headness_mobile_menu_toggle.html.haml'
-
-    = render './layouts/headness_mobile_menu_dropdown'
+      %span.sm:hidden.items-center.mt-1{data: {controller: "dropdown"}}
+        = render './layouts/headness_mobile_menu_toggle.html.haml'
+        .flex.items-center.sm:hidden 
+          = render './layouts/headness_mobile_menu_dropdown'
