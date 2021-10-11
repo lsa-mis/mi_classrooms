@@ -7,7 +7,7 @@
         = link_to root_path do
           .block.md:hidden.h-10.w-16= svg("MiClassroomsLogo")
           -# .hidden.md:block.h-8.w-auto= link_to image_tag(asset_path('mi_classrooms_logo.png'), alt: "#{(t :sitename)} Logo, link to home   page.", id: root_path(anchor: 'page-bottom')), root_path
-          .hidden.md:block.h-8.justify-self-start.content-start.items-start= svg("MiClassroomsNamePlate")
+          .hidden.md:block.h-8.justify-self-start.content-start.items-start= svg("MiClassroomsNamePlateRevised")
         .hidden.sm:ml-6.sm:flex.sm:space-x-8
           .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "About", about_path, class: "#{class_names(active: current_page?(about_path))}"
           .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to 'Contact', contact_path, class: "#{class_names(active: current_page?(contact_path))}"
