@@ -58,14 +58,8 @@
             .origin-top-right.absolute.right-0.mt-2.w-48.rounded-md.shadow-lg.py-1.bg-white.ring-1.ring-black.ring-opacity-5.focus:outline-none{aria: {"labelledby" => "header-nav-menu-button",
                                 "orientation" => "vertical"},
                         role: "menu", 
-                        tabindex: "-1",
-
-                        data: {
-                          controller: "dropdown"
-                        }}
-              %span{data: {}}
-              #user-menu-item-mobile-sign-out.block.px-4.py-2.text-sm.text-gray-700= button_to "Sign Out!!", destroy_user_session_path, method: :delete, role: "menuitem", tabindex: "-1", data: {turbo: "false"}
-
+                        tabindex: "-1"}
+              #user-menu-item-mobile-sign-out.block.px-4.py-2.text-sm.text-gray-700= button_to "Sign Out", destroy_user_session_path, method: :delete, role: "menuitem", tabindex: "-1", data: {turbo: "false"}
 
       .sm:hidden.items-center.mt-1= render './layouts/headness_mobile_menu_toggle.html.haml'
 
