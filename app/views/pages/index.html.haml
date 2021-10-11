@@ -14,19 +14,21 @@
         Makes finding the right room easy!
       %p.mt-4.max-w-xl.mx-auto.text-xl.text-gray-600 
         Whether an instructor searching for a classroom with the technologies to meet their pedegpgy, or a student trying to find their way to class, MiClassrooms has you back. MiClassrooms provides an intuitive accessible interface to find the room you are looking for. 
-      %a.mt-10.inline-block.w-full.bg-gray-900.border.border-transparent.rounded-md.py-3.px-8.font-medium.text-white.hover:bg-gray-800.sm:w-auto.mb-10.sm:mb-0{href: "#"} Find your room!
+      =link_to rooms_path do 
+        .mt-10.inline-block.w-full.bg-gray-900.border.border-transparent.rounded-md.py-3.px-8.font-medium.text-white.hover:bg-gray-800.sm:w-auto.mb-10.sm:mb-0{href: "#"} Find your room!
   
 / Collection section
 %section.max-w-xl.mx-auto.px-4.sm:pt-12.sm:px-6.lg:max-w-7xl.lg:px-8{"aria-labelledby" => "collection-heading"}
   -# %h2#collection-heading.text-2xl.font-extrabold.tracking-tight.text-gray-900 Shop by Collection
   
   .space-y-4.lg:space-y-0.lg:grid.lg:grid-cols-3.lg:gap-x-8
-    %a.group.block{href: "#"}
-      .aspect-w-3.aspect-h-1.rounded-lg.overflow-hidden.group-hover:opacity-75.lg:aspect-w-5.lg:aspect-h-6{"aria-hidden" => "true"}
-        %img.w-full.h-full.object-center.object-cover{alt: "Brown leather key ring with brass metal loops and rivets on wood table.", src: "https://tailwindui.com/img/ecommerce-images/home-page-01-collection-01.jpg"}
-      %h3.mt-4.text-base.font-semibold.text-gray-900 Search for Buildings
-      %p.mt-2.text-sm.text-gray-500 Each building has quick information about the classrooms inathat building as well as floor map information. 
-    %a.group.block{href: "#"}
+    .group.block
+      =link_to buildings_path do
+        .aspect-w-3.aspect-h-1.rounded-lg.overflow-hidden.group-hover:opacity-75.lg:aspect-w-5.lg:aspect-h-6{"aria-hidden" => "true"}
+          %img.w-full.h-full.object-center.object-cover{alt: "Brown leather key ring with brass metal loops and rivets on wood table.", src: "https://tailwindui.com/img/ecommerce-images/home-page-01-collection-01.jpg"}
+        %h3.mt-4.text-base.font-semibold.text-gray-900 Search for Buildings
+        %p.mt-2.text-sm.text-gray-500 Each building has quick information about the classrooms inathat building as well as floor map information. 
+    =link_to rooms_path do
       .aspect-w-3.aspect-h-1.rounded-lg.overflow-hidden.group-hover:opacity-75.lg:aspect-w-5.lg:aspect-h-6{"aria-hidden" => "true"}
         %img.w-full.h-full.object-center.object-cover{alt: "Natural leather mouse pad on white desk next to porcelain mug and keyboard.", src: "https://tailwindui.com/img/ecommerce-images/home-page-01-collection-02.jpg"}/
       %h3.mt-4.text-base.font-semibold.text-gray-900 Search for Classrooms
