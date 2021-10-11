@@ -29,7 +29,7 @@ gem "bootsnap", ">= 1.4.3", require: false
 # gem "administrate", "~> 0.8.1"
 gem "haml-rails"
 gem "sassc-rails"
-gem "sidekiq", "~> 6.1.0"
+gem "sidekiq", "~> 6.2.1"
 gem "uglifier"
 gem "geocoder"
 gem "pagy"
