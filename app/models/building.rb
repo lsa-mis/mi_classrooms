@@ -25,7 +25,7 @@ class Building < ApplicationRecord
   include PgSearch::Model
   self.primary_key = 'bldrecnbr'
 
-  has_many :rooms, primary_key: 'bldrecnbr', foreign_key: 'building_bldrecnbr'
+  has_many :rooms, primary_key: 'bldrecnbr', foreign_key: 'building_bldrecnbr', dependent: :destroy
   geocoded_by :address # can also be an IP address
 
   multisearchable(
