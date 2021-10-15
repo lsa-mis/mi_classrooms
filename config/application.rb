@@ -8,30 +8,17 @@ Bundler.require(*Rails.groups)
 
 module MiClassrooms
   class Application < Rails::Application
-
-    # remove Turbo from Asset Pipeline precompilation
-    config.after_initialize do
-      config.assets.precompile.delete("turbo")
-    end
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
-    config.generators do |g|
-      g.test_framework false
-      g.stylesheets false
-      g.javascripts false
-      g.helper false
-      g.channel assets: false
-    end
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration can go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded after loading
-    # the framework and any gems in your application.
-    config.generators.system_tests = nil
-    config.active_job.queue_adapter = :sidekiq
-    config.active_record.schema_format = :sql
-  end
-  ActiveStorage::Engine.config.active_storage.content_types_to_serve_as_binary.delete("image/svg+xml")
 
-  ActiveStorage::Engine.config.active_storage.content_types_allowed_inline.append("image/svg+xml")
-  Webpacker::Compiler.env["TAILWIND_MODE"] = "build"
+    Rails.application.config.active_storage.variant_processor = :vips
+
+    # Configuration for the application, engines, and railties goes here.
+    #
+    # These settings can be overridden in specific environments using the files
+    # in config/environments, which are processed later.
+    #
+    # config.time_zone = "Central Time (US & Canada)"
+    # config.eager_load_paths << Rails.root.join("extras")
+  end
 end

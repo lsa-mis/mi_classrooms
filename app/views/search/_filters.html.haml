@@ -33,14 +33,14 @@
         %nav{class: "bg-gray-50 px-4 py-2 sm:px-6 lg:px-8 xl:pl-12", "aria-labelledby" => "characteristicsHeading"}
           %h2#characteristicsHeading.sr-only Room Characteristic checkboxes
 
-          = render './search/student_capacity'
-          = render partial: './search/school_or_college', locals: {form: form}
+          = render 'search/student_capacity'
+          = render partial: 'search/school_or_college', locals: {form: form}
         -# Secondary
 
         %div{class: "grid  px-4  bg-white sm:grid-cols-2 sm:gap-x-8  sm:px-6 lg:px-8  xl:pr-12"}
-          = render './search/room_characteristics'
+          = render 'search/room_characteristics'
 
-          = render './search/projection_list'
+          = render 'search/projection_list'
 
       .link-to-all-classrooms 
         = link_to "Show all classrooms", rooms_path

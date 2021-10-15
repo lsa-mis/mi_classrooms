@@ -20,7 +20,7 @@
 
   .flex.flex-row
     
-    = render partial: './search/filters', rooms: @rooms, locals: {form: form}
+    = render partial: 'search/filters', rooms: @rooms, locals: {form: form}
     .inset-y-0.right-0
       - if user_signed_in?
         %span.text-muted{"data-autosubmit-target" => "status"}

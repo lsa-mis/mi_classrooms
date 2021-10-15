@@ -4,8 +4,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.0.2"
 
 # Bundle edge Rails instead:
-gem "rails", "~> 6.1.0"
-# gem "rails", "~> 6.0.3"
+# gem "rails", "~> 6.1.0"
+gem "rails", github: "rails/rails"
 
 # Use postgresql as the database for Active Record
 gem "pg", ">= 0.18", "< 2.0"
@@ -35,11 +35,11 @@ gem "geocoder"
 gem "pagy"
 gem "pg_search"
 # gem "gravatar_image_tag", github: "mdeering/gravatar_image_tag"
-gem "listen"
+# gem "listen"
 
 group :development, :test do
   # Call "byebug" anywhere in the code to stop execution and get a debugger console
-  gem "bullet"
+  # gem "bullet"
   gem "pry"
   gem "factory_bot_rails"
   gem "standard"
@@ -58,8 +58,8 @@ group :development do
   gem "capistrano3-puma", "~> 4.0", require: false
   gem "erb2haml"
   gem "pry-rails"
-  gem "spring"
-  gem "spring-watcher-listen"
+  # gem "spring"
+  # gem "spring-watcher-listen"
 end
 
 group :test do

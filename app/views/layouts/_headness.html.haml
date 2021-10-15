@@ -63,6 +63,6 @@
                         tabindex: "-1"}
               #user-menu-item-mobile-sign-out.block.px-4.py-2.text-sm.text-gray-700= button_to "Sign Out", destroy_user_session_path, method: :delete, role: "menuitem", tabindex: "-1", data: {turbo: "false"}
 
-      .sm:hidden.items-center.mt-1= render './layouts/headness_mobile_menu_toggle.html.haml'
+      .sm:hidden.items-center.mt-1= render 'layouts/headness_mobile_menu_toggle'
 
-    = render './layouts/headness_mobile_menu_dropdown'
+    = render 'layouts/headness_mobile_menu_dropdown'
