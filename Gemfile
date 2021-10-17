@@ -44,6 +44,7 @@ group :development, :test do
   gem "factory_bot_rails"
   gem "standard"
   gem "rubocop-performance"
+  gem 'rspec-rails', '~> 5.0', '>= 5.0.2'
 end
 
 group :development do
@@ -66,6 +67,7 @@ group :test do
   gem "capybara"
   gem "webdrivers"
   gem "shoulda-matchers"
+  gem 'faker', '~> 2.19'
   gem "ffaker"
   gem "database_cleaner"
 end
