@@ -11,7 +11,7 @@
 # and update campus_records table in the database
 # If campus is in the app db, but not in the API, a warning will be added to the log file
 
-desc "This will update Ann Arbor campus buildings"
+desc "This will update campus records"
 task update_campus_list: :environment do
 
   auth_token = AuthTokenApi.new("bf", "buildings")
