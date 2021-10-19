@@ -7,10 +7,10 @@
 # https://en.wikipedia.org/wiki/Cron
 # https://medium.com/@pawlkris/scheduling-tasks-in-rails-with-cron-and-using-the-whenever-gem-34aa68b992e3
 
-desc "This will update classroom"
-task update_classroom: :environment do
+desc "This will update Ann Arbor campus buildings"
+task update_campus_list: :environment do
 
-  auth_token = AuthTokenApi.new("aa", "classrooms")
+  auth_token = AuthTokenApi.new("bf", "buildings")
   result = auth_token.get_auth_token
   if result['success']
     access_token = result['access_token']
@@ -18,19 +18,11 @@ task update_classroom: :environment do
     puts "No access_token. Error: " + result['error']
     exit
   end
-
-  classroom = ClassroomApi.new('USB1230', access_token)
-
-  # classroom_info  = classroom.get_classroom_info
-  # puts classroom_info
-
-  # classroom_characteristics = classroom.get_classroom_characteristics
-  # puts classroom_characteristics
-
-  # classroom_contact  = classroom.get_classroom_contact
-  # puts classroom_contact
-
-  classroom_meetings  = classroom.get_classroom_meetings("09/01/2021", "10/20/2021")
-  puts classroom_meetings
-
+  
+  api = BuildingsApi.new(access_token)
+  time = Benchmark.measure {
+    result = api.update_campus_list
+  }
+  puts "Update campus list Time: #{time.real.round(2)} seconds"
+  puts "See the log file #{Rails.root}/log/#{Date.today}_campus_api.log for errors or warnings"
 end
