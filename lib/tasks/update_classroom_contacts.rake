@@ -7,6 +7,10 @@
 # https://en.wikipedia.org/wiki/Cron
 # https://medium.com/@pawlkris/scheduling-tasks-in-rails-with-cron-and-using-the-whenever-gem-34aa68b992e3
 
+# For every classroom in the app db the task will get classroom_contact info from the API,
+# apdate the classroom_contact for that classroom or create a new classroom_contact
+# record if it doesn't exist
+
 desc "This will update classroom contacts"
 task update_classroom_contacts: :environment do
 

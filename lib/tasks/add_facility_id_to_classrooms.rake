@@ -7,6 +7,7 @@
 # https://en.wikipedia.org/wiki/Cron
 # https://medium.com/@pawlkris/scheduling-tasks-in-rails-with-cron-and-using-the-whenever-gem-34aa68b992e3
 
+# This task is needed for tests
 desc "This will find FacilityID for classroom"
 task check_room_for_facility_id: :environment do
 
@@ -27,6 +28,10 @@ task check_room_for_facility_id: :environment do
   puts result
 
 end
+
+# The task will add FacilityID to every classroom which is needed to get info 
+# about classroom_characteristics and classroom_contacts from APIs
+# Rooms were added to the database from the BuidingsApi and that data did not have FacilityIDs
 
 desc "This will find FacilityID for classroom"
 task add_facility_id_to_classrooms: :environment do

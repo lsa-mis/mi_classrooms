@@ -7,6 +7,10 @@
 # https://en.wikipedia.org/wiki/Cron
 # https://medium.com/@pawlkris/scheduling-tasks-in-rails-with-cron-and-using-the-whenever-gem-34aa68b992e3
 
+# The task will get info about all buildings (only for the Central Campus)
+# and update buildings records or add new builodings if they are not in the database
+# If a building is in the app db, but not in the API, a warning will be added to the log file
+
 desc "This will update Ann Arbor campus buildings"
 task update_buildings: :environment do
 

@@ -7,6 +7,10 @@
 # https://en.wikipedia.org/wiki/Cron
 # https://medium.com/@pawlkris/scheduling-tasks-in-rails-with-cron-and-using-the-whenever-gem-34aa68b992e3
 
+# The task will get info about all rooms (only for the Central Campus)
+# and update rooms records or add new rooms if they are not in the database
+# If a room is in the app db, but not in the API, the room will be updated with: room.update(visible: false)
+
 desc "This will update rooms for every building"
 task update_rooms: :environment do
 

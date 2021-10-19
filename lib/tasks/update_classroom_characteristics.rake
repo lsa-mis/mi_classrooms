@@ -7,6 +7,10 @@
 # https://en.wikipedia.org/wiki/Cron
 # https://medium.com/@pawlkris/scheduling-tasks-in-rails-with-cron-and-using-the-whenever-gem-34aa68b992e3
 
+# For every classroom in the app db the task will get classroom_characteristics info from the API,
+# delete all classroom_characteristics for that classroom and create a new classroom_characteristics
+# records
+
 desc "This will update classroom characteristics"
 task update_classroom_characteristics: :environment do
 
