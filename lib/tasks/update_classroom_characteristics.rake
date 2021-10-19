@@ -25,7 +25,7 @@ task update_classroom_characteristics: :environment do
 
   api = ClassroomApi.new(access_token)
   time = Benchmark.measure {
-    result = api.update_all_classroom_characteristics
+    api.update_all_classroom_characteristics
   }
   puts "Update classroom characteristics Time: #{time.real.round(2)} seconds"
   puts "See the log file #{Rails.root}/log/#{Date.today}_classroom_characteristics_api.log for errors or warnings"

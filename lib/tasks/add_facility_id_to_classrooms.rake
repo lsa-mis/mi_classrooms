@@ -49,7 +49,7 @@ task add_facility_id_to_classrooms: :environment do
   api = ClassroomApi.new(access_token)
 
   time = Benchmark.measure {
-    result = api.add_facility_id_to_classrooms
+    api.add_facility_id_to_classrooms
   }
   puts "Add FacilityID for classroom Time: #{time.real.round(2)} seconds"
   puts "See the log file #{Rails.root}/log/#{Date.today}_facility_id_logger_api.log for errors or warnings"

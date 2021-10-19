@@ -25,7 +25,7 @@ task update_buildings: :environment do
   
   api = BuildingsApi.new(access_token)
   time = Benchmark.measure {
-    result = api.update_all_buildings
+    api.update_all_buildings
   }
   puts "Update buildings Time: #{time.real.round(2)} seconds"
   puts "See the log file #{Rails.root}/log/#{Date.today}_building_api.log for errors or warnings"

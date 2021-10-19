@@ -25,7 +25,7 @@ task update_classroom_contacts: :environment do
 
   api = ClassroomApi.new(access_token)
   time = Benchmark.measure {
-    result = api.update_all_classroom_contacts
+    api.update_all_classroom_contacts
   }
   puts "Update classroom contacts Time: #{time.real.round(2)} seconds"
   puts "See the log file #{Rails.root}/log/#{Date.today}_classroom_contact_api.log for errors or warnings"
