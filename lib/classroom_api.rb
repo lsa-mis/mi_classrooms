@@ -2,7 +2,6 @@ class ClassroomApi
 
   def initialize(access_token)
     @buildings_ids = Building.all.pluck(:bldrecnbr)
-    @campus_codes = [100]
     @result = {'success' => false, 'error' => '', 'data' => {}}
     @access_token = access_token
   end
@@ -23,7 +22,7 @@ class ClassroomApi
     @@classroom_logger ||= Logger.new("#{Rails.root}/log/#{Date.today}_classroom_characteristics_api.log")
   end
 
-  def add_facility_id_to_classrooms
+  def add_facility_id_to_classrooms(campus_codes = [100])
     result = get_classrooms_list
     if result['success']
       classrooms_list = result['data'] 
@@ -41,7 +40,7 @@ class ClassroomApi
           result = get_classroom_info(ERB::Util.url_encode(facility_id))
           if result['success']
             room_info = result['data'][0]
-            if @campus_codes.include?(room_info['CampusCd'].to_i)
+            if campus_codes.include?(room_info['CampusCd'].to_i)
               rmrecnbr = room_info['RmRecNbr'].to_i
               room_in_db = Room.find_by(rmrecnbr: rmrecnbr)
               if room_in_db

@@ -11,7 +11,7 @@
 # and update buildings records or add new builodings if they are not in the database
 # If a building is in the app db, but not in the API, a warning will be added to the log file
 
-desc "This will update Ann Arbor campus buildings"
+desc "This will update campus buildings for [campus_codes] campuses"
 task update_buildings: :environment do
 
   auth_token = AuthTokenApi.new("bf", "buildings")
@@ -23,9 +23,10 @@ task update_buildings: :environment do
     exit
   end
   
+  campus_codes = [100]
   api = BuildingsApi.new(access_token)
   time = Benchmark.measure {
-    api.update_all_buildings
+    api.update_all_buildings(campus_codes)
   }
   puts "Update buildings Time: #{time.real.round(2)} seconds"
   puts "See the log file #{Rails.root}/log/#{Date.today}_building_api.log for errors or warnings"

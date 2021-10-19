@@ -1,8 +1,6 @@
 class BuildingsApi
 
   def initialize(access_token)
-    # @buildings_ids = Building.where("bldrecnbr = 1080012").pluck(:bldrecnbr).sort
-    @campus_codes = [100]
     @result = {'success' => false, 'error' => '', 'data' => {}}
     @access_token = access_token
   end
@@ -90,14 +88,14 @@ class BuildingsApi
 
   # update builgings
 
-  def update_all_buildings
+  def update_all_buildings(campus_codes = [100])
     @buildings_ids = Building.all.pluck(:bldrecnbr)
 
     @result = get_buildings_for_current_fiscal_year
     if @result['success']
       data = @result['data']
       data.each do |row|
-        if @campus_codes.include?(row['BuildingCampusCode'])
+        if campus_codes.include?(row['BuildingCampusCode'])
           if building_exists?(row['BuildingRecordNumber'])
             update_building(row)
           else

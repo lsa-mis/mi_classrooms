@@ -19,7 +19,7 @@ task check_room_for_facility_id: :environment do
     puts "No access_token. Error: " + result['error']
     exit
   end
-  @campus_codes = [100]
+  campus_codes = [100]
 
   classrooms = ClassroomApi.new(access_token)
 
@@ -33,7 +33,7 @@ end
 # about classroom_characteristics and classroom_contacts from APIs
 # Rooms were added to the database from the BuidingsApi and that data did not have FacilityIDs
 
-desc "This will find FacilityID for classroom"
+desc "This will find FacilityID for classroom for [campus_codes]"
 task add_facility_id_to_classrooms: :environment do
 
   auth_token = AuthTokenApi.new("aa", "classrooms")
@@ -44,12 +44,12 @@ task add_facility_id_to_classrooms: :environment do
     puts "No access_token. Error: " + result['error']
     exit
   end
-  @campus_codes = [100]
+  campus_codes = [100]
 
   api = ClassroomApi.new(access_token)
 
   time = Benchmark.measure {
-    api.add_facility_id_to_classrooms
+    api.add_facility_id_to_classrooms(campus_codes)
   }
   puts "Add FacilityID for classroom Time: #{time.real.round(2)} seconds"
   puts "See the log file #{Rails.root}/log/#{Date.today}_facility_id_logger_api.log for errors or warnings"
