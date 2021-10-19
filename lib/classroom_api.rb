@@ -27,12 +27,12 @@ class ClassroomApi
     result = get_classrooms_list
     if result['success']
       classrooms_list = result['data'] 
-      counter = 0
+      number_of_api_calls_per_minutes = 0
       classrooms_list.each do |room|
-        if counter < 190 
-          counter += 1
+        if number_of_api_calls_per_minutes < 190 
+          number_of_api_calls_per_minutes += 1
         else
-          counter = 1
+          number_of_api_calls_per_minutes = 1
           sleep(61.seconds)
         end
         facility_id = room['FacilityID'].to_s
@@ -150,12 +150,12 @@ class ClassroomApi
   def update_all_classroom_characteristics
 
     classrooms = Room.where(rmtyp_description: "Classroom").where.not(facility_code_heprod: nil)
-    counter = 0
+    number_of_api_calls_per_minutes = 0
     classrooms.each do |room|
-      if counter < 190 
-        counter += 1
+      if number_of_api_calls_per_minutes < 190 
+        number_of_api_calls_per_minutes += 1
       else
-        counter = 1
+        number_of_api_calls_per_minutes = 1
         sleep(61.seconds)
       end
       facility_id = room.facility_code_heprod
@@ -216,12 +216,12 @@ class ClassroomApi
 
   def update_all_classroom_contacts
     classrooms = Room.where(rmtyp_description: "Classroom").where.not(facility_code_heprod: nil)
-    counter = 0
+    number_of_api_calls_per_minutes = 0
     classrooms.each do |room|
-      if counter < 190 
-        counter += 1
+      if number_of_api_calls_per_minutes < 190 
+        number_of_api_calls_per_minutes += 1
       else
-        counter = 1
+        number_of_api_calls_per_minutes = 1
         sleep(61.seconds)
       end
       facility_id = room.facility_code_heprod
