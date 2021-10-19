@@ -219,8 +219,6 @@ GEM
     nokogiri (1.12.5)
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
-    nokogiri (1.12.5-x86_64-darwin)
-      racc (~> 1.4)
     oauth2 (1.4.7)
       faraday (>= 0.8, < 2.0)
       jwt (>= 1.0, < 3.0)
@@ -259,6 +257,8 @@ GEM
     public_suffix (4.0.6)
     puma (4.3.9)
       nio4r (~> 2.0)
+    pundit (2.1.1)
+      activesupport (>= 3.0.0)
     racc (1.5.2)
     rack (2.2.3)
     rack-protection (2.1.0)
@@ -431,6 +431,7 @@ DEPENDENCIES
   pry
   pry-rails
   puma
+  pundit
   rails (~> 6.1.0)
   rubocop-performance
   sassc-rails
@@ -449,4 +450,4 @@ RUBY VERSION
    ruby 3.0.1p64
 
 BUNDLED WITH
-   2.2.26
+   2.2.29

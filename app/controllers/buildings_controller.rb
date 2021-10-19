@@ -1,6 +1,7 @@
 class BuildingsController < ApplicationController
 
   before_action :set_building, only: [:show, :edit, :update, :destroy]
+  skip_after_action :verify_policy_scoped, only: :index
 
   # GET /buildings
   # GET /buildings.json
@@ -9,6 +10,7 @@ class BuildingsController < ApplicationController
     if params[:query].present?
       session[:query] = params[:query]
       @buildings = Building.with_name(params[:query])
+      authorize @buildings
       @pagy, @buildings = pagy(@buildings)
     else
       @buildings = Building.all
