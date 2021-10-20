@@ -43,7 +43,7 @@ class Building < ApplicationRecord
       tsearch: {
         dictionary: "english",
         prefix: true,
-        any_word: true,
+        any_word: false,
 
       }
     }
