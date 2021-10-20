@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   include Pundit
   before_action :store_user_location!, if: :storable_location?
   before_action :create_feedback
-  # after_action :verify_authorized, except: :index, unless: :devise_controller?
+  after_action :verify_authorized, except: :index, unless: :devise_controller?
   after_action :verify_policy_scoped, only: :index
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
