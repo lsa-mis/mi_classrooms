@@ -31,3 +31,9 @@ task update_classroom_characteristics: :environment do
   puts "See the log file #{Rails.root}/log/#{Date.today}_classroom_characteristics_api.log for errors or warnings"
 
 end
+
+desc "This will update classroom characteristics array"
+task update_classroom_characteristics_array: :environment do
+
+  UpdateRoomCharacteristicsArrayJob.perform_now
+end 
