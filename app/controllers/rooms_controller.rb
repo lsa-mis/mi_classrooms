@@ -8,11 +8,15 @@ include ActionView::RecordIdentifier
 
     @rooms = Room.classrooms.includes([:building, :room_contact, :room_characteristics]).where('instructional_seating_count > ?', 1) 
 
+    if params.present?
+      Rails.logger.debug "**************************** params: #{params} "
+    end
     @rooms = @rooms.classrooms.with_building_name(params[:query]) if params[:query].present?
     @rooms = @rooms.classrooms.with_school_or_college_name(params[:school_or_college_name]) if params[:school_or_college_name].present?
     @rooms = @rooms.classrooms.with_all_characteristics(params[:room_characteristics]) if params[:room_characteristics].present?
-    @rooms = @rooms.where('instructional_seating_count > ?', params[:min_capacity].to_i) 
-    @rooms = @rooms.where('instructional_seating_count > ?', capacity_slider_maximum) if params[:capacity_slider_maximum].present?
+    @rooms = @rooms.where('instructional_seating_count > ?', params[:min_capacity].to_i) if params[:max_capacity].present?
+    
+    @rooms = @rooms.where('instructional_seating_count < ?', params[:max_capacity].to_i) if params[:max_capacity].present?
 
     # school_or_college_name
     @rooms = @rooms.with_school_or_college_name(params[:school_or_college_name]) if params[:school_or_college_name].present?  
