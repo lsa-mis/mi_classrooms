@@ -27,7 +27,7 @@ class BuildingPolicy < ApplicationPolicy
       true
     end
   end
-end\
+end
 
 private
 
