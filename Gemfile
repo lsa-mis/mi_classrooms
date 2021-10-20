@@ -80,3 +80,5 @@ gem "omniauth-google-oauth2"
 gem 'omniauth-rails_csrf_protection'
 gem "draper", "~> 4.0"
 gem "pundit"
+
+gem 'image_processing'

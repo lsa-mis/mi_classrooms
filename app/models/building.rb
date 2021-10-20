@@ -27,6 +27,7 @@ class Building < ApplicationRecord
 
   has_many :rooms, primary_key: 'bldrecnbr', foreign_key: 'building_bldrecnbr'
   geocoded_by :address # can also be an IP address
+  has_one_attached :building_image
 
   multisearchable(
     against: [:name, :nick_name, :abbreviation, :bldrecnbr],
@@ -43,7 +44,7 @@ class Building < ApplicationRecord
       tsearch: {
         dictionary: "english",
         prefix: true,
-        any_word: true,
+        any_word: false,
 
       }
     }
