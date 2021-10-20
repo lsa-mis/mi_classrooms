@@ -14,6 +14,7 @@ class BuildingsController < ApplicationController
       @pagy, @buildings = pagy(@buildings)
     else
       @buildings = Building.all
+      authorize @buildings
       @pagy, @buildings = pagy(@buildings)
     end
 
