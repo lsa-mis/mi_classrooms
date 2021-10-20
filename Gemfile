@@ -73,9 +73,12 @@ gem "annotate", "~> 3.1.1"
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem 'devise', github: 'heartcombo/devise'
+# gem 'devise', github: 'heartcombo/devise'
+gem "devise", github: "ghiculescu/devise", branch: "error-code-422" # https://github.com/heartcombo/devise/pull/5340 not yet merged
+gem "responders", github: "heartcombo/responders"
 gem "omniauth-google-oauth2"
 gem 'omniauth-rails_csrf_protection'
 gem "draper", "~> 4.0"
+gem "pundit"
 
 gem 'image_processing'

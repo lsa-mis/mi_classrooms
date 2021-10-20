@@ -1,6 +1,7 @@
 GIT
-  remote: https://github.com/heartcombo/devise.git
-  revision: c82e4cf47b02002b2fd7ca31d441cf1043fc634c
+  remote: https://github.com/ghiculescu/devise.git
+  revision: 3b2d9ae3d47be5c9228c4446119b04b0e98917c1
+  branch: error-code-422
   specs:
     devise (4.8.0)
       bcrypt (~> 3.0)
@@ -8,6 +9,14 @@ GIT
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+
+GIT
+  remote: https://github.com/heartcombo/responders.git
+  revision: d15834ec95546c529375d6497104941be79372f6
+  specs:
+    responders (3.0.1)
+      actionpack (>= 5.2)
+      railties (>= 5.2)
 
 GEM
   remote: https://rubygems.org/
@@ -263,6 +272,8 @@ GEM
     public_suffix (4.0.6)
     puma (4.3.9)
       nio4r (~> 2.0)
+    pundit (2.1.1)
+      activesupport (>= 3.0.0)
     racc (1.5.2)
     rack (2.2.3)
     rack-protection (2.1.0)
@@ -306,9 +317,6 @@ GEM
     regexp_parser (2.1.1)
     request_store (1.5.0)
       rack (>= 1.4)
-    responders (3.0.1)
-      actionpack (>= 5.0)
-      railties (>= 5.0)
     rexml (3.2.5)
     rubocop (1.20.0)
       parallel (~> 1.10)
@@ -438,7 +446,9 @@ DEPENDENCIES
   pry
   pry-rails
   puma
+  pundit
   rails (~> 6.1.0)
+  responders!
   rubocop-performance
   sassc-rails
   shoulda-matchers
@@ -456,4 +466,4 @@ RUBY VERSION
    ruby 3.0.1p64
 
 BUNDLED WITH
-   2.2.26
+   2.2.29
