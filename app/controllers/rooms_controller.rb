@@ -1,7 +1,7 @@
 class RoomsController < ApplicationController
 include ActionView::RecordIdentifier
   before_action :set_room, only: [:show, :edit, :update, :destroy, :toggle_visibile]
-
+  skip_after_action :verify_policy_scoped, only: :index
   # GET /rooms
   # GET /rooms.json
   def index
@@ -16,9 +16,9 @@ include ActionView::RecordIdentifier
 
     # school_or_college_name
     @rooms = @rooms.with_school_or_college_name(params[:school_or_college_name]) if params[:school_or_college_name].present?  
-    @rooms = RoomDecorator.decorate_collection(@rooms)
     authorize @rooms
-    # @rooms = @rooms.decorate 
+    @rooms = RoomDecorator.decorate_collection(@rooms)
+
     @pagy, @rooms = pagy(@rooms)
 
     # unless params[:query].nil?
@@ -120,6 +120,11 @@ include ActionView::RecordIdentifier
 
     def filtering_params
       params.slice(:bluray, :chalkboard, :doccam, :interactive_screen, :instructor_computer, :lecture_capture, :projector_16mm, :projector_35mm, :projector_digital_cinema, :projector_digial, :projector_slide, :team_board, :team_tables, :team_technology, :vcr, :video_conf, :whiteboard)
+    end
+
+    def user_not_authorized
+      flash[:alert] = "Please sign in to see rooms."
+      redirect_to(request.referrer || fallback_location)
     end
 
 end

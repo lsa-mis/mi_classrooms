@@ -1,31 +1,39 @@
 class RoomPolicy < ApplicationPolicy
-  class Scope
-    def initialize(user, scope)
-      @user  = user
-      @scope = scope
-    end
-
-    def user_in_group?
-      # user.authorized_groups.includes?
-      if user.email.include?("dschmura")
-      # if user.mcommunity_groups.include?("mi-classrooms-notify")
-        true
-      else
-        false
-      end
-    end
+  class Scope < Scope
     def resolve
-      if user && user_in_group?
+      if user.admin?
         scope.all
       else
-        scope.where(visible: true)
-        # scope.all
+        raise Pundit::NotAuthorizedError, 'not allowed to view this action'
       end
     end
   end
   
   def index?
-    false
+    if user
+      true
+    end
   end
 
+  def show?
+    true
+  end
+
+end
+
+
+private
+
+def moni_pat
+  ['dschmura', 'rsmoke']
+end
+
+def user_in_group?
+  # user.authorized_groups.includes?
+  # true
+  if user.email.include?("moni_pat")
+    true
+  else
+    false
+  end
 end

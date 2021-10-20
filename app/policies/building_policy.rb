@@ -13,7 +13,7 @@ class BuildingPolicy < ApplicationPolicy
   end
 
   def index?
-    if user
+    if user 
       true
     end
   end
@@ -39,6 +39,7 @@ def user_in_group?
   # user.authorized_groups.includes?
   # true
   if user.email.include?("moni_pat")
+    puts "USER IN GROUP"
     true
   else
     false
