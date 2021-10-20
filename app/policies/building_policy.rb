@@ -13,7 +13,9 @@ class BuildingPolicy < ApplicationPolicy
   end
 
   def index?
-    true
+    if user
+      true
+    end
   end
 
   def show?
@@ -25,7 +27,7 @@ class BuildingPolicy < ApplicationPolicy
       true
     end
   end
-end
+end\
 
 private
 
