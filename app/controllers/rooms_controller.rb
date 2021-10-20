@@ -17,6 +17,8 @@ include ActionView::RecordIdentifier
     # school_or_college_name
     @rooms = @rooms.with_school_or_college_name(params[:school_or_college_name]) if params[:school_or_college_name].present?  
 
+    @rooms = @rooms.where(building_bldrecnbr: params[:building_bldrecnbr]) if params[:building_bldrecnbr].present?
+
     @rooms = RoomDecorator.decorate_collection(@rooms)
     # @rooms = @rooms.decorate 
     @pagy, @rooms = pagy(@rooms)
