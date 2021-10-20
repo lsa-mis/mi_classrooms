@@ -1,10 +1,11 @@
 class PagesController < ApplicationController
+  
   def about
     authorize :page
   end
 
   def index
-    true
+    skip_policy_scope
   end
 
   def contact

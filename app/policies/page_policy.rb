@@ -1,13 +1,7 @@
 class PagePolicy < ApplicationPolicy
   class Scope < Scope
-
     def resolve
-      if user && user_in_group?
-        scope.all
-      else
-        # scope.where(visible: true)
-        scope.all
-      end
+      scope.all
     end
   end
   def index?
