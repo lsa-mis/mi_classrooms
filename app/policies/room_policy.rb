@@ -10,7 +10,7 @@ class RoomPolicy < ApplicationPolicy
   end
   
   def index?
-    if user
+    if user && user_in_group?
       true
     end
   end
@@ -21,17 +21,16 @@ class RoomPolicy < ApplicationPolicy
 
 end
 
-
 private
 
-def moni_pat
-  ['dschmura', 'rsmoke']
+def bespoke_team
+  ['dschmura', 'rsmoke', 'brita', 'anantas', 'jjsantos', 'mlaitan', 'prbelden', 'mdressle']
 end
 
 def user_in_group?
   # user.authorized_groups.includes?
   # true
-  if user.email.include?("moni_pat")
+  if bespoke_team.include?(user.uniqname)
     true
   else
     false

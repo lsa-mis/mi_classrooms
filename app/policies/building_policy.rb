@@ -31,15 +31,14 @@ end
 
 private
 
-def moni_pat
-  ['dschmura', 'rsmoke']
+def bespoke_team
+  ['dschmura', 'rsmoke', 'brita', 'anantas', 'jjsantos', 'mlaitan', 'prbelden', 'mdressle']
 end
 
 def user_in_group?
   # user.authorized_groups.includes?
   # true
-  if user.email.include?("moni_pat")
-    puts "USER IN GROUP"
+  if bespoke_team.include?(user.uniqname)
     true
   else
     false
