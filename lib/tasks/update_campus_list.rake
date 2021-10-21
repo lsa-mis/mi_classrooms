@@ -7,12 +7,12 @@
 # https://en.wikipedia.org/wiki/Cron
 # https://medium.com/@pawlkris/scheduling-tasks-in-rails-with-cron-and-using-the-whenever-gem-34aa68b992e3
 
-# The task will get info about all buildings (only for the Central Campus)
-# and update buildings records or add new builodings if they are not in the database
-# If a building is in the app db, but not in the API, a warning will be added to the log file
+# The task will get info about all campuses 
+# and update campus_records table in the database
+# If campus is in the app db, but not in the API, a warning will be added to the log file
 
-desc "This will update campus buildings for [campus_codes] campuses"
-task update_buildings: :environment do
+desc "This will update campus records"
+task update_campus_list: :environment do
 
   auth_token = AuthTokenApi.new("bf", "buildings")
   result = auth_token.get_auth_token
@@ -23,12 +23,10 @@ task update_buildings: :environment do
     exit
   end
   
-  campus_codes = [100]
   api = BuildingsApi.new(access_token)
   time = Benchmark.measure {
-    api.update_all_buildings(campus_codes)
+    api.update_campus_list
   }
-  puts "Update buildings Time: #{time.real.round(2)} seconds"
-  puts "See the log file #{Rails.root}/log/#{Date.today}_building_api.log for errors or warnings"
-
+  puts "Update campus list Time: #{time.real.round(2)} seconds"
+  puts "See the log file #{Rails.root}/log/#{Date.today}_campus_api.log for errors or warnings"
 end

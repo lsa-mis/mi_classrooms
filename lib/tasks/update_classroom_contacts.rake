@@ -7,14 +7,14 @@
 # https://en.wikipedia.org/wiki/Cron
 # https://medium.com/@pawlkris/scheduling-tasks-in-rails-with-cron-and-using-the-whenever-gem-34aa68b992e3
 
-# The task will get info about all buildings (only for the Central Campus)
-# and update buildings records or add new builodings if they are not in the database
-# If a building is in the app db, but not in the API, a warning will be added to the log file
+# For every classroom in the app db the task will get classroom_contact info from the API,
+# apdate the classroom_contact for that classroom or create a new classroom_contact
+# record if it doesn't exist
 
-desc "This will update campus buildings for [campus_codes] campuses"
-task update_buildings: :environment do
+desc "This will update classroom contacts"
+task update_classroom_contacts: :environment do
 
-  auth_token = AuthTokenApi.new("bf", "buildings")
+  auth_token = AuthTokenApi.new("aa", "classrooms")
   result = auth_token.get_auth_token
   if result['success']
     access_token = result['access_token']
@@ -22,13 +22,12 @@ task update_buildings: :environment do
     puts "No access_token. Error: " + result['error']
     exit
   end
-  
-  campus_codes = [100]
-  api = BuildingsApi.new(access_token)
+
+  api = ClassroomApi.new(access_token)
   time = Benchmark.measure {
-    api.update_all_buildings(campus_codes)
+    api.update_all_classroom_contacts
   }
-  puts "Update buildings Time: #{time.real.round(2)} seconds"
-  puts "See the log file #{Rails.root}/log/#{Date.today}_building_api.log for errors or warnings"
+  puts "Update classroom contacts Time: #{time.real.round(2)} seconds"
+  puts "See the log file #{Rails.root}/log/#{Date.today}_classroom_contact_api.log for errors or warnings"
 
 end

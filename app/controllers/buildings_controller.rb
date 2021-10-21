@@ -1,6 +1,7 @@
 class BuildingsController < ApplicationController
 
   before_action :set_building, only: [:show, :edit, :update, :destroy]
+  skip_after_action :verify_policy_scoped, only: :index
 
   # GET /buildings
   # GET /buildings.json
@@ -9,9 +10,11 @@ class BuildingsController < ApplicationController
     if params[:query].present?
       session[:query] = params[:query]
       @buildings = Building.with_name(params[:query])
+      authorize @buildings
       @pagy, @buildings = pagy(@buildings)
     else
       @buildings = Building.all
+      authorize @buildings
       @pagy, @buildings = pagy(@buildings)
     end
 
@@ -27,6 +30,7 @@ class BuildingsController < ApplicationController
   # GET /buildings/1
   # GET /buildings/1.json
   def show
+    authorize @building
   end
 
   # GET /buildings/new
@@ -36,6 +40,7 @@ class BuildingsController < ApplicationController
 
   # GET /buildings/1/edit
   def edit
+    authorize @building
   end
 
   # POST /buildings
@@ -57,6 +62,7 @@ class BuildingsController < ApplicationController
   # PATCH/PUT /buildings/1
   # PATCH/PUT /buildings/1.json
   def update
+    authorize @building
     respond_to do |format|
       if @building.update(building_params)
         format.html { redirect_to @building, notice: 'Building was successfully updated.' }
@@ -87,6 +93,11 @@ class BuildingsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def building_params
-      params.require(:building).permit(:bldrecnbr, :latitude, :longitude, :name, :nick_name, :abbreviation, :address, :city, :state, :zip, :country, :query)
+      params.require(:building).permit(:bldrecnbr, :latitude, :longitude, :name, :nick_name, :abbreviation, :address, :city, :state, :zip, :country, :query, :building_image)
+    end
+
+    def user_not_authorized
+      flash[:alert] = "Please sign in to see buildings."
+      redirect_to(request.referrer || fallback_location)
     end
 end

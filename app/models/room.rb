@@ -35,8 +35,8 @@ class Room < ApplicationRecord
   
 
   belongs_to :building, foreign_key: :building_bldrecnbr
-  has_many :room_characteristics, foreign_key: :rmrecnbr
-  has_one :room_contact, foreign_key: :rmrecnbr
+  has_many :room_characteristics, foreign_key: :rmrecnbr, dependent: :destroy
+  has_one :room_contact, foreign_key: :rmrecnbr, dependent: :destroy
   has_one_attached :room_panorama
   has_one_attached :room_image
 

@@ -1,6 +1,7 @@
 GIT
-  remote: https://github.com/heartcombo/devise.git
-  revision: c82e4cf47b02002b2fd7ca31d441cf1043fc634c
+  remote: https://github.com/ghiculescu/devise.git
+  revision: 3b2d9ae3d47be5c9228c4446119b04b0e98917c1
+  branch: error-code-422
   specs:
     devise (4.8.0)
       bcrypt (~> 3.0)
@@ -8,6 +9,14 @@ GIT
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+
+GIT
+  remote: https://github.com/heartcombo/responders.git
+  revision: d15834ec95546c529375d6497104941be79372f6
+  specs:
+    responders (3.0.1)
+      actionpack (>= 5.2)
+      railties (>= 5.2)
 
 GEM
   remote: https://rubygems.org/
@@ -195,9 +204,14 @@ GEM
       ruby_parser (~> 3.5)
     i18n (1.8.10)
       concurrent-ruby (~> 1.0)
+    image_processing (1.12.1)
+      mini_magick (>= 4.9.5, < 5)
+      ruby-vips (>= 2.0.17, < 3)
     jbuilder (2.11.2)
       activesupport (>= 5.0.0)
     jwt (2.2.3)
+    ldap_lookup (0.1.5)
+      net-ldap (~> 0.17.0)
     listen (3.7.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -208,6 +222,7 @@ GEM
       mini_mime (>= 0.1.1)
     marcel (1.0.2)
     method_source (1.0.0)
+    mini_magick (4.11.0)
     mini_mime (1.1.1)
     mini_portile2 (2.6.1)
     minitest (5.14.4)
@@ -215,14 +230,13 @@ GEM
     multi_json (1.15.0)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
+    net-ldap (0.17.0)
     net-scp (3.0.0)
       net-ssh (>= 2.6.5, < 7.0.0)
     net-ssh (6.1.0)
     nio4r (2.5.8)
     nokogiri (1.12.5)
       mini_portile2 (~> 2.6.1)
-      racc (~> 1.4)
-    nokogiri (1.12.5-x86_64-darwin)
       racc (~> 1.4)
     oauth2 (1.4.7)
       faraday (>= 0.8, < 2.0)
@@ -262,6 +276,8 @@ GEM
     public_suffix (4.0.6)
     puma (4.3.9)
       nio4r (~> 2.0)
+    pundit (2.1.1)
+      activesupport (>= 3.0.0)
     racc (1.5.2)
     rack (2.2.3)
     rack-protection (2.1.0)
@@ -305,9 +321,6 @@ GEM
     regexp_parser (2.1.1)
     request_store (1.5.0)
       rack (>= 1.4)
-    responders (3.0.1)
-      actionpack (>= 5.0)
-      railties (>= 5.0)
     rexml (3.2.5)
     rspec-core (3.10.1)
       rspec-support (~> 3.10.0)
@@ -341,6 +354,8 @@ GEM
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
     ruby-progressbar (1.11.0)
+    ruby-vips (2.1.3)
+      ffi (~> 1.12)
     ruby2_keywords (0.0.5)
     ruby_parser (3.17.0)
       sexp_processor (~> 4.15, >= 4.15.1)
@@ -438,7 +453,9 @@ DEPENDENCIES
   geocoder
   haml-rails
   hotwire-rails
+  image_processing
   jbuilder (~> 2.7)
+  ldap_lookup
   listen
   omniauth-google-oauth2
   omniauth-rails_csrf_protection
@@ -448,8 +465,10 @@ DEPENDENCIES
   pry
   pry-rails
   puma
+  pundit
   rails (~> 6.1.0)
   rspec-rails (~> 5.0, >= 5.0.2)
+  responders!
   rubocop-performance
   sassc-rails
   selenium-webdriver
@@ -467,4 +486,4 @@ RUBY VERSION
    ruby 3.0.1p64
 
 BUNDLED WITH
-   2.2.26
+   2.2.29
