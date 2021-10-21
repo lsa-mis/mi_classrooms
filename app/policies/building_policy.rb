@@ -6,8 +6,7 @@ class BuildingPolicy < ApplicationPolicy
       if user && user_in_group?
         scope.all
       else
-        # scope.where(visible: true)
-        scope.all
+        raise Pundit::NotAuthorizedError, 'not allowed to view this action'
       end
     end
   end
@@ -17,7 +16,7 @@ class BuildingPolicy < ApplicationPolicy
   end
 
   def show?
-    true
+    user && user_in_group?
   end
 
   def update?
