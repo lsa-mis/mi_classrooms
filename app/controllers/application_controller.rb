@@ -5,7 +5,12 @@ class ApplicationController < ActionController::Base
   before_action :create_feedback
   after_action :verify_authorized, except: :index, unless: :devise_controller?
   after_action :verify_policy_scoped, only: :index
-  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_in_group
+
+  def user_not_in_group
+    flash[:alert] = "You are not authorized to perform this action."
+    redirect_to root_path
+  end
 
   private
 
@@ -18,10 +23,10 @@ class ApplicationController < ActionController::Base
   end
 
 
-  def user_not_authorized
-    flash[:alert] = "Please sign in to perform this action."
-    redirect_back(fallback_location: :user_google_oauth2_omniauth_authorize)
-  end
+  # def user_not_authorized
+  #   flash[:alert] = "Please sign in to perform this action."
+  #   redirect_back(fallback_location: :user_google_oauth2_omniauth_authorize)
+  # end
 
   def storable_location?
     request.get? && is_navigational_format? && !devise_controller? && !request.xhr?
