@@ -142,7 +142,8 @@ CREATE TABLE public.buildings (
     country character varying,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    tsv tsvector
+    tsv tsvector,
+    campus_records_id bigint
 );
 
 
@@ -163,6 +164,38 @@ CREATE SEQUENCE public.buildings_bldrecnbr_seq
 --
 
 ALTER SEQUENCE public.buildings_bldrecnbr_seq OWNED BY public.buildings.bldrecnbr;
+
+
+--
+-- Name: campus_records; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.campus_records (
+    id bigint NOT NULL,
+    campus_cd integer,
+    campus_description character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: campus_records_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.campus_records_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: campus_records_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.campus_records_id_seq OWNED BY public.campus_records.id;
 
 
 --
@@ -351,7 +384,8 @@ CREATE TABLE public.rooms (
     building_bldrecnbr bigint NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    tsv tsvector
+    tsv tsvector,
+    campus_records_id bigint
 );
 
 
@@ -452,6 +486,13 @@ ALTER TABLE ONLY public.buildings ALTER COLUMN bldrecnbr SET DEFAULT nextval('pu
 
 
 --
+-- Name: campus_records id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.campus_records ALTER COLUMN id SET DEFAULT nextval('public.campus_records_id_seq'::regclass);
+
+
+--
 -- Name: omni_auth_services id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -531,6 +572,14 @@ ALTER TABLE ONLY public.ar_internal_metadata
 
 ALTER TABLE ONLY public.buildings
     ADD CONSTRAINT buildings_pkey PRIMARY KEY (bldrecnbr);
+
+
+--
+-- Name: campus_records campus_records_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.campus_records
+    ADD CONSTRAINT campus_records_pkey PRIMARY KEY (id);
 
 
 --
@@ -618,6 +667,13 @@ CREATE UNIQUE INDEX index_active_storage_variant_records_uniqueness ON public.ac
 
 
 --
+-- Name: index_buildings_on_campus_records_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_buildings_on_campus_records_id ON public.buildings USING btree (campus_records_id);
+
+
+--
 -- Name: index_buildings_on_tsv; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -664,6 +720,13 @@ CREATE INDEX index_room_contacts_on_rmrecnbr ON public.room_contacts USING btree
 --
 
 CREATE INDEX index_rooms_on_building_bldrecnbr ON public.rooms USING btree (building_bldrecnbr);
+
+
+--
+-- Name: index_rooms_on_campus_records_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_rooms_on_campus_records_id ON public.rooms USING btree (campus_records_id);
 
 
 --
@@ -749,6 +812,14 @@ ALTER TABLE ONLY public.active_storage_variant_records
 
 
 --
+-- Name: rooms fk_rails_af04891a02; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.rooms
+    ADD CONSTRAINT fk_rails_af04891a02 FOREIGN KEY (campus_records_id) REFERENCES public.campus_records(id);
+
+
+--
 -- Name: active_storage_attachments fk_rails_c3b3935057; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -762,6 +833,14 @@ ALTER TABLE ONLY public.active_storage_attachments
 
 ALTER TABLE ONLY public.room_characteristics
     ADD CONSTRAINT fk_rails_d00a2d31b3 FOREIGN KEY (rmrecnbr) REFERENCES public.rooms(rmrecnbr);
+
+
+--
+-- Name: buildings fk_rails_e321516598; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.buildings
+    ADD CONSTRAINT fk_rails_e321516598 FOREIGN KEY (campus_records_id) REFERENCES public.campus_records(id);
 
 
 --
@@ -784,9 +863,13 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210816183531'),
 ('20210910182654'),
 ('20210910182736'),
+('20211018211216'),
+('20211018211648'),
+('20211018211722');
 ('20211015134156'),
 ('20211015134157'),
 ('20211021092659'),
 ('20211021115852');
+
 
 
