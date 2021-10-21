@@ -13,17 +13,19 @@ class BuildingPolicy < ApplicationPolicy
   end
 
   def index?
-    if user 
+    if user && user_in_group?
       true
     end
   end
 
   def show?
-    true
+    if user && user_in_group?
+      true
+    end
   end
 
   def update?
-    if user
+    if user && user_in_group?
       true
     end
   end

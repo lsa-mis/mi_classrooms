@@ -16,7 +16,9 @@ class RoomPolicy < ApplicationPolicy
   end
 
   def show?
-    true
+    if user && user_in_group?
+      true
+    end
   end
 
 end
