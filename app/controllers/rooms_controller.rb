@@ -1,24 +1,32 @@
 class RoomsController < ApplicationController
 include ActionView::RecordIdentifier
   before_action :set_room, only: [:show, :edit, :update, :destroy, :toggle_visibile]
-
+  skip_after_action :verify_policy_scoped, only: :index
   # GET /rooms
   # GET /rooms.json
   def index
 
     @rooms = Room.classrooms.includes([:building, :room_contact, :room_characteristics]).where('instructional_seating_count > ?', 1) 
 
+    if params.present?
+      Rails.logger.debug "**************************** params: #{params} "
+    end
     @rooms = @rooms.classrooms.with_building_name(params[:query]) if params[:query].present?
     @rooms = @rooms.classrooms.with_school_or_college_name(params[:school_or_college_name]) if params[:school_or_college_name].present?
     @rooms = @rooms.classrooms.with_all_characteristics(params[:room_characteristics]) if params[:room_characteristics].present?
-    @rooms = @rooms.where('instructional_seating_count > ?', params[:min_capacity].to_i) 
-    @rooms = @rooms.where('instructional_seating_count > ?', capacity_slider_maximum) if params[:capacity_slider_maximum].present?
+    @rooms = @rooms.where('instructional_seating_count > ?', params[:min_capacity].to_i) if params[:max_capacity].present?
+    
+    @rooms = @rooms.where('instructional_seating_count < ?', params[:max_capacity].to_i) if params[:max_capacity].present?
 
     # school_or_college_name
     @rooms = @rooms.with_school_or_college_name(params[:school_or_college_name]) if params[:school_or_college_name].present?  
 
+    authorize @rooms
+
+    @rooms = @rooms.where(building_bldrecnbr: params[:building_bldrecnbr]) if params[:building_bldrecnbr].present?
+
     @rooms = RoomDecorator.decorate_collection(@rooms)
-    # @rooms = @rooms.decorate 
+
     @pagy, @rooms = pagy(@rooms)
 
     # unless params[:query].nil?
@@ -33,6 +41,7 @@ include ActionView::RecordIdentifier
   # GET /rooms/1
   # GET /rooms/1.json
   def show
+    authorize @room
     respond_to do |format|
       # format.js
       format.html
@@ -120,6 +129,11 @@ include ActionView::RecordIdentifier
 
     def filtering_params
       params.slice(:bluray, :chalkboard, :doccam, :interactive_screen, :instructor_computer, :lecture_capture, :projector_16mm, :projector_35mm, :projector_digital_cinema, :projector_digial, :projector_slide, :team_board, :team_tables, :team_technology, :vcr, :video_conf, :whiteboard)
+    end
+
+    def user_not_authorized
+      flash[:alert] = "Please sign in to see rooms."
+      redirect_to(request.referrer || fallback_location)
     end
 
 end

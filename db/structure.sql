@@ -432,7 +432,9 @@ CREATE TABLE public.users (
     updated_at timestamp(6) without time zone NOT NULL,
     avatar_url character varying,
     provider character varying,
-    uid character varying
+    uid character varying,
+    mcommunity_groups text DEFAULT ''::text NOT NULL,
+    uniqname character varying
 );
 
 
@@ -749,6 +751,13 @@ CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING bt
 
 
 --
+-- Name: index_users_on_uniqname; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_on_uniqname ON public.users USING btree (uniqname);
+
+
+--
 -- Name: buildings tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -857,5 +866,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211018211216'),
 ('20211018211648'),
 ('20211018211722');
+('20211015134156'),
+('20211015134157'),
+('20211021092659'),
+('20211021115852');
+
 
 
