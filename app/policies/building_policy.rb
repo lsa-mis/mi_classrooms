@@ -13,9 +13,7 @@ class BuildingPolicy < ApplicationPolicy
   end
 
   def index?
-    if user 
-      true
-    end
+    user && user_in_group?
   end
 
   def show?
@@ -23,16 +21,14 @@ class BuildingPolicy < ApplicationPolicy
   end
 
   def update?
-    if user
-      true
-    end
+    user && user_in_group?
   end
 end
 
 private
 
 def bespoke_team
-  ['dschmura', 'rsmoke', 'brita', 'anantas', 'jjsantos', 'mlaitan', 'prbelden', 'mdressle']
+  ['dschmura', 'rsmoke', 'anantas', 'jjsantos', 'mlaitan', 'prbelden', 'mdressle']
 end
 
 def user_in_group?
