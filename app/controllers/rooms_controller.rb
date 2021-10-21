@@ -41,6 +41,7 @@ include ActionView::RecordIdentifier
   # GET /rooms/1
   # GET /rooms/1.json
   def show
+    authorize @room
     respond_to do |format|
       # format.js
       format.html
