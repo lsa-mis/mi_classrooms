@@ -175,7 +175,8 @@ class ClassroomApi
         classroom_characteristics_logger.debug "API return: #{@result['error']}"
       end
     end
-
+    # Update room.characteristics array job.
+    UpdateRoomCharacteristicsArrayJob.perform_later
   end
 
   def create_classroom_characteristics(characteristics)
@@ -186,6 +187,8 @@ class ClassroomApi
         classroom_characteristics_logger.debug "Could not create #{row['RmRecNbr']} because : #{room_char.errors.messages}"
       end
     end
+    # Update room.characteristics array job.
+    UpdateRoomCharacteristicsArrayJob.perform_later
   end
 
   def get_classroom_characteristics(facility_id)
