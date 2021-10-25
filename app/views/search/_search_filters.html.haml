@@ -17,13 +17,13 @@
           -#UI reset form
           
           .text-gray-500= link_to "Clear all", rooms_path
-        .pl-6
+        -# .pl-6
           
-          - if user_signed_in?
-            %span.text-muted{"data-autosubmit-target" => "status"}
-            .text-sm.font-medium.text-blue-700.inline-flex.w-28.object-contain= "#{@pagy.count} Results"
-          - else
-            .font-bold.text-yellow-800.text-base.w-auto.block.w-full.w-56 Please sign in to see results.
+        -#   - if user_signed_in?
+        -#     %span.text-muted{"data-autosubmit-target" => "status"}
+        -#     .text-sm.font-medium.text-blue-700.inline-flex.w-28.object-contain= "#{@pagy.count} Results"
+        -#   - else
+        -#     .font-bold.text-yellow-800.text-base.w-auto.block.w-full.w-56 Please sign in to see results.
 
     #disclosure-1.hidden.border-t.border-gray-200.py-10{ "data-toggle-target" => "toggleable"}
       .max-w-7xl.mx-auto.grid.grid-cols-1.gap-x-4.px-4.text-sm.sm:px-6.md:gap-x-6.lg:px-8
@@ -45,8 +45,17 @@
             = render './search/room_characteristics'
 
             = render './search/projection_list'
+
+
+    .col-start-2.row-start-1
+      
+      - if user_signed_in?
+        %span.text-muted{"data-autosubmit-target" => "status"}
+        .text-sm.font-medium.text-blue-700.inline-flex.object-contain= "#{@pagy.count} Results"
+      - else
+        .font-bold.text-yellow-800.text-base.w-auto.block Please sign in to see results.            
  
-    .col-start-1.row-start-1.py-4{"data-controller" => "toggle"}
+    .col-start-2.row-start-1.py-4{"data-controller" => "toggle"}
       .flex.justify-end.max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8
         .relative.inline-block
           .flex
