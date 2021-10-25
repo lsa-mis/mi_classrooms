@@ -18,15 +18,7 @@
       - else
         = form.text_field :query, class: 'search-by-building-name', value: params[:query], data: { action: "input->autosubmit#search" }
 
-  .flex.flex-row
-    
-    = render partial: './search/filters', rooms: @rooms, locals: {form: form}
-    .inset-y-0.right-0
-      - if user_signed_in?
-        %span.text-muted{"data-autosubmit-target" => "status"}
-        .mt-2.text-sm.font-bold.text-blue-700.inline-flex.w-28.object-contain= "#{@pagy.count} Results"
-      - else
-        .font-bold.text-yellow-800.text-base.w-auto.block.w-full.mt-4.w-56 Please sign in to see results.
+    = render partial: './search/search_filters', rooms: @rooms, locals: {form: form}
 
   - if user_signed_in?
     = render 'listing'
