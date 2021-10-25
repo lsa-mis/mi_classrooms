@@ -131,9 +131,6 @@ include ActionView::RecordIdentifier
       params.slice(:bluray, :chalkboard, :doccam, :interactive_screen, :instructor_computer, :lecture_capture, :projector_16mm, :projector_35mm, :projector_digital_cinema, :projector_digial, :projector_slide, :team_board, :team_tables, :team_technology, :vcr, :video_conf, :whiteboard)
     end
 
-    def user_not_authorized
-      flash[:alert] = "Please sign in to see rooms."
-      redirect_to(request.referrer || fallback_location)
-    end
+
 
 end
