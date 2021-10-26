@@ -1,0 +1,25 @@
+<footer class='fixed bottom-0 w-full inset-x-0 bg-white border-t-2 border-gray-200 pt-2'>
+  <div class="text-sm">
+    <div class="flex justify-center">
+      <a id="myCustomTrigger" class="text-blue-800 hover:underline pb-2" href="#">Report an Issue</a> 
+    </div>
+    <div class='flex justify-center'>
+      Copyright <%= Time.now.year %> | <%= link_to 'The Regents of the University of Michigan', 'https://regents.umich.edu', class: 'text-blue-800 hover:underline' %>
+    </div>
+  </div>
+  
+  <script type="text/javascript" src="https://umlsait.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/r5gghz/b/3/bc54840da492f9ca037209037ef0522a/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=51ecac03"></script>
+
+  <script type="text/javascript">window.ATL_JQ_PAGE_PROPS =  {
+    "triggerFunction": function(showCollectorDialog) {
+      document.getElementById("myCustomTrigger").addEventListener("click", function(e) {
+      e.preventDefault();
+      showCollectorDialog();
+      });
+    },
+    "fieldValues" : {
+      components : ['15319']
+    }
+  };
+  </script>
+</footer>
