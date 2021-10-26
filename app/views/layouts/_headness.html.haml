@@ -18,24 +18,19 @@
 
       .hidden.sm:ml-6.sm:flex.sm:items-center
         .ml-2.relative
-          %div
+          %div.inline-flex.items-center
             - if user_signed_in?
-              %button#user-menu-button.bg-white.rounded-full.flex.text-sm.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-blue-500{"aria-expanded" => "false", "aria-haspopup" => "true", type: "button", "data-action" => "click->dropdown#toggle click@window->dropdown#hide"}
+              %button#user-menu-button.bg-white.rounded-full.flex-1.text-sm.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-blue-500{"aria-expanded" => "false", "aria-haspopup" => "true", type: "button", "data-action" => "click->dropdown#toggle click@window->dropdown#hide"}
                 %span.sr-only Open user menu
                 %img.user-avatar{:alt => "User Photo", :src => current_user.avatar_url }
+              = button_to destroy_user_session_path, method: :delete, role: "menuitem", tabindex: "-1", data: {turbo: "false"} do
+                .px-1.ml-2.shadow-sm.font-medium.rounded.text-blue-50.bg-yellow-700.hover:bg-yellow-900.flex-1 Sign Out
 
 
             - else
               .user-action-links 
                 = button_to user_google_oauth2_omniauth_authorize_path, data: {turbo: "false"} do
-                  .px-1.shadow-sm.font-medium.rounded.text-blue-800.bg-yellow-400 Sign In
-
-          - if user_signed_in?
-            .origin-top-right.absolute.right-0.mt-2.w-48.rounded-md.shadow-lg.py-1.bg-white.ring-1.ring-black.ring-opacity-5.z-10.focus:outline-none{aria: {"labelledby" => "header-nav-menu-button",
-                                "orientation" => "vertical"},
-                        role: "menu", 
-                        tabindex: "-1"}
-              #user-menu-item-mobile-sign-out.block.px-4.py-2.text-sm.text-gray-700= button_to "Sign Out", destroy_user_session_path, method: :delete, role: "menuitem", tabindex: "-1", data: {turbo: "false"}
+                  .px-1.shadow-sm.font-medium.rounded.text-blue-900.bg-yellow-300.hover:bg-yellow-500 Sign In
 
       .sm:hidden.items-center.mt-1= render './layouts/headness_mobile_menu_toggle.html.haml'
 
