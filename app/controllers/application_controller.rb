@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
 
   def user_not_authorized
     flash[:alert] = "Please sign in to perform this action."
-    redirect_back(fallback_location: :user_google_oauth2_omniauth_authorize)
+    redirect_to(request.referrer || root_path)
   end
 
   def storable_location?

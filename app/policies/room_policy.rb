@@ -16,8 +16,19 @@ class RoomPolicy < ApplicationPolicy
   end
 
   def show?
-    true
+    if user && user_in_group?
+      true
+    end
   end
+
+  def toggle_visibility?
+    if user && user_in_group?
+      false
+    else
+      false
+    end
+  end
+
 
 end
 
