@@ -17,7 +17,8 @@
       .corner-ribbon.top-right= link_to('Work in Progress', project_status_path)
 
     = render 'layouts/header'
-    = render 'layouts/tailwindcss_breakpoints'
+    - if Rails.env.development?
+      = render 'layouts/tailwindcss_breakpoints'
     %main{:class => controller.controller_name}
       .max-w-7xl{class: "mx-auto py-6 sm:px-6 lg:px-8"}
         / Replace with your content
