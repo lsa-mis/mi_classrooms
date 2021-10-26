@@ -1,7 +1,8 @@
 <footer class='fixed bottom-0 w-full inset-x-0 bg-white border-t-2 border-gray-200 pt-2'>
   <div class="text-sm">
-    <div class="flex justify-center">
-      <a id="myCustomTrigger" class="text-blue-800 hover:underline pb-2" href="#">Report an Issue</a> 
+    <div class="text-blue-800 items-center mx-2 flex justify-center">
+      <span class='svg pr-1'><%= svg "message_question" %></span>
+      <a id="myCustomTrigger" class="hover:underline pb-2" href="#">Report an Issue</a> 
     </div>
     <div class='flex justify-center'>
       Copyright <%= Time.now.year %> | <%= link_to 'The Regents of the University of Michigan', 'https://regents.umich.edu', class: 'text-blue-800 hover:underline' %>
