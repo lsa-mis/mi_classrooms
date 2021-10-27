@@ -11,10 +11,10 @@
                             "dropdown-entering-class" => "transition ease-out duration-200",
                             "dropdown-leaving-class" => "transition ease-in duration-150"
                             }}
-    .pt-2.pb-3.space-y-1
-      = link_to "About - mobile", about_path, class: " #{class_names(active: current_page?(about_path))} mobile-dropdown-link"
-      = link_to "Buildings", buildings_path, class: "#{class_names(active: current_page?(buildings_path))} mobile-dropdown-link"
-      = link_to "Classrooms", rooms_path, class: "#{class_names(active: current_page?(rooms_path))} mobile-dropdown-link"
+    .pt-2.pb-3.space-y-1.text-white
+      = link_to "About - mobile", about_path, class: " mobile-dropdown-link #{class_names(active: current_page?(about_path))} "
+      = link_to "Buildings", buildings_path, class: "mobile-dropdown-link #{class_names(active: current_page?(buildings_path))} "
+      = link_to "Classrooms", rooms_path, class: "mobile-dropdown-link #{class_names(active: current_page?(rooms_path))} "
       .flex.items-center.px-4
 
 
@@ -26,7 +26,7 @@
               .leading-tight.text-base.font-medium.text-blue-50 User Name  
               .leading-tight.text-sm.font-medium.text-gray-500=current_user.email
 
-      .pt-6.pb-3
+      .pt-6.pb-3.text-center
         - if user_signed_in?
           = button_to destroy_user_session_path, method: :delete, role: "menuitem", tabindex: "-1", data: {turbo: "false"}, class: "w-screen max-w-md" do 
             .py-3.shadow-sm.font-medium.rounded.text-blue-50.bg-yellow-700.hover:bg-yellow-900 Sign Out
