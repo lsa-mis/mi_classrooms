@@ -7,7 +7,7 @@ export default class extends Controller {
 
     this.timeout = setTimeout(() => {
       this.statusTarget.textContent = 'Updating...'
-      this.element.requestSubmit()
+      Turbo.navigator.submitForm(this.formTarget)
     }, 600)
   }
 
@@ -16,13 +16,13 @@ export default class extends Controller {
 
     this.timeout = setTimeout(() => {
       this.statusTarget.textContent = 'Updating...'
-      this.element.requestSubmit()
+      Turbo.navigator.submitForm(this.formTarget)
     }, 0)
   }
 
   change(event) {
     event.preventDefault()
-    this.element.requestSubmit()
+    Turbo.navigator.submitForm(this.formTarget)
   }
 
 }
