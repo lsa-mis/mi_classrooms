@@ -17,37 +17,9 @@
           -#UI reset form
           
           .text-gray-500= link_to "Clear all", rooms_path
-        -# .pl-6
-          
-        -#   - if user_signed_in?
-        -#     %span.text-muted{"data-autosubmit-target" => "status"}
-        -#     .text-sm.font-medium.text-blue-700.inline-flex.w-28.object-contain= "#{@pagy.count} Results"
-        -#   - else
-        -#     .font-bold.text-yellow-800.text-base.w-auto.block.w-full.w-56 Please sign in to see results.
-
-    #disclosure-1.hidden.border-t.border-gray-200.py-10{ "data-toggle-target" => "toggleable"}
-      .max-w-7xl.mx-auto.grid.grid-cols-1.gap-x-4.px-4.text-sm.sm:px-6.md:gap-x-6.lg:px-8
-      
-        .filters-inner{"aria-hidden" => "true"}
-          .bg-white{:class => "w-1/2"}
-          .bg-gray-50{:class => "w-1/2"}
 
 
-        .relative{class: "max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2"}
-          %nav{class: "bg-gray-50 px-4 py-2 sm:px-6 lg:px-8 xl:pl-12", "aria-labelledby" => "characteristicsHeading"}
-            %h2#characteristicsHeading.sr-only Room Characteristic checkboxes
-
-            = render './search/student_capacity'
-            = render partial: './search/school_or_college', locals: {form: form}
-          -# Secondary
-
-          %div{class: "grid  px-4  bg-white sm:grid-cols-2 sm:gap-x-8  sm:px-6 lg:px-8  xl:pr-12"}
-            = render './search/room_characteristics'
-
-            = render './search/projection_list'
-
-
-    .col-start-2.row-start-1
+    .col-start-2
       
       - if user_signed_in?
         %span.text-muted{"data-autosubmit-target" => "status"}
@@ -55,7 +27,7 @@
       - else
         .font-bold.text-yellow-800.text-base.w-auto.block Please sign in to see results.            
  
-    .col-start-2.row-start-1.py-4{"data-controller" => "toggle"}
+    .col-start-3.row-start-1.py-4{"data-controller" => "toggle"}
       .flex.justify-end.max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8
         .relative.inline-block
           .flex
@@ -85,3 +57,26 @@
                 Building Name
               %a#menu-item-2.text-gray-500.block.px-4.py-2.text-sm{href: "#", role: "menuitem", tabindex: "-1"}
                 Newest
+
+
+
+    #disclosure-1.hidden.border-t.border-gray-200.py-10.col-span-3{ "data-toggle-target" => "toggleable"}
+      .max-w-7xl.mx-auto.grid.grid-cols-1.gap-x-4.px-4.text-sm.sm:px-6.md:gap-x-6.lg:px-8
+      
+        .filters-inner{"aria-hidden" => "true"}
+          .bg-white{:class => "w-1/2"}
+          .bg-gray-50{:class => "w-1/2"}
+
+
+        .relative{class: "max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2"}
+          %nav{class: "bg-gray-50 px-4 py-2 sm:px-6 lg:px-8 xl:pl-12", "aria-labelledby" => "characteristicsHeading"}
+            %h2#characteristicsHeading.sr-only Room Characteristic checkboxes
+
+            = render './search/student_capacity'
+            = render partial: './search/school_or_college', locals: {form: form}
+          -# Secondary
+
+          %div{class: "grid  px-4  bg-white sm:grid-cols-2 sm:gap-x-8  sm:px-6 lg:px-8  xl:pr-12"}
+            = render './search/room_characteristics'
+
+            = render './search/projection_list'
