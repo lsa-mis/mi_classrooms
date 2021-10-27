@@ -1,12 +1,12 @@
 <div class="relative">
-  <div class="max-w-3xl mx-2 py-4 px-2" >
+  <div class="max-w-3xl mx-2 py-4 px-2 w-screen" >
     <h2 class="sr-only"><%= @building.name  %></h2>
     <div class="grid grid-cols-1 gap-y-4 place-content-center" >
       <div class="bg-white border border-gray-300 rounded-lg flex flex-col overflow-hidden">
         <div class="px-2 py-2 space-y-4 flex flex-col" >
           <div class="flex flex-row justify-center w-full " >
-                        <% if @building.building_image.representable? %>
-                <%= image_tag(@building.building_image.representation(resize_to_limit: [200, 200]), class: "building_image") %>
+              <% if @building.building_image.representable? %>
+                <%= image_tag(@building.building_image.representation(resize_to_limit: [200, 200]), class: "building_image pr-2") %>
               <% else %>
                 <%= image_tag("building_placeholder.png", height: '100', width: '200', class: "building_image") %>
               <% end %>
