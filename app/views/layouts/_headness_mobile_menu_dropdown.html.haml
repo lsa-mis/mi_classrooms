@@ -27,10 +27,10 @@
               .leading-tight.text-base.font-medium.text-blue-50 User Name  
               .leading-tight.text-sm.font-medium.text-gray-500=current_user.email
 
-      .pt-6.pb-3.space-y-1.w-screen
+      .pt-6.pb-3
         - if user_signed_in?
-          = button_to destroy_user_session_path, method: :delete, role: "menuitem", tabindex: "-1", data: {turbo: "false"} do 
-            .px-1.ml-2.shadow-sm.font-medium.rounded.text-blue-50.bg-yellow-700.hover:bg-yellow-900.flex-1 Sign Out
+          = button_to destroy_user_session_path, method: :delete, role: "menuitem", tabindex: "-1", data: {turbo: "false"}, class: "w-screen max-w-md" do 
+            .py-3.shadow-sm.font-medium.rounded.text-blue-50.bg-yellow-700.hover:bg-yellow-900 Sign Out
           
         - else
           .user-action-links 
