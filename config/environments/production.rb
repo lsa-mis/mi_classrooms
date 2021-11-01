@@ -3,7 +3,7 @@ require "active_support/core_ext/integer/time"
 Rails.application.configure do
   config.action_mailer.delivery_method = :sendmail
   config.action_mailer.perform_deliveries = true
-  config.action_mailer.default_options = {from: 'mi.locations.feedback@umich.edu'}
+  config.action_mailer.default_options = {from: 'mi.classrooms.feedback@umich.edu'}
 
   config.action_mailer.smtp_settings = {address: "mi_classrooms"}
   config.action_mailer.smtp_settings = {
