@@ -1,6 +1,9 @@
 !!!
 %html{lang: "#{I18n.locale}"}
   %head
+    %script{async: "", src: "https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"}
+    = javascript_include_tag 'analytics', async: true
+
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}
     %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}
     %title= (t :sitename)
