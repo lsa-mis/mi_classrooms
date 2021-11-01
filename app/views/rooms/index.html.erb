@@ -1,8 +1,14 @@
 <h1>Classrooms</h1>
-<div class="grid grid-cols-5 gap-3">
+<div class="grid grid-cols-5 gap-3" data-controller='autosubmit'>
   <div class="some-class">
       Filters
-    <%= form_with url: rooms_path, method: :get, class: "", data: { controller: "autosubmit", target: "autosubmit.form" } do |form| %>
+    <%= form_with url: rooms_path, method: :get, class: "", data: { controller: 'autosubmit', target: "autosubmit.form" } do |form| %>
+      <div>
+        <button type="button" class=""
+          data-action='click->autosubmit#clearFilters'>
+          Clear
+        </button>
+      </div>
       <label class="block text-sm font-medium text-gray-700" for="building_name">Search building names</label>
       
       <% if params[:query].blank?  %>
@@ -38,7 +44,7 @@
           </li>
           <li class="check-box">
             <%= check_box_tag "room_characteristics[]", "BluRay", params[:room_characteristics].try(:include?, "BluRay"), id: "bluray", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
-            <label class="" for="instructor-computer">BluRay / DVD legendayer</label>
+            <label class="" for="instructor-computer">BluRay / DVD</label>
           </li>
         </ul>
       </fieldset>
