@@ -4,9 +4,21 @@ function gtag() { dataLayer.push(arguments) }
 window.gtag('js', new Date())
 
 const trackGoogleAnalytics = (event) => {
-  window.gtag('config', 'GA_MEASUREMENT_ID', {
+  window.gtag('config', 'UA-211737475-1', {
     'cookie_flags': 'max-age=7200;secure;samesite=none'
   })
 }
 
 document.addEventListener('turbolinks:load', trackGoogleAnalytics)
+
+
+
+// <!-- Global site tag (gtag.js) - Google Analytics -->
+// <script async src="https://www.googletagmanager.com/gtag/js?id=UA-211737475-1"></script>
+// <script>
+//   window.dataLayer = window.dataLayer || [];
+//   function gtag(){dataLayer.push(arguments);}
+//   gtag('js', new Date());
+
+//   gtag('config', 'UA-211737475-1');
+// </script>
