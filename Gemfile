@@ -85,3 +85,5 @@ gem "draper", "~> 4.0"
 gem "pundit"
 gem 'ldap_lookup'
 gem 'image_processing'
+gem 'newrelic_rpm'
+gem 'newrelic-infinite_tracing'
