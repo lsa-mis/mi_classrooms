@@ -82,8 +82,7 @@ class ClassroomApi
   def update_classroom(row)
     classroom = Room.find_by(rmrecnbr: row['RmRecNbr'])
 
-    if classroom.update(building_bldrecnbr: row['BuildingID'], instructional_seating_count: row['RmInstSeatCnt'], 
-          campus_records_id: CampusRecord.find_by(campus_cd: row['CampusCd']).id)
+    if classroom.update(building_bldrecnbr: row['BuildingID'], instructional_seating_count: row['RmInstSeatCnt'])
       classroom_logger.info "Updated: #{row['RmRecNbr']}"
     else
       classroom_logger.debug "Could not save #{row['RmRecNbr']} because : #{classroom.errors.messages}"
