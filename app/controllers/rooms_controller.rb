@@ -6,6 +6,7 @@ include ActionView::RecordIdentifier
   # GET /rooms.json
   def index
 
+    @schools = Room.where.not(dept_grp: [nil, '']).pluck(:dept_group_description).uniq.sort
     @rooms = Room.classrooms.includes([:building, :room_contact, :room_characteristics]).where('instructional_seating_count > ?', 1) 
 
     if params.present?
@@ -29,12 +30,12 @@ include ActionView::RecordIdentifier
 
     @pagy, @rooms = pagy(@rooms)
 
-    # unless params[:query].nil?
-    #   render turbo_stream: turbo_stream.replace(
-    #     :roomListing,
-    #     partial: "rooms/listing"
-    #   )
-    # end
+    unless params[:query].nil?
+      render turbo_stream: turbo_stream.replace(
+        :roomListing,
+        partial: "rooms/listing"
+      )
+    end
 
   end
 

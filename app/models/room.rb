@@ -100,7 +100,7 @@ class Room < ApplicationRecord
 
   pg_search_scope(
     :with_school_or_college_name,
-    against: [:dept_description],
+    against: [:dept_group_description],
     using: {
       tsearch:{
         dictionary: "english",

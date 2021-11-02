@@ -9,13 +9,21 @@
           Clear
         </button>
       </div>
-      <label class="block text-sm font-medium text-gray-700" for="building_name">Search building names</label>
-      
-      <% if params[:query].blank?  %>
-        <%= form.text_field :query, {class: "search-by-building-name", :placeholder => "Undergraduate Sciences Building", data: { action: "input->autosubmit#search" }}   %>
-      <% else %>
-        <%= form.text_field :query, class: 'search-by-building-name', value: params[:query], data: { action: "input->autosubmit#search" } %>
-      <% end %>
+      <div>
+        <%= label_tag "Select a School/College" %>
+                  <%= select_tag "school_or_college_name", options_for_select(@schools, " "), include_blank: "Select ...", 
+                    :"data-report-target" => "school", :"data-action" => "change->autosubmit#searchSchool" %>
+      </div>
+      <br>
+      <hr>
+      <div>
+        <label class="block text-sm font-medium text-gray-700" for="building_name">Search building names</label>
+        <% if params[:query].blank?  %>
+          <%= form.text_field :query, {class: "search-by-building-name", :placeholder => "Undergraduate Sciences Building", data: { action: "input->autosubmit#search" }}   %>
+        <% else %>
+          <%= form.text_field :query, class: 'search-by-building-name', value: params[:query], data: { action: "input->autosubmit#search" } %>
+        <% end %>
+      </div>
       <br>
       <hr>
       <fieldset>
