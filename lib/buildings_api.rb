@@ -192,7 +192,7 @@ class BuildingsApi
               # get information about department
               dept_name = row['DepartmentName']
               if dept_info_array[dept_name].present?
-                dept_data = dept_info_array['dept_name']
+                dept_data = dept_info_array[dept_name]
               else
                 # get data from API
                 if number_of_api_calls_per_minutes < 190 
