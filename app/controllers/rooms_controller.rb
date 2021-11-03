@@ -7,24 +7,25 @@ include ActionView::RecordIdentifier
   def index
 
     @schools = Room.where.not(dept_grp: [nil, '']).pluck(:dept_group_description).uniq.sort
-    @rooms = Room.classrooms.includes([:building, :room_contact, :room_characteristics]).where('instructional_seating_count > ?', 1) 
+    # @rooms = Room.classrooms.includes([:building, :room_contact, :room_characteristics]).where('instructional_seating_count > ?', 1) 
+    @rooms = Room.classrooms_including_labs.includes([:building, :room_contact, :room_characteristics]).where('instructional_seating_count > ?', 1) 
 
     if params.present?
       Rails.logger.debug "**************************** params: #{params} "
     end
-    @rooms = @rooms.classrooms.with_building_name(params[:query]) if params[:query].present?
-    @rooms = @rooms.classrooms.with_school_or_college_name(params[:school_or_college_name]) if params[:school_or_college_name].present?
-    @rooms = @rooms.classrooms.with_all_characteristics(params[:room_characteristics]) if params[:room_characteristics].present?
-    @rooms = @rooms.where('instructional_seating_count > ?', params[:min_capacity].to_i) if params[:max_capacity].present?
+    @rooms = @rooms.classrooms_including_labs.with_building_name(params[:query]) if params[:query].present?
+    @rooms = @rooms.classrooms_including_labs.with_school_or_college_name(params[:school_or_college_name]) if params[:school_or_college_name].present?
+    @rooms = @rooms.classrooms_including_labs.with_all_characteristics(params[:room_characteristics]) if params[:room_characteristics].present?
+    @rooms = @rooms.classrooms_including_labs.where('instructional_seating_count > ?', params[:min_capacity].to_i) if params[:max_capacity].present?
     
-    @rooms = @rooms.where('instructional_seating_count < ?', params[:max_capacity].to_i) if params[:max_capacity].present?
+    @rooms = @rooms.classrooms_including_labs.where('instructional_seating_count < ?', params[:max_capacity].to_i) if params[:max_capacity].present?
 
     # school_or_college_name
-    @rooms = @rooms.with_school_or_college_name(params[:school_or_college_name]) if params[:school_or_college_name].present?  
+    @rooms = @rooms.classrooms_including_labs.with_school_or_college_name(params[:school_or_college_name]) if params[:school_or_college_name].present?  
 
     authorize @rooms
 
-    @rooms = @rooms.where(building_bldrecnbr: params[:building_bldrecnbr]) if params[:building_bldrecnbr].present?
+    @rooms = @rooms.classrooms_including_labs.where(building_bldrecnbr: params[:building_bldrecnbr]) if params[:building_bldrecnbr].present?
 
     @rooms = RoomDecorator.decorate_collection(@rooms)
 
