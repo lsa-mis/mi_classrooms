@@ -42,8 +42,8 @@ export default class extends Controller {
   clearFilters() {
     console.log("clear")
     console.log(this.element)
-    Turbo.navigator.this.formTarget.reset()
-    Turbo.navigator.this.element.reset()
-
+    console.log(this.element)
+    this.formTarget.reset()
+    Turbo.navigator.submitForm(this.formTarget)
   }
 }
