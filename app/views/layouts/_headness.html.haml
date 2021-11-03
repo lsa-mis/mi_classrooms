@@ -4,17 +4,17 @@
     .flex.justify-between.h-16
 
       .flex-shrink-0.flex.items-center
-        = link_to root_path do
-          .block.md:hidden.h-10.w-16= svg("MiClassroomsLogo")
-          -# .hidden.md:block.h-8.w-auto= link_to image_tag(asset_path('mi_classrooms_logo.png'), alt: "#{(t :sitename)} Logo, link to home   page.", id: root_path(anchor: 'page-bottom')), root_path
-
-          .hidden.md:block.h-8.justify-self-start.content-start.items-start= svg("MiClassroomsNamePlateRevised")
-
-        .hidden.sm:ml-6.sm:flex.sm:space-x-8
-          .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "About", about_path, class: "#{class_names(active: current_page?(about_path))}"
-          .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "Buildings", buildings_path, class: "#{class_names(active: current_page?(buildings_path))}"
-          .border-transparent.text-blue-50.hover:border-blue-300.hover:text-blue-300.inline-flex.items-center.px-1.pt-1.border-b-2.text-xl.font-medium= link_to "Classrooms", rooms_path, class: "#{class_names(active: current_page?(rooms_path))}"
-
+        .flex
+          =link_to root_path do
+            .flex.items-center
+              .inline-block.h-8.justify-self-start.content-start.items-start= image_tag 'block_m-hex.png', alt: 'University of Michigan Logo', height: '35.75', width: '50', class: ''
+              %span.text-white.font.text-3xl.pl-2.font-sans.font-medium
+                Classrooms
+          
+        .hidden.sm:ml-6.sm:flex.sm:space-x-4.pl-12
+          .border-transparent.text-blue-50.hover:border-blue-300.hover:text-white.inline-flex.items-center.pl-1.pt-1.border-b-2.text-lg.font-normal= link_to "Find a Room", rooms_path, class: "#{class_names(active: current_page?(rooms_path))}"
+          .border-transparent.text-blue-50.hover:border-blue-300.hover:text-white.inline-flex.items-center.pr-1.pt-1.border-b-2.text-lg.font-normal= link_to "About", about_path, class: "#{class_names(active: current_page?(about_path))}"
+          
 
       .hidden.sm:ml-6.sm:flex.sm:items-center
         .ml-2.relative
@@ -22,7 +22,7 @@
             - if user_signed_in?
               %button#user-menu-button.bg-white.rounded-full.flex-1.text-sm.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-blue-500{"aria-expanded" => "false", "aria-haspopup" => "true", type: "button", "data-action" => "click->dropdown#toggle click@window->dropdown#hide"}
                 %span.sr-only Open user menu
-                %img.user-avatar{:alt => "User Photo", :src => current_user.avatar_url }
+              .leading-tight.text-sm.font-medium.text-white=current_user.email
               = button_to destroy_user_session_path, method: :delete, role: "menuitem", tabindex: "-1", data: {turbo: "false"} do
                 .px-1.ml-2.shadow-sm.font-medium.rounded.text-blue-50.bg-yellow-700.hover:bg-yellow-900.flex-1 Sign Out
 
