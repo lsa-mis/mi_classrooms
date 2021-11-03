@@ -12,19 +12,16 @@
                             "dropdown-leaving-class" => "transition ease-in duration-150"
                             }}
     .pt-2.pb-3.space-y-1.text-white
-      = link_to "About - mobile", about_path, class: " mobile-dropdown-link #{class_names(active: current_page?(about_path))} "
-      = link_to "Buildings", buildings_path, class: "mobile-dropdown-link #{class_names(active: current_page?(buildings_path))} "
-      = link_to "Classrooms", rooms_path, class: "mobile-dropdown-link #{class_names(active: current_page?(rooms_path))} "
+      = link_to "Find a Room", rooms_path, class: "mobile-dropdown-link #{class_names(active: current_page?(rooms_path))} "
+      = link_to "About", about_path, class: " mobile-dropdown-link #{class_names(active: current_page?(about_path))} "
       .flex.items-center.px-4
 
 
         .flex.flex-row
           - if user_signed_in?
-            %img.user-avatar{:alt => "User Photo", :src => current_user.avatar_url }
             .ml-3.float-right.right-0.absolute.mr-4.w-auto
-          
-              .leading-tight.text-base.font-medium.text-blue-50 User Name  
-              .leading-tight.text-sm.font-medium.text-gray-500=current_user.email
+           
+              .leading-tight.text-sm.font-medium.text-white=current_user.email
 
       .pt-6.pb-3.text-center
         - if user_signed_in?
