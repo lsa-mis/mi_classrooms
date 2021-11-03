@@ -1,10 +1,14 @@
-<footer class='fixed bottom-0 w-full inset-x-0 bg-white border-t border-gray-200 pt-2'>
-  <div class="text-sm w-screen">
-    <div class="text-blue-800 items-center pb-2 flex justify-center">
+<footer class='fixed bottom-0 w-full inset-x-0 bg-white border-t border-gray-200'>
+  <div class="text-sm w-screen mb-2">
+    <div class="items-center flex justify-center">
+      <%= image_tag 'Technology_Services_logo.png', alt: "LSA Technical Service Logo", size: "323 x 75" %>
+    </div>
+    <div class="text-blue-800 items-center flex justify-center">
       <a class="hover:underline pr-1" href="https://umich.edu/about/privacy/">Privacy Notice</a> 
       |
-      <span class='svg pl-1'><%= svg "message_question" %></span>
-      <a id="myCustomTrigger" class="hover:underline pl-1" href="#">Report an Issue</a> 
+      <a id="myCustomTrigger" class="hover:underline px-1" href="#">Report an Issue</a> 
+      |
+      734.615.0100
     </div>
     <div class='flex justify-center tracking-tighter'>
       Copyright <%= Time.now.year %> | <%= link_to 'The Regents of the University of Michigan', 'https://regents.umich.edu', class: 'pl-1 text-blue-800 hover:underline' %>
