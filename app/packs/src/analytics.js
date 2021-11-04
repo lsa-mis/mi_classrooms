@@ -1,16 +1,17 @@
-window.dataLayer = window.dataLayer || []
-function gtag() { dataLayer.push(arguments) }
+window.dataLayer = window.dataLayer || [];
+function gtag() { dataLayer.push(arguments); }
+gtag('js', new Date());
 
-window.gtag('js', new Date())
-
-const trackGoogleAnalytics = (event) => {
-  window.gtag('config', 'UA-211737475-1', {
+document.addEventListener("turbolinks:load", function(event) {
+  gtag('config', 'UA-211737475-1', {
+    page_location: event.data.url,
+    page_path: event.srcElement.location.pathname,
+    page_title: event.srcElement.title,
     'cookie_flags': 'max-age=7200;secure;samesite=none'
-  })
-}
+  });
+})
 
-document.addEventListener('turbolinks:load', trackGoogleAnalytics)
-
+export default gtag
 
 // TO BE CLEANED UP AFTER CONFIRMSTION THIS IS WORKING
 // <!-- Global site tag (gtag.js) - Google Analytics -->
