@@ -11,8 +11,13 @@
       </div>
       <div>
         <%= label_tag "Select a School/College" %>
-                  <%= select_tag "school_or_college_name", options_for_select(@schools, " "), include_blank: "Select ...", 
+        <% if params[:school_or_college_name].blank?  %>
+          <%= select_tag "school_or_college_name", options_for_select(@schools, " "), include_blank: "Select ...", 
                     :"data-report-target" => "school", :"data-action" => "change->autosubmit#searchSchool" %>
+        <% else %>
+          <%= select_tag "school_or_college_name", options_for_select(@schools, selected: params[:school_or_college_name]), include_blank: "Select ...", 
+                    :"data-report-target" => "school", :"data-action" => "change->autosubmit#searchSchool" %>
+        <% end %>
       </div>
       <br>
       <hr>
