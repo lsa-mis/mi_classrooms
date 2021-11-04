@@ -193,6 +193,10 @@ class BuildingsApi
               dept_name = row['DepartmentName']
               if dept_info_array[dept_name].present?
                 dept_data = dept_info_array[dept_name]
+                department_record = Department.find_by(dept_description: dept_name)
+                puts "department_record"
+                puts dept_data
+                puts department_record.id
               else
                 # get data from API
                 if number_of_api_calls_per_minutes < 190 
@@ -206,24 +210,30 @@ class BuildingsApi
                   if dept_result['data']['DeptData'].present?
                     dept_data_info = dept_result['data']['DeptData'][0]
                     dept_info_array[dept_name] = 
-                                            {'DeptId' => dept_data_info['DeptId'], 
+                                            {'DepartmentName' => dept_name,
+                                            'DeptId' => dept_data_info['DeptId'], 
                                             'DeptGroup' => dept_data_info['DeptGroup'], 
                                             'DeptGroupDescription' => dept_data_info['DeptGroupDescription']
                                             }
                     dept_data = dept_info_array[dept_name]
+                    department_record = update_department(dept_data)
+                    puts "department_record from API"
+                    puts department_record.id
                   else
-                    dept_data = nil
+                    department_record = nil
                   end
                 else
                   room_logger.info "DepartmentApi: Error for building #{bld}, room #{row['RoomRecordNumber']}, department #{dept_name} - #{dept_result['error']}"
-                  dept_data = nil
+                  department_record = nil
                 end
               end
               if room_exists?(bld, row['RoomRecordNumber'])
-                update_room(row, bld, dept_data)
+                puts "call update room"
+                update_room(row, bld, department_record)
               else
-                create_room(row, bld, dept_data)
+                create_room(row, bld, department_record)
               end
+              # exit
             end
           end
         else
@@ -233,7 +243,7 @@ class BuildingsApi
         if @rooms_not_updated.present?
           @rooms_not_updated.each do |rmrecnbr|
             room = Room.find_by(rmrecnbr: rmrecnbr)
-            if !room.update(visible: false)
+            unless room.update(visible: false)
               room_logger.info "Could not update room #{rmrecnbr} - should have visible = false "
             end
           end
@@ -249,46 +259,53 @@ class BuildingsApi
     Building.find_by(bldrecnbr: bldrecnbr).rooms.find_by(rmrecnbr: rmrecnbr).present?
   end
 
-  def update_room(row, bld, dept_data)
-    room = Room.find_by(rmrecnbr: row['RoomRecordNumber'])
-    if dept_data.nil?
-      if room.update(floor: row['FloorNumber'], room_number: row['RoomNumber'], 
-        square_feet: row['RoomSquareFeet'], rmtyp_description: row['RoomTypeDescription'],
-        dept_description: row['DepartmentName'], instructional_seating_count: row['RoomStationCount'],
-        campus_records_id: @campus_records_id)
-        @rooms_in_db.delete(row['RoomRecordNumber'])
-      else
-        room_logger.info "Could not update #{row['RoomRecordNumber']} because : #{room.errors.messages}"
-      end
+  def update_room(row, bld, department_record)
+    if department_record.nil?
+      room_logger.info "department record nis nil for room : #{row['RoomRecordNumber']}"
     else
+      puts "in update room"
+      room = Room.find_by(rmrecnbr: row['RoomRecordNumber'])
+      puts room.rmrecnbr
+      puts department_record.id
       if room.update(floor: row['FloorNumber'], room_number: row['RoomNumber'], 
               square_feet: row['RoomSquareFeet'], rmtyp_description: row['RoomTypeDescription'],
-              dept_description: row['DepartmentName'], instructional_seating_count: row['RoomStationCount'],
-              dept_id: dept_data['DeptId'], dept_grp: dept_data['DeptGroup'], dept_group_description: dept_data['DeptGroupDescription'],
-              campus_records_id: @campus_records_id)
+              instructional_seating_count: row['RoomStationCount'],
+              campus_records_id: @campus_records_id, departments_id: department_record.id)
         @rooms_in_db.delete(row['RoomRecordNumber'])
+        puts "updated"
       else
+        puts room.errors.full_messages
         room_logger.info "Could not update #{row['RoomRecordNumber']} because : #{room.errors.messages}"
       end
     end
   end
 
-  def create_room(row, bld, dept_data)
-    if dept_data.nil?
-      room = Room.new(building_bldrecnbr: bld, rmrecnbr: row['RoomRecordNumber'], floor: row['FloorNumber'], room_number: row['RoomNumber'], 
+  def create_room(row, bld, department_record)
+    room = Room.new(building_bldrecnbr: bld, rmrecnbr: row['RoomRecordNumber'], floor: row['FloorNumber'], room_number: row['RoomNumber'], 
             square_feet: row['RoomSquareFeet'], rmtyp_description: row['RoomTypeDescription'],
-            dept_description: row['DepartmentName'], instructional_seating_count: row['RoomStationCount'],
-            campus_records_id: @campus_records_id, visible: true)
-    else
-      room = Room.new(building_bldrecnbr: bld, rmrecnbr: row['RoomRecordNumber'], floor: row['FloorNumber'], room_number: row['RoomNumber'], 
-            square_feet: row['RoomSquareFeet'], rmtyp_description: row['RoomTypeDescription'],
-            dept_description: row['DepartmentName'], instructional_seating_count: row['RoomStationCount'],
-            dept_id: dept_data['DeptId'], dept_grp: dept_data['DeptGroup'], dept_group_description: dept_data['DeptGroupDescription'],
-            campus_records_id: @campus_records_id, visible: true)
-    end
-    if !room.save
+            instructional_seating_count: row['RoomStationCount'],
+            campus_records_id: @campus_records_id, departments_id: department_record.id, visible: true)
+    unless room.save
       room_logger.info "Could not create #{row['RoomRecordNumber']} because : #{room.errors.messages}"
     end
+  end
+
+  def update_department(dept_data)
+    
+    if Department.find_by(dept_id: dept_data['DeptId'])
+      department = Department.find_by(dept_id: dept_data['DeptId'])
+      puts "in update department"
+      puts department.id
+      unless department.update(dept_id: dept_data['DeptId'], dept_description: dept_data['DepartmentName'], dept_grp: dept_data['DeptGroup'], dept_group_description: dept_data['DeptGroupDescription'])
+        room_logger.info "Could not update department #{dept_data['DepartmentName']} because : #{department.errors.messages}"
+      end
+    else
+      department = Department.new(dept_id: dept_data['DeptId'], dept_description: dept_data['DepartmentName'], dept_grp: dept_data['DeptGroup'], dept_group_description: dept_data['DeptGroupDescription'])
+      unless department.save
+        room_logger.info "Could not create department #{dept_data['DepartmentName']} because : #{department.errors.messages}"
+      end
+    end
+    return department
   end
 
   def get_building_classroom_data(bldrecnbr)
