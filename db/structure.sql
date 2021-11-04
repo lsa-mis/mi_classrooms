@@ -199,6 +199,40 @@ ALTER SEQUENCE public.campus_records_id_seq OWNED BY public.campus_records.id;
 
 
 --
+-- Name: departments; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.departments (
+    id bigint NOT NULL,
+    dept_id integer,
+    dept_grp character varying,
+    dept_description character varying,
+    dept_group_description character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: departments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.departments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: departments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.departments_id_seq OWNED BY public.departments.id;
+
+
+--
 -- Name: omni_auth_services; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -386,7 +420,8 @@ CREATE TABLE public.rooms (
     updated_at timestamp(6) without time zone NOT NULL,
     tsv tsvector,
     campus_records_id bigint,
-    dept_group_description character varying
+    dept_group_description character varying,
+    departments_id bigint
 );
 
 
@@ -494,6 +529,13 @@ ALTER TABLE ONLY public.campus_records ALTER COLUMN id SET DEFAULT nextval('publ
 
 
 --
+-- Name: departments id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.departments ALTER COLUMN id SET DEFAULT nextval('public.departments_id_seq'::regclass);
+
+
+--
 -- Name: omni_auth_services id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -581,6 +623,14 @@ ALTER TABLE ONLY public.buildings
 
 ALTER TABLE ONLY public.campus_records
     ADD CONSTRAINT campus_records_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: departments departments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.departments
+    ADD CONSTRAINT departments_pkey PRIMARY KEY (id);
 
 
 --
@@ -731,6 +781,13 @@ CREATE INDEX index_rooms_on_campus_records_id ON public.rooms USING btree (campu
 
 
 --
+-- Name: index_rooms_on_departments_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_rooms_on_departments_id ON public.rooms USING btree (departments_id);
+
+
+--
 -- Name: index_rooms_on_tsv; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -845,6 +902,14 @@ ALTER TABLE ONLY public.buildings
 
 
 --
+-- Name: rooms fk_rails_f73342cbcc; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.rooms
+    ADD CONSTRAINT fk_rails_f73342cbcc FOREIGN KEY (departments_id) REFERENCES public.departments(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -869,6 +934,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211018211722'),
 ('20211021092659'),
 ('20211021115852'),
-('20211101125649');
+('20211101125649'),
+('20211104144339'),
+('20211104175155'),
+('20211104181948');
 
 
