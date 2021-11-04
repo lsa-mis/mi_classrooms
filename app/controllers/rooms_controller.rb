@@ -6,7 +6,7 @@ include ActionView::RecordIdentifier
   # GET /rooms.json
   def index
 
-    @schools = Room.where.not(dept_grp: [nil, '']).pluck(:dept_group_description).uniq.sort
+    @schools = Room.where(rmtyp_description: "Classroom").pluck(:dept_group_description).uniq.sort
     # @rooms = Room.classrooms.includes([:building, :room_contact, :room_characteristics]).where('instructional_seating_count > ?', 1) 
     @rooms = Room.classrooms_including_labs.includes([:building, :room_contact, :room_characteristics]).where('instructional_seating_count > ?', 1) 
 
