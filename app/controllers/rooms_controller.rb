@@ -17,12 +17,7 @@ include ActionView::RecordIdentifier
     @rooms = @rooms.classrooms_including_labs.with_school_or_college_name(params[:school_or_college_name]) if params[:school_or_college_name].present?
     @rooms = @rooms.classrooms_including_labs.with_all_characteristics(params[:room_characteristics]) if params[:room_characteristics].present?
     @rooms = @rooms.classrooms_including_labs.where('instructional_seating_count > ?', params[:min_capacity].to_i) if params[:max_capacity].present?
-    
     @rooms = @rooms.classrooms_including_labs.where('instructional_seating_count < ?', params[:max_capacity].to_i) if params[:max_capacity].present?
-
-    # school_or_college_name
-    @rooms = @rooms.classrooms_including_labs.with_school_or_college_name(params[:school_or_college_name]) if params[:school_or_college_name].present?  
-
     authorize @rooms
 
     @rooms = @rooms.classrooms_including_labs.where(building_bldrecnbr: params[:building_bldrecnbr]) if params[:building_bldrecnbr].present?
