@@ -1,5 +1,5 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
-
+  skip_before_action :verify_authenticity_token, only: :saml
   before_action :set_omni_auth_service
   before_action :set_user
   # after_action :update_user_mcommunity_groups
@@ -9,16 +9,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     handle_auth "Google"
   end
 
-  def facebook
-    handle_auth "Facebook"
-  end
-
-  def twitter
-    handle_auth "Twitter"
-  end
-
-  def github
-    handle_auth "Github"
+  def saml
+    handle_auth "Saml"
   end
 
   def after_sign_in_path_for(resource_or_scope)
@@ -104,8 +96,12 @@ def create_user
   @user = User.create(
     email: auth.info.email,
     uniqname: get_uniqname(auth.info.email),
+    uid: auth.info.uid,
+    principal_name: auth.info.principal_name,
+    display_name: auth.info.name,
+    person_affiliation: auth.info.person_affiliation, 
     # name: auth.info.name,
-    avatar_url: auth.info.image,
+    # avatar_url: auth.info.image,
     password: Devise.friendly_token[0, 20]
   )
 
