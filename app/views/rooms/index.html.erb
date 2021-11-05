@@ -31,6 +31,15 @@
       </div>
       <br>
       <hr>
+      <div>
+        <label class="block text-sm font-medium text-gray-700" for="building_name">Capacity</label>
+        <label class="block text-sm font-medium text-gray-700" for="building_name">Min</label>
+        <%= number_field_tag 'min_capacity', nil, min: 1, value: 0, data: { action: "input->autosubmit#search" } %>
+        <label class="block text-sm font-medium text-gray-700" for="building_name">Max</label>
+        <%= number_field_tag 'max_capacity', nil, max: 600, value: 600, data: { action: "input->autosubmit#search" } %>
+      </div>
+      <br>
+      <hr>
       <fieldset>
         <legend class="">Ameneties</legend>
 
