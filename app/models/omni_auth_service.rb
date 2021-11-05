@@ -18,7 +18,7 @@
 class OmniAuthService < ApplicationRecord
   belongs_to :user
 
-  %w[google_oauth2].each do |provider|
+  %w[saml].each do |provider|
     scope provider, -> { where(provider: provider) }
   end
 
