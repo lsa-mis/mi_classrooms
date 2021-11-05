@@ -238,6 +238,8 @@ GEM
     nokogiri (1.12.5)
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
+    nokogiri (1.12.5-x86_64-darwin)
+      racc (~> 1.4)
     oauth2 (1.4.7)
       faraday (>= 0.8, < 2.0)
       jwt (>= 1.0, < 3.0)
@@ -467,8 +469,8 @@ DEPENDENCIES
   puma
   pundit
   rails (~> 6.1.0)
-  rspec-rails (~> 5.0, >= 5.0.2)
   responders!
+  rspec-rails (~> 5.0, >= 5.0.2)
   rubocop-performance
   sassc-rails
   selenium-webdriver
