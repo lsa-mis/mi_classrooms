@@ -26,6 +26,7 @@ class Building < ApplicationRecord
   self.primary_key = 'bldrecnbr'
 
   has_many :rooms, primary_key: 'bldrecnbr', foreign_key: 'building_bldrecnbr'
+  belongs_to :campus_record, optional: true
   geocoded_by :address # can also be an IP address
   has_one_attached :building_image
 
