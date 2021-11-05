@@ -56,7 +56,7 @@ class Room < ApplicationRecord
       tsearch: {
         dictionary: "english",
         prefix: true,
-        any_word: false,
+        any_word: false
 
       }
     }

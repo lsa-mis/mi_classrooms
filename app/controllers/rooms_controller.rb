@@ -8,7 +8,7 @@ include ActionView::RecordIdentifier
 
     @schools = Room.where(rmtyp_description: "Classroom").pluck(:dept_group_description).uniq.sort
     # @rooms = Room.classrooms.includes([:building, :room_contact, :room_characteristics]).where('instructional_seating_count > ?', 1) 
-    @rooms = Room.classrooms_including_labs.includes([:building, :room_contact, :room_characteristics]).where('instructional_seating_count > ?', 1) 
+    @rooms = Room.classrooms_including_labs.includes([:building, :room_contact, :room_characteristics]).where('instructional_seating_count > ?', 1)
 
     if params.present?
       Rails.logger.debug "**************************** params: #{params} "
@@ -21,7 +21,7 @@ include ActionView::RecordIdentifier
     authorize @rooms
 
     @rooms = @rooms.classrooms_including_labs.where(building_bldrecnbr: params[:building_bldrecnbr]) if params[:building_bldrecnbr].present?
-
+    @rooms = @rooms.order(:floor => :desc, :room_number => :asc)
     @rooms = RoomDecorator.decorate_collection(@rooms)
 
     @pagy, @rooms = pagy(@rooms)
