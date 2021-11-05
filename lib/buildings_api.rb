@@ -121,7 +121,7 @@ class BuildingsApi
     if building.update(bldrecnbr: row['BuildingRecordNumber'], name: row['BuildingLongDescription'], nick_name: row['BuildingLongDescription'], abbreviation: row['BuildingShortDescription'], 
           address: " #{row['BuildingStreetNumber']}  #{row['BuildingStreetDirection']}  #{row['BuildingStreetName']}".strip.gsub(/\s+/, " "), 
           city: row['BuildingCity'], state: row['BuildingState'], zip: row['BuildingPostal'], country: 'usa again', 
-          campus_records_id: CampusRecord.find_by(campus_cd: row['BuildingCampusCode']).id)
+          campus_record_id: CampusRecord.find_by(campus_cd: row['BuildingCampusCode']).id)
       @buildings_ids.delete(row['BuildingRecordNumber'])
     else
       building_logger.info "Could not update #{row['BuildingRecordNumber']} because : #{building.errors.messages}"
@@ -132,7 +132,7 @@ class BuildingsApi
     building = Building.new(bldrecnbr: row['BuildingRecordNumber'], name: row['BuildingLongDescription'], nick_name: row['BuildingLongDescription'], abbreviation: row['BuildingShortDescription'], 
         address: " #{row['BuildingStreetNumber']}  #{row['BuildingStreetDirection']}  #{row['BuildingStreetName']}".strip.gsub(/\s+/, " "), 
         city: row['BuildingCity'], state: row['BuildingState'], zip: row['BuildingPostal'], country: 'USA',
-        campus_records_id: CampusRecord.find_by(campus_cd: row['BuildingCampusCode']).id)
+        campus_record_id: CampusRecord.find_by(campus_cd: row['BuildingCampusCode']).id)
 
     if building.save
       GeocodeBuildingJob.perform_later(building)
@@ -181,7 +181,7 @@ class BuildingsApi
     dept_info_array = {}
     number_of_api_calls_per_minutes = 0
     @buildings_ids.each do |bld|
-      @campus_records_id = Building.find_by(bldrecnbr: bld).campus_records_id
+      @campus_id = Building.find_by(bldrecnbr: bld).campus_record_id
       result = get_building_classroom_data(bld)
       if result['success']
         if result['data'].present?
@@ -193,7 +193,11 @@ class BuildingsApi
               dept_name = row['DepartmentName']
               if dept_info_array[dept_name].present?
                 dept_data = dept_info_array[dept_name]
-                department_record = Department.find_by(dept_description: dept_name)
+                if Department.find_by(dept_description: dept_name)
+                  department_record = Department.find_by(dept_description: dept_name)
+                else
+                  department_record = update_department(dept_data)
+                end
                 puts "department_record"
                 puts dept_data
                 puts department_record.id
@@ -261,7 +265,7 @@ class BuildingsApi
 
   def update_room(row, bld, department_record)
     if department_record.nil?
-      room_logger.info "department record nis nil for room : #{row['RoomRecordNumber']}"
+      room_logger.info "department record is nil for room : #{row['RoomRecordNumber']}"
     else
       puts "in update room"
       room = Room.find_by(rmrecnbr: row['RoomRecordNumber'])
@@ -270,7 +274,7 @@ class BuildingsApi
       if room.update(floor: row['FloorNumber'], room_number: row['RoomNumber'], 
               square_feet: row['RoomSquareFeet'], rmtyp_description: row['RoomTypeDescription'],
               instructional_seating_count: row['RoomStationCount'],
-              campus_records_id: @campus_records_id, departments_id: department_record.id)
+              campus_record_id: @campus_id, department_id: department_record.id)
         @rooms_in_db.delete(row['RoomRecordNumber'])
         puts "updated"
       else
@@ -284,7 +288,7 @@ class BuildingsApi
     room = Room.new(building_bldrecnbr: bld, rmrecnbr: row['RoomRecordNumber'], floor: row['FloorNumber'], room_number: row['RoomNumber'], 
             square_feet: row['RoomSquareFeet'], rmtyp_description: row['RoomTypeDescription'],
             instructional_seating_count: row['RoomStationCount'],
-            campus_records_id: @campus_records_id, departments_id: department_record.id, visible: true)
+            campus_record_id: @campus_id, department_id: department_record.id, visible: true)
     unless room.save
       room_logger.info "Could not create #{row['RoomRecordNumber']} because : #{room.errors.messages}"
     end
