@@ -137,6 +137,12 @@
             </li>
           </ul>
         </div>
+        <br>
+        <hr>
+        <div class="px-1">
+          <%= label_tag "Search Classroom Name" %>
+          <%= text_field_tag :classroom_name, "", data: { action: "input->autosubmit#search" }, class: 'search-by-building-name' %>
+        </div>
       </div>
 
     <% end %>
