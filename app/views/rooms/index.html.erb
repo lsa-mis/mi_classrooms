@@ -10,7 +10,7 @@
         </button>
       </div>
       <div class="bg-gray-50 shadow border">
-        <div>
+        <div class="px-1">
           <%= label_tag "Select a School/College" %>
           <% if params[:school_or_college_name].blank?  %>
             <%= select_tag "school_or_college_name", options_for_select(@schools, " "), include_blank: "Select ...", class: "search-by-building-name",
@@ -22,8 +22,8 @@
         </div>
         <br>
         <hr>
-        <div>
-          <label class="block text-sm font-medium text-gray-700" for="building_name">Search building names</label>
+        <div class="px-1">
+          <label class="" for="building_name">Search building names</label>
           <% if params[:query].blank?  %>
             <%= form.text_field :query, {class: "search-by-building-name", :placeholder => "Undergraduate Sciences Building", data: { action: "input->autosubmit#search" }}   %>
           <% else %>
@@ -32,112 +32,111 @@
         </div>
         <br>
         <hr>
-        <div class="mt-2">
-          <div class="flex items-end">
-            <div class="flex-1 w-1/3">
-              <label class="block text-sm font-medium text-gray-700" for="building_name">Capacity</label>
+        <div class="col-span-1 pl-1">
+          <label class="" for="building_name">Capacity</label>
+          <div class="flex mt-2">
+            <div class="w-1/2 ml-2 mr-2">
               <label class="block text-sm font-medium text-gray-700" for="building_name">Min</label>
-              <%= number_field_tag 'min_capacity', nil, min: 1, value: 0, data: { action: "input->autosubmit#search" } %>
+              <%= number_field_tag 'min_capacity', nil, min: 1, value: 0, data: { action: "input->autosubmit#search" }, class: 'w-full block rounded sm:text-sm border-gray-300' %>
             </div>
-            <div class="ml-1 flex-1 w-1/3">
+            <div class="ml-1 mr-2 w-1/2">
               <label class="block text-sm font-medium text-gray-700" for="building_name">Max</label>
-              <%= number_field_tag 'max_capacity', nil, max: 600, value: 600, data: { action: "input->autosubmit#search" } %>
+              <%= number_field_tag 'max_capacity', nil, max: 600, value: 600, data: { action: "input->autosubmit#search" }, class: 'w-full block rounded sm:text-sm border-gray-300' %>
             </div>
           </div>
         </div>
         <br>
         <hr>
-        <fieldset>
+        <div class="pl-1">
           <legend class="">Ameneties</legend>
-
           <ul class="characteristics-list">
-            <li class="check-box">
+            <li class="">
               <%= check_box_tag "room_characteristics[]", "InstrComp", params[:room_characteristics].try(:include?, "InstrComp"), id: "instructor-computer", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
-              <label class="" for="instructor-computer">Instructor Computer</label>
+              <label class="text-sm font-medium text-gray-700" for="instructor-computer">Instructor Computer</label>
             </li>
-            <li class="check-box">
+            <li class="">
               <%= check_box_tag "room_characteristics[]", "DocCam", params[:room_characteristics].try(:include?, "DocCam"), id: "doccam", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
-              <label class="" for="instructor-computer">Document Camera</label>
+              <label class="text-sm font-medium text-gray-700" for="instructor-computer">Document Camera</label>
             </li>
-            <li class="check-box">
+            <li class="">
               <%= check_box_tag "room_characteristics[]", "LectureCap", params[:room_characteristics].try(:include?, "LectureCap"), id: "lectcap", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
-              <label class="" for="instructor-computer">Lecture Capture</label>
+              <label class="text-sm font-medium text-gray-700" for="instructor-computer">Lecture Capture</label>
             </li>
-            <li class="check-box">
+            <li class="">
               <%= check_box_tag "room_characteristics[]", "VideoConf", params[:room_characteristics].try(:include?, "VideoConf"), id: "video-conferencing", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
-              <label class="" for="instructor-computer">Video Conferencing</label>
+              <label class="text-sm font-medium text-gray-700" for="instructor-computer">Video Conferencing</label>
             </li>
-            <li class="check-box">
+            <li class="">
               <%= check_box_tag "room_characteristics[]", "IntrScreen", params[:room_characteristics].try(:include?, "IntrScreen"), id: "interavtive-screen", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
-              <label class="" for="instructor-computer">Interactive Screen</label>
+              <label class="text-sm font-medium text-gray-700" for="instructor-computer">Interactive Screen</label>
             </li>
-            <li class="check-box">
+            <li class="">
               <%= check_box_tag "room_characteristics[]", "BluRay", params[:room_characteristics].try(:include?, "BluRay"), id: "bluray", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
-              <label class="" for="instructor-computer">BluRay / DVD</label>
+              <label class="text-sm font-medium text-gray-700" for="instructor-computer">BluRay / DVD</label>
             </li>
           </ul>
-        </fieldset>
+        </div>
         <br>
         <hr>
-        <fieldset>
+        <div class="pl-1">
           <legend class="">Team Learning</legend>
           <ul class="characteristics-list">
-            <li class="check-box">
+            <li class="">
               <%= check_box_tag "room_characteristics[]", "TeamBoard", params[:room_characteristics].try(:include?, "TeamBoard"), id: "team-board", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
-              <label class="" for="instructor-computer">Team Board</label>
+              <label class="text-sm font-medium text-gray-700" for="instructor-computer">Team Board</label>
             </li>
-            <li class="check-box">
+            <li class="">
               <%= check_box_tag "room_characteristics[]", "TeamTables", params[:room_characteristics].try(:include?, "TeamTables"), id: "team-tables", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
-              <label class="" for="instructor-computer">Team Tables</label>
+              <label class="text-sm font-medium text-gray-700" for="instructor-computer">Team Tables</label>
             </li>
-            <li class="check-box">
+            <li class="">
               <%= check_box_tag "room_characteristics[]", "TeamTech", params[:room_characteristics].try(:include?, "TeamTech"), id: "team-technology", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
-              <label class="" for="instructor-computer">Team Technology</label>
+              <label class="text-sm font-medium text-gray-700" for="instructor-computer">Team Technology</label>
             </li>
           </ul>
-        </fieldset>
+        </div>
         <br>
         <hr>
-        <fieldset>
+        <div class="pl-1">
           <legend class="">Writing Surface</legend>
           <ul class="characteristics-list">
-            <li class="check-box">
+            <li class="">
               <%= check_box_tag "room_characteristics[]", "TeamTech", params[:room_characteristics].try(:include?, "TeamTech"), id: "team-technology", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
-              <label class="" for="instructor-computer">Whiteboard</label>
+              <label class="text-sm font-medium text-gray-700" for="instructor-computer">Whiteboard</label>
             </li>
-            <li class="check-box">
+            <li class="">
               <%= check_box_tag "room_characteristics[]", "Chkbrd", params[:room_characteristics].try(:include?, "Chkbrd"), id: "chalkboard", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
-              <label class="" for="instructor-computer">Chalkboard</label>
+              <label class="text-sm font-medium text-gray-700" for="instructor-computer">Chalkboard</label>
             </li>
           </ul>
-        </fieldset>
+        </div>
         <br>
         <hr>
-        <fieldset>
+        <div class="pl-1">
           <legend class="">Projection</legend>
           <ul class="characteristics-list">
-            <li class="check-box">
+            <li class="">
               <%= check_box_tag "room_characteristics[]", "Proj16mm", params[:room_characteristics].try(:include?, "Proj16mm"), id: "projector-16mm", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
-              <label class="" for="instructor-computer">16mm Film&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+              <label class="text-sm font-medium text-gray-700" for="instructor-computer">16mm Film&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
             </li>
-            <li class="check-box">
+            <li class="">
               <%= check_box_tag "room_characteristics[]", "Proj35mm", params[:room_characteristics].try(:include?, "Proj35mm"), id: "projector-35mm", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
-              <label class="" for="instructor-computer">35mm Film</label>
+              <label class="text-sm font-medium text-gray-700" for="instructor-computer">35mm Film</label>
             </li>
-            <li class="check-box">
+            <li class="">
               <%= check_box_tag "room_characteristics[]", "ProjD-Cin", params[:room_characteristics].try(:include?, "ProjD-Cin"), id: "projector-cin", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
-              <label class="" for="instructor-computer">Digital Cinema (DCP)</label>
+              <label class="text-sm font-medium text-gray-700" for="instructor-computer">Digital Cinema (DCP)</label>
             </li>
-            <li class="check-box">
+            <li class="">
               <%= check_box_tag "room_characteristics[]", "ProjDigit", params[:room_characteristics].try(:include?, "ProjDigit"), id: "projector-digital", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
-              <label class="" for="instructor-computer">Digital Data & Video</label>
+              <label class="text-sm font-medium text-gray-700" for="instructor-computer">Digital Data & Video</label>
             </li>
-            <li class="check-box">
+            <li class="">
               <%= check_box_tag "room_characteristics[]", "ProjSlide", params[:room_characteristics].try(:include?, "ProjSlide"), id: "projector-slide", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
-              <label class="" for="instructor-computer">Slide Projector</label>
+              <label class="text-sm font-medium text-gray-700" for="instructor-computer">Slide Projector</label>
             </li>
           </ul>
-        </fieldset>
+        </div>
       </div>
 
     <% end %>
