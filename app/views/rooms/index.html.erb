@@ -117,10 +117,6 @@
             <legend class="">Projection</legend>
             <ul class="characteristics-list">
               <li class="">
-                <%= check_box_tag "room_characteristics[]", "Proj16mm", params[:room_characteristics].try(:include?, "Proj16mm"), id: "projector-16mm", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
-                <label class="text-sm font-medium text-gray-700" for="instructor-computer">16mm Film&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-              </li>
-              <li class="">
                 <%= check_box_tag "room_characteristics[]", "Proj35mm", params[:room_characteristics].try(:include?, "Proj35mm"), id: "projector-35mm", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
                 <label class="text-sm font-medium text-gray-700" for="instructor-computer">35mm Film</label>
               </li>
@@ -131,10 +127,6 @@
               <li class="">
                 <%= check_box_tag "room_characteristics[]", "ProjDigit", params[:room_characteristics].try(:include?, "ProjDigit"), id: "projector-digital", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
                 <label class="text-sm font-medium text-gray-700" for="instructor-computer">Digital Data & Video</label>
-              </li>
-              <li class="">
-                <%= check_box_tag "room_characteristics[]", "ProjSlide", params[:room_characteristics].try(:include?, "ProjSlide"), id: "projector-slide", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
-                <label class="text-sm font-medium text-gray-700" for="instructor-computer">Slide Projector</label>
               </li>
             </ul>
           </div>
