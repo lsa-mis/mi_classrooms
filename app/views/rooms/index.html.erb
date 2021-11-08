@@ -1,6 +1,6 @@
 <div class="container mb-20">
   <h1>Classrooms</h1>
-  <div class="grid grid-cols-5 gap-2" data-controller='autosubmit'>
+  <div class="grid grid-cols-5" data-controller='autosubmit'>
     <div class="some-class">
         Filters
       <%= form_with url: rooms_path, method: :get, class: "", data: { controller: 'autosubmit', target: "autosubmit.form" } do |form| %>
@@ -140,7 +140,7 @@
           </div>
           <br>
           <hr>
-          <div class="px-1">
+          <div class="px-1 pb-2">
             <%= label_tag "Search Classroom Name" %>
             <%= text_field_tag :classroom_name, "", data: { action: "input->autosubmit#search" }, class: 'search-by-building-name' %>
           </div>
