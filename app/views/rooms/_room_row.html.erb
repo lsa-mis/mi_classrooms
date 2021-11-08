@@ -1,0 +1,45 @@
+<%= turbo_frame_tag dom_id(room) do  %>
+  <div class="">
+    <div class="max-w-2xl mx-2 px-2 sm:py-2 sm:px-0 md:max-w-full md:min-w-full lg:px-4 bg-blue-50">
+      <h2 class="sr-only">Classroom</h2>
+      <div class="bg-white border border-gray-300 rounded-lg flex flex-col sm:flex-row overflow-hidden sm:leading-tight">
+        <img alt="<%= room.title %>" class="h-24" src="https://images.unsplash.com/photo-1606761568499-6d2451b23c66?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjJ8fGNsYXNzcm9vbXxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"/>
+        <div class="flex-1 px-2 sm:pt-0 sm:pl-2 py-2 flex flex-col sm:justify-between">
+          <div class="flex flex-row justify-between w-full">
+            <div class="text-2xl font-medium text-gray-900 lg:font-light">
+              <div class="truncate">
+                <%= room.title  %>
+              </div>
+              <div class="text-base text-blue-700 lg:text-xs">
+                <%= room.address %>
+              </div>
+              <div class="text-base text-blue-700 lg:text-xs hover:underline">
+                <%= link_to 'Details', room, data: { "turbo-frame": "_top" } %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="items-end pr-2" >
+          <div class="text-base text-gray-600 lg:text-sm">
+            <div class="icon text-gray-700">
+              <%= svg("users") %>
+            </div>
+            <%= "#{room.student_capacity}" %>
+          </div>
+          <div class="text-sm font-medium highlights">
+            <%= link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{room.facility_code_heprod }", target: "_blank" do %>
+              <div class="h-layout h-highlight-item">
+                <%= svg("calendar_days")  %>
+                <span>Scheduling</span>
+              </div>
+            <% end %>
+          </div>
+          <div class="h-layout h-highlight-item">
+            <%= svg("message_question")  %>
+            <span>Support</span>
+          </div>
+        </div>
+      </div>
+    </div>  
+  </div>
+<% end %>
