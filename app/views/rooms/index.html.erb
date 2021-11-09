@@ -50,7 +50,7 @@
           <hr>
           <div class="pl-1">
             <legend class="">Ameneties</legend>
-            <ul class="characteristics-list">
+            <ul class="">
               <li class="">
                 <%= check_box_tag "room_characteristics[]", "InstrComp", params[:room_characteristics].try(:include?, "InstrComp"), id: "instructor-computer", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
                 <label class="text-sm font-medium text-gray-700" for="instructor-computer">Instructor Computer</label>
@@ -81,7 +81,7 @@
           <hr>
           <div class="pl-1">
             <legend class="">Team Learning</legend>
-            <ul class="characteristics-list">
+            <ul class="">
               <li class="">
                 <%= check_box_tag "room_characteristics[]", "TeamBoard", params[:room_characteristics].try(:include?, "TeamBoard"), id: "team-board", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
                 <label class="text-sm font-medium text-gray-700" for="instructor-computer">Team Board</label>
@@ -100,7 +100,7 @@
           <hr>
           <div class="pl-1">
             <legend class="">Writing Surface</legend>
-            <ul class="characteristics-list">
+            <ul class="">
               <li class="">
                 <%= check_box_tag "room_characteristics[]", "TeamTech", params[:room_characteristics].try(:include?, "TeamTech"), id: "team-technology", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
                 <label class="text-sm font-medium text-gray-700" for="instructor-computer">Whiteboard</label>
@@ -115,7 +115,7 @@
           <hr>
           <div class="pl-1">
             <legend class="">Projection</legend>
-            <ul class="characteristics-list">
+            <ul class="">
               <li class="">
                 <%= check_box_tag "room_characteristics[]", "Proj35mm", params[:room_characteristics].try(:include?, "Proj35mm"), id: "projector-35mm", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
                 <label class="text-sm font-medium text-gray-700" for="instructor-computer">35mm Film</label>
