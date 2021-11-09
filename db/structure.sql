@@ -143,7 +143,7 @@ CREATE TABLE public.buildings (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     tsv tsvector,
-    campus_records_id bigint
+    campus_record_id bigint
 );
 
 
@@ -196,6 +196,40 @@ CREATE SEQUENCE public.campus_records_id_seq
 --
 
 ALTER SEQUENCE public.campus_records_id_seq OWNED BY public.campus_records.id;
+
+
+--
+-- Name: departments; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.departments (
+    id bigint NOT NULL,
+    dept_id integer,
+    dept_grp character varying,
+    dept_description character varying,
+    dept_group_description character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: departments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.departments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: departments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.departments_id_seq OWNED BY public.departments.id;
 
 
 --
@@ -385,8 +419,10 @@ CREATE TABLE public.rooms (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     tsv tsvector,
-    campus_records_id bigint,
-    dept_group_description character varying
+    dept_group_description character varying,
+    department_id bigint,
+    campus_record_id bigint,
+    building_name character varying
 );
 
 
@@ -435,7 +471,10 @@ CREATE TABLE public.users (
     provider character varying,
     uid character varying,
     mcommunity_groups text DEFAULT ''::text NOT NULL,
-    uniqname character varying
+    uniqname character varying,
+    principal_name character varying,
+    display_name character varying,
+    person_affiliation character varying
 );
 
 
@@ -491,6 +530,13 @@ ALTER TABLE ONLY public.buildings ALTER COLUMN bldrecnbr SET DEFAULT nextval('pu
 --
 
 ALTER TABLE ONLY public.campus_records ALTER COLUMN id SET DEFAULT nextval('public.campus_records_id_seq'::regclass);
+
+
+--
+-- Name: departments id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.departments ALTER COLUMN id SET DEFAULT nextval('public.departments_id_seq'::regclass);
 
 
 --
@@ -584,6 +630,14 @@ ALTER TABLE ONLY public.campus_records
 
 
 --
+-- Name: departments departments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.departments
+    ADD CONSTRAINT departments_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: omni_auth_services omni_auth_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -668,10 +722,10 @@ CREATE UNIQUE INDEX index_active_storage_variant_records_uniqueness ON public.ac
 
 
 --
--- Name: index_buildings_on_campus_records_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_buildings_on_campus_record_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_buildings_on_campus_records_id ON public.buildings USING btree (campus_records_id);
+CREATE INDEX index_buildings_on_campus_record_id ON public.buildings USING btree (campus_record_id);
 
 
 --
@@ -724,10 +778,17 @@ CREATE INDEX index_rooms_on_building_bldrecnbr ON public.rooms USING btree (buil
 
 
 --
--- Name: index_rooms_on_campus_records_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_rooms_on_campus_record_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_rooms_on_campus_records_id ON public.rooms USING btree (campus_records_id);
+CREATE INDEX index_rooms_on_campus_record_id ON public.rooms USING btree (campus_record_id);
+
+
+--
+-- Name: index_rooms_on_department_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_rooms_on_department_id ON public.rooms USING btree (department_id);
 
 
 --
@@ -805,6 +866,22 @@ ALTER TABLE ONLY public.room_contacts
 
 
 --
+-- Name: rooms fk_rails_41c309f023; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.rooms
+    ADD CONSTRAINT fk_rails_41c309f023 FOREIGN KEY (campus_record_id) REFERENCES public.campus_records(id);
+
+
+--
+-- Name: buildings fk_rails_6a75b39956; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.buildings
+    ADD CONSTRAINT fk_rails_6a75b39956 FOREIGN KEY (campus_record_id) REFERENCES public.campus_records(id);
+
+
+--
 -- Name: active_storage_variant_records fk_rails_993965df05; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -813,11 +890,11 @@ ALTER TABLE ONLY public.active_storage_variant_records
 
 
 --
--- Name: rooms fk_rails_af04891a02; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: rooms fk_rails_b3b7d14183; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.rooms
-    ADD CONSTRAINT fk_rails_af04891a02 FOREIGN KEY (campus_records_id) REFERENCES public.campus_records(id);
+    ADD CONSTRAINT fk_rails_b3b7d14183 FOREIGN KEY (department_id) REFERENCES public.departments(id);
 
 
 --
@@ -834,14 +911,6 @@ ALTER TABLE ONLY public.active_storage_attachments
 
 ALTER TABLE ONLY public.room_characteristics
     ADD CONSTRAINT fk_rails_d00a2d31b3 FOREIGN KEY (rmrecnbr) REFERENCES public.rooms(rmrecnbr);
-
-
---
--- Name: buildings fk_rails_e321516598; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.buildings
-    ADD CONSTRAINT fk_rails_e321516598 FOREIGN KEY (campus_records_id) REFERENCES public.campus_records(id);
 
 
 --
@@ -869,6 +938,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211018211722'),
 ('20211021092659'),
 ('20211021115852'),
-('20211101125649');
+('20211101125649'),
+('20211102213452'),
+('20211104144339'),
+('20211104200637'),
+('20211109130147');
 
 
