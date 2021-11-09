@@ -22,7 +22,6 @@ include ActionView::RecordIdentifier
     authorize @rooms
 
     @rooms = @rooms.classrooms.where(building_bldrecnbr: params[:building_bldrecnbr]) if params[:building_bldrecnbr].present?
-    @rooms = @rooms.order(:floor => :desc, :room_number => :asc)
     @rooms = RoomDecorator.decorate_collection(@rooms)
 
     @pagy, @rooms = pagy(@rooms)
