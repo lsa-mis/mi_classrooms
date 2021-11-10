@@ -1,0 +1,31 @@
+<div data-modal-target="container" data-action="click->modal#closeBackground keyup@window->modal#closeWithKeyboard" class="hidden animated fadeIn fixed inset-0 overflow-y-auto flex items-center justify-center" style="z-index: 9999;">
+  <div class="max-h-screen w-full max-w-lg relative">
+    <!-- Modal Card -->
+    <div class="m-1 bg-white rounded shadow">
+      <div class="p-8">
+        <h2 class="text-xl mb-4">Support Info</h2>
+        <ul>
+          <li class="flex">
+            <div class="icon self-center">
+              <%= svg("phone") %>
+            </div>
+          <div class="pl-2 self-center">
+            <%= "#{room.room_support_phone}" %>
+          </div>
+          </li>
+            <li class="flex">
+          <div class="icon self-center">
+            <%= svg("envelope") %>
+          </div>
+          <div class="pl-2 self-center">
+            <%= "#{room.room_support_email}" %>
+          </div>
+          </li>
+        </ul>
+        <div class="flex justify-end items-center flex-wrap mt-6">
+          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" data-action="click->modal#close">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

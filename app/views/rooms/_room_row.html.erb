@@ -35,10 +35,15 @@
             <% end %>
           </div>
           <div class="h-layout h-highlight-item">
-            <%= svg("message_question")  %>
-            <span>Support</span>
+            <div data-controller="modal" data-modal-allow-background-close="true" data-modal-disable-backdrop="true">
+              <a href="#" data-action="click->modal#open" class="h-layout h-highlight-item">
+                <%= svg("message_question")  %>
+                <span>Support</span>
+              </a>
+              <!-- Modal Container -->
+              <%= render 'support_info', room: room %>
+            </div>
           </div>
-        </div>
       </div>
     </div>  
   </div>
