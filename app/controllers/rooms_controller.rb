@@ -11,7 +11,12 @@ include ActionView::RecordIdentifier
 
     @schools = Room.where(rmtyp_description: "Classroom").pluck(:dept_group_description).uniq.sort
     # @rooms = Room.classrooms.includes([:building, :room_contact, :room_characteristics]).where('instructional_seating_count > ?', 1)
-    @rooms = Room.classrooms.includes([:building, :room_contact]).where('instructional_seating_count > ?', 1)
+    if params[:direction].present?
+      Rails.logger.debug "**************************** sorting params[:direction] : #{params[:direction]} "
+      @rooms = Room.classrooms.includes([:building, :room_contact]).reorder(:instructional_seating_count => params[:direction].to_sym)
+    else
+      @rooms = Room.classrooms.includes([:building, :room_contact]).reorder(:building_name).order(:floor, :room_number => :asc)
+    end
 
     if params.present?
       Rails.logger.debug "**************************** params: #{params} "
@@ -22,12 +27,7 @@ include ActionView::RecordIdentifier
     @rooms = @rooms.classrooms.where('instructional_seating_count >= ?', params[:min_capacity].to_i) if params[:max_capacity].present?
     @rooms = @rooms.classrooms.where('instructional_seating_count <= ?', params[:max_capacity].to_i) if params[:max_capacity].present?
     @rooms = @rooms.classrooms.where('facility_code_heprod LIKE ?', "%#{params[:classroom_name]}%") if params[:classroom_name].present?
-    if params[:direction].present?
-      # @rooms = @rooms.order(params[:sort].to_sym, params[:direction].to_sym)
-      @rooms = @rooms.order(:instructional_seating_count => params[:direction].to_sym)
-    else
-      @rooms = @rooms.order(:floor => :desc, :room_number => :asc)
-    end
+    
     authorize @rooms
 
     @rooms = RoomDecorator.decorate_collection(@rooms)
@@ -144,6 +144,16 @@ include ActionView::RecordIdentifier
       %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
     end
 
-
+    def sort_by_floor(rooms)
+      sorted = rooms.sort_by do |s|
+        f = s.floor
+        if f =~ /^\d+$/
+          [2, $&.to_i]
+        else
+          [1, s]
+        end
+      end
+      return sorted
+    end
 
 end

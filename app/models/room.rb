@@ -111,7 +111,7 @@ class Room < ApplicationRecord
   )
 
   scope :classrooms, -> {
-    where(rmtyp_description: ["Classroom"]).order(:building_name)
+    where(rmtyp_description: ["Classroom"]).where('instructional_seating_count > ?', 1)
   }
 
   scope :classroom_labs, -> {
