@@ -4,11 +4,14 @@ include ActionView::RecordIdentifier
   skip_after_action :verify_policy_scoped, only: :index
   # GET /rooms
   # GET /rooms.json
+
+  helper_method :sort_direction
+
   def index
 
     @schools = Room.where(rmtyp_description: "Classroom").pluck(:dept_group_description).uniq.sort
-    # @rooms = Room.classrooms.includes([:building, :room_contact, :room_characteristics]).where('instructional_seating_count > ?', 1) 
-    @rooms = Room.classrooms.includes([:building, :room_contact, :room_characteristics]).where('instructional_seating_count > ?', 1)
+    # @rooms = Room.classrooms.includes([:building, :room_contact, :room_characteristics]).where('instructional_seating_count > ?', 1)
+    @rooms = Room.classrooms.includes([:building, :room_contact]).where('instructional_seating_count > ?', 1)
 
     if params.present?
       Rails.logger.debug "**************************** params: #{params} "
@@ -19,7 +22,12 @@ include ActionView::RecordIdentifier
     @rooms = @rooms.classrooms.where('instructional_seating_count >= ?', params[:min_capacity].to_i) if params[:max_capacity].present?
     @rooms = @rooms.classrooms.where('instructional_seating_count <= ?', params[:max_capacity].to_i) if params[:max_capacity].present?
     @rooms = @rooms.classrooms.where('facility_code_heprod = ?', params[:classroom_name]) if params[:classroom_name].present?
-    @rooms = @rooms.order(:floor => :desc, :room_number => :asc)
+    if params[:direction].present?
+      # @rooms = @rooms.order(params[:sort].to_sym, params[:direction].to_sym)
+      @rooms = @rooms.order(:instructional_seating_count => params[:direction].to_sym)
+    else
+      @rooms = @rooms.order(:floor => :desc, :room_number => :asc)
+    end
     authorize @rooms
 
     @rooms = RoomDecorator.decorate_collection(@rooms)
@@ -126,6 +134,14 @@ include ActionView::RecordIdentifier
 
     def filtering_params
       params.slice(:bluray, :chalkboard, :doccam, :interactive_screen, :instructor_computer, :lecture_capture, :projector_16mm, :projector_35mm, :projector_digital_cinema, :projector_digial, :projector_slide, :team_board, :team_tables, :team_technology, :vcr, :video_conf, :whiteboard)
+    end
+
+    # def sort_column
+    #   Product.column_names.include?(params[:sort]) ? params[:sort] : "name"
+    # end
+    
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
     end
 
 
