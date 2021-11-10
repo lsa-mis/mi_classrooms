@@ -19,11 +19,11 @@ include ActionView::RecordIdentifier
     @rooms = @rooms.classrooms.where('instructional_seating_count >= ?', params[:min_capacity].to_i) if params[:max_capacity].present?
     @rooms = @rooms.classrooms.where('instructional_seating_count <= ?', params[:max_capacity].to_i) if params[:max_capacity].present?
     @rooms = @rooms.classrooms.where('facility_code_heprod = ?', params[:classroom_name]) if params[:classroom_name].present?
+    @rooms = @rooms.order(:floor => :desc, :room_number => :asc)
     authorize @rooms
 
-    @rooms = @rooms.classrooms.where(building_bldrecnbr: params[:building_bldrecnbr]) if params[:building_bldrecnbr].present?
     @rooms = RoomDecorator.decorate_collection(@rooms)
-
+    
     @pagy, @rooms = pagy(@rooms)
 
     unless params[:query].nil?

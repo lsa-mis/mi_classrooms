@@ -111,7 +111,7 @@ class Room < ApplicationRecord
   )
 
   scope :classrooms, -> {
-    where(rmtyp_description: ["Classroom"]).order(:building_name, :floor => :desc, :room_number => :asc)
+    where(rmtyp_description: ["Classroom"]).order(:building_name)
   }
 
   scope :classroom_labs, -> {
