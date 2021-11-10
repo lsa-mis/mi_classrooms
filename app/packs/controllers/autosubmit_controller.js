@@ -7,7 +7,7 @@ export default class extends Controller {
     console.log("search")
 
     this.timeout = setTimeout(() => {
-      // this.statusTarget.textContent = 'Updating...'
+      this.statusTarget.textContent = 'Updating...'
       Turbo.navigator.submitForm(this.formTarget)
     }, 600)
   }
@@ -18,7 +18,7 @@ export default class extends Controller {
     clearTimeout(this.timeout)
 
     this.timeout = setTimeout(() => {
-      // this.statusTarget.textContent = 'Updating...'
+      this.statusTarget.textContent = 'Updating...'
       Turbo.navigator.submitForm(this.formTarget)
     }, 0)
   }
@@ -29,7 +29,7 @@ export default class extends Controller {
     clearTimeout(this.timeout)
 
     this.timeout = setTimeout(() => {
-      // this.statusTarget.textContent = 'Updating...'
+      this.statusTarget.textContent = 'Updating...'
       Turbo.navigator.submitForm(this.formTarget)
     }, 0)
   }
