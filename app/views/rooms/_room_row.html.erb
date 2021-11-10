@@ -27,22 +27,30 @@
             <%= "#{room.student_capacity}" %>
           </div>
           <div class="text-sm font-medium highlights">
-            <%= link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{room.facility_code_heprod }", target: "_blank" do %>
-              <div class="h-layout h-highlight-item">
-                <%= svg("calendar_days")  %>
-                <span>Scheduling</span>
-              </div>
+            <% if room.facility_code_heprod.present? %>
+              <%= link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{room.facility_code_heprod }", target: "_blank" do %>
+                <div class="h-layout h-highlight-item">
+                  <%= svg("calendar_days")  %>
+                  <span>Scheduling</span>
+                </div>
+              <% end %>
+            <% else %>
+              <span>Scheduling not available</span>
             <% end %>
           </div>
           <div class="h-layout h-highlight-item">
-            <div data-controller="modal" data-modal-allow-background-close="true" data-modal-disable-backdrop="true">
-              <a href="#" data-action="click->modal#open" class="h-layout h-highlight-item">
-                <%= svg("message_question")  %>
-                <span>Support</span>
-              </a>
-              <!-- Modal Container -->
-              <%= render 'support_info', room: room %>
-            </div>
+            <% if room.room_support_phone == "Not Available" && room.room_support_email == "Not Available" %>
+              <span>Support not avalable</span>
+            <% else %>
+              <div data-controller="modal" data-modal-allow-background-close="true" data-modal-disable-backdrop="true">
+                <a href="#" data-action="click->modal#open" class="h-layout h-highlight-item">
+                  <%= svg("message_question") %>
+                  <span>Support</span>
+                </a>
+                <!-- Modal Container -->
+                <%= render 'support_info', room: room %>
+              </div>
+            <% end %>
           </div>
       </div>
     </div>  
