@@ -140,7 +140,7 @@
           <hr>
           <div class="px-1 pb-2">
             <%= label_tag "Search Classroom Name" %>
-            <%= text_field_tag :classroom_name, "", data: { action: "input->autosubmit#search" }, class: 'block rounded-none rounded-l-md sm:text-sm border-gray-300' %>
+            <%= form.text_field :classroom_name, class: 'block rounded-none rounded-l-md sm:text-sm border-gray-300', data: { action: "input->autosubmit#search" }, :placeholder => "USB4153" %>
           </div>
         </div>
       </div>
