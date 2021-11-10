@@ -8,7 +8,10 @@
           <div class="flex flex-row justify-between w-full">
             <div class="text-2xl font-medium text-gray-900 lg:font-light">
               <div class="truncate">
-                <%= room.title  %>
+                <%= room.facility_code_heprod  %>
+              </div>
+              <div class="truncate">
+                <%= room.building_name.titleize  %>
               </div>
               <div class="text-base text-blue-700 lg:text-xs">
                 <%= room.address %>
@@ -39,10 +42,9 @@
             <% end %>
           </div>
           <div class="h-layout h-highlight-item">
-            <% if room.room_support_phone == "Not Available" && room.room_support_email == "Not Available" %>
-              <span>Support not avalable</span>
-            <% else %>
-              <div data-controller="modal" data-modal-allow-background-close="true" data-modal-disable-backdrop="true">
+            <% unless room.room_support_phone == "Not Available" && room.room_support_email == "Not Available" %>
+              
+              <div data-controller="modal" data-modal-allow-background-close="true" >
                 <a href="#" data-action="click->modal#open" class="h-layout h-highlight-item">
                   <%= svg("message_question") %>
                   <span>Support</span>

@@ -12,34 +12,38 @@
         </div>
       </div>
       <div class="col-span-4">
-        <div class="flex justify-end mb-2 items-center">
+        <div class="flex justify-end mx-2 items-center">
         <span>Sort by capacity</span>
           <%= select_tag "direction", options_for_select([["asc", "asc"], ["desc", "desc"]]), include_blank: "Select ...", class: "block rounded-md sm:text-sm border-gray-300 ml-2",
           :"data-action" => "change->autosubmit#search"%>
         </div>
-
       </div>
       <div>
-        <div class="bg-gray-50 shadow border">
+        <div class="col-span-1 pl-1 bg-gray-50 shadow border">
           <div class="px-1">
-            <%= label_tag "Select a School/College" %>
+            <label for="school_or_college_name">Select a School/College
               <%= select_tag "school_or_college_name", options_for_select(@schools, " "), include_blank: "Select ...", class: "block rounded-none rounded-l-md sm:text-sm border-gray-300",
                         :"data-report-target" => "school", :"data-action" => "change->autosubmit#searchSchool" %>
-            
           </div>
           <br>
           <hr>
           <div class="px-1">
-            <label class="" for="building_name">Search building names</label>
+            <label for="building_name">Search Building Names</label>
             <% if params[:query].blank?  %>
-              <%= form.text_field :query, {class: "block rounded-none rounded-l-md sm:text-sm border-gray-300", :placeholder => "Undergraduate Sciences Building", data: { action: "input->autosubmit#search" }}   %>
+              <%= form.text_field :query, {class: "block rounded-none rounded-l-md sm:text-sm border-gray-300", :placeholder => 'ex. "East Hall"', data: { action: "input->autosubmit#search" }}   %>
             <% else %>
               <%= form.text_field :query, class: 'block rounded-none rounded-l-md sm:text-sm border-gray-300', value: params[:query], data: { action: "input->autosubmit#search" } %>
             <% end %>
           </div>
           <br>
           <hr>
-          <div class="col-span-1 pl-1">
+          <div class="px-1 pb-2">
+            <label for="classroom_name">Search Classroom Name</label>
+            <%= form.text_field :classroom_name, class: 'block rounded-none rounded-l-md sm:text-sm border-gray-300', data: { action: "input->autosubmit#search" }, :placeholder => 'ex. "USB4153"' %>
+          </div>
+          <br>
+          <hr>
+          <div>
             <label class="" for="building_name">Capacity</label>
             <div class="flex mt-2">
               <div class="w-1/2 ml-2 mr-2">
@@ -136,12 +140,7 @@
               </li>
             </ul>
           </div>
-          <br>
-          <hr>
-          <div class="px-1 pb-2">
-            <%= label_tag "Search Classroom Name" %>
-            <%= form.text_field :classroom_name, class: 'block rounded-none rounded-l-md sm:text-sm border-gray-300', data: { action: "input->autosubmit#search" }, :placeholder => "USB4153" %>
-          </div>
+          
         </div>
       </div>
       
