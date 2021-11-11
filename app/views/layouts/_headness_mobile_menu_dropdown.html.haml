@@ -30,5 +30,5 @@
           
         - else
           .user-action-links 
-            = button_to user_google_oauth2_omniauth_authorize_path, data: {turbo: "false"}, class: "w-screen max-w-md" do
+            = button_to user_saml_omniauth_authorize_path, data: {turbo: "false"}, class: "w-screen max-w-md" do
               .py-3.shadow-sm.font-medium.rounded.text-blue-900.bg-yellow-300.hover:bg-yellow-500 Sign In

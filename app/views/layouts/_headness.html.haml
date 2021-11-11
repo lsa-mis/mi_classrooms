@@ -29,7 +29,7 @@
 
             - else
               .user-action-links 
-                = button_to user_google_oauth2_omniauth_authorize_path, data: {turbo: "false"} do
+                = button_to user_saml_omniauth_authorize_path, data: {turbo: "false"} do
                   .px-1.shadow-sm.font-medium.rounded.text-blue-900.bg-yellow-300.hover:bg-yellow-500 Sign In
 
       .sm:hidden.items-center.mt-1= render './layouts/headness_mobile_menu_toggle.html.haml'
