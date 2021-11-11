@@ -8,7 +8,10 @@
           <div class="flex flex-row justify-between w-full">
             <div class="text-2xl font-medium text-gray-900 lg:font-light">
               <div class="truncate">
-                <%= room.title  %>
+                <%= room.facility_code_heprod  %>
+              </div>
+              <div class="truncate">
+                <%= room.building_name.titleize  %>
               </div>
               <div class="text-base text-blue-700 lg:text-xs">
                 <%= room.address %>
@@ -27,18 +30,30 @@
             <%= "#{room.student_capacity}" %>
           </div>
           <div class="text-sm font-medium highlights">
-            <%= link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{room.facility_code_heprod }", target: "_blank" do %>
-              <div class="h-layout h-highlight-item">
-                <%= svg("calendar_days")  %>
-                <span>Scheduling</span>
-              </div>
+            <% if room.facility_code_heprod.present? %>
+              <%= link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{room.facility_code_heprod }", target: "_blank" do %>
+                <div class="h-layout h-highlight-item">
+                  <%= svg("calendar_days")  %>
+                  <span>Room Schedule</span>
+                </div>
+              <% end %>
+            <% else %>
+              <span>Room Schedule not available</span>
             <% end %>
           </div>
           <div class="h-layout h-highlight-item">
-            <%= svg("message_question")  %>
-            <span>Support</span>
+            <% unless room.room_support_phone == "Not Available" && room.room_support_email == "Not Available" %>
+              
+              <div data-controller="modal" data-modal-allow-background-close="true" >
+                <a href="#" data-action="click->modal#open" class="h-layout h-highlight-item">
+                  <%= svg("message_question") %>
+                  <span>Support</span>
+                </a>
+                <!-- Modal Container -->
+                <%= render 'support_info', room: room %>
+              </div>
+            <% end %>
           </div>
-        </div>
       </div>
     </div>  
   </div>
