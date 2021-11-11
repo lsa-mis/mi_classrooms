@@ -36,6 +36,8 @@
   %p
     %b building:
     = @room.building.name
+  
+  = render 'rooms_row_dropdown', room: @room
 
   = link_to 'Edit', edit_room_path(@room)
   \|

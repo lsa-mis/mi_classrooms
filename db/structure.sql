@@ -385,7 +385,8 @@ CREATE TABLE public.rooms (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     tsv tsvector,
-    campus_records_id bigint
+    campus_records_id bigint,
+    dept_group_description character varying
 );
 
 
@@ -863,12 +864,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210816183531'),
 ('20210910182654'),
 ('20210910182736'),
-('20211015134156'),
-('20211015134157'),
 ('20211018211216'),
 ('20211018211648'),
 ('20211018211722'),
 ('20211021092659'),
-('20211021115852');
+('20211021115852'),
+('20211101125649');
 
 

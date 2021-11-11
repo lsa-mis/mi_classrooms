@@ -183,16 +183,6 @@ GEM
     geocoder (1.6.7)
     globalid (0.5.2)
       activesupport (>= 5.0)
-    google-protobuf (3.19.1)
-    google-protobuf (3.19.1-x86_64-darwin)
-    googleapis-common-protos-types (1.3.0)
-      google-protobuf (~> 3.14)
-    grpc (1.41.0)
-      google-protobuf (~> 3.17)
-      googleapis-common-protos-types (~> 1.0)
-    grpc (1.41.0-universal-darwin)
-      google-protobuf (~> 3.17)
-      googleapis-common-protos-types (~> 1.0)
     haml (5.2.2)
       temple (>= 0.8.0)
       tilt
@@ -244,10 +234,6 @@ GEM
     net-scp (3.0.0)
       net-ssh (>= 2.6.5, < 7.0.0)
     net-ssh (6.1.0)
-    newrelic-infinite_tracing (8.1.0)
-      grpc (~> 1.34)
-      newrelic_rpm (= 8.1.0)
-    newrelic_rpm (8.1.0)
     nio4r (2.5.8)
     nokogiri (1.12.5)
       mini_portile2 (~> 2.6.1)
@@ -473,8 +459,6 @@ DEPENDENCIES
   jbuilder (~> 2.7)
   ldap_lookup
   listen
-  newrelic-infinite_tracing
-  newrelic_rpm
   omniauth-google-oauth2
   omniauth-rails_csrf_protection
   pagy
