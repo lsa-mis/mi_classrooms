@@ -6,34 +6,6 @@
   <h1 class="flex items-center">
     <%= image_tag 'building_placeholder', height: '100', width: '100', class: "mr-2" %><%= "#{@room.room_number} --  #{@room.building.name}" %> 
   </h1>
-  <p>
-    <%= image_tag 'room_placeholder', height: '300', width: '300' %>
-  </p>
-  <div class="bg-blue-50 flex flex-row justify-between sm:pl-36.lg:overflow-scroll">
-    <div class="flex flex-1 items-center text-sm font-medium highlights">
-      <%= link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{@room.facility_code_heprod }", target: "_blank" do %>
-        <div class="h-layout h-highlight-item">
-          <%= svg("calendar_days")  %>
-          <span>Scheduling</span>
-        </div>
-      <% end %>
-      <div class="h-layout h-highlight-item">
-        <%= svg("message_question")  %>
-        <span>Support</span>
-      </div>
-      <div class="h-layout h-highlight-item">
-        <%= svg("chair") %>
-        <div class="span">Room Layout</div>
-      </div>
-      <div class="h-floorplan h-highlight-item">
-        <%= svg("layer_group") %>
-        <span>Floor Map <%= @room.floor %> </span>
-      </div>
-    </div>
-  </div>
-
-
-    <%#= @room.rmrecnbr %>
   <p>Panorama
     <%= image_tag 'room_placeholder', height: '200', width: '400' %>
   </p>
@@ -43,34 +15,32 @@
     <p class="bg-blue-50 text-lg">Instructional seating count:
       <%= @room.instructional_seating_count %>
     </p>
-   <%= render 'rooms_row_dropdown', room: @room%>
-  </p>
-
-<div class="flex flex-row justify-between sm:pl-36.lg:overflow-scroll">
-  <div class="flex flex-1 items-center text-sm font-medium highlights">
-    <%= link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{@room.facility_code_heprod }", target: "_blank" do %>
+  <div class="bg-blue-50 flex flex-row justify-between sm:pl-36.lg:overflow-scroll">
+    <div class="flex flex-1 items-center text-sm font-medium highlights">
+      <%= link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{@room.facility_code_heprod }", target: "_blank" do %>
+        <div class="h-layout h-highlight-item">
+          <%= svg("calendar_days")  %>
+          <span>Scheduling</span>
+        </div>
+      <% end %>
       <div class="h-layout h-highlight-item">
-        <%= svg("calendar_days")  %>
-        <span>Scheduling</span>
+        <%= svg("chair") %>
+        <div class="span">Room Layout</div>
       </div>
-    <% end %>
-    <div class="h-layout h-highlight-item">
-      <%= svg("message_question")  %>
-      <span>Support</span>
-    </div>
-    <div class="h-layout h-highlight-item">
-      <%= svg("chair") %>
-      <div class="span">Room Layout</div>
-    </div>
-    <div class="h-floorplan h-highlight-item">
-      <%= svg("layer_group") %>
-      <span>Floor Map </span>
+      <%= link_to "https://rooms.lsa.umich.edu/maps/#{@room.facility_code_heprod.}.html", target: "_blank" do %>
+        <div class="h-floorplan h-highlight-item">
+          <%= svg("layer_group") %>
+          <span>Floor <%= @room.floor %> Map  </span>
+        </div>
+      <% end %> 
     </div>
   </div>
+   <%= render 'rooms_row_dropdown', room: @room%>
+  </p>
 </div>
 
     <%#= @room.facility_code_heprod %>
-
+    <%#= @room.rmrecnbr %>
 
     <%#= @room.rmtyp_description %>
 
