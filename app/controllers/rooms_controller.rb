@@ -1,6 +1,7 @@
 class RoomsController < ApplicationController
 include ActionView::RecordIdentifier
   before_action :set_room, only: [:show, :edit, :update, :destroy, :toggle_visibile]
+  before_action :set_filters_list, only: [:index]
   skip_after_action :verify_policy_scoped, only: :index
   # GET /rooms
   # GET /rooms.json
@@ -9,18 +10,13 @@ include ActionView::RecordIdentifier
 
   def index
 
-    @schools = Room.where(rmtyp_description: "Classroom").pluck(:dept_group_description).uniq.sort
-    # @rooms = Room.classrooms.includes([:building, :room_contact, :room_characteristics]).where('instructional_seating_count > ?', 1)
+    @schools = Room.classrooms.pluck(:dept_group_description).uniq.sort
     if params[:direction].present?
-      Rails.logger.debug "**************************** sorting params[:direction] : #{params[:direction]} "
       @rooms = Room.classrooms.includes([:building, :room_contact]).reorder(:instructional_seating_count => params[:direction].to_sym)
     else
       @rooms = Room.classrooms.includes([:building, :room_contact]).reorder(:building_name).order(:floor, :room_number => :asc)
     end
 
-    if params.present?
-      Rails.logger.debug "**************************** params: #{params} "
-    end
     @rooms = @rooms.classrooms.with_building_name(params[:query]) if params[:query].present?
     @rooms = @rooms.classrooms.with_school_or_college_name(params[:school_or_college_name]) if params[:school_or_college_name].present?
     @rooms = @rooms.classrooms.with_all_characteristics(params[:room_characteristics]) if params[:room_characteristics].present?
@@ -142,6 +138,38 @@ include ActionView::RecordIdentifier
     
     def sort_direction
       %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    end
+
+    def set_filters_list
+      @filters_list = {}
+      if params.present?
+        capacity = ""
+        params.each do |k, v|
+          unless k == 'controller' || k == 'action' || k == 'direction'
+            unless v.empty?
+              case k
+              when "school_or_college_name"
+                @filters_list['School'] = v
+              when "query"
+                @filters_list['building'] = "*" + v + "*"
+              when "classroom_name"
+                @filters_list['building'] = "*" + v + "*"
+              when "min_capacity"
+                capacity = v
+              when 'max_capacity'
+                unless v == "600" && capacity == "0"
+                  capacity = capacity + "-" + v
+                  @filters_list['capacity'] = capacity
+                end
+              when "room_characteristics"
+                @filters_list['filter'] = v
+              else
+                @filters_list[k] = v
+              end
+            end
+          end
+        end
+      end
     end
 
     def sort_by_floor(rooms)
