@@ -13,7 +13,7 @@
       </div>
       <div class="col-span-4">
         <div class="flex justify-end mx-2 items-center">
-        <span>Sort by capacity</span>
+          <span>Sort by capacity</span>
           <%= select_tag "direction", options_for_select([["asc", "asc"], ["desc", "desc"]]), include_blank: "Select ...", class: "block rounded-md sm:text-sm border-gray-300 ml-2",
           :"data-action" => "change->autosubmit#search"%>
         </div>
@@ -23,17 +23,13 @@
           <div class="px-1">
             <label for="school_or_college_name">Select a School/College
               <%= select_tag "school_or_college_name", options_for_select(@schools, " "), include_blank: "Select ...", class: "block rounded-none rounded-l-md sm:text-sm border-gray-300",
-                        :"data-report-target" => "school", :"data-action" => "change->autosubmit#searchSchool" %>
+                        :"data-action" => "change->autosubmit#search" %>
           </div>
           <br>
           <hr>
           <div class="px-1">
             <label for="building_name">Search Building Names</label>
-            <% if params[:query].blank?  %>
-              <%= form.text_field :query, {class: "block rounded-none rounded-l-md sm:text-sm border-gray-300", :placeholder => 'ex. "East Hall"', data: { action: "input->autosubmit#search" }}   %>
-            <% else %>
-              <%= form.text_field :query, class: 'block rounded-none rounded-l-md sm:text-sm border-gray-300', value: params[:query], data: { action: "input->autosubmit#search" } %>
-            <% end %>
+            <%= form.text_field :query, class: "block rounded-none rounded-l-md sm:text-sm border-gray-300", :placeholder => 'ex. "East Hall"', :"data-action" => "input->autosubmit#search", :"data-autosubmit-target" => "building_name" %>
           </div>
           <br>
           <hr>
@@ -62,7 +58,7 @@
             <legend class="">Ameneties</legend>
             <ul class="">
               <li class="">
-                <%= check_box_tag "room_characteristics[]", "InstrComp", params[:room_characteristics].try(:include?, "InstrComp"), id: "instructor-computer", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
+                <%= check_box_tag "room_characteristics[]", "InstrComp", params[:room_characteristics].try(:include?, "InstrComp"), id: "instructor-computer", class: "", data: { value: "instructor-computer", action: "input->autosubmit#checkboxSubmit" } %>
                 <label class="text-sm font-medium text-gray-700" for="instructor-computer">Instructor Computer</label>
               </li>
               <li class="">
