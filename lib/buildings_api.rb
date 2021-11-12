@@ -266,7 +266,7 @@ class BuildingsApi
               square_feet: row['RoomSquareFeet'], rmtyp_description: row['RoomTypeDescription'],
               dept_description: row['DepartmentName'], instructional_seating_count: row['RoomStationCount'],
               dept_id: dept_data['DeptId'], dept_grp: dept_data['DeptGroup'], dept_group_description: dept_data['DeptGroupDescription'],
-              campus_record_id: @campus_id)
+              campus_record_id: @campus_id, building_name: @building_name)
         @rooms_in_db.delete(row['RoomRecordNumber'])
       else
         room_logger.info "Could not update #{row['RoomRecordNumber']} because : #{room.errors.messages}"
@@ -305,7 +305,6 @@ class BuildingsApi
 
     response = http.request(request)
     response_json = JSON.parse(response.read_body)
-    
     if response_json['httpCode'].present?
       @result['error'] = response_json['httpMessage'] + ". " + response_json['moreInformation']
     else
