@@ -19,9 +19,9 @@ class DepartmentApi
 
     response = http.request(request)
     response_json = JSON.parse(response.read_body)
-    if dept_name == "EH&S"
-      puts response_json
-    end
+    # if dept_name == "EH&S"
+    #   puts response_json
+    # end
     if response_json['ErrorResponse'].present?
       @result['success'] = false
       error = response_json['ErrorResponse']
@@ -30,9 +30,9 @@ class DepartmentApi
       @result['success'] = true
       @result['data'] = response_json['DepartmentList']
     end
-    if dept_name == "EH&S"
-      puts @result
-    end
+    # if dept_name == "EH&S"
+    #   puts @result
+    # end
     return @result
   end
   
