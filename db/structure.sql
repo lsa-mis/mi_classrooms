@@ -143,7 +143,7 @@ CREATE TABLE public.buildings (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     tsv tsvector,
-    campus_records_id bigint
+    campus_record_id bigint
 );
 
 
@@ -385,8 +385,8 @@ CREATE TABLE public.rooms (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     tsv tsvector,
-    campus_records_id bigint,
-    dept_group_description character varying
+    dept_group_description character varying,
+    campus_record_id bigint
 );
 
 
@@ -668,10 +668,10 @@ CREATE UNIQUE INDEX index_active_storage_variant_records_uniqueness ON public.ac
 
 
 --
--- Name: index_buildings_on_campus_records_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_buildings_on_campus_record_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_buildings_on_campus_records_id ON public.buildings USING btree (campus_records_id);
+CREATE INDEX index_buildings_on_campus_record_id ON public.buildings USING btree (campus_record_id);
 
 
 --
@@ -724,10 +724,10 @@ CREATE INDEX index_rooms_on_building_bldrecnbr ON public.rooms USING btree (buil
 
 
 --
--- Name: index_rooms_on_campus_records_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_rooms_on_campus_record_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_rooms_on_campus_records_id ON public.rooms USING btree (campus_records_id);
+CREATE INDEX index_rooms_on_campus_record_id ON public.rooms USING btree (campus_record_id);
 
 
 --
@@ -805,19 +805,27 @@ ALTER TABLE ONLY public.room_contacts
 
 
 --
+-- Name: rooms fk_rails_41c309f023; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.rooms
+    ADD CONSTRAINT fk_rails_41c309f023 FOREIGN KEY (campus_record_id) REFERENCES public.campus_records(id);
+
+
+--
+-- Name: buildings fk_rails_6a75b39956; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.buildings
+    ADD CONSTRAINT fk_rails_6a75b39956 FOREIGN KEY (campus_record_id) REFERENCES public.campus_records(id);
+
+
+--
 -- Name: active_storage_variant_records fk_rails_993965df05; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.active_storage_variant_records
     ADD CONSTRAINT fk_rails_993965df05 FOREIGN KEY (blob_id) REFERENCES public.active_storage_blobs(id);
-
-
---
--- Name: rooms fk_rails_af04891a02; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.rooms
-    ADD CONSTRAINT fk_rails_af04891a02 FOREIGN KEY (campus_records_id) REFERENCES public.campus_records(id);
 
 
 --
@@ -834,14 +842,6 @@ ALTER TABLE ONLY public.active_storage_attachments
 
 ALTER TABLE ONLY public.room_characteristics
     ADD CONSTRAINT fk_rails_d00a2d31b3 FOREIGN KEY (rmrecnbr) REFERENCES public.rooms(rmrecnbr);
-
-
---
--- Name: buildings fk_rails_e321516598; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.buildings
-    ADD CONSTRAINT fk_rails_e321516598 FOREIGN KEY (campus_records_id) REFERENCES public.campus_records(id);
 
 
 --
@@ -869,6 +869,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211018211722'),
 ('20211021092659'),
 ('20211021115852'),
-('20211101125649');
+('20211101125649'),
+('20211112035428'),
+('20211112035659');
 
 
