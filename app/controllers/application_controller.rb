@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   after_action :verify_authorized, except: :index, unless: :devise_controller?
   after_action :verify_policy_scoped, only: :index
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+  before_action :set_membership
 
   private
 
@@ -36,4 +37,16 @@ class ApplicationController < ActionController::Base
   def create_feedback
     @feedback = Feedback.new
   end
+
+  def set_membership
+    if user_signed_in?
+      current_user.membership = session[:user_memberships]
+      Rails.logger.debug "************************** in application controller current_user.membership #{current_user.membership}"
+
+    else
+      new_user_session_path
+    end
+    
+  end
+
 end

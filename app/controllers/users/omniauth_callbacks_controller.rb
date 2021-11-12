@@ -73,7 +73,18 @@ def set_user
     @user = create_user
 
   end
-    puts "UPDATED RECORD!!"
+  puts "UPDATED RECORD!!"
+  if @user
+    membership = []
+    access_groups = ['mi-classrooms-admin']
+    access_groups.each do |group|
+      if  LdapLookup.is_member_of_group?(@user.uniqname, group)
+        membership.append(group)
+      end
+    end
+    Rails.logger.debug "************************** in set_user: membership #{membership}"
+    session[:user_memberships] = membership
+  end
 end
 
 def omni_auth_service_attrs
