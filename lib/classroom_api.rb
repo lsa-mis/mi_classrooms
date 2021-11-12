@@ -44,7 +44,7 @@ class ClassroomApi
               rmrecnbr = room_info['RmRecNbr'].to_i
               room_in_db = Room.find_by(rmrecnbr: rmrecnbr)
               if room_in_db
-                room_in_db.update(facility_code_heprod: facility_id, campus_records_id: CampusRecord.find_by(campus_cd: room_info['CampusCd']).id)
+                room_in_db.update(facility_code_heprod: facility_id, campus_record_id: CampusRecord.find_by(campus_cd: room_info['CampusCd']).id)
               else
                 facility_id_logger.info "Room not in the database: rmrecnbr - #{rmrecnbr}, facility_id - #{facility_id}"
               end
