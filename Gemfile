@@ -80,8 +80,11 @@ gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem "devise", github: "ghiculescu/devise", branch: "error-code-422" # https://github.com/heartcombo/devise/pull/5340 not yet merged
 gem "responders", github: "heartcombo/responders"
 gem "omniauth-google-oauth2"
+gem "omniauth-saml"
 gem 'omniauth-rails_csrf_protection'
 gem "draper", "~> 4.0"
 gem "pundit"
 gem 'ldap_lookup'
 gem 'image_processing'
+# gem 'newrelic_rpm'
+# gem 'newrelic-infinite_tracing'

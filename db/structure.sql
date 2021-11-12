@@ -387,6 +387,7 @@ CREATE TABLE public.rooms (
     tsv tsvector,
     dept_group_description character varying,
     campus_record_id bigint
+    building_name character varying
 );
 
 
@@ -435,7 +436,10 @@ CREATE TABLE public.users (
     provider character varying,
     uid character varying,
     mcommunity_groups text DEFAULT ''::text NOT NULL,
-    uniqname character varying
+    uniqname character varying,
+    principal_name character varying,
+    display_name character varying,
+    person_affiliation character varying
 );
 
 
@@ -872,5 +876,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211101125649'),
 ('20211112035428'),
 ('20211112035659');
+('20211102213452'),
+('20211109130147');
 
 

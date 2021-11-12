@@ -14,6 +14,7 @@ import '../stylesheets/_flash_errors.sass'
 import '../stylesheets/_feedback.sass'
 import '../stylesheets/ribbons.sass'
 import '../stylesheets/search.sass'
+import gtag from '../src/analytics'
 
 function importAll(r) {
   r.keys().forEach(r);
