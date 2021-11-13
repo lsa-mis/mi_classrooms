@@ -36,18 +36,28 @@ class ApplicationPolicy
     false
   end
 
-  class Scope
-    def initialize(user, scope)
-      @user = user
-      @scope = scope
-    end
-
-    def resolve
-      scope.all
-    end
-
-    private
-
-    attr_reader :user, :scope
+  def user_in_non_admin_group?
+    @non_admin_group = 'mi-classrooms-non-admin'
+    user.membership.include?(@non_admin_group)
   end
+  
+  def user_in_admin_group?
+    @admin_group = 'mi-classrooms-admin'
+    user.membership.include?(@admin_group)
+  end
+
+  # class Scope
+  #   def initialize(user, scope)
+  #     @user = user
+  #     @scope = scope
+  #   end
+
+  #   def resolve
+  #     scope.all
+  #   end
+
+  #   private
+
+  #   attr_reader :user, :scope
+  # end
 end
