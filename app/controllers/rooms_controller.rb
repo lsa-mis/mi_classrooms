@@ -57,6 +57,7 @@ include ActionView::RecordIdentifier
 
   # GET /rooms/1/edit
   def edit
+    authorize @room
   end
 
   # POST /rooms
@@ -78,6 +79,7 @@ include ActionView::RecordIdentifier
   # PATCH/PUT /rooms/1
   # PATCH/PUT /rooms/1.json
   def update
+    authorize @room
     respond_to do |format|
       if @room.update(room_params)
         format.html { redirect_to @room, notice: 'Room was successfully updated.' }
