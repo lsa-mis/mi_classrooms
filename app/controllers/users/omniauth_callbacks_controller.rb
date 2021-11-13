@@ -76,7 +76,7 @@ def set_user
   puts "UPDATED RECORD!!"
   if @user
     membership = []
-    access_groups = ['mi-classrooms-admin']
+    access_groups = ['mi-classrooms-admin', 'mi-classrooms-non-admin']
     access_groups.each do |group|
       if  LdapLookup.is_member_of_group?(@user.uniqname, group)
         membership.append(group)
