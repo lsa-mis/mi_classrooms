@@ -2,6 +2,8 @@ class PagesController < ApplicationController
   
   def about
     authorize :page
+    @about_page_announcement = Announcement.find_by(location: "about_page")
+
   end
 
   def index
