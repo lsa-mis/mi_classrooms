@@ -1,8 +1,10 @@
 class RoomsController < ApplicationController
 include ActionView::RecordIdentifier
+  devise_group :logged_in, contains: [:user]
+  before_action :authenticate_logged_in!  
   before_action :set_room, only: [:show, :edit, :update, :destroy, :toggle_visibile]
   before_action :set_filters_list, only: [:index]
-  skip_after_action :verify_policy_scoped, only: :index
+  # skip_after_action :verify_policy_scoped, only: :index
   # GET /rooms
   # GET /rooms.json
 
