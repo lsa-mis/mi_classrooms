@@ -37,8 +37,8 @@ class ApplicationPolicy
   end
 
   def user_in_non_admin_group?
-    @non_admin_group = 'mi-classrooms-non-admin'
-    user.membership.include?(@non_admin_group)
+    @non_admin_group = ['mi-classrooms-admin', 'mi-classrooms-non-admin']
+    (user.membership & @non_admin_group).any?
   end
   
   def user_in_admin_group?
