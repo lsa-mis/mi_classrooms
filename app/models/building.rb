@@ -24,7 +24,7 @@
 class Building < ApplicationRecord
   include PgSearch::Model
   self.primary_key = 'bldrecnbr'
-
+  belongs_to :campus_record, optional: true
   has_many :rooms, primary_key: 'bldrecnbr', foreign_key: 'building_bldrecnbr'
   geocoded_by :address # can also be an IP address
   has_one_attached :building_image

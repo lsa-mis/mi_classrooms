@@ -1,8 +1,8 @@
 <div class="container mb-20" data-controller='autosubmit'>
   <h1>Classrooms</h1>
   <%= form_with url: rooms_path, method: :get, class: "", data: { target: "autosubmit.form" } do |form| %>
-    <div class="grid grid-cols-5" >
-      <div class="some-class">
+    <div class="grid grid-cols-9" >
+      <div class="col-span-2">
         Filters
         <div class="flex justify-end mb-2">
           <button type="button" class="px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400"
@@ -11,18 +11,18 @@
           </button>
         </div>
       </div>
-      <div class="col-span-4">
+      <div class="col-span-7">
         <div class="flex justify-end mx-2 items-center">
           <span>Sort by capacity</span>
           <%= select_tag "direction", options_for_select([["asc", "asc"], ["desc", "desc"]]), include_blank: "Select ...", class: "block rounded-md sm:text-sm border-gray-300 ml-2",
           :"data-action" => "change->autosubmit#search"%>
         </div>
       </div>
-      <div>
-        <div class="col-span-1 pl-1 bg-gray-50 shadow border">
+
+        <div class="col-span-2 pl-1 bg-gray-50 shadow border">
           <div class="px-1">
             <label for="school_or_college_name">Select a School/College
-              <%= select_tag "school_or_college_name", options_for_select(@schools, " "), include_blank: "Select ...", class: "block rounded-none rounded-l-md sm:text-sm border-gray-300",
+              <%= select_tag "school_or_college_name", options_for_select(@schools, " "), include_blank: "Select ...", class: "block rounded-none rounded-l-md sm:text-xs border-gray-300",
                         :"data-action" => "change->autosubmit#search" %>
           </div>
           <br>
@@ -138,9 +138,8 @@
           </div>
           
         </div>
-      </div>
       
-      <div class="col-span-4">
+      <div class="col-span-7">
         <% if user_signed_in? %>
           <%= render 'listing' %>
         <% end %>
