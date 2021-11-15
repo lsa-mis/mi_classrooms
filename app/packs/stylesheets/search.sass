@@ -144,7 +144,7 @@
     @apply  col-start-2
 
 .h-highlight-item
-  @apply inline-flex text-sm text-blue-700 whitespace-nowrap items-center font-semibold mx-2
+  @apply inline-flex text-sm text-black whitespace-nowrap items-center font-semibold mx-2
   svg
     @apply h-5 w-5 mr-1
 
@@ -161,7 +161,7 @@
     svg
       @apply h-3 w-3 mr-1
   &:hover
-    @apply text-blue-400
+    @apply underline
     
 
 
@@ -176,7 +176,7 @@
     @apply ml-1 transform rotate-90 fill-current
 
 .classroom-row-dropdown
-  @apply  pt-4 bg-blue-50
+  @apply  pt-2 text-black
 
 .classroom-row-dropdown-features-section
   @apply w-full max-w-2xl 
@@ -195,7 +195,7 @@
   @apply w-full 
 
 .classroom-row-dropdown-features
-  @apply  grid grid-cols-4  grid-flow-row mx-4 mt-4
+  @apply  grid grid-cols-4  grid-flow-row mt-2
   @screen md 
     @apply grid-cols-3 
   li
@@ -204,10 +204,10 @@
     @apply h-4 w-4
 
 .classroom-row-dropdown-feature
-  @apply flex items-start text-blue-700 truncate mt-1 ml-1 whitespace-nowrap items-center 
+  @apply flex items-start truncate mt-1 ml-1 whitespace-nowrap items-center 
 
 .classroom-row-contact-icon
-  @apply flex items-center justify-center h-8 w-8 rounded-md  text-blue-100
+  @apply flex items-center justify-center h-8 w-8 rounded-md
   svg
     @apply h-5 w-5 fill-current text-blue-100
 
@@ -223,20 +223,20 @@
   @apply bg-white rounded py-4 pr-6 pl-2 truncate mt-2
 
   h5
-    @apply  truncate text-lg text-gray-600 leading-tight -mt-1 
+    @apply  truncate text-lg leading-tight -mt-1 
   ul
     @apply leading-tight
     li
       @apply font-light leading-loose align-middle items-center leading-tight flex
       svg
-        @apply h-5 w-5  text-blue-700 px-1 fill-current flex-shrink-0 align-middle mr-1
+        @apply h-5 w-5 px-1 fill-current flex-shrink-0 align-middle mr-1
   @screen md
     @apply mb-1
     h5
       @apply text-sm
     ul
       li
-        @apply text-xs leading-tight
+        @apply text-sm leading-tight
 
 .features-header
-  @apply  flex-shrink-0 pr-4 text-sm tracking-wider font-semibold uppercase text-blue-600 pt-2
+  @apply  flex-shrink-0 pr-4 text-sm tracking-wider font-semibold uppercase pt-2
