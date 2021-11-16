@@ -36,7 +36,14 @@ class ApplicationPolicy
     false
   end
 
-  class Scope
+  def user_in_non_admin_group?
+    @non_admin_group = ['mi-classrooms-admin', 'mi-classrooms-non-admin']
+    (user.membership & @non_admin_group).any?
+  end
+  
+end
+
+ class Scope
     def initialize(user, scope)
       @user = user
       @scope = scope
@@ -49,5 +56,4 @@ class ApplicationPolicy
     private
 
     attr_reader :user, :scope
-  end
 end

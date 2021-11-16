@@ -1,40 +1,41 @@
 class RoomsController < ApplicationController
 include ActionView::RecordIdentifier
-  before_action :set_room, only: [:show, :edit, :update, :destroy, :toggle_visibile]
+  devise_group :logged_in, contains: [:user]
+  before_action :authenticate_logged_in!  
   skip_after_action :verify_policy_scoped, only: :index
-  # GET /rooms
-  # GET /rooms.json
+  before_action :set_room, only: [:show, :edit, :update, :destroy, :toggle_visibile]
+  before_action :set_filters_list, only: [:index]
+
+  helper_method :sort_direction
+
   def index
 
-    @rooms = Room.classrooms.includes([:building, :room_contact, :room_characteristics]).where('instructional_seating_count > ?', 1) 
-
-    if params.present?
-      Rails.logger.debug "**************************** params: #{params} "
+    @schools = Room.classrooms.pluck(:dept_group_description).uniq.sort
+    if params[:direction].present?
+      @rooms = Room.classrooms.includes([:building, :room_contact]).reorder(:instructional_seating_count => params[:direction].to_sym)
+    else
+      @rooms = Room.classrooms.includes([:building, :room_contact]).reorder(:building_name).order(:floor, :room_number => :asc)
     end
+
     @rooms = @rooms.classrooms.with_building_name(params[:query]) if params[:query].present?
     @rooms = @rooms.classrooms.with_school_or_college_name(params[:school_or_college_name]) if params[:school_or_college_name].present?
     @rooms = @rooms.classrooms.with_all_characteristics(params[:room_characteristics]) if params[:room_characteristics].present?
-    @rooms = @rooms.where('instructional_seating_count > ?', params[:min_capacity].to_i) if params[:max_capacity].present?
+    @rooms = @rooms.classrooms.where('instructional_seating_count >= ?', params[:min_capacity].to_i) if params[:max_capacity].present?
+    @rooms = @rooms.classrooms.where('instructional_seating_count <= ?', params[:max_capacity].to_i) if params[:max_capacity].present?
+    @rooms = @rooms.classrooms.where('facility_code_heprod LIKE ?', "%#{params[:classroom_name].upcase}%") if params[:classroom_name].present?
     
-    @rooms = @rooms.where('instructional_seating_count < ?', params[:max_capacity].to_i) if params[:max_capacity].present?
-
-    # school_or_college_name
-    @rooms = @rooms.with_school_or_college_name(params[:school_or_college_name]) if params[:school_or_college_name].present?  
-
     authorize @rooms
 
-    @rooms = @rooms.where(building_bldrecnbr: params[:building_bldrecnbr]) if params[:building_bldrecnbr].present?
-
     @rooms = RoomDecorator.decorate_collection(@rooms)
-
+    
     @pagy, @rooms = pagy(@rooms)
 
-    # unless params[:query].nil?
-    #   render turbo_stream: turbo_stream.replace(
-    #     :roomListing,
-    #     partial: "rooms/listing"
-    #   )
-    # end
+    unless params[:query].nil?
+      render turbo_stream: turbo_stream.replace(
+        :roomListing,
+        partial: "rooms/listing"
+      )
+    end
 
   end
 
@@ -56,6 +57,7 @@ include ActionView::RecordIdentifier
 
   # GET /rooms/1/edit
   def edit
+    authorize @room
   end
 
   # POST /rooms
@@ -77,6 +79,7 @@ include ActionView::RecordIdentifier
   # PATCH/PUT /rooms/1
   # PATCH/PUT /rooms/1.json
   def update
+    authorize @room
     respond_to do |format|
       if @room.update(room_params)
         format.html { redirect_to @room, notice: 'Room was successfully updated.' }
@@ -108,10 +111,6 @@ include ActionView::RecordIdentifier
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    # def set_room
-    #   @room = Room.includes([:building]).find(params[:id])
-    # end
 
     def set_room
       fresh_when @room
@@ -130,7 +129,53 @@ include ActionView::RecordIdentifier
     def filtering_params
       params.slice(:bluray, :chalkboard, :doccam, :interactive_screen, :instructor_computer, :lecture_capture, :projector_16mm, :projector_35mm, :projector_digital_cinema, :projector_digial, :projector_slide, :team_board, :team_tables, :team_technology, :vcr, :video_conf, :whiteboard)
     end
+    
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    end
 
+    def set_filters_list
+      @filters_list = {}
+      if params.present?
+        capacity = ""
+        params.each do |k, v|
+          unless k == 'controller' || k == 'action' || k == 'direction'
+            unless v.empty?
+              case k
+              when "school_or_college_name"
+                @filters_list['School'] = v
+              when "query"
+                @filters_list['building'] = "*" + v + "*"
+              when "classroom_name"
+                @filters_list['building'] = "*" + v + "*"
+              when "min_capacity"
+                capacity = v
+              when 'max_capacity'
+                unless v == "600" && capacity == "0"
+                  capacity = capacity + "-" + v
+                  @filters_list['capacity'] = capacity
+                end
+              when "room_characteristics"
+                @filters_list['filter'] = v
+              else
+                @filters_list[k] = v
+              end
+            end
+          end
+        end
+      end
+    end
 
+    def sort_by_floor(rooms)
+      sorted = rooms.sort_by do |s|
+        f = s.floor
+        if f =~ /^\d+$/
+          [2, $&.to_i]
+        else
+          [1, s]
+        end
+      end
+      return sorted
+    end
 
 end

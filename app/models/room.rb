@@ -35,6 +35,7 @@ class Room < ApplicationRecord
   
 
   belongs_to :building, foreign_key: :building_bldrecnbr
+  belongs_to :campus_record, optional: true
   has_many :room_characteristics, foreign_key: :rmrecnbr, dependent: :destroy
   has_one :room_contact, foreign_key: :rmrecnbr, dependent: :destroy
   has_one_attached :room_panorama
@@ -56,7 +57,7 @@ class Room < ApplicationRecord
       tsearch: {
         dictionary: "english",
         prefix: true,
-        any_word: false,
+        any_word: false
 
       }
     }
@@ -100,7 +101,7 @@ class Room < ApplicationRecord
 
   pg_search_scope(
     :with_school_or_college_name,
-    against: [:dept_description],
+    against: [:dept_group_description],
     using: {
       tsearch:{
         dictionary: "english",
@@ -111,7 +112,7 @@ class Room < ApplicationRecord
   )
 
   scope :classrooms, -> {
-    where(rmtyp_description: ["Classroom"])
+    where(rmtyp_description: ["Classroom"]).where.not(facility_code_heprod: nil).where('instructional_seating_count > ?', 1)
   }
 
   scope :classroom_labs, -> {
@@ -121,9 +122,5 @@ class Room < ApplicationRecord
 scope :classrooms_including_labs, -> {
   where(rmtyp_description: ["Classroom", "Class Laboratory"])
 }
-
-def self.departments
-  [['Academic and Budget Affairs', 'ACAD_&_BDGT_AFFAIRS'],['College of LSA','COLLEGE_OF_LSA'], ['College of Pharmacy','COLLEGE_PHARMACY'], ['Ford School of Public Policy', 'SCHOOL_PUB_POLICY'],['Law School', 'LAW_SCHOOL'], ['Museum of Art', 'VP_ACAD_GRAD_STUDY'],['Ross School of Business' ,'SCHOOL_BUS_ADMIN'], ['School of Dentistry', 'SCHOOL_DENTISTRY'],['School of Education', 'SCHOOL_EDUCATION'], ['School of Information', 'SCHOOL_INFORMATION'], ['School of Kinesiology', 'SCHOOL_KINESIOLOGY'],['School for Environment and Sustainability','SCHOOL_NAT_RES_ENVIR'],['School of Nursing','SCHOOL_NURSING'], ['School of Music, Theatre and Dance','SCHOOL_MUSIC'], ['School of Public Health', 'SCHOOL_PUB_HEALTH'],['School of Social Work', 'SCHOOL_SOCIAL_WORK']]
-end
 
 end

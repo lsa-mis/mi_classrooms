@@ -12,7 +12,7 @@
                             "dropdown-leaving-class" => "transition ease-in duration-150"
                             }}
     .pt-2.pb-3.space-y-1.text-white
-      = link_to "Find a Room", rooms_path, class: "mobile-dropdown-link #{class_names(active: current_page?(rooms_path))} "
+      = link_to "Find a Room", rooms_path, class: "mobile-dropdown-link #{class_names(active: current_page?(rooms_path))} " if user_signed_in?
       = link_to "About", about_path, class: " mobile-dropdown-link #{class_names(active: current_page?(about_path))} "
       .flex.items-center.px-4
 
@@ -30,5 +30,5 @@
           
         - else
           .user-action-links 
-            = button_to user_google_oauth2_omniauth_authorize_path, data: {turbo: "false"}, class: "w-screen max-w-md" do
+            = button_to user_saml_omniauth_authorize_path, data: {turbo: "false"}, class: "w-screen max-w-md" do
               .py-3.shadow-sm.font-medium.rounded.text-blue-900.bg-yellow-300.hover:bg-yellow-500 Sign In

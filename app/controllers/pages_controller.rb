@@ -5,6 +5,7 @@ class PagesController < ApplicationController
   end
 
   def index
+    redirect_to rooms_path if current_user
     skip_policy_scope
   end
 

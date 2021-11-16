@@ -51,6 +51,10 @@ class RoomDecorator < Draper::Decorator
     "#{room.room_number} #{room.building.nick_name.titleize}"
   end
 
+  def building_name
+    "#{room.building.nick_name.titleize}"
+  end
+
   def address
     " #{room.building.address.titleize}, #{room.building.city.titleize}"
   end
@@ -113,8 +117,7 @@ room.room_contact&.rm_sppt_cntct_url
 
   def room_support_email
     #  rm_sppt_cntct_url    :string
-    if
-room.room_contact&.rm_sppt_cntct_email
+    if room.room_contact&.rm_sppt_cntct_email && room.room_contact.rm_sppt_cntct_email != " "
       "#{room.room_contact.rm_sppt_cntct_email}"
     else
       "Not Available"
@@ -123,14 +126,21 @@ room.room_contact&.rm_sppt_cntct_email
 
   def room_support_phone
     #  rm_sppt_cntct_url    :string
-    if
-room.room_contact&.rm_sppt_cntct_phone
+    if room.room_contact&.rm_sppt_cntct_phone && room.room_contact.rm_sppt_cntct_phone != " "
       "#{room.room_contact.rm_sppt_cntct_phone}"
     else
       "Not Available"
     end
   end
 
+  def room_support_url
+    #  rm_sppt_cntct_url    :string
+    if room.room_contact&.rm_sppt_cntct_url && room.room_contact.rm_sppt_cntct_url != " "
+      "#{room.room_contact.rm_sppt_cntct_url}"
+    else
+      "Not Available"
+    end
+  end
 
   def copy_text
     %(#{title.upcase} : #{address}. | Student Capacity: #{room.instructional_seating_count}. | You can find details at https://rooms.umich.edu/rooms/#{room.id} including links to support and scheduling for this room.)

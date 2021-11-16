@@ -1,16 +1,13 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-  devise_for :users, controllers: {omniauth_callbacks: "users/omniauth_callbacks"} do
-    delete 'sign_out', :to => 'devise/sessions#destroy', :as => :destroy_user_session
+  devise_for :users, controllers: {omniauth_callbacks: "users/omniauth_callbacks", sessions: "users/sessions"} do
+    delete 'sign_out', :to => 'users/sessions#destroy', :as => :destroy_user_session
   end
   resources :rooms do
   end
   match "toggle_visibile/:id" => "rooms#toggle_visibile", :via => [:get, :post], :as => :toggle_visibile
   
-  get '/linkedin' => redirect('https://www.linkedin.com/in/mi_classrooms/')
-  get '/github' => redirect('https://github.com/mi_classrooms')
-  get '/twitter' => redirect('https://twitter.com/mi_classrooms')
   get '/project_status', to: 'pages#project_status'
   get '/privacy', to: 'pages#privacy'
   get '/contact', to: 'pages#contact'
