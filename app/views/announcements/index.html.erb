@@ -6,21 +6,20 @@
 
       <thead>
         <tr>
-          <th scope="col" class="audit-th">Location</th>
-          <th scope="col" class="audit-th">Content</th>
-          <th scope="col" class="audit-th">Action</th>
+          <th scope="col">Location</th>
+          <th scope="col">Content</th>
+          <th scope="col">Action</th>
         </tr>
       </thead>
 
       <tbody>
         <% @announcements.each do |announcement| %>
           <tr class="border-b border-gray-100">
-            <td class="audit-td border-r-2 border-dotted"><%= announcement.location %></td>
-            <td class="audit-td text-left"><%= announcement.content %></td>
-            <td class="audit-td">
+            <td class="border-r-2 border-dotted"><%= announcement.location %></td>
+            <td class="text-left"><%= announcement.content %></td>
+            <td class="">
               <ul>
-                <li class= "action-link"><%= link_to 'Show', announcement %></li>
-                <li class= "action-link"><%= link_to 'Edit', edit_announcement_path(announcement) %></li>
+                <li class="px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400"><%= link_to 'Edit', edit_announcement_path(announcement) %></li>
               </ul>
             </td>
           </tr>
