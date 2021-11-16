@@ -10,12 +10,12 @@
       <%= image_tag 'room_placeholder', height: '200', width: '400' %>
     </div>
 
-    <div class="rounded-lg shadow-lg text-xl">Details
+    <div class="p-2 rounded-lg shadow-lg text-xl">Details
 
       <div class="text-lg">Instructional seating count:
         <%= @room.instructional_seating_count %>
       </div>
-      <div class="flex flex-row justify-between sm:pl-36.lg:overflow-scroll">
+      <div class="flex flex-row justify-between">
         <div class="flex flex-1 items-center text-sm font-medium">
           <%= link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{@room.facility_code_heprod }", target: "_blank" do %>
             <div class="h-layout h-highlight-item">
