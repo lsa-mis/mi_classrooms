@@ -7,9 +7,7 @@
       <%= building_image(@room) %>
     </h1>
     <div>Panorama
-      <%= image_tag 'room_placeholder', height: '200', width: '400' %>
-    </div>
-
+    <%= panoramic_image(@room) %>
     <div class="container p-2 rounded-lg shadow-lg text-xl">Details
 
       <div class="text-lg">Instructional seating count:
@@ -39,7 +37,7 @@
       </div>
       <%= render 'rooms_row_dropdown', room: @room%>
     </div>
-    <%= link_to 'Edit', edit_room_path(@room) %>
+    <%= link_to 'Edit', edit_room_path(@room), data: {turbo: "false"} %>
   </div>
 <% end %>
     <%#= @room.facility_code_heprod %>

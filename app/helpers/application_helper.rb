@@ -25,4 +25,13 @@ module ApplicationHelper
     end
   end
 
+  def panoramic_image ( room )
+    if room.room_panorama.attached?
+      <div data-controller="pannellum" data-pannellum-panoimage= "#{url_for(room.room_panorama)}" data-pannellum-panopreview= "#{url_for(room.room_panorama.variant(resize: '25%').processed)}" id="panorama"></div>
+    elsif room.room_image.attached?
+      image_tag(url_for(@room.room_image), alt: "#{@room.room_number.titleize} #{@room.building.name.titleize} picture")
+    else
+      image_tag 'room_placeholder', height: '200', width: '400'
+    end
+
 end
