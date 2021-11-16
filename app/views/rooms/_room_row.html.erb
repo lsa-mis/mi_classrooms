@@ -6,18 +6,15 @@
         <img alt="<%= room.title %>" class="h-24" src="https://images.unsplash.com/photo-1606761568499-6d2451b23c66?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjJ8fGNsYXNzcm9vbXxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"/>
         <div class="flex-1 px-2 sm:pt-0 sm:pl-2 py-2 flex flex-col sm:justify-between">
           <div class="flex flex-row justify-between w-full">
-            <div class="text-2xl font-medium text-gray-900 lg:font-light">
-              <div class="truncate">
-                <%= room.facility_code_heprod  %>
+            <div class="font-sans text-gray-900 text-lg leading-5">
+              <div class="truncate font-semibold">
+                <%= link_to room.facility_code_heprod, room, data: { "turbo-frame": "_top" }  %>
               </div>
-              <div class="truncate">
+              <div class="truncate font-semibold">
                 <%= room.building_name %>
               </div>
-              <div class="text-base text-blue-700 lg:text-xs">
+              <div class="text-sm">
                 <%= room.address %>
-              </div>
-              <div class="text-base text-blue-700 lg:text-xs hover:underline">
-                <%= link_to 'Details', room, data: { "turbo-frame": "_top" } %>
               </div>
             </div>
           </div>
@@ -29,7 +26,7 @@
             </div>
             <%= "#{room.student_capacity}" %>
           </div>
-          <div class="text-sm font-medium highlights">
+          <div class="text-sm font-medium highlights hover:underline">
             <% if room.facility_code_heprod.present? %>
               <%= link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{room.facility_code_heprod }", target: "_blank" do %>
                 <div class="h-layout h-highlight-item">
@@ -41,7 +38,7 @@
               <span>Room Schedule not available</span>
             <% end %>
           </div>
-          <div class="h-layout h-highlight-item">
+          <div class="text-sm font-medium highlight hover:underline">
             <% unless room.room_support_phone == "Not Available" && room.room_support_email == "Not Available" %>
               <div data-controller="modal" data-modal-allow-background-close="true" >
                 <a href="#" data-action="click->modal#open" class="h-layout h-highlight-item">
@@ -50,6 +47,14 @@
                 </a>
                 <!-- Modal Container -->
                 <%= render 'support_info', room: room %>
+              </div>
+            <% end %>
+          </div>
+          <div class="text-sm font-medium highlight hover:underline">
+            <%= link_to room, data: { "turbo-frame": "_top" } do %>
+              <div class="h-layout h-highlight-item">
+                <%= svg("info-circle")  %>
+                <span>Room Details</span>
               </div>
             <% end %>
           </div>
