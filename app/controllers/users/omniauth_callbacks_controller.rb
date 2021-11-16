@@ -2,7 +2,6 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   skip_before_action :verify_authenticity_token, only: :saml
   before_action :set_omni_auth_service
   before_action :set_user
-  # after_action :update_user_mcommunity_groups
   attr_reader :omni_auth_service, :user, :service
 
   def google_oauth2
@@ -56,7 +55,6 @@ end
 
 def set_omni_auth_service
   @omni_auth_service = OmniAuthService.where(provider: auth.provider, uid: auth.uid).first
-  # @omni_auth_service = OmniAuthService.create
 end
 
 def set_user
@@ -65,7 +63,6 @@ def set_user
   elsif omni_auth_service.present?
     @user = omni_auth_service.user
   elsif User.where(email: auth.info.email).any?
-    # 5. User is logged out and they login to a new account which doesn't match their old one
     flash[:alert] = "An account with this email already exists. Please sign in with that account before connecting your #{auth.provider.titleize} account."
     redirect_to new_user_session_path
 
@@ -73,7 +70,22 @@ def set_user
     @user = create_user
 
   end
-    puts "UPDATED RECORD!!"
+  puts "UPDATED RECORD!!"
+  if @user
+    admin = false
+    membership = []
+    access_groups = ['mi-classrooms-admin', 'mi-classrooms-non-admin']
+    access_groups.each do |group|
+      if  LdapLookup.is_member_of_group?(@user.uniqname, group)
+        membership.append(group)
+      end
+    end
+    if membership.include?('mi-classrooms-admin')
+      admin = true
+    end
+    session[:user_memberships] = membership
+    session[:user_admin] = admin
+  end
 end
 
 def omni_auth_service_attrs
@@ -100,12 +112,7 @@ def create_user
     principal_name: auth.info.principal_name,
     display_name: auth.info.name,
     person_affiliation: auth.info.person_affiliation, 
-    # name: auth.info.name,
-    # avatar_url: auth.info.image,
     password: Devise.friendly_token[0, 20]
   )
 
 end
-
-# <OmniAuth::AuthHash
-# credentials=#<OmniAuth::AuthHash expires=true expires_at=1506091894 token="EAABflKwUrhQBABqzaa8vayyVVTspYhjEN4ixhFGdgxSA6XXvFmylyyA6nDzWE4lmqPT31ZAKNJrRKZBylQQysaB1VsoGVRyaPVfihnsKIcVna4WAlzZAfo3DCTc02RFjgz0LF3NlZB8io0OUeSTvL1lDGfDv5zNhQ5vJSiXphQZDZD"> extra=#<OmniAuth::AuthHash raw_info=#<OmniAuth::AuthHash email="excid3@gmail.com" id="1225015704269784" name="Chris Oliver">> info=#<OmniAuth::AuthHash::InfoHash email="excid3@gmail.com" image="http://graph.facebook.com/v2.6/1225015704269784/picture" name="Chris Oliver"> provider="facebook" uid="1225015704269784">

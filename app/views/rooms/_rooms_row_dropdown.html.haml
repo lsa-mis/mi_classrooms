@@ -95,9 +95,3 @@
                   %li
                     .icon= svg("envelope")
                     = "#{room.room_support_email}"
-          .mt-6
-            - unless action_name == 'show'
-              .rounded-md.shadow
-
-
-                .flex.items-center.justify-center.px-5.py-3.border.border-transparent.text-base.leading-6.font-medium.rounded-md.text-green-900.bg-green-400{class: "hover:bg-green-500 hover:text-green-100focus:outline-none focus:ring transition duration-150 ease-in-out", href: "#"}= link_to "More Details", room_path(room), data: {"turbo-frame" => "_top"}
