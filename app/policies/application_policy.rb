@@ -41,23 +41,4 @@ class ApplicationPolicy
     (user.membership & @non_admin_group).any?
   end
   
-  def user_in_admin_group?
-    @admin_group = 'mi-classrooms-admin'
-    user.membership.include?(@admin_group)
-  end
-
-  # class Scope
-  #   def initialize(user, scope)
-  #     @user = user
-  #     @scope = scope
-  #   end
-
-  #   def resolve
-  #     scope.all
-  #   end
-
-  #   private
-
-  #   attr_reader :user, :scope
-  # end
 end

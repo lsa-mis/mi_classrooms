@@ -3,8 +3,6 @@ class ApplicationController < ActionController::Base
   include Pundit
   before_action :store_user_location!, if: :storable_location?
   before_action :create_feedback
-  # after_action :verify_authorized, except: :index, unless: :devise_controller?
-  # after_action :verify_policy_scoped, only: :index
   rescue_from Pundit::NotAuthorizedError, with: :user_not_in_group
   before_action :set_membership
 
@@ -35,7 +33,6 @@ class ApplicationController < ActionController::Base
 
 
   def store_user_location!
-    # :user is the scope we are authenticating
     store_location_for(:user, request.fullpath)
   end
 
@@ -46,8 +43,7 @@ class ApplicationController < ActionController::Base
   def set_membership
     if user_signed_in?
       current_user.membership = session[:user_memberships]
-      Rails.logger.debug "************************** in application controller current_user.membership #{current_user.membership}"
-
+      current_user.admin = session[:user_admin]
     else
       new_user_session_path
     end

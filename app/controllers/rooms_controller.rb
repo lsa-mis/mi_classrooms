@@ -4,9 +4,6 @@ include ActionView::RecordIdentifier
   before_action :authenticate_logged_in!  
   before_action :set_room, only: [:show, :edit, :update, :destroy, :toggle_visibile]
   before_action :set_filters_list, only: [:index]
-  # skip_after_action :verify_policy_scoped, only: :index
-  # GET /rooms
-  # GET /rooms.json
 
   helper_method :sort_direction
 
@@ -113,10 +110,6 @@ include ActionView::RecordIdentifier
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    # def set_room
-    #   @room = Room.includes([:building]).find(params[:id])
-    # end
 
     def set_room
       fresh_when @room
@@ -135,10 +128,6 @@ include ActionView::RecordIdentifier
     def filtering_params
       params.slice(:bluray, :chalkboard, :doccam, :interactive_screen, :instructor_computer, :lecture_capture, :projector_16mm, :projector_35mm, :projector_digital_cinema, :projector_digial, :projector_slide, :team_board, :team_tables, :team_technology, :vcr, :video_conf, :whiteboard)
     end
-
-    # def sort_column
-    #   Product.column_names.include?(params[:sort]) ? params[:sort] : "name"
-    # end
     
     def sort_direction
       %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
