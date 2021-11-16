@@ -4,7 +4,7 @@
   </div>
   <div class="container mb-20 w-2/3">
     <h1 class="flex items-center">
-      <%= image_tag 'building_placeholder', height: '100', width: '100', class: "mr-2" %><%= "#{@room.room_number} --  #{@room.building.name}" %> 
+      <%= building_image(@room) %>
     </h1>
     <div>Panorama
       <%= image_tag 'room_placeholder', height: '200', width: '400' %>
