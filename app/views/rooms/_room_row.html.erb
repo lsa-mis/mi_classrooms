@@ -23,7 +23,7 @@
           </div>
         </div>
         <div class="items-end pr-2" >
-          <div class="text-base text-gray-600 lg:text-sm">
+          <div class="text-base text-gray-700 lg:text-sm">
             <div class="icon text-gray-700">
               <%= svg("users") %>
             </div>
@@ -43,7 +43,6 @@
           </div>
           <div class="h-layout h-highlight-item">
             <% unless room.room_support_phone == "Not Available" && room.room_support_email == "Not Available" %>
-              
               <div data-controller="modal" data-modal-allow-background-close="true" >
                 <a href="#" data-action="click->modal#open" class="h-layout h-highlight-item">
                   <%= svg("message_question") %>
