@@ -24,7 +24,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :omniauthable, omniauth_providers: [:saml]
 
-  attr_accessor :membership
+  attr_accessor :membership, :admin
   has_many :omni_auth_services, dependent: :destroy
 
   def self.from_omniauth(auth)
