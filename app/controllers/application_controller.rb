@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   before_action :create_feedback
   rescue_from Pundit::NotAuthorizedError, with: :user_not_in_group
   before_action :set_membership
+  after_action :verify_authorized, except: :index, unless: :devise_controller?
   after_action :verify_policy_scoped, only: :index
 
   private
