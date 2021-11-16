@@ -51,6 +51,10 @@ class RoomDecorator < Draper::Decorator
     "#{room.room_number} #{room.building.nick_name.titleize}"
   end
 
+  def building_name
+    "#{room.building.nick_name.titleize}"
+  end
+
   def address
     " #{room.building.address.titleize}, #{room.building.city.titleize}"
   end
