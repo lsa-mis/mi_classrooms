@@ -10,36 +10,36 @@
       <%= image_tag 'room_placeholder', height: '200', width: '400' %>
     </div>
 
-    <div class="p-2 rounded-lg shadow-lg text-xl">Details
+    <div class="container p-2 rounded-lg shadow-lg text-xl">Details
 
       <div class="text-lg">Instructional seating count:
         <%= @room.instructional_seating_count %>
       </div>
-      <div class="flex flex-row justify-between">
-        <div class="flex flex-1 items-center text-sm font-medium">
-          <%= link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{@room.facility_code_heprod }", target: "_blank" do %>
-            <div class="h-layout h-highlight-item">
-              <%= svg("calendar_days")  %>
-              <span>Scheduling</span>
-            </div>
-          <% end %>
+      <div class="grid grid-cols-3 text-sm font-medium">
+
+        <%= link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{@room.facility_code_heprod }", target: "_blank" do %>
           <div class="h-layout h-highlight-item">
-            <%= svg("chair") %>
-            <div class="span">Room Layout</div>
+            <%= svg("calendar_days")  %>
+            <span>Scheduling</span>
           </div>
-          <%= link_to "https://rooms.lsa.umich.edu/maps/#{@room.facility_code_heprod}.html", target: "_blank" do %>
-            <div class="h-floorplan h-highlight-item">
-              <%= svg("layer_group") %>
-              <span>Floor <%= @room.floor %> Map  </span>
-            </div>
-          <% end %> 
-        </div>
+        <% end %>
+        <%= link_to "#", target: "_blank" do %>
+          <div class="h-layout h-highlight-item">
+            <%= svg("chair")  %>
+            <span>Room Layout</span>
+          </div>
+        <% end %>
+        <%= link_to "#", target: "_blank" do %>
+          <div class="h-floorplan h-highlight-item">
+            <%= svg("layer_group") %>
+            <span>Floor <%= @room.floor %> Map  </span>
+          </div>
+        <% end %> 
+
       </div>
       <%= render 'rooms_row_dropdown', room: @room%>
     </div>
     <%= link_to 'Edit', edit_room_path(@room) %>
-    |
-    <%= link_to 'Back', rooms_path, data: { "turbo-frame": "_top" } %>
   </div>
 <% end %>
     <%#= @room.facility_code_heprod %>
