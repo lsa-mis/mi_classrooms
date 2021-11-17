@@ -134,7 +134,7 @@
       </div>
       <div class="flex-1 mx-2">
         <div class="grid">
-          <div class="flex justify-end">
+          <div class="flex justify-end items-center">
             <label for="direction">Sort by capacity</label>
             <%= select_tag "direction", options_for_select([["asc", "asc"], ["desc", "desc"]]), include_blank: "Select ...", class: "block rounded-md sm:text-sm border-gray-300 ml-2",
             :"data-action" => "change->autosubmit#search"%>
