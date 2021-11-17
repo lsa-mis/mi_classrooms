@@ -1,0 +1,68 @@
+<div class="h-auto">Panorama
+  <% if @room.room_panorama.attached? %>
+    <iframe width="600" height="400" allowfullscreen style="border-style:none;" src="<%= url_for(@room.room_panorama) %>&amp;autoLoad=true&amp;showZoomCtrl=true"></iframe>
+
+  <% else %>
+    <%= image_tag 'room_placeholder', height: '200', width: '400' %>
+  <% end %>
+</div>
+
+<%= turbo_frame_tag "room" do  %>
+  <div id="notice">
+    <%= notice %>
+  </div>
+  <div class="container mb-20 w-2/3">
+    <h1 class="flex items-center">
+    <% if @room.building.building_image.attached? %>
+         <%= image_tag @room.building.building_image, height: '200', width: '200', class: "mr-2" %><%= "#{@room.room_number} --  #{@room.building.name}" %> 
+    <% else %>
+      <%= image_tag 'building_placeholder', height: '100', width: '100', class: "mr-2" %><%= "#{@room.room_number} --  #{@room.building.name}" %> 
+    <% end %>
+    </h1>
+
+    <div class="container p-2 rounded-lg shadow-lg text-xl">Details
+
+      <div class="text-lg">Instructional seating count:
+        <%= @room.instructional_seating_count %>
+      </div>
+      <div class="grid grid-cols-3 text-sm font-medium">
+
+        <%= link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{@room.facility_code_heprod }", target: "_blank" do %>
+          <div class="h-layout h-highlight-item">
+            <%= svg("calendar_days")  %>
+            <span>Scheduling</span>
+          </div>
+        <% end %>
+        <%= link_to "#", target: "_blank" do %>
+          <div class="h-layout h-highlight-item">
+            <%= svg("chair")  %>
+            <span>Room Layout</span>
+          </div>
+        <% end %>
+        <%= link_to "#", target: "_blank" do %>
+          <div class="h-floorplan h-highlight-item">
+            <%= svg("layer_group") %>
+            <span>Floor <%= @room.floor %> Map  </span>
+          </div>
+        <% end %> 
+
+      </div>
+      <%= render 'rooms_row_dropdown', room: @room%>
+    </div>
+    <%= link_to 'Edit', edit_room_path(@room), data: {turbo: "false"} %>
+  </div>
+<% end %>
+    <%#= @room.facility_code_heprod %>
+    <%#= @room.rmrecnbr %>
+
+    <%#= @room.rmtyp_description %>
+
+    <%#= @room.dept_id %>
+
+    <%#= @room.dept_grp %>
+
+    <%#= @room.dept_description %>
+
+    <%#= @room.square_feet %>
+
+    <%#= @room.visible %>
