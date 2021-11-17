@@ -135,7 +135,7 @@ include ActionView::RecordIdentifier
     end
 
     def set_filters_list
-      @filters_list = {}
+      filters = {}
       if params.present?
         capacity = ""
         params.each do |k, v|
@@ -143,27 +143,35 @@ include ActionView::RecordIdentifier
             unless v.empty?
               case k
               when "school_or_college_name"
-                @filters_list['School'] = v
+                filters['School'] = v
               when "query"
-                @filters_list['building'] = "*" + v + "*"
+                filters['Building'] = "*" + v + "*"
               when "classroom_name"
-                @filters_list['building'] = "*" + v + "*"
+                filters['Classroom'] = "*" + v + "*"
               when "min_capacity"
                 capacity = v
               when 'max_capacity'
                 unless v == "600" && capacity == "0"
                   capacity = capacity + "-" + v
-                  @filters_list['capacity'] = capacity
+                  filters['Capacity'] = capacity
                 end
               when "room_characteristics"
-                @filters_list['filter'] = v
+                names = []
+                v.each do |item|
+                  names << ROOM_CHARACTERISTIC_NAME[item]
+                end
+                n = names.join(', ')
+                filters['Filters'] = n
               else
-                @filters_list[k] = v
+                filters[k] = v
               end
             end
           end
         end
       end
+      @filters_list = filters.map do |key, val|
+        key + ': ' + val
+      end.join(', ')
     end
 
     def sort_by_floor(rooms)
