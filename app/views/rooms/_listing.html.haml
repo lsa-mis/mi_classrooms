@@ -1,10 +1,9 @@
 #roomListing.mb-10
-  .pl-2= "#{@pagy.count} Results"
+  .pl-2.font-semibold= "#{@pagy.count} Results"
   .grid.grid-cols-4
     .col-span-3.pl-2
-      %span.text-gray-700 Selected
-      - @filters_list.each do |k,v|
-        = "#{k}: #{v}; "
+      %span.text-gray-700
+      = @filters_list
     .place-self-end.pr-2
       %span.text-muted{"data-autosubmit-target" => "status"}
       
