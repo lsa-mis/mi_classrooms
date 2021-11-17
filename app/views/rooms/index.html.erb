@@ -1,8 +1,8 @@
 <div class="container mb-20" data-controller='autosubmit'>
   <h1>Classrooms</h1>
   <%= form_with url: rooms_path, method: :get, class: "", data: { target: "autosubmit.form" } do |form| %>
-    <div class="relative min-h-screen md:flex">
-      <div class="bg-gray-500 text-wtite flex justify-end md:hidden">
+    <div class="relative min-h-screen lg:flex">
+      <div class="bg-gray-500 text-wtite flex justify-end lg:hidden">
 
         <!--  Mobile menu button -->
         <button class="mobile-menu-button p-4 focus:outline-none focus:bg-gray-700">
@@ -11,7 +11,7 @@
           </svg>
         </button>
       </div>
-      <div class="sidebar w-64 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out">
+      <div class="sidebar w-64 absolute inset-y-0 left-0 transform -translate-x-full lg:relative lg:translate-x-0 transition duration-200 ease-in-out" data-autosubmit-target="sidebar">
         <div class="grid grid-cols-2">
             Filters
           <div class="flex justify-end mb-2">
