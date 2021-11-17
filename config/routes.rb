@@ -22,6 +22,8 @@ Rails.application.routes.draw do
   resources 'feedbacks', only: [:create]
   resources :buildings
 
+  resources :announcements
+
   get "legacy_crdb" => redirect("https://rooms.lsa.umich.edu")
 
 

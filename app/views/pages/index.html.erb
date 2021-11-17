@@ -1,25 +1,30 @@
-<div class="relative overflow-hidden -mx-10 -mt-6">
-  <!-- Decorative background image and gradient -->
-  <div aria-hidden="true" class="absolute inset-0">
-    <div class="absolute inset-0 max-w-7xl mx-auto overflow-hidden xl:px-8">
-      <div class="w-full h-full object-center object-cover">
-        <%= link_to image_tag(asset_path('cube.jpg', class: "h-5/6"), alt: "#{(t :sitename)} Logo, link to home page.", id: root_path(anchor: 'page-bottom')), root_path %>
+<div class="container mb-20">
+  <div class="relative overflow-hidden -mx-10 -mt-6">
+    <!-- Decorative background image and gradient -->
+    <div aria-hidden="true" class="absolute inset-0">
+      <div class="absolute inset-0 max-w-7xl mx-auto overflow-hidden xl:px-8">
+        <div class="w-full h-full object-center object-cover">
+          <%= link_to image_tag(asset_path('cube.jpg', class: "h-5/6"), alt: "#{(t :sitename)} Logo, link to home page.", id: root_path(anchor: 'page-bottom')), root_path %>
+        </div>
       </div>
+      <div class="absolute inset-0 bg-white bg-opacity-25"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-white via-white"></div>
     </div>
-    <div class="absolute inset-0 bg-white bg-opacity-25"></div>
-    <div class="absolute inset-0 bg-gradient-to-t from-white via-white"></div>
+    <section aria-labelledby="sale-heading" class="relative max-w-7xl mx-auto px-20 pt-32 px-4 flex flex-col items-center text-center sm:px-6 lg:px-8">
+      <div class="max-w-2xl mx-auto lg:max-w-none">
+        <h2 class="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl" id="sale-heading">
+          Makes finding the right room easy!
+        </h2>
+        <p class="mt-4 max-w-xl md:max-w-3xl mx-auto text-xl text-gray-600">
+          MClassrooms provides an intuitive, accessible interface to find the room you are looking for. Whether you are an instructor searching for a classroom with the technologies to meet your pedegogy, a student trying to find their way to class, or a staff member looking to schedule a room; MClassrooms has your back.
+        </p>
+        <%= button_to user_saml_omniauth_authorize_path, data: {turbo: "false"} do %>
+          <div class="mt-10 inline-block w-full bg-gray-900 border border-transparent rounded-md py-3 px-8 font-medium text-white hover:bg-gray-800 sm:w-auto mb-10 sm:mb-0 href="#">Log In To Find A Room!</div>
+        <% end %>
+      </div>
+    </section>
+    <div class="relative static-page-text">
+      <%= @index_page_announcement.content %>
+    </div>
   </div>
-  <section aria-labelledby="sale-heading" class="relative max-w-7xl mx-auto px-20 pt-32 px-4 flex flex-col items-center text-center sm:px-6 lg:px-8">
-    <div class="max-w-2xl mx-auto lg:max-w-none">
-      <h2 class="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl" id="sale-heading">
-        Makes finding the right room easy!
-      </h2>
-      <p class="mt-4 max-w-xl md:max-w-3xl mx-auto text-xl text-gray-600">
-        MClassrooms provides an intuitive, accessible interface to find the room you are looking for. Whether you are an instructor searching for a classroom with the technologies to meet your pedegogy, a student trying to find their way to class, or a staff member looking to schedule a room; MClassrooms has your back.
-      </p>
-      <%= button_to user_saml_omniauth_authorize_path, data: {turbo: "false"} do %>
-        <div class="mt-10 inline-block w-full bg-gray-900 border border-transparent rounded-md py-3 px-8 font-medium text-white hover:bg-gray-800 sm:w-auto mb-10 sm:mb-0 href="#">Log In To Find A Room!</div>
-      <% end %>
-    </div>
-  </section>
 </div>
