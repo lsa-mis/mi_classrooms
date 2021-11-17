@@ -1,19 +1,24 @@
+<div class="h-auto">Panorama
+  <% if @room.room_panorama.attached? %>
+    <iframe width="600" height="400" allowfullscreen style="border-style:none;" src="<%= url_for(@room.room_panorama) %>&amp;autoLoad=true&amp;showZoomCtrl=true"></iframe>
+
+  <% else %>
+    <%= image_tag 'room_placeholder', height: '200', width: '400' %>
+  <% end %>
+</div>
+
 <%= turbo_frame_tag "room" do  %>
   <div id="notice">
     <%= notice %>
   </div>
   <div class="container mb-20 w-2/3">
     <h1 class="flex items-center">
-      <%= building_image(@room) %>
-    </h1>
-    <div>Panorama
-    <% if @room.room_panorama.attached? %>
-      <div data-controller="pannellum" data-pannellum-panoimage="<%= url_for(@room.room_panorama) %>" data-pannellum-panopreview="<%= url_for(@room.room_panorama.variant(resize: '25%').processed) %>" id="panorama"></div>
-    <% elsif @room.room_image.attached? %>
-      <%= image_tag(url_for(@room.room_image), alt: "#{@room.room_number.titleize} #{@room.building.name.titleize} picture") %>
+    <% if @room.building.building_image.attached? %>
+         <%= image_tag @room.building.building_image, height: '200', width: '200', class: "mr-2" %><%= "#{@room.room_number} --  #{@room.building.name}" %> 
     <% else %>
-      <%= image_tag 'room_placeholder', height: '200', width: '400' %>
+      <%= image_tag 'building_placeholder', height: '100', width: '100', class: "mr-2" %><%= "#{@room.room_number} --  #{@room.building.name}" %> 
     <% end %>
+    </h1>
 
     <div class="container p-2 rounded-lg shadow-lg text-xl">Details
 
