@@ -16,5 +16,13 @@ module ApplicationHelper
     return File.read(file_path).html_safe if File.exist?(file_path)
     file_path
   end
-end
 
+  def building_image( room )
+    if room.building.building_image.attached?
+      image_tag room.building.building_image, height: '200', width: '200', class: "mr-2""#{room.room_number} --  #{room.building.name}" 
+    else
+      image_tag 'building_placeholder', height: '100', width: '100', class: "mr-2""#{room.room_number} --  #{room.building.name}" 
+    end
+  end
+
+end

@@ -1,0 +1,71 @@
+<%= form_for @room do |f| %>
+  <% if @room.errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= "#{pluralize(@room.errors.count, "error")} prohibited this room from being saved:" %>
+      </h2>
+      <ul>
+        <% @room.errors.full_messages.each do |message| %>
+          <li>
+            <%= message %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="field">
+    <%= f.label :rmrecnbr %>
+    <%= f.text_field :rmrecnbr %>
+  </div>
+  <div class="field">
+    <%= f.label :floor %>
+    <%= f.text_field :floor %>
+  </div>
+  <div class="field">
+    <%= f.label :room_number %>
+    <%= f.text_field :room_number %>
+  </div>
+  <div class="field">
+    <%= f.label :rmtyp_description %>
+    <%= f.text_field :rmtyp_description %>
+  </div>
+  <div class="field">
+    <%= f.label :dept_id %>
+    <%= f.number_field :dept_id %>
+  </div>
+  <div class="field">
+    <%= f.label :dept_grp %>
+    <%= f.text_field :dept_grp %>
+  </div>
+  <div class="field">
+    <%= f.label :dept_description %>
+    <%= f.text_field :dept_description %>
+  </div>
+  <div class="field">
+    <%= f.label :square_feet %>
+    <%= f.number_field :square_feet %>
+  </div>
+  <div class="field">
+    <%= f.label :instructional_seating_count %>
+    <%= f.number_field :instructional_seating_count %>
+  </div>
+  <div class="field">
+    <%= f.label :visible %>
+    <%= f.check_box :visible %>
+  </div>
+  <div class="field">
+    <%= f.label :building %>
+    <%= f.text_field :building %>
+  </div>
+  <div class="field">
+    <%= f.label :room_image %>
+    <%= f.file_field :room_image %>
+  </div>
+  <div class="field">
+    <%= f.label :room_panorama %>
+    <%= f.file_field :room_panorama %>
+  </div>
+  <div class="actions">
+    <%= f.submit 'Save' %>
+  </div>
+<% end %>

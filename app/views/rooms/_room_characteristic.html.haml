@@ -1,6 +1,5 @@
-= link_to  "", :role => "button" do
-  %li.classroom-row-dropdown-feature{data: {"tippy-content" => "#{characteristic.chrstc_desc254}"}}
-    .flex-shrink-0
-      .icon.text-blue-600= svg("#{room_characteristic_icon(characteristic)}")
-    %p.ml-1.text-sm.text-blue-700.truncate
-      = characteristic.characteristic_label
+%li.classroom-row-dropdown-feature{data: {"tippy-content" => "#{characteristic.chrstc_desc254}"}}
+  .flex-shrink-0
+    .icon.text-blue-800= svg("#{room_characteristic_icon(characteristic)}")
+  %p.ml-1.text-base.truncate
+    = characteristic.characteristic_label
