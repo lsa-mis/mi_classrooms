@@ -24,7 +24,9 @@
       </div>
     </section>
     <div class="relative static-page-text">
-      <%= @index_page_announcement.content %>
+      <% unless @index_page_announcement.nil? %>
+        <%= @index_page_announcement.content %>
+      <% end %>
     </div>
   </div>
 </div>
