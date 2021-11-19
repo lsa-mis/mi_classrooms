@@ -29,10 +29,10 @@ task update_buildings: :environment do
   # "BuildingRecordNumber": 1000234, "BuildingLongDescription": "FRANCIS THOMAS JR PUBLIC HEALTH",
   # "BuildingRecordNumber": 1000204, "BuildingLongDescription": "VAUGHAN HENRY FRIEZE PUBLIC HEALTH BUILDING",
   # "BuildingRecordNumber": 1000333, "BuildingLongDescription": "400 NORTH INGALLS BUILDING",
-  buildinds_codes = [1000440, 1000234, 1000204, 1000333]
+  buildings_codes = [1000440, 1000234, 1000204, 1000333]
   api = BuildingsApi.new(access_token)
   time = Benchmark.measure {
-    api.update_all_buildings(campus_codes, buildinds_codes)
+    api.update_all_buildings(campus_codes, buildings_codes)
   }
   puts "Update buildings Time: #{time.real.round(2)} seconds"
   puts "See the log file #{Rails.root}/log/#{Date.today}_building_api.log for errors or warnings"

@@ -88,14 +88,14 @@ class BuildingsApi
 
   # update builgings
 
-  def update_all_buildings(campus_codes = [100], buildinds_codes = [])
+  def update_all_buildings(campus_codes = [100], buildings_codes = [])
     @buildings_ids = Building.all.pluck(:bldrecnbr)
 
     @result = get_buildings_for_current_fiscal_year
     if @result['success']
       data = @result['data']
       data.each do |row|
-        if campus_codes.include?(row['BuildingCampusCode']) || buildinds_codes.include?(row['BuildingRecordNumber'])
+        if campus_codes.include?(row['BuildingCampusCode']) || buildings_codes.include?(row['BuildingRecordNumber'])
           if building_exists?(row['BuildingRecordNumber'])
             update_building(row)
           else
