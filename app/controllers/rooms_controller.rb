@@ -7,6 +7,7 @@ include ActionView::RecordIdentifier
   before_action :set_filters_list, only: [:index]
 
   helper_method :sort_direction
+  include ApplicationHelper 
 
   def index
 
