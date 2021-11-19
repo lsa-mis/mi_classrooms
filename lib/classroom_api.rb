@@ -40,7 +40,7 @@ class ClassroomApi
           result = get_classroom_info(ERB::Util.url_encode(facility_id))
           if result['success']
             room_info = result['data'][0]
-            if campus_codes.include?(room_info['CampusCd'].to_i) || buildinds_codes.include?(room_info['BuildingRecordNumber'].to_i)
+            if campus_codes.include?(room_info['CampusCd'].to_i) || buildinds_codes.include?(room_info['BuildingID'].to_i)
               rmrecnbr = room_info['RmRecNbr'].to_i
               room_in_db = Room.find_by(rmrecnbr: rmrecnbr)
               if room_in_db
