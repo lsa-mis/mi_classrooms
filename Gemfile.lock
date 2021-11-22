@@ -264,6 +264,8 @@ GEM
     omniauth-saml (2.0.0)
       omniauth (~> 2.0)
       ruby-saml (~> 1.9)
+    order_as_specified (1.7)
+      activerecord (>= 5.0.0)
     orm_adapter (0.5.0)
     pagy (4.11.0)
     parallel (1.21.0)
@@ -468,6 +470,7 @@ DEPENDENCIES
   omniauth-google-oauth2
   omniauth-rails_csrf_protection
   omniauth-saml
+  order_as_specified (~> 1.7)
   pagy
   pg (>= 0.18, < 2.0)
   pg_search
