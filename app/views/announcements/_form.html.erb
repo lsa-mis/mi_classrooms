@@ -1,0 +1,23 @@
+
+<div class="container mb-20" data-controller='autosubmit'>
+  <%= form_with(model: announcement) do |form| %>
+    <div class="form-container">
+      <div class="field-container">
+        <div class="field">
+          <span class="font-bold"><%= "Location: #{@announcement.location.gsub('_', ' ').upcase}" %></span>
+        </div>
+
+        <div class="field">
+          <%= form.label :content %>
+          <%= form.rich_text_area :content %>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-area">
+      <div class="actions">
+        <%= form.submit 'Submit', class: "my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
+      </div>
+    </div>
+  <% end %>
+</div>

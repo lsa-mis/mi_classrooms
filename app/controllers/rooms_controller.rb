@@ -7,7 +7,8 @@ include ActionView::RecordIdentifier
   before_action :set_filters_list, only: [:index]
 
   helper_method :sort_direction
-  include ApplicationHelper
+  include ApplicationHelper 
+
   def index
 
     @schools = Room.classrooms.pluck(:dept_group_description).uniq.sort
