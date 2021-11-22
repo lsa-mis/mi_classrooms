@@ -45,11 +45,17 @@ task add_facility_id_to_classrooms: :environment do
     exit
   end
   campus_codes = [100]
+  # include buildings that are not in the campuses described by campus_codes
+  # "BuildingRecordNumber": 1000440, "BuildingLongDescription": "MOORE EARL V BLDG", 
+  # "BuildingRecordNumber": 1000234, "BuildingLongDescription": "FRANCIS THOMAS JR PUBLIC HEALTH",
+  # "BuildingRecordNumber": 1000204, "BuildingLongDescription": "VAUGHAN HENRY FRIEZE PUBLIC HEALTH BUILDING",
+  # "BuildingRecordNumber": 1000333, "BuildingLongDescription": "400 NORTH INGALLS BUILDING",
+  buildings_codes = [1000440, 1000234, 1000204, 1000333]
 
   api = ClassroomApi.new(access_token)
 
   time = Benchmark.measure {
-    api.add_facility_id_to_classrooms(campus_codes)
+    api.add_facility_id_to_classrooms(campus_codes, buildings_codes)
   }
   puts "Add FacilityID for classroom Time: #{time.real.round(2)} seconds"
   puts "See the log file #{Rails.root}/log/#{Date.today}_facility_id_logger_api.log for errors or warnings"

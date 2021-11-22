@@ -1,16 +1,16 @@
 <%= turbo_frame_tag dom_id(room) do  %>
   <div class="">
-    <div class="mx-2 px-2 sm:px-0">
+    <div class="mt-2 mb-3 px-2 sm:px-0">
       <h2 class="sr-only">Classroom</h2>
       <div class="bg-white border border-gray-300 rounded-lg flex flex-col sm:flex-row overflow-hidden sm:leading-tight">
-        <img alt="<%= room.title %>" class="h-24" src="https://images.unsplash.com/photo-1606761568499-6d2451b23c66?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjJ8fGNsYXNzcm9vbXxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"/>
+        <%= image_tag 'room_placeholder', width: '100' %>
         <div class="flex-1 px-2 sm:pt-0 sm:pl-2 py-2 flex flex-col sm:justify-between">
-          <div class="flex flex-row justify-between w-full">
-            <div class="font-sans text-gray-900 text-lg leading-5">
-              <div class="truncate font-semibold">
+          <div class="flex flex-row justify-between w-full font-sans text-gray-900 leading-5">
+            <div class="font-sans text-gray-900 leading-5 pt-2">
+              <div class="truncate font-semibold text-md">
                 <%= link_to room.facility_code_heprod, room, data: { "turbo-frame": "_top" }  %>
               </div>
-              <div class="truncate font-semibold">
+              <div class="truncate font-semibold text-md">
                 <%= room.building_name %>
               </div>
               <div class="text-sm">
@@ -20,8 +20,8 @@
           </div>
         </div>
         <div class="items-end pr-2" >
-          <div class="text-base text-gray-700 lg:text-sm">
-            <div class="icon text-gray-700">
+          <div class="text-sm text-gray-700 pt-2">
+            <div class="h-layout h-highlight-item">
               <%= svg("users") %>
             </div>
             <%= "#{room.student_capacity}" %>

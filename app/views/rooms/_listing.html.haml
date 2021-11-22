@@ -1,11 +1,10 @@
 #roomListing.mb-10
-  .pl-2= "#{@pagy.count} Results"
-  .grid.grid-cols-4
-    .col-span-3.pl-2
-      %span.text-gray-700 Selected
-      - @filters_list.each do |k,v|
-        = "#{k}: #{v}; "
-    .place-self-end.pr-2
+  .pl-2.font-semibold= "#{@pagy.count} Results"
+  .flex
+    .flex.pl-2
+      %span.text-gray-700
+      = @filters_list
+    .justify-end.pr-2
       %span.text-muted{"data-autosubmit-target" => "status"}
       
   .flex.flex-col
