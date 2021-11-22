@@ -7,45 +7,21 @@ class AnnouncementPolicy < ApplicationPolicy
   end
 
   def index?
-    if user && user_in_group?
-      true
-    end
+    # true
+    user_in_non_admin_group?
   end
 
   def show?
-    if user && user_in_group?
-      true
-    end
+    # true
+    user_in_non_admin_group?
   end  
 
-  def new?
-    if user && user_in_group?
-      true
-    end
-  end
-
   def edit?
-    if user && user_in_group?
-      true
-    end
+    user.admin
   end
 
   def update?
     edit?
   end
 
-  def bespoke_team
-    ['dschmura', 'rsmoke', 'brita', 'anantas', 'jjsantos', 'mlaitan', 'prbelden', 'mdressle']
-  end
-  
-  def user_in_group?
-    # user.authorized_groups.includes?
-    # true
-    if bespoke_team.include?(user.uniqname)
-      true
-    else
-      false
-    end
-
-  end
 end
