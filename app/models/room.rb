@@ -31,7 +31,7 @@
 class Room < ApplicationRecord
   include PgSearch::Model
   self.primary_key = 'rmrecnbr'
-
+  extend OrderAsSpecified
   
 
   belongs_to :building, foreign_key: :building_bldrecnbr

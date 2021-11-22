@@ -15,7 +15,10 @@ include ActionView::RecordIdentifier
     if params[:direction].present?
       @rooms = Room.classrooms.includes([:building, :room_contact]).reorder(:instructional_seating_count => params[:direction].to_sym)
     else
-      @rooms = Room.classrooms.includes([:building, :room_contact]).reorder(:building_name).order(:floor, :room_number => :asc)
+      @rooms = Room.classrooms.includes([:building, :room_contact]).reorder(:building_name)
+      floors = sort_floors(@rooms.pluck(:floor).uniq)
+      @rooms = @rooms.order_as_specified(floor: floors).order(:room_number => :asc)
+
     end
 
     @rooms = @rooms.classrooms.with_building_name(params[:query]) if params[:query].present?
@@ -24,7 +27,7 @@ include ActionView::RecordIdentifier
     @rooms = @rooms.classrooms.where('instructional_seating_count >= ?', params[:min_capacity].to_i) if params[:max_capacity].present?
     @rooms = @rooms.classrooms.where('instructional_seating_count <= ?', params[:max_capacity].to_i) if params[:max_capacity].present?
     @rooms = @rooms.classrooms.where('facility_code_heprod LIKE ?', "%#{params[:classroom_name].upcase}%") if params[:classroom_name].present?
-    
+
     authorize @rooms
 
     @rooms = RoomDecorator.decorate_collection(@rooms)
@@ -175,10 +178,9 @@ include ActionView::RecordIdentifier
       end.join(', ')
     end
 
-    def sort_by_floor(rooms)
-      sorted = rooms.sort_by do |s|
-        f = s.floor
-        if f =~ /^\d+$/
+    def sort_floors(floors)
+      sorted = floors.sort_by do |s|
+        if s =~ /^\d+$/
           [2, $&.to_i]
         else
           [1, s]
