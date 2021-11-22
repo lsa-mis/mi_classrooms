@@ -1,6 +1,6 @@
 import { Controller } from 'stimulus'
 export default class extends Controller {
-  static targets = ['form', 'status']
+  static targets = ['form', 'status', 'sidebar']
 
   search() {
     clearTimeout(this.timeout)
@@ -8,6 +8,7 @@ export default class extends Controller {
     this.timeout = setTimeout(() => {
       this.statusTarget.textContent = 'Updating...'
       Turbo.navigator.submitForm(this.formTarget)
+      this.sidebarTarget.classList.toggle('-translate-x-full')
     }, 600)
   }
 
@@ -17,6 +18,7 @@ export default class extends Controller {
     this.timeout = setTimeout(() => {
       this.statusTarget.textContent = 'Updating...'
       Turbo.navigator.submitForm(this.formTarget)
+      this.sidebarTarget.classList.toggle('-translate-x-full')
     }, 0)
   }
 
