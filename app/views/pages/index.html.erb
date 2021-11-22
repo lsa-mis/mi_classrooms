@@ -4,7 +4,7 @@
     <div aria-hidden="true" class="absolute inset-0">
       <div class="absolute inset-0 max-w-7xl mx-auto overflow-hidden xl:px-8">
         <div class="w-full h-full object-center object-cover">
-          <%= link_to image_tag(asset_path('cube.jpg', class: "h-5/6"), alt: "#{(t :sitename)} Logo, link to home page.", id: root_path(anchor: 'page-bottom')), root_path %>
+          <%= link_to image_tag(asset_path('cube.jpg', class: "h-5/6"), alt: "#{(t :sitename)} Logo, link to home page.", id: root_path(anchor: 'page-bottom')), root_path, tabindex: '-1' %>
         </div>
       </div>
       <div class="absolute inset-0 bg-white bg-opacity-25"></div>
