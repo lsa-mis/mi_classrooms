@@ -52,11 +52,15 @@ class RoomDecorator < Draper::Decorator
   end
 
   def building_name
-    "#{room.building.nick_name.titleize}"
+    unless room.building.nick_name.nil?
+      "#{room.building.nick_name.titleize}"
+    end
   end
 
   def address
-    " #{room.building.address.titleize}, #{room.building.city.titleize}"
+    unless room.building.address.nil?
+    " #{room.building.address.titleize}, #{room.building.city.titleize}" 
+    end
   end
 
   def created_at
@@ -84,7 +88,7 @@ class RoomDecorator < Draper::Decorator
 room.room_contact&.rm_schd_cntct_name
       "#{room.room_contact.rm_schd_cntct_name.titleize}"
     else
-      "Not Available"
+      "Contact Not Available"
     end
   end
 
