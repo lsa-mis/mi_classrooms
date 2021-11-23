@@ -15,25 +15,12 @@
     </div>
   <% end %>
 
-  <h1>Classrooms</h1>
-  <%= form_with url: rooms_path, method: :get, class: "", data: { target: "autosubmit.form" } do |form| %>
-    <div class="grid grid-cols-9" >
-      <div class="col-span-2">
-        Filters
-        <div class="flex justify-end mb-2">
-          <button type="button" class="px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400"
-            data-action='click->autosubmit#clearFilters'>
-            Clear
-          </button>
-        </div>
-      </div>
-      <div class="col-span-7">
-        <div class="flex justify-end mx-2 items-center">
-          <label for="direction">Sort by capacity</label>
-          <%= select_tag "direction", options_for_select([["asc", "asc"], ["desc", "desc"]]), include_blank: "Select ...", class: "block rounded-md sm:text-sm border-gray-300 ml-2",
-          :"data-action" => "change->autosubmit#search"%>
-        </div>
-      </div>
+  <div class="grid grid-cols-2 pb-2">
+    <div>
+      <h1>Classrooms</h1>
+    </div>
+    <div class="bg-blue-900 text-white justify-self-end md:hidden mr-4">
+
       <!--  Mobile menu button -->
       <button class="mobile-menu-button p-4 focus:outline-none focus:bg-blue-900 ">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
