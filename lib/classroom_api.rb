@@ -22,7 +22,7 @@ class ClassroomApi
     @@classroom_logger ||= Logger.new("#{Rails.root}/log/#{Date.today}_classroom_characteristics_api.log")
   end
 
-  def add_facility_id_to_classrooms(campus_codes = [100])
+  def add_facility_id_to_classrooms(campus_codes = [100], buildings_codes = [])
     result = get_classrooms_list
     if result['success']
       classrooms_list = result['data'] 
@@ -40,7 +40,7 @@ class ClassroomApi
           result = get_classroom_info(ERB::Util.url_encode(facility_id))
           if result['success']
             room_info = result['data'][0]
-            if campus_codes.include?(room_info['CampusCd'].to_i)
+            if campus_codes.include?(room_info['CampusCd'].to_i) || buildings_codes.include?(room_info['BuildingID'].to_i)
               rmrecnbr = room_info['RmRecNbr'].to_i
               room_in_db = Room.find_by(rmrecnbr: rmrecnbr)
               if room_in_db
@@ -174,8 +174,6 @@ class ClassroomApi
         classroom_characteristics_logger.debug "API return: #{@result['error']}"
       end
     end
-    # Update room.characteristics array job.
-    UpdateRoomCharacteristicsArrayJob.perform_later
   end
 
   def create_classroom_characteristics(characteristics)
@@ -186,8 +184,7 @@ class ClassroomApi
         classroom_characteristics_logger.debug "Could not create #{row['RmRecNbr']} because : #{room_char.errors.messages}"
       end
     end
-    # Update room.characteristics array job.
-    UpdateRoomCharacteristicsArrayJob.perform_later
+
   end
 
   def get_classroom_characteristics(facility_id)

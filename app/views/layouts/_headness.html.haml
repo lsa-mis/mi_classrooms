@@ -1,5 +1,5 @@
 / This example requires Tailwind CSS v2.0+
-%nav.bg-blue-900.shadow.min-w-screen{data: {controller: "dropdown"}}
+%nav.static.bg-blue-900.shadow.min-w-screen{data: {controller: "dropdown"}}
   .w-auto.max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8
     .flex.justify-between.h-16
 
@@ -14,7 +14,13 @@
         .hidden.sm:ml-6.sm:flex.sm:space-x-4.pl-12
           .border-transparent.text-blue-50.hover:border-blue-300.hover:text-white.inline-flex.items-center.pl-1.pt-1.border-b-2.text-lg.font-normal= link_to "Find a Room", rooms_path, class: "#{class_names(active: current_page?(rooms_path))}" if user_signed_in?
           .border-transparent.text-blue-50.hover:border-blue-300.hover:text-white.inline-flex.items-center.pr-1.pt-1.border-b-2.text-lg.font-normal= link_to "About", about_path, class: "#{class_names(active: current_page?(about_path))}"
-          .border-transparent.text-blue-50.hover:border-blue-300.hover:text-white.inline-flex.items-center.pr-1.pt-1.border-b-2.text-lg.font-normal= link_to "Announcements", announcements_path, class: "#{class_names(active: current_page?(announcements_path))}" if user_signed_in? && policy(Announcement).edit?
+          - if user_signed_in? && policy(Announcement).edit?
+            .border-transparent.text-blue-50.hover:border-blue-300.hover:text-white.inline-flex.items-center.pr-1.pt-1.border-b-2.text-lg.font-normal= link_to "Announcements", announcements_path, class: "#{class_names(active: current_page?(announcements_path))}"
+            = link_to announcements_path do
+              %svg.h-5.w-5{:fill => "white", :viewbox => "0 0 20 20", :xmlns => "http://www.w3.org/2000/svg"}
+                %path{:d => "M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"}
+                %path{"clip-rule" => "evenodd", :d => "M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z", "fill-rule" => "evenodd"} 
+                %title Edit announcements
 
 
 
@@ -26,13 +32,13 @@
                 %span.sr-only Open user menu
               .leading-tight.text-sm.font-medium.text-white=current_user.email
               = button_to destroy_user_session_path, method: :delete, role: "menuitem", tabindex: "-1", data: {turbo: "false"} do
-                .px-1.ml-2.shadow-sm.font-medium.rounded.text-blue-50.bg-yellow-700.hover:bg-yellow-900.flex-1 Sign Out
+                .px-1.ml-2.shadow-sm.font-medium.rounded.text-blue-900.bg-yellow-550.hover:bg-yellow-500.flex-1 Sign Out
 
 
             - else
               .user-action-links 
                 = button_to user_saml_omniauth_authorize_path, data: {turbo: "false"} do
-                  .px-1.shadow-sm.font-medium.rounded.text-blue-900.bg-yellow-300.hover:bg-yellow-500 Sign In
+                  .px-1.shadow-sm.font-medium.rounded.text-blue-900.bg-yellow-550.hover:bg-yellow-500 Sign In
 
       .sm:hidden.items-center.mt-1= render './layouts/headness_mobile_menu_toggle.html.haml'
 

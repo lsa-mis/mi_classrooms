@@ -17,24 +17,6 @@ module ApplicationHelper
     file_path
   end
 
-
-ROOM_CHARACTERISTIC_NAME = {
-  "InstrComp" => "Instructor Computer",
-  "DocCam" => "Document Camera",
-  "LectureCap" => "Lecture Capture",
-  "VideoConf" => "Video Conferencing",
-  "IntrScreen" => "Interactive Screen",
-  "BluRay" => "BluRay / DVD",
-  "TeamBoard" => "Team Board",
-  "TeamTables" => "Team Tables",
-  "TeamTech" => "Team Technology",
-  "Whtbrd" => "Whiteboard",
-  "Chkbrd" => "Chalkboard",
-  "Proj35mm" => "35mm Film",
-  "ProjD-Cin" => "Digital Cinema (DCP)",
-  "ProjDigit" => "Digital Data & Video"
-}
-
   def building_image( room )
     if room.building.building_image.attached?
       image_tag room.building.building_image, height: '200', width: '200', class: "mr-2""#{room.room_number} --  #{room.building.name}" 
@@ -42,6 +24,23 @@ ROOM_CHARACTERISTIC_NAME = {
       image_tag 'building_placeholder', height: '100', width: '100', class: "mr-2""#{room.room_number} --  #{room.building.name}" 
     end
   end
+
+  ROOM_CHARACTERISTIC_NAME = {
+    "InstrComp" => "Instructor Computer",
+    "DocCam" => "Document Camera",
+    "LectureCap" => "Lecture Capture",
+    "VideoConf" => "Video Conferencing",
+    "IntrScreen" => "Interactive Screen",
+    "BluRay" => "BluRay / DVD",
+    "TeamBoard" => "Team Board",
+    "TeamTables" => "Team Tables",
+    "TeamTech" => "Team Technology",
+    "Whtbrd" => "Whiteboard",
+    "Chkbrd" => "Chalkboard",
+    "Proj35mm" => "35mm Film",
+    "ProjD-Cin" => "Digital Cinema (DCP)",
+    "ProjDigit" => "Digital Data & Video"
+  }
 
 end
 
