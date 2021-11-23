@@ -27,9 +27,9 @@
       .pt-6.pb-3.text-center
         - if user_signed_in?
           = button_to destroy_user_session_path, method: :delete, role: "menuitem", tabindex: "-1", data: {turbo: "false"}, class: "w-screen max-w-md" do 
-            .py-3.shadow-sm.font-medium.rounded.text-blue-900.bg-yellow-550.hover:bg-yellow-500 Sign Out
+            .py-3.shadow-sm.font-medium.rounded.text-blue-900.bg-yellow-550.hover:bg-yellow-500.hover:underline Sign Out
           
         - else
           .user-action-links 
             = button_to user_saml_omniauth_authorize_path, data: {turbo: "false"}, class: "w-screen max-w-md" do
-              .py-3.shadow-sm.font-medium.rounded.text-blue-900.bg-yellow-550.hover:bg-yellow-500 Sign In
+              .py-3.shadow-sm.font-medium.rounded.text-blue-900.bg-yellow-550.hover:bg-yellow-500.hover:underline Sign In
