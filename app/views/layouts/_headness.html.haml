@@ -26,13 +26,13 @@
                 %span.sr-only Open user menu
               .leading-tight.text-sm.font-medium.text-white=current_user.email
               = button_to destroy_user_session_path, method: :delete, role: "menuitem", tabindex: "-1", data: {turbo: "false"} do
-                .px-1.ml-2.shadow-sm.font-medium.rounded.text-blue-900.bg-yellow-550.hover:bg-yellow-500.flex-1 Sign Out
+                .px-1.ml-2.shadow-sm.font-medium.rounded.text-blue-900.bg-yellow-550.hover:bg-yellow-500.flex-1.hover:underline Sign Out
 
 
             - else
               .user-action-links 
                 = button_to user_saml_omniauth_authorize_path, data: {turbo: "false"} do
-                  .px-1.shadow-sm.font-medium.rounded.text-blue-900.bg-yellow-550.hover:bg-yellow-500 Sign In
+                  .px-1.shadow-sm.font-medium.rounded.text-blue-900.bg-yellow-550.hover:bg-yellow-500.hover:underline Sign In
 
       .sm:hidden.items-center.mt-1= render './layouts/headness_mobile_menu_toggle.html.haml'
 
