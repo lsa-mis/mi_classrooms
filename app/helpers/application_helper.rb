@@ -29,7 +29,7 @@ module ApplicationHelper
     if room.room_image.representable?
       image_tag room.room_image.representation(resize_to_limit: [600, 400]), class: 'm-2', alt: "#{room.room_number} --  #{room.building.name}" 
     else
-      image_tag 'room_placeholder', height: '150', width: '150', class: 'mr-2', alt: "room placeholder" 
+      image_tag 'room_placeholder', height: '150', width: '150', class: 'm-2', alt: "room placeholder" 
     end
   end
 
@@ -37,7 +37,7 @@ module ApplicationHelper
     if room.room_image.representable?
       image_tag room.room_image.representation(resize_to_limit: [100, 80]), class: 'p-2', alt: "#{room.room_number} --  #{room.building.name}" 
     else
-      image_tag 'room_placeholder', height: '75', width: '100', class: 'p-2', alt: "room placeholder" 
+      image_tag 'room_placeholder', height: '50', width: '120', class: 'p-2', alt: "room placeholder" 
     end
   end
 
