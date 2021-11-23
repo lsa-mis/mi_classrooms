@@ -6,9 +6,9 @@
         <div class="px-2 py-2 space-y-4 flex flex-col" >
           <div class="flex flex-row justify-center w-full " >
               <% if @building.building_image.representable? %>
-                <%= image_tag(@building.building_image.representation(resize_to_limit: [200, 200]), class: "building_image pr-2") %>
+                <%= image_tag(@building.building_image.representation(resize_to_limit: [200, 200]), class: "building_image pr-2", alt: @building.name ) %>
               <% else %>
-                <%= image_tag("building_placeholder.png", height: '100', width: '200', class: "building_image") %>
+                <%= image_tag("building_placeholder.png", height: '100', width: '200', class: "building_image", alt: "building placeholder") %>
               <% end %>
             <div class="md:text-2xl font-medium text-gray-900 sm:text-base" >
               <div class="truncate">
