@@ -1,9 +1,9 @@
 <div class="h-auto">Panorama
   <% if @room.room_panorama.attached? %>
-    <iframe width="600" height="400" allowfullscreen style="border-style:none;" src="<%= url_for(@room.room_panorama) %>&amp;autoLoad=true&amp;showZoomCtrl=true"></iframe>
+    <iframe width="600" height="400"  alt="panorama placeholder" allowfullscreen style="border-style:none;" src="<%= url_for(@room.room_panorama) %>&amp;autoLoad=true&amp;showZoomCtrl=true"></iframe>
 
   <% else %>
-    <%= image_tag 'room_placeholder', height: '200', width: '400' %>
+    <%= image_tag 'room_placeholder', height: '200', width: '400', alt: "panorama placeholder" %>
   <% end %>
 </div>
 
@@ -13,11 +13,7 @@
   </div>
   <div class="container mb-20 w-2/3">
     <h1 class="flex items-center">
-    <% if @room.building.building_image.attached? %>
-         <%= image_tag @room.building.building_image, height: '200', width: '200', class: "mr-2" %><%= "#{@room.room_number} --  #{@room.building.name}" %> 
-    <% else %>
-      <%= image_tag 'building_placeholder', height: '100', width: '100', class: "mr-2" %><%= "#{@room.room_number} --  #{@room.building.name}" %> 
-    <% end %>
+      <%= building_image( @room ) %><%= @room.facility_code_heprod %><br><%= @room.building.name %>
     </h1>
 
     <div class="container p-2 rounded-lg shadow-lg text-xl">Details
