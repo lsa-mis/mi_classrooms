@@ -3,11 +3,11 @@
     <div class="mt-2 mb-3 px-2 sm:px-0">
       <h2 class="sr-only">Classroom</h2>
       <div class="bg-white border border-gray-300 rounded-lg flex flex-col sm:flex-row overflow-hidden sm:leading-tight">
-        <%= image_tag 'room_placeholder', width: '100', alt: "room placeholder", class: "p-2" %>
+        <%= room_thumbnail_image(room) %>
         <div class="flex-1 px-2 sm:pt-0 sm:pl-2 py-2 flex flex-col sm:justify-between">
           <div class="flex flex-row justify-between w-full font-sans text-gray-900 leading-5">
             <div class="font-sans text-gray-900 leading-5 pt-2">
-              <div class="truncate font-semibold text-md">
+              <div class="truncate font-semibold text-md text-blue-800 hover:underline">
                 <%= link_to room.facility_code_heprod, room, data: { "turbo-frame": "_top" }  %>
               </div>
               <div class="truncate font-semibold text-md">
@@ -21,15 +21,15 @@
         </div>
         <div class="items-end pr-2" >
           <div class="text-sm text-gray-700 pt-2">
-            <div class="h-layout h-highlight-item">
+            <div class="h-highlight-item">
               <%= svg("users") %>
             </div>
             <%= "#{room.student_capacity}" %>
           </div>
-          <div class="text-sm font-medium highlights hover:underline">
+          <div class="text-sm font-medium hover:underline">
             <% if room.facility_code_heprod.present? %>
               <%= link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{room.facility_code_heprod }", target: "_blank" do %>
-                <div class="h-layout h-highlight-item">
+                <div class="h-highlight-item">
                   <%= svg("calendar_days")  %>
                   <span>Room Schedule</span>
                 </div>
@@ -41,7 +41,7 @@
           <div class="text-sm font-medium highlight hover:underline">
             <% unless room.room_support_phone == "Not Available" && room.room_support_email == "Not Available" %>
               <div data-controller="modal" data-modal-allow-background-close="true" >
-                <a href="#" data-action="click->modal#open" class="h-layout h-highlight-item">
+                <a href="#" data-action="click->modal#open" class="h-highlight-item">
                   <%= svg("message_question") %>
                   <span>Support</span>
                 </a>
@@ -52,7 +52,7 @@
           </div>
           <div class="text-sm font-medium highlight hover:underline">
             <%= link_to room, data: { "turbo-frame": "_top" } do %>
-              <div class="h-layout h-highlight-item">
+              <div class="h-highlight-item">
                 <%= svg("info-circle")  %>
                 <span>Room Details</span>
               </div>
