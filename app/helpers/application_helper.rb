@@ -41,6 +41,22 @@ module ApplicationHelper
     end
   end
 
+  def room_layout( room )
+    if room.room_layout.representable?
+      room.room_layout
+    else
+      "#"
+    end
+  end
+
+  def room_panorama( room )
+    if room.room_panorama.representable?
+      room.room_panorama
+    else
+      "#"
+    end
+  end
+
   ROOM_CHARACTERISTIC_NAME = {
     "InstrComp" => "Instructor Computer",
     "DocCam" => "Document Camera",
