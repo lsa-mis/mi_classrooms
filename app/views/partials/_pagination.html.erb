@@ -7,7 +7,7 @@
       <% end                         -%>
       <% pagy.series.each do |item|  -%>
       <%   if    item.is_a?(Integer) -%>  <span class="page"><%== link.call(item) %></span>
-      <%   elsif item.is_a?(String)  -%>  <span class="page current text-blue-700 "><%= item %></span>
+      <%   elsif item.is_a?(String)  -%>  <span class="page current text-blue-700 underline "><%= item %></span>
       <%   elsif item == :gap        -%>  <span class="page gap"><%== pagy_t('pagy.nav.gap') %></span>
       <%   end                       -%>
       <% end                         -%>

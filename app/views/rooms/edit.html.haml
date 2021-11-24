@@ -1,8 +1,12 @@
 = turbo_frame_tag "room" do 
 
   = render 'form', room: @room
+%br
+  = link_to 'Add a Building Image', @room.building, class: "rounded-md hover:underline bg-blue-800 text-white px-2 py-1 mt-4", data: {turbo: "false"}
 
-  = link_to 'Show', @room
-  \|
-  = link_to 'Back', rooms_path, data: { "turbo-frame": "_top" }
+%br
+
+= link_to 'Show', @room, data: { "turbo-frame": "_top" }
+\|
+= link_to 'Back', rooms_path, data: { "turbo-frame": "_top" }
 

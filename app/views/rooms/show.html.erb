@@ -1,26 +1,98 @@
-<div class="h-auto">Panorama
-  <% if @room.room_panorama.attached? %>
-    <iframe width="600" height="400" allowfullscreen style="border-style:none;" src="<%= url_for(@room.room_panorama) %>&amp;autoLoad=true&amp;showZoomCtrl=true"></iframe>
-
-  <% else %>
-    <%= image_tag 'room_placeholder', height: '200', width: '400' %>
-  <% end %>
-</div>
-
 <%= turbo_frame_tag "room" do  %>
   <div id="notice">
     <%= notice %>
   </div>
-  <div class="container mb-20 w-2/3">
-    <h1 class="flex items-center">
-    <% if @room.building.building_image.attached? %>
-         <%= image_tag @room.building.building_image, height: '200', width: '200', class: "mr-2" %><%= "#{@room.room_number} --  #{@room.building.name}" %> 
-    <% else %>
-      <%= image_tag 'building_placeholder', height: '100', width: '100', class: "mr-2" %><%= "#{@room.room_number} --  #{@room.building.name}" %> 
-    <% end %>
+  <div class="container px-2 md:w-3/4 sm:w-full">
+    <h1 class="flex-col w-full">
+      <div>
+        <%= room_image(@room) %>
+      </div>
+      <div class='grid grid-cols-2 pl-4 -m-2'>
+        <div>
+          <%= @room.facility_code_heprod%>
+        </div>
+        <div>
+          <%= link_to room_panorama(@room), target: "_blank" do %>
+            <div class='h-layout h-highlight-item'>
+              <%= svg("sync-alt-solid") %>
+              <span>360</span>
+            </div>
+          <% end %>
+        </div>
+      </div>
     </h1>
+    <div class="grid grid-cols-6 gap-2">
+      <div class="col-span-2">
+        <%= building_image( @room ) %>
+        <div class="text-xs pl-2 -mt-2 "><%= @room.building.name %></div>
+      </div>
+      <div class="col-span-4 truncate pl-1 text-left flex justify-end">
+        <div class="grid grid-rows-2 gap-2 text-sm">
+          <div class="flex overflow-x-auto">
+            <div>
+              <div class="classroom-row-contact-icon bg-blue-700">
+                <svg fill="none" stroke="currentColor" viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0 464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V192H0v272zm320-196c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zm0 128c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zM192 268c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zm0 128c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zM64 268c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12H76c-6.6 0-12-5.4-12-12v-40zm0 128c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12H76c-6.6 0-12-5.4-12-12v-40zM400 64h-48V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48H160V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48H48C21.5 64 0 85.5 0 112v48h448v-48c0-26.5-21.5-48-48-48z"></path>
+                </svg>
+              </div>
+            </div>
+            <div class="ml-1 lg:ml-4">
+              <h5>
+                <%= @room.room_schedule_contact %>
+              </h5>
+              <ul>
+                <li>
+                  <div class="icon">
+                    <%= svg("phone") %>
+                  </div>
+                  <%= "#{@room.room_schedule_phone}" %>
+                </li>
+                <li>
+                  <div class="icon">
+                    <%= svg("envelope") %>
+                  </div>
+                  <%= "Email #{@room.room_schedule_email}" %>
+                </li>
+              </ul>
+            <hr>
+            </div>
+          </div>
+          <div>
+            <div class="flex overflow-x-auto">
+              <div class="">
+                <div class="classroom-row-contact-icon bg-red-700">
+                  <svg fill="none" stroke="currentColor" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M256 504c136.967 0 248-111.033 248-248S392.967 8 256 8 8 119.033 8 256s111.033 248 248 248zm-103.398-76.72l53.411-53.411c31.806 13.506 68.128 13.522 99.974 0l53.411 53.411c-63.217 38.319-143.579 38.319-206.796 0zM336 256c0 44.112-35.888 80-80 80s-80-35.888-80-80 35.888-80 80-80 80 35.888 80 80zm91.28 103.398l-53.411-53.411c13.505-31.806 13.522-68.128 0-99.974l53.411-53.411c38.319 63.217 38.319 143.579 0 206.796zM359.397 84.72l-53.411 53.411c-31.806-13.505-68.128-13.522-99.973 0L152.602 84.72c63.217-38.319 143.579-38.319 206.795 0zM84.72 152.602l53.411 53.411c-13.506 31.806-13.522 68.128 0 99.974L84.72 359.398c-38.319-63.217-38.319-143.579 0-206.796z"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="ml-1 lg:ml-4">
+                <h5>
+                  <%= "Support provided by #{@room.department_name}" %>
+                </h5>
+                <ul>
+                  <li>
+                    <div class="icon">
+                      <%= svg("phone") %>
+                    </div>
+                    <%= "#{@room.room_support_phone}" %>
+                  </li>
+                  <li>
+                    <div class="icon">
+                      <%= svg("envelope") %>
+                    </div>
+                    <%= "#{@room.room_support_email}" %>
+                  </li>
+                </ul>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <div class="container p-2 rounded-lg shadow-lg text-xl">Details
+  <div class="container">
+    <div class="container grid p-2 rounded-lg shadow-lg text-xl border-t-2 border-gray-100">Details
 
       <div class="text-lg">Instructional seating count:
         <%= @room.instructional_seating_count %>
@@ -30,39 +102,30 @@
         <%= link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{@room.facility_code_heprod }", target: "_blank" do %>
           <div class="h-layout h-highlight-item">
             <%= svg("calendar_days")  %>
-            <span>Scheduling</span>
+            <span>Room Schedule</span>
           </div>
         <% end %>
-        <%= link_to "#", target: "_blank" do %>
+        <%= link_to room_layout(@room), target: "_blank" do %>
           <div class="h-layout h-highlight-item">
-            <%= svg("chair")  %>
+            <%= svg("chair") %>
             <span>Room Layout</span>
           </div>
-        <% end %>
+        <% end %> 
         <%= link_to "#", target: "_blank" do %>
-          <div class="h-floorplan h-highlight-item">
+          <div class="h-layout h-highlight-item">
             <%= svg("layer_group") %>
             <span>Floor <%= @room.floor %> Map  </span>
           </div>
         <% end %> 
-
       </div>
       <%= render 'rooms_row_dropdown', room: @room%>
     </div>
-    <%= link_to 'Edit', edit_room_path(@room), data: {turbo: "false"} %>
+  </div>
+  <div class="py-2 mb-20">
+    <%= link_to 'Back', rooms_path, class: "hover:underline text-blue-800", data: {turbo: "false"} %>
+    <% if user_signed_in? && policy(Room).edit? %>
+      |
+      <%= link_to 'Edit', edit_room_path(@room), class: "hover:underline text-blue-800", data: {turbo: "false"} %>
+    <% end %>
   </div>
 <% end %>
-    <%#= @room.facility_code_heprod %>
-    <%#= @room.rmrecnbr %>
-
-    <%#= @room.rmtyp_description %>
-
-    <%#= @room.dept_id %>
-
-    <%#= @room.dept_grp %>
-
-    <%#= @room.dept_description %>
-
-    <%#= @room.square_feet %>
-
-    <%#= @room.visible %>

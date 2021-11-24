@@ -40,6 +40,7 @@ class Room < ApplicationRecord
   has_one :room_contact, foreign_key: :rmrecnbr, dependent: :destroy
   has_one_attached :room_panorama
   has_one_attached :room_image
+  has_one_attached :room_layout
 
   multisearchable(
     against: [:rmrecnbr, :room_number, :building_bldrecnbr],
