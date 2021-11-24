@@ -46,7 +46,6 @@ include ActionView::RecordIdentifier
   def show
     authorize @room
     respond_to do |format|
-      # format.js
       format.html
       format.json { render json: @room, serializer: RoomSerializer }
     end
@@ -117,10 +116,7 @@ include ActionView::RecordIdentifier
     def set_room
       fresh_when @room
       @room = Room.includes(:building, :room_characteristics, :room_panorama_attachment, :room_contact).find(params[:id])
-      # authorize @room
-      # @room_json = serialize_rooms([@room])
       @room = @room.decorate
-      # @room = Room.find_by facility_code_heprod:(params[:id].upcase) || Room.find(params[:id])
     end
     
     # Only allow a list of trusted parameters through.
@@ -141,7 +137,7 @@ include ActionView::RecordIdentifier
       if params.present?
         capacity = ""
         params.each do |k, v|
-          unless k == 'controller' || k == 'action' || k == 'direction'
+          unless k == 'controller' || k == 'action' || k == 'direction' || k == 'format'
             unless v.empty?
               case k
               when "school_or_college_name"
