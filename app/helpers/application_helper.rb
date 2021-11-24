@@ -21,7 +21,7 @@ module ApplicationHelper
     if room.building.building_image.representable?
       image_tag room.building.building_image.representation(resize_to_limit: [150, 150]), class: 'm-2', alt: "#{room.room_number} --  #{room.building.name}" 
     else
-      image_tag 'building_placeholder', height: '150', width: '150', class: 'mr-2', alt: "building placeholder" 
+      image_tag 'building_placeholder', height: '150', width: '150', class: 'm-2', alt: "building placeholder" 
     end
   end
 
