@@ -41,6 +41,7 @@ class Room < ApplicationRecord
   has_one_attached :room_panorama
   has_one_attached :room_image
   has_one_attached :room_layout
+  has_many :notes, as: :noteable
 
   multisearchable(
     against: [:rmrecnbr, :room_number, :building_bldrecnbr],

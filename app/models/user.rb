@@ -26,6 +26,7 @@ class User < ApplicationRecord
 
   attr_accessor :membership, :admin
   has_many :omni_auth_services, dependent: :destroy
+  has_many :notes
 
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
