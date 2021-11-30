@@ -9,4 +9,5 @@
                 - @buildings.each do |building|
                   = render 'building_row', building: building
 
-  = render 'partials/results_pagination'
+  = render partial: "partials/pagination", locals: { pagy: @pagy }
+
