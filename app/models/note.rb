@@ -9,4 +9,8 @@ class Note < ApplicationRecord
   has_rich_text :body
 
   validates :body, presence: true
+
+  after_create_commit -> {
+    broadcast_append_to [noteable, :notes], target: "#{dom_id(noteable)}_notes"
+  }
 end
