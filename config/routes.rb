@@ -5,7 +5,10 @@ Rails.application.routes.draw do
     delete 'sign_out', :to => 'users/sessions#destroy', :as => :destroy_user_session
   end
   resources :rooms do
+    resources :notes, module: :rooms
   end
+  resources :notes
+  
   match "toggle_visibile/:id" => "rooms#toggle_visibile", :via => [:get, :post], :as => :toggle_visibile
   
   get '/project_status', to: 'pages#project_status'
