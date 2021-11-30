@@ -1,5 +1,8 @@
-<%= form_with model: [noteable, note],
-  id: dom_id_for_records(noteable, note) do |form| %>
+<% model = [local_assigns[:noteable], note].compact %>
+<%= form_with model: model,
+  id: dom_id_for_records(*model),
+  data: local_assigns[:data],
+  class: ["my-4"] + Array.wrap(local_assigns[:class]) do |form| %>
   <% if form.object.errors.any? %>
     <div class="alert alert-danger">
       <% form.object.errors.full_messages.each do |message| %>
@@ -9,4 +12,5 @@
   <% end %>
   <%= form.rich_text_area :body %>
   <%= form.submit class: "btn btn-primary" %>
+  <%= link_to "Cancel", note, class: "btn btn-link" if form.object.persisted? %>
 <% end %>

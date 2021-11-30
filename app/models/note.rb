@@ -10,7 +10,13 @@ class Note < ApplicationRecord
 
   validates :body, presence: true
 
-  after_create_commit -> {
+  after_create_commit do
     broadcast_append_to [noteable, :notes], target: "#{dom_id(noteable)}_notes"
-  }
+  end
+  after_update_commit do
+    broadcast_replace_to self
+  end
+  after_destroy_commit do
+    broadcast_remove_to self
+  end
 end
