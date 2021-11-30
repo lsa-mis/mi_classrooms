@@ -264,6 +264,40 @@ ALTER SEQUENCE public.campus_records_id_seq OWNED BY public.campus_records.id;
 
 
 --
+-- Name: notes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.notes (
+    id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    noteable_type character varying NOT NULL,
+    noteable_id bigint NOT NULL,
+    parent_id integer,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: notes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.notes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: notes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.notes_id_seq OWNED BY public.notes.id;
+
+
+--
 -- Name: omni_auth_services; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -451,8 +485,8 @@ CREATE TABLE public.rooms (
     updated_at timestamp(6) without time zone NOT NULL,
     tsv tsvector,
     dept_group_description character varying,
-    building_name character varying,
-    campus_record_id bigint
+    campus_record_id bigint,
+    building_name character varying
 );
 
 
@@ -577,6 +611,13 @@ ALTER TABLE ONLY public.campus_records ALTER COLUMN id SET DEFAULT nextval('publ
 
 
 --
+-- Name: notes id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.notes ALTER COLUMN id SET DEFAULT nextval('public.notes_id_seq'::regclass);
+
+
+--
 -- Name: omni_auth_services id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -683,6 +724,14 @@ ALTER TABLE ONLY public.campus_records
 
 
 --
+-- Name: notes notes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.notes
+    ADD CONSTRAINT notes_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: omni_auth_services omni_auth_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -785,6 +834,20 @@ CREATE INDEX index_buildings_on_campus_record_id ON public.buildings USING btree
 --
 
 CREATE INDEX index_buildings_on_tsv ON public.buildings USING gin (tsv);
+
+
+--
+-- Name: index_notes_on_noteable; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_notes_on_noteable ON public.notes USING btree (noteable_type, noteable_id);
+
+
+--
+-- Name: index_notes_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_notes_on_user_id ON public.notes USING btree (user_id);
 
 
 --
@@ -927,6 +990,14 @@ ALTER TABLE ONLY public.buildings
 
 
 --
+-- Name: notes fk_rails_7f2323ad43; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.notes
+    ADD CONSTRAINT fk_rails_7f2323ad43 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
 -- Name: active_storage_variant_records fk_rails_993965df05; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -981,6 +1052,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211112035428'),
 ('20211112035659'),
 ('20211113230614'),
-('20211113231859');
+('20211113231859'),
+('20211124064836'),
+('20211124071308'),
+('20211124131027'),
+('20211127165122'),
+('20211129210918');
 
 

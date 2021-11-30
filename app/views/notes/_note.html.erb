@@ -1,0 +1,17 @@
+<%= turbo_stream_from note %>
+<%= turbo_frame_tag note do %>
+  <hr class= "flex-1 border-t border-blue-600 mt-1 mb-2 m-2">
+  <div>
+    <div class="flex flex-row w-full text-sm">
+      <div class="flex-1">
+        <%= note.user.display_name %>
+      </div>
+      <div class="">
+        <%= link_to "Edit", edit_note_path(note), class: "m-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
+        <%= button_to "Delete", note_path(note), method: :delete, data: { confirm: 'Are you sure?' }, class: "m-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
+      </div>
+    </div>
+  </div>
+
+  <%= note.body %>
+<% end %>

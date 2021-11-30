@@ -1,0 +1,16 @@
+<% model = [local_assigns[:noteable], note].compact %>
+<%= form_with model: model,
+  id: dom_id_for_records(*model),
+  data: local_assigns[:data],
+  class: ["my-4"] + Array.wrap(local_assigns[:class]) do |form| %>
+  <% if form.object.errors.any? %>
+    <div class="alert alert-danger">
+      <% form.object.errors.full_messages.each do |message| %>
+        <div><%= message %></div>
+      <% end %>
+    </div>
+  <% end %>
+  <%= form.rich_text_area :body %>
+  <%= form.submit class: "m-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
+  <%= link_to "Cancel", note, class: "m-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" if form.object.persisted? %>
+<% end %>

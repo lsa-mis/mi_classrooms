@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
 
   def user_not_in_group
     flash[:alert] = "You are not authorized to perform this action."
-    redirect_to root_path
+    redirect_to about_path
   end
 
   def storable_location?

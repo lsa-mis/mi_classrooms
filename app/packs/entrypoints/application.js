@@ -7,6 +7,7 @@ require("trix")
 require("@rails/actiontext")
 
 import "@hotwired/turbo-rails"
+require("@rails/ujs").start()
 import "channels"
 
 import * as ActiveStorage from "@rails/activestorage"
