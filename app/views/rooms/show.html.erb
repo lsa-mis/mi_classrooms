@@ -130,15 +130,29 @@
   </div>
 <% end %>
 
-<div class="mb-20">
-  <% if user_signed_in? %>
-    <%= render partial: "notes/form", locals: { note: Note.new, noteable: @room } %>
+<div class="container p-2 rounded-lg shadow-lg text-xl mb-20 -mt-16 bg-gray-50">Notes:
+  <% if session["user_admin"] %>
+    <div class="mb-20">
+      <% if user_signed_in? %>
+        <%= render partial: "notes/form", locals: { note: Note.new, noteable: @room } %>
+      <% else %>
+        <%= link_to "Sign up", new_user_registration_path %> or <%= link_to "login", new_user_session_path %> to note
+      <% end %>
+      
+      <%= turbo_stream_from @room, :notes %>
+      <%= tag.div id: "#{dom_id(@room)}_notes" do %>
+        <%= render @room.notes %>
+      <% end %>
+    </div>
   <% else %>
-    <%= link_to "Sign up", new_user_registration_path %> or <%= link_to "login", new_user_session_path %> to note
-  <% end %>
-  
-  <%= turbo_stream_from @room, :notes %>
-  <%= tag.div id: "#{dom_id(@room)}_notes" do %>
-    <%= render @room.notes %>
+    <div>
+      <% @room.notes.each do |note| %>
+        <hr class= "flex-1 border-t border-blue-600 mt-1 mb-2 m-2">
+        <div class="text-sm pb-1">
+          <%= note.updated_at.strftime('%m/%d/%Y') %>
+          <%= note.body  %>
+        </div>
+      <% end %>
+    </div>
   <% end %>
 </div>
