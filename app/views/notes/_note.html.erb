@@ -1,0 +1,16 @@
+<%= turbo_frame_tag note do %>
+  <hr class= "flex-1 border-t border-blue-600 mt-1 mb-2 m-2">
+  <div>
+    <div class="flex flex-row w-full text-sm">
+      <div class="flex-1">
+        <%= note.user.display_name %>
+      </div>
+      <div class="">
+        <%= link_to "Edit", edit_note_path(note), class: "mr-2" %>
+        <%= button_to "Delete", note_path(note), method: :delete, data: { confirm: "Are you sure?" } %>
+      </div>
+    </div>
+  </div>
+
+  <%= note.body %>
+<% end %>

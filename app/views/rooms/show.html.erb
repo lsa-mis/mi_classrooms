@@ -129,3 +129,16 @@
     <% end %>
   </div>
 <% end %>
+
+<div class="mb-20">
+  <% if user_signed_in? %>
+    <%= render partial: "notes/form", locals: { note: Note.new, noteable: @room } %>
+  <% else %>
+    <%= link_to "Sign up", new_user_registration_path %> or <%= link_to "login", new_user_session_path %> to note
+  <% end %>
+  
+  <%= turbo_stream_from @room, :notes %>
+  <%= tag.div id: "#{dom_id(@room)}_notes" do %>
+    <%= render @room.notes %>
+  <% end %>
+</div>

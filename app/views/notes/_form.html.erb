@@ -1,0 +1,12 @@
+<%= form_with model: [noteable, note],
+  id: dom_id_for_records(noteable, note) do |form| %>
+  <% if form.object.errors.any? %>
+    <div class="alert alert-danger">
+      <% form.object.errors.full_messages.each do |message| %>
+        <div><%= message %></div>
+      <% end %>
+    </div>
+  <% end %>
+  <%= form.rich_text_area :body %>
+  <%= form.submit class: "btn btn-primary" %>
+<% end %>
