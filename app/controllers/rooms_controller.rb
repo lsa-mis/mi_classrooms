@@ -139,7 +139,7 @@ include ActionView::RecordIdentifier
       if params.present?
         capacity = ""
         params.each do |k, v|
-          unless k == 'controller' || k == 'action' || k == 'direction' || k == 'format'
+          unless k == 'controller' || k == 'action' || k == 'direction' || k == 'format' || k == 'page' || k == 'custom_param'
             unless v.empty?
               case k
               when "school_or_college_name"
