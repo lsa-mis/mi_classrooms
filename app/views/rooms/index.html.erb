@@ -1,7 +1,9 @@
 <div class="container mb-20" data-controller='autosubmit'>
   <% if @rooms_page_announcement.present? && @rooms_page_announcement.content.present? %>  
-    <div class="relative p-2 flex justify-center">
-      <%= @rooms_page_announcement.content %>
+    <div class="relative flex justify-center">
+      <div class="border-4 border-yellow-400 p-1">
+        <%= @rooms_page_announcement.content %>
+      </div>
       <div>
         <% if policy(Announcement).edit? %>
           <%= link_to edit_announcement_path(@rooms_page_announcement) do %>
