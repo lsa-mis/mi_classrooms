@@ -55,7 +55,7 @@ class Room < ApplicationRecord
     },
     using: {
       tsearch: {
-        dictionary: "english",
+        dictionary: "simple",
         prefix: true,
         any_word: false
 
