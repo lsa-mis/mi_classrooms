@@ -1,12 +1,12 @@
 desc "This will add chair layouts to rooms"
 task add_chairs_to_rooms: :environment do
 
-  path_to_images = "/Users/rsmoke/uploads/chair_charts/"
+  path_to_images = "/home/deploy/uploads/chair_charts/"
   images = []
   classrooms = Room.where(rmtyp_description: "Classroom").where.not(facility_code_heprod: nil)
   classrooms_facility_codes = classrooms.pluck(:facility_code_heprod)
 
-  file_names = Dir["/Users/rsmoke/uploads/chair_charts/*.pdf"].each { |f| images << File.basename(f, ".pdf").split("_chairs")[0]}
+  file_names = Dir["/home/deploy/uploads/chair_charts/*.pdf"].each { |f| images << File.basename(f, ".pdf").split("_chairs")[0]}
   room_images = classrooms_facility_codes & images
 
   room_images.each do |ri|
