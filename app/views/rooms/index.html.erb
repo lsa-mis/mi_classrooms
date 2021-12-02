@@ -59,11 +59,12 @@
               <div class="flex mt-2">
                 <div class="w-1/2 ml-2 mr-2">
                   <label class="block text-sm font-medium text-gray-700" for="min_capacity">Min</label>
-                  <%= number_field_tag 'min_capacity', nil, min: 1, value: 0, data: { action: "input->autosubmit#search" }, class: 'w-full block rounded sm:text-sm border-gray-300' %>
+                  <%= number_field_tag 'min_capacity', nil, min: 1, value: 0, :"data-autosubmit-target" => "min_capacity", data: { action: "input->autosubmit#capacitySubmit" }, class: 'w-full block rounded sm:text-sm border-gray-300' %>
+                  <span class="capacity-error--hide text-red-700" data-autosubmit-target="capacity_error">
                 </div>
                 <div class="ml-1 mr-2 w-1/2">
                   <label class="block text-sm font-medium text-gray-700" for="max_capacity">Max</label>
-                  <%= number_field_tag 'max_capacity', nil, max: 600, value: 600, data: { action: "input->autosubmit#search" }, class: 'w-full block rounded sm:text-sm border-gray-300' %>
+                  <%= number_field_tag 'max_capacity', nil, max: 600, value: 600, :"data-autosubmit-target" => "min_capacity", data: { action: "input->autosubmit#capacitySubmit"}, class: 'w-full block rounded sm:text-sm border-gray-300' %>
                 </div>
               </div>
             </div>
