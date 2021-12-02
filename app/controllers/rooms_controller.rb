@@ -10,7 +10,7 @@ include ActionView::RecordIdentifier
   include ApplicationHelper 
 
   def index
-    @rooms_page_announcement = Announcement.find_by(location: "rooms_page")
+    @rooms_page_announcement = Announcement.find_by(location: "find_a_room_page")
 
     @schools = Room.classrooms.pluck(:dept_group_description).uniq.sort
     if params[:direction].present?

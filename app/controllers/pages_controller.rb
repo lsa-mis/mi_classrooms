@@ -6,7 +6,7 @@ class PagesController < ApplicationController
   end
 
   def index
-    @index_page_announcement = Announcement.find_by(location: "index_page")
+    @index_page_announcement = Announcement.find_by(location: "home_page")
     # redirect_to rooms_path if current_user
     if current_user
       redirect_to rooms_path unless current_user.admin
