@@ -5,7 +5,7 @@ class AnnouncementsController < ApplicationController
   before_action :set_announcement, only: [:show, :edit, :update, :cancel]
 
   def index
-    @announcements = Announcement.all.with_rich_text_content
+    @announcements = Announcement.all.with_rich_text_content.order(:id)
     authorize @announcements
   end
 
@@ -33,7 +33,6 @@ class AnnouncementsController < ApplicationController
 
   def cancel
     authorize @announcement
-    flash[:notice] = "Update is cancelled."
     redirect_to session.delete(:return_to)
   end
   
