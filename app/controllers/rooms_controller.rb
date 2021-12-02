@@ -10,7 +10,7 @@ include ActionView::RecordIdentifier
   include ApplicationHelper 
 
   def index
-    @rooms_page_announcement = Announcement.find_by(location: "rooms_page")
+    @rooms_page_announcement = Announcement.find_by(location: "find_a_room_page")
 
     @schools = Room.classrooms.pluck(:dept_group_description).uniq.sort
     if params[:direction].present?
@@ -139,7 +139,7 @@ include ActionView::RecordIdentifier
       if params.present?
         capacity = ""
         params.each do |k, v|
-          unless k == 'controller' || k == 'action' || k == 'direction' || k == 'format'
+          unless k == 'controller' || k == 'action' || k == 'direction' || k == 'format' || k == 'page' || k == 'custom_param'
             unless v.empty?
               case k
               when "school_or_college_name"

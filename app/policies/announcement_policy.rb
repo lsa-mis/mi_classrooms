@@ -24,4 +24,8 @@ class AnnouncementPolicy < ApplicationPolicy
     edit?
   end
 
+  def cancel?
+    edit?
+  end
+
 end
