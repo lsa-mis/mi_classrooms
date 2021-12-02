@@ -1,7 +1,7 @@
 <div class="container mb-20" data-controller='autosubmit'>
   <% if @rooms_page_announcement.present? && @rooms_page_announcement.content.present? %>  
-    <div class="relative flex justify-center">
-      <div class="bg-gray-50 shadow borde p-2">
+    <div class="relative mb-2">
+      <div class="bg-gray-50 shadow borde p-2 w-full flex justify-left mb-2">
         <%= @rooms_page_announcement.content %>
       </div>
       <div>
