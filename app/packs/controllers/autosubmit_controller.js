@@ -1,6 +1,6 @@
 import { Controller } from 'stimulus'
 export default class extends Controller {
-  static targets = ['form', 'status', 'sidebar', 'min_capacity', 'max-capacity', 'capacity_error']
+  static targets = ['form', 'status', 'sidebar', 'min_capacity', 'max_capacity', 'capacity_error']
 
   search() {
     clearTimeout(this.timeout)
@@ -22,26 +22,29 @@ export default class extends Controller {
     }, 0)
   }
 
-  capacitySubmit() {
-    var min_capacity = this.min_capacityTarget
-    var max_capacity = this.max_capacityTarget
-
-    if (min_capacity > max_capacity) {
-      this.capacity_errorTarget.classList.add("device-error--display")
-      this.capacity_errorTarget.classList.remove("device-error--hide")
-    }
-    else {
-      this.capacity_errorTarget.classList.add("device-error--hide")
-      this.capacity_errorTarget.classList.remove("device-error--display")
-    }
-
+  capacitySubmit(event) {
     clearTimeout(this.timeout)
 
     this.timeout = setTimeout(() => {
-      this.statusTarget.textContent = 'Updating...'
-      Turbo.navigator.submitForm(this.formTarget)
-      this.sidebarTarget.classList.toggle('-translate-x-full')
-    }, 0)
+      var min_capacity = parseInt(this.min_capacityTarget.value)
+      var max_capacity = parseInt(this.max_capacityTarget.value)
+
+      if (min_capacity > max_capacity) {
+        this.capacity_errorTarget.classList.add("capacity-error--display")
+        this.capacity_errorTarget.classList.remove("capacity-error--hide")
+        this.capacity_errorTarget.innerText = "Min should be smaller than Max"
+        event.preventDefault()
+      }
+      else {
+        this.capacity_errorTarget.classList.add("capacity-error--hide")
+        this.capacity_errorTarget.classList.remove("capacity-error--display")
+        this.capacity_errorTarget.innerText = ""
+
+        this.statusTarget.textContent = 'Updating...'
+        Turbo.navigator.submitForm(this.formTarget)
+        this.sidebarTarget.classList.toggle('-translate-x-full')
+      }
+    }, 600)
   }
 
   change(event) {
