@@ -2,32 +2,33 @@
   <div id="notice">
     <%= notice %>
   </div>
-  <div class="container px-2 md:w-3/4 sm:w-full">
-    <h1 class="flex-col w-full">
+  <div class="container rounded-lg shadow-lg px-2 md:w-3/4 sm:w-full">
+    <div class="flex-col w-full">
+      <h1>
+        <%= @room.facility_code_heprod%>
+      </h1>
       <div>
         <%= room_image(@room) %>
       </div>
-      <div class='grid grid-cols-2 pl-4 -m-2'>
-        <div>
-          <%= @room.facility_code_heprod%>
-        </div>
+      <div class='pl-4 mb-5'>
         <div>
           <%= link_to room_panorama(@room), target: "_blank" do %>
             <div class='h-layout h-highlight-item'>
               <%= svg("sync-alt-solid") %>
-              <span>360</span>
+              <span class="pr-1">view 360</span>
+              <%= svg("external-link-alt-solid") %>
             </div>
           <% end %>
         </div>
       </div>
-    </h1>
+    </div>
     <div class="grid grid-cols-6 gap-2">
       <div class="col-span-2">
         <%= building_image( @room ) %>
-        <div class="text-xs pl-2 -mt-2 "><%= @room.building.name %></div>
+        <div class="text-xs pl-2 -mt-2 "><%= @room.building.name.titleize %></div>
       </div>
       <div class="col-span-4 truncate pl-1 text-left flex justify-end">
-        <div class="grid grid-rows-2 gap-2 text-sm">
+        <div class="grid grid-rows-2 gap-2 text-sm pr-2">
           <div class="flex overflow-x-auto">
             <div>
               <div class="classroom-row-contact-icon bg-blue-700">
@@ -42,13 +43,13 @@
               </h5>
               <ul>
                 <li>
-                  <div class="icon">
+                  <div class="h-highlight-item">
                     <%= svg("phone") %>
                   </div>
                   <%= "#{@room.room_schedule_phone}" %>
                 </li>
                 <li>
-                  <div class="icon">
+                  <div class="h-highlight-item">
                     <%= svg("envelope") %>
                   </div>
                   <%= "Email #{@room.room_schedule_email}" %>
@@ -60,10 +61,8 @@
           <div>
             <div class="flex overflow-x-auto">
               <div class="">
-                <div class="classroom-row-contact-icon bg-red-700">
-                  <svg fill="none" stroke="currentColor" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M256 504c136.967 0 248-111.033 248-248S392.967 8 256 8 8 119.033 8 256s111.033 248 248 248zm-103.398-76.72l53.411-53.411c31.806 13.506 68.128 13.522 99.974 0l53.411 53.411c-63.217 38.319-143.579 38.319-206.796 0zM336 256c0 44.112-35.888 80-80 80s-80-35.888-80-80 35.888-80 80-80 80 35.888 80 80zm91.28 103.398l-53.411-53.411c13.505-31.806 13.522-68.128 0-99.974l53.411-53.411c38.319 63.217 38.319 143.579 0 206.796zM359.397 84.72l-53.411 53.411c-31.806-13.505-68.128-13.522-99.973 0L152.602 84.72c63.217-38.319 143.579-38.319 206.795 0zM84.72 152.602l53.411 53.411c-13.506 31.806-13.522 68.128 0 99.974L84.72 359.398c-38.319-63.217-38.319-143.579 0-206.796z"></path>
-                  </svg>
+                <div class="classroom-row-contact-icon bg-blue-800">
+                  <%= svg("message_question") %>
                 </div>
               </div>
               <div class="ml-1 lg:ml-4">
@@ -72,13 +71,13 @@
                 </h5>
                 <ul>
                   <li>
-                    <div class="icon">
+                    <div class="h-highlight-item">
                       <%= svg("phone") %>
                     </div>
                     <%= "#{@room.room_support_phone}" %>
                   </li>
                   <li>
-                    <div class="icon">
+                    <div class="h-highlight-item">
                       <%= svg("envelope") %>
                     </div>
                     <%= "#{@room.room_support_email}" %>
@@ -91,8 +90,8 @@
     </div>
   </div>
 
-  <div class="container">
-    <div class="container grid p-2 rounded-lg shadow-lg text-xl border-t-2 border-gray-100">Details
+  <div>
+    <div class="container grid p-2 text-xl border-t-2 border-gray-100">Details
 
       <div class="text-lg">Instructional seating count:
         <%= @room.instructional_seating_count %>
@@ -102,7 +101,7 @@
         <%= link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{@room.facility_code_heprod }", target: "_blank" do %>
           <div class="h-layout h-highlight-item">
             <%= svg("calendar_days")  %>
-            <span>Room Schedule</span>
+            <span>Room Availability</span>
           </div>
         <% end %>
         <%= link_to room_layout(@room), target: "_blank" do %>
@@ -114,7 +113,7 @@
         <%= link_to "#", target: "_blank" do %>
           <div class="h-layout h-highlight-item">
             <%= svg("layer_group") %>
-            <span>Floor <%= @room.floor %> Map  </span>
+            <span>Floor <%= @room.floor.gsub(/[0]/, '') %> Map  </span>
           </div>
         <% end %> 
       </div>
