@@ -1,7 +1,9 @@
 <div class="container mb-20" data-controller='autosubmit'>
   <% if @rooms_page_announcement.present? && @rooms_page_announcement.content.present? %>  
-    <div class="relative p-2 flex justify-center">
-      <%= @rooms_page_announcement.content %>
+    <div class="relative mb-2">
+      <div class="bg-gray-50 shadow borde p-2 w-full flex justify-left mb-2">
+        <%= @rooms_page_announcement.content %>
+      </div>
       <div>
         <% if policy(Announcement).edit? %>
           <%= link_to edit_announcement_path(@rooms_page_announcement) do %>
@@ -167,7 +169,7 @@
             <div class="flex justify-end items-center">
               <label for="direction" class="border-0 h-px -m-px overflow-hidden p-0 absolute w-px">Sort by capacity</label>
               <%= select_tag "direction", options_for_select([["Low to High", "asc"], ["High to Low", "desc"]]), include_blank: "Sort Room Capacity", class: "rounded-md sm:text-sm ml-2",
-              :"data-action" => "change->autosubmit#search" %>
+              :"data-action" => "change->autosubmit#sortCapacity" %>
             </div>
           </div>
           <div class="">

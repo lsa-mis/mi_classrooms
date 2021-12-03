@@ -47,6 +47,15 @@ export default class extends Controller {
     }, 600)
   }
 
+  sortCapacity() {
+    clearTimeout(this.timeout)
+
+    this.timeout = setTimeout(() => {
+      this.statusTarget.textContent = 'Updating...'
+      Turbo.navigator.submitForm(this.formTarget)
+    }, 0)
+  }
+
   change(event) {
     event.preventDefault()
     Turbo.navigator.submitForm(this.formTarget)
