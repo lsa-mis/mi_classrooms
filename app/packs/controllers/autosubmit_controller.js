@@ -60,6 +60,7 @@ export default class extends Controller {
   }
 
   clearFilters() {
+    console.log("clear")
     this.formTarget.reset()
     Turbo.navigator.submitForm(this.formTarget)
   }

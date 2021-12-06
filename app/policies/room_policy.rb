@@ -28,4 +28,8 @@ class RoomPolicy < ApplicationPolicy
   def update?
     edit?
   end
+
+  def get_current_url?
+    true
+  end
 end
