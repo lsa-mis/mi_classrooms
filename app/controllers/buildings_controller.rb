@@ -36,6 +36,7 @@ class BuildingsController < ApplicationController
   # GET /buildings/new
   def new
     @building = Building.new
+    authorize @building
   end
 
   # GET /buildings/1/edit
@@ -45,19 +46,19 @@ class BuildingsController < ApplicationController
 
   # POST /buildings
   # POST /buildings.json
-  def create
-    @building = Building.new(building_params)
+  # def create
+  #   @building = Building.new(building_params)
 
-    respond_to do |format|
-      if @building.save
-        format.html { redirect_to @building, notice: 'Building was successfully created.' }
-        format.json { render :show, status: :created, location: @building }
-      else
-        format.html { render :new }
-        format.json { render json: @building.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+  #   respond_to do |format|
+  #     if @building.save
+  #       format.html { redirect_to @building, notice: 'Building was successfully created.' }
+  #       format.json { render :show, status: :created, location: @building }
+  #     else
+  #       format.html { render :new }
+  #       format.json { render json: @building.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
 
   # PATCH/PUT /buildings/1
   # PATCH/PUT /buildings/1.json
@@ -76,14 +77,14 @@ class BuildingsController < ApplicationController
 
   # DELETE /buildings/1
   # DELETE /buildings/1.json
-  def destroy
-    @building.destroy
-    respond_to do |format|
-      format.html { redirect_to buildings_url, notice: 'Building was successfully destroyed.' }
-      format.json { head :no_content }
-      format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@building))}
-    end
-  end
+  # def destroy
+  #   @building.destroy
+  #   respond_to do |format|
+  #     format.html { redirect_to buildings_url, notice: 'Building was successfully destroyed.' }
+  #     format.json { head :no_content }
+  #     format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@building))}
+  #   end
+  # end
 
   private
     # Use callbacks to share common setup or constraints between actions.

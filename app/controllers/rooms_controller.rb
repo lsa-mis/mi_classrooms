@@ -56,6 +56,7 @@ include ActionView::RecordIdentifier
   # GET /rooms/new
   def new
     @room = Room.new
+    authorize @room
   end
 
   # GET /rooms/1/edit
@@ -65,19 +66,19 @@ include ActionView::RecordIdentifier
 
   # POST /rooms
   # POST /rooms.json
-  def create
-    @room = Room.new(room_params)
+  # def create
+  #   @room = Room.new(room_params)
 
-    respond_to do |format|
-      if @room.save
-        format.html { redirect_to @room, notice: 'Room was successfully created.' }
-        format.json { render :show, status: :created, location: @room }
-      else
-        format.html { render :new }
-        format.json { render json: @room.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+  #   respond_to do |format|
+  #     if @room.save
+  #       format.html { redirect_to @room, notice: 'Room was successfully created.' }
+  #       format.json { render :show, status: :created, location: @room }
+  #     else
+  #       format.html { render :new }
+  #       format.json { render json: @room.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
 
   # PATCH/PUT /rooms/1
   # PATCH/PUT /rooms/1.json
@@ -96,16 +97,17 @@ include ActionView::RecordIdentifier
 
   # DELETE /rooms/1
   # DELETE /rooms/1.json
-  def destroy
-    @room.destroy
-    respond_to do |format|
-      format.html { redirect_to rooms_url, notice: 'Room was successfully destroyed.' }
-      format.json { head :no_content }
-      format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@room))}
-    end
-  end
+  # def destroy
+  #   @room.destroy
+  #   respond_to do |format|
+  #     format.html { redirect_to rooms_url, notice: 'Room was successfully destroyed.' }
+  #     format.json { head :no_content }
+  #     format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@room))}
+  #   end
+  # end
 
   def toggle_visibile
+    authorize @room
     @room.toggle! :visible
     respond_to do |format|
       format.html { redirect_to rooms_url, notice: 'Room was successfully updated.' }
