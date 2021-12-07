@@ -13,36 +13,18 @@ class BuildingPolicy < ApplicationPolicy
   end
 
   def index?
-    if user && user_in_group?
-      true
-    end
+    user.admin
+  end
+
+  def new
+    false
   end
 
   def show?
-    if user && user_in_group?
-      true
-    end
+    user.admin
   end
 
   def update?
-    if user && user_in_group?
-      true
-    end
-  end
-end
-
-private
-
-def bespoke_team
-  ['dschmura', 'rsmoke', 'brita', 'anantas', 'jjsantos', 'mlaitan', 'prbelden', 'mdressle']
-end
-
-def user_in_group?
-  # user.authorized_groups.includes?
-  # true
-  if bespoke_team.include?(user.uniqname)
-    true
-  else
-    false
+    user.admin
   end
 end
