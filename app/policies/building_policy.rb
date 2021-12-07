@@ -16,7 +16,7 @@ class BuildingPolicy < ApplicationPolicy
     user.admin
   end
 
-  def new
+  def new?
     false
   end
 
