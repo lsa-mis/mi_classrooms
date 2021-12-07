@@ -1,8 +1,8 @@
 class ApplicationController < ActionController::Base
   include Pagy::Backend
   include Pundit
-  before_action :store_user_location!, if: :storable_location?
-  before_action :create_feedback
+  # before_action :store_user_location!, if: :storable_location?
+  # before_action :create_feedback
   rescue_from Pundit::NotAuthorizedError, with: :user_not_in_group
   before_action :set_membership
   after_action :verify_authorized, except: :index, unless: :devise_controller?
@@ -10,13 +10,13 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def sign_up_params
-    params.require(:user).permit(:uniqname, :email, :password, :password_confirmation)
-  end
+  # def sign_up_params
+  #   params.require(:user).permit(:uniqname, :email, :password, :password_confirmation)
+  # end
 
-  def account_update_params
-    params.require(:user).permit(:uniqname, :email, :password, :password_confirmation, :current_password)
-  end
+  # def account_update_params
+  #   params.require(:user).permit(:uniqname, :email, :password, :password_confirmation, :current_password)
+  # end
 
 
   def user_not_authorized
@@ -29,18 +29,18 @@ class ApplicationController < ActionController::Base
     redirect_to about_path
   end
 
-  def storable_location?
-    request.get? && is_navigational_format? && !devise_controller? && !request.xhr?
-  end
+  # def storable_location?
+  #   request.get? && is_navigational_format? && !devise_controller? && !request.xhr?
+  # end
 
 
-  def store_user_location!
-    store_location_for(:user, request.fullpath)
-  end
+  # def store_user_location!
+  #   store_location_for(:user, request.fullpath)
+  # end
 
-  def create_feedback
-    @feedback = Feedback.new
-  end
+  # def create_feedback
+  #   @feedback = Feedback.new
+  # end
 
   def set_membership
     if user_signed_in?
