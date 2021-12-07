@@ -12,6 +12,10 @@ class RoomPolicy < ApplicationPolicy
     user_in_non_admin_group?
   end
 
+  def new?
+    false
+  end
+
   def show?
     # true
     user_in_non_admin_group?
