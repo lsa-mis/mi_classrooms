@@ -1,5 +1,3 @@
-$(document).ready(function () {
-  setTimeout(function () {
-    $('#flash-message').remove();
-  }, 5000);
-})
+setTimeout(function () {
+  $('#flash-message').remove();
+}, 3000);
