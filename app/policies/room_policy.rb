@@ -29,7 +29,4 @@ class RoomPolicy < ApplicationPolicy
     edit?
   end
 
-  def get_current_url?
-    true
-  end
 end
