@@ -34,13 +34,17 @@ include ActionView::RecordIdentifier
     
     @pagy, @rooms = pagy(@rooms)
 
-    unless params[:query].nil?
-      render turbo_stream: turbo_stream.replace(
-        :roomListing,
-        partial: "rooms/listing"
-      )
-    end
+    # unless params[:query].nil?
+    #   render turbo_stream: turbo_stream.replace(
+    #     :roomListing,
+    #     partial: "rooms/listing"
+    #   )
+    # end
 
+  end
+
+  def clear
+    
   end
 
   # GET /rooms/1
