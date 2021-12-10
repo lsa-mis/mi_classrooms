@@ -35,6 +35,10 @@ Rails.application.configure do
   config.active_job.queue_name_prefix = "mi_classrooms_#{Rails.env}"
   config.active_job.queue_adapter = :sidekiq
 
+  # letter_opener
+  config.action_mailer.delivery_method = :letter_opener_web
+  config.action_mailer.perform_deliveries = true
+  
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 

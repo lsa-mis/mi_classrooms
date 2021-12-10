@@ -61,6 +61,7 @@ group :development do
   gem "pry-rails"
   gem "spring"
   gem "spring-watcher-listen"
+  gem 'letter_opener_web', '~> 2.0'
 end
 
 group :test do
@@ -89,3 +90,5 @@ gem 'image_processing'
 gem 'order_as_specified', '~> 1.7'
 # gem 'newrelic_rpm'
 # gem 'newrelic-infinite_tracing'
+gem 'ruby-oci8', '~> 2.2', '>= 2.2.9'
+gem 'activerecord-oracle_enhanced-adapter', '~> 6.1', '>= 6.1.5'

@@ -30,9 +30,12 @@ Rails.application.routes.draw do
 
   get "legacy_crdb" => redirect("https://rooms.lsa.umich.edu")
 
-
-
   authenticate :user, lambda { |u| u.email == "dschmura@umich.edu" } do
     mount Sidekiq::Web => "/sidekiq"
+  end
+
+  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  if Rails.env.development?
+    mount LetterOpenerWeb::Engine, at: "/letter_opener"
   end
 end
