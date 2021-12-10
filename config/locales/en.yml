@@ -33,5 +33,5 @@ en:
   sitename: "mi_classrooms"
 
   room:
-    one: "1 room"
-    other: "%{count} rooms"
+    one: "1 Room"
+    other: "%{count} Rooms"

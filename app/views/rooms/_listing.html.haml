@@ -1,5 +1,9 @@
 #roomListing.mb-10
-  .pl-2.font-semibold= t("room", count: @pagy.count)
+  .pl-2.font-semibold 
+    - if @pagy.count == @all_rooms_number
+      = "All Rooms"
+    - else
+      = t("room", count: @pagy.count)
   .flex
     .flex.pl-2
       %span.text-gray-700

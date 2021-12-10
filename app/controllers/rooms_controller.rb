@@ -11,7 +11,7 @@ include ActionView::RecordIdentifier
 
   def index
     @rooms_page_announcement = Announcement.find_by(location: "find_a_room_page")
-
+    @all_rooms_number = @rooms = Room.classrooms.count
     @schools = Room.classrooms.pluck(:dept_group_description).uniq.sort
     if params[:direction].present?
       @rooms = Room.classrooms.includes([:building, :room_contact]).reorder(:instructional_seating_count => params[:direction].to_sym)
