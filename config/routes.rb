@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   get '/privacy', to: 'pages#privacy'
   get '/contact', to: 'pages#contact'
   get '/about', to: 'pages#about'
+  get '/room_filters_glossary', to: 'pages#room_filters_glossary'
   root to: 'pages#index'
   get 'pages/index'
   get 'pages/about'

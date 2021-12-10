@@ -12,6 +12,10 @@ class PagePolicy < ApplicationPolicy
     true
   end
 
+  def room_filters_glossary?
+    true
+  end
+
   def contact?
     true
   end

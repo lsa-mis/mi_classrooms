@@ -13,6 +13,11 @@ class PagesController < ApplicationController
     skip_policy_scope
   end
 
+  def room_filters_glossary
+    authorize :page
+    @filters = RoomCharacteristic.all.pluck(:chrstc_descr, :chrstc_desc254).uniq.sort
+  end
+
   def contact
     authorize :page
   end
