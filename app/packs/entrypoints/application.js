@@ -15,7 +15,6 @@ import * as ActiveStorage from "@rails/activestorage"
 import "../stylesheets/application.sass"
 import '../stylesheets/_header.sass'
 import '../stylesheets/_flash_errors.sass'
-import '../stylesheets/_feedback.sass'
 import '../stylesheets/ribbons.sass'
 import '../stylesheets/search.sass'
 import gtag from '../src/analytics'
@@ -25,10 +24,6 @@ function importAll(r) {
 }
 // Add relevant file extensions as needed below.
 importAll(require.context('../images/', true, /\.(svg|jpg|gif|png)$/));
-
-// require('trix')
-// require('@rails/actiontext')
-// import 'trix/dist/trix.css'
 
 import "controllers"
 
