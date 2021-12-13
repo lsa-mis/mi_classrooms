@@ -11,7 +11,7 @@ include ActionView::RecordIdentifier
 
   def index
     @rooms_page_announcement = Announcement.find_by(location: "find_a_room_page")
-
+    @all_rooms_number = Room.classrooms.count
     @schools = Room.classrooms.pluck(:dept_group_description).uniq.sort
     if params[:direction].present?
       @rooms = Room.classrooms.includes([:building, :room_contact]).reorder(:instructional_seating_count => params[:direction].to_sym)
@@ -33,6 +33,7 @@ include ActionView::RecordIdentifier
     @rooms = RoomDecorator.decorate_collection(@rooms)
     
     @pagy, @rooms = pagy(@rooms)
+    @rooms_search_count = @pagy.count
 
     # unless params[:query].nil?
     #   render turbo_stream: turbo_stream.replace(
