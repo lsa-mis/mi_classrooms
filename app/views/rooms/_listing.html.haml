@@ -1,9 +1,11 @@
 #roomListing.mb-10
   .pl-2.font-semibold 
-    - if @pagy.count == @all_rooms_number
+    - if @rooms_search_count == @all_rooms_number
       = "All Rooms"
-    - else
-      = t("room", count: @pagy.count)
+    - elsif @rooms_search_count == 1
+      = "1 Room"
+    - else 
+      = "#{@rooms_search_count} Rooms"
   .flex
     .flex.pl-2
       %span.text-gray-700
