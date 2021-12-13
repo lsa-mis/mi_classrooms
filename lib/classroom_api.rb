@@ -35,23 +35,21 @@ class ClassroomApi
           sleep(61.seconds)
         end
         facility_id = room['FacilityID'].to_s
-        # add facility_id only if room in the database doesn't have one
-        if Room.find_by(facility_code_heprod: facility_id).nil?
-          result = get_classroom_info(ERB::Util.url_encode(facility_id))
-          if result['success']
-            room_info = result['data'][0]
-            if campus_codes.include?(room_info['CampusCd'].to_i) || buildings_codes.include?(room_info['BuildingID'].to_i)
-              rmrecnbr = room_info['RmRecNbr'].to_i
-              room_in_db = Room.find_by(rmrecnbr: rmrecnbr)
-              if room_in_db
-                room_in_db.update(facility_code_heprod: facility_id, instructional_seating_count: room_info['RmInstSeatCnt'], campus_record_id: CampusRecord.find_by(campus_cd: room_info['CampusCd']).id)
-              else
-                facility_id_logger.info "Room not in the database: rmrecnbr - #{rmrecnbr}, facility_id - #{facility_id}"
-              end
+        # add facility_id and number of seats
+        result = get_classroom_info(ERB::Util.url_encode(facility_id))
+        if result['success']
+          room_info = result['data'][0]
+          if campus_codes.include?(room_info['CampusCd'].to_i) || buildings_codes.include?(room_info['BuildingID'].to_i)
+            rmrecnbr = room_info['RmRecNbr'].to_i
+            room_in_db = Room.find_by(rmrecnbr: rmrecnbr)
+            if room_in_db
+              room_in_db.update(facility_code_heprod: facility_id, instructional_seating_count: room_info['RmInstSeatCnt'], campus_record_id: CampusRecord.find_by(campus_cd: room_info['CampusCd']).id)
+            else
+              facility_id_logger.info "Room not in the database: rmrecnbr - #{rmrecnbr}, facility_id - #{facility_id}"
             end
-          else
-            facility_id_logger.info "did not find room in API room_info for facility_id: #{facility_id}"
           end
+        else
+          facility_id_logger.info "did not find room in API room_info for facility_id: #{facility_id}"
         end
       end
     else
