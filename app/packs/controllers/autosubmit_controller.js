@@ -60,7 +60,10 @@ export default class extends Controller {
   }
 
   clearFilters() {
-    this.formTarget.reset()
-    Turbo.navigator.submitForm(this.formTarget)
+    var url = window.location.pathname
+    // console.log(url)
+    Turbo.visit(url)
+    // this.formTarget.reset()
+    // Turbo.navigator.submitForm(this.formTarget)
   }
 }

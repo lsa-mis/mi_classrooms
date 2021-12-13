@@ -32,4 +32,5 @@ class RoomPolicy < ApplicationPolicy
   def update?
     edit?
   end
+
 end
