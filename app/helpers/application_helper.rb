@@ -57,32 +57,6 @@ module ApplicationHelper
     end
   end
 
-  ROOM_CHARACTERISTIC_NAME = {
-    "InstrComp" => "Instructor Computer",
-    "DocCam" => "Document Camera",
-    "LectureCap" => "Lecture Capture",
-    "VideoConf" => "Video Conferencing",
-    "IntrScreen" => "Interactive Screen",
-    "BluRay" => "BluRay / DVD",
-    "TeamBoard" => "Team Board",
-    "TeamTables" => "Team Tables",
-    "TeamTech" => "Team Technology",
-    "Whtbrd" => "Whiteboard",
-    "Chkbrd" => "Chalkboard",
-    "Proj35mm" => "35mm Film",
-    "ProjD-Cin" => "Digital Cinema (DCP)",
-    "ProjDigit" => "Digital Data & Video",
-    "SoundPrgrm" => "Sound Amplification: Program",
-    "SoundVoice" => "Sound Amplification: Voice",
-    "AudSeat" => "Auditorium Seating",
-    "ChairFix" => "Chairs Fixed",
-    "MoveTablet" => "Moveable Tablet Chair",
-    "TablesAny" => "Tables (Any)",
-    "TablesConf" => "Table Conf/Seminar",
-    "TablesFix" => "Tables Fixed",
-    "TablesMov" => "Tables Moveable",
-    "TeamTables" => " Team Tables"
-  }
 
 end
 

@@ -1,0 +1,19 @@
+<% @filters_array.each do |category, list| %>
+  <div class="pl-1">
+    <legend class="">
+      <%= category %>
+    </legend>
+    <ul class="">
+      <% list.each do |filter, descr| %>
+        <li class="">
+          <%= check_box_tag "room_characteristics[]", "#{filter}", params[:room_characteristics].try(:include?, "#{filter}"), id: "#{filter.underscore}", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
+          <label class="text-sm font-medium text-gray-700" for=<%= "#{filter.underscore}" %>>
+            <%= descr %>
+          </label>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+  <br>
+  <hr>
+<% end %>

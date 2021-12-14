@@ -34,6 +34,30 @@ include ActionView::RecordIdentifier
     @pagy, @rooms = pagy(@rooms)
     @rooms_search_count = @pagy.count
 
+    # create array of room cahracteristics to use in filters
+    characteristics_all = RoomCharacteristic.all.pluck(:chrstc_descr, :chrstc_descrshort).uniq.sort
+    @filters_array = {}
+    category_prev = ""
+    other = {}
+    characteristics_all.each do |item|
+      Rails.logger.debug "****************** item #{item}"
+      filter_key = item[1]
+      if item[0][":"]
+        category = item[0].slice(0, item[0].index(': '))
+        value = item[0].sub(/.*?:/, '').lstrip
+        if category == category_prev
+          @filters_array[category].merge!(filter_key => value)
+        else 
+          @filters_array.merge!(category => { filter_key => value })
+        end
+        category_prev = category
+      else
+        other.merge!(filter_key => item[0])
+      end
+    end
+    @filters_array.merge!("Other" => other)
+    Rails.logger.debug "****************** filters_array #{@filters_array}"
+
     # unless params[:query].nil?
     #   render turbo_stream: turbo_stream.replace(
     #     :roomListing,
@@ -127,7 +151,7 @@ include ActionView::RecordIdentifier
               when "room_characteristics"
                 names = []
                 v.each do |item|
-                  names << ROOM_CHARACTERISTIC_NAME[item]
+                  names << RoomCharacteristic.find_by(chrstc_descrshort: item).chrstc_descr.sub(/.*?:/, '').lstrip
                 end
                 n = names.join(', ')
                 filters['Filters'] = n
