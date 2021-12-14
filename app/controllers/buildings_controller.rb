@@ -33,30 +33,10 @@ class BuildingsController < ApplicationController
     authorize @building
   end
 
-  # GET /buildings/new
-  def new
-    @building = Building.new
-  end
 
   # GET /buildings/1/edit
   def edit
     authorize @building
-  end
-
-  # POST /buildings
-  # POST /buildings.json
-  def create
-    @building = Building.new(building_params)
-
-    respond_to do |format|
-      if @building.save
-        format.html { redirect_to @building, notice: 'Building was successfully created.' }
-        format.json { render :show, status: :created, location: @building }
-      else
-        format.html { render :new }
-        format.json { render json: @building.errors, status: :unprocessable_entity }
-      end
-    end
   end
 
   # PATCH/PUT /buildings/1
@@ -74,16 +54,6 @@ class BuildingsController < ApplicationController
     end
   end
 
-  # DELETE /buildings/1
-  # DELETE /buildings/1.json
-  def destroy
-    @building.destroy
-    respond_to do |format|
-      format.html { redirect_to buildings_url, notice: 'Building was successfully destroyed.' }
-      format.json { head :no_content }
-      format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@building))}
-    end
-  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

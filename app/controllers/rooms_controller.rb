@@ -6,12 +6,11 @@ include ActionView::RecordIdentifier
   before_action :set_room, only: [:show, :edit, :update, :destroy, :toggle_visibile]
   before_action :set_filters_list, only: [:index]
 
-  helper_method :sort_direction
   include ApplicationHelper 
 
   def index
     @rooms_page_announcement = Announcement.find_by(location: "find_a_room_page")
-
+    @all_rooms_number = Room.classrooms.count
     @schools = Room.classrooms.pluck(:dept_group_description).uniq.sort
     if params[:direction].present?
       @rooms = Room.classrooms.includes([:building, :room_contact]).reorder(:instructional_seating_count => params[:direction].to_sym)
@@ -33,6 +32,7 @@ include ActionView::RecordIdentifier
     @rooms = RoomDecorator.decorate_collection(@rooms)
     
     @pagy, @rooms = pagy(@rooms)
+    @rooms_search_count = @pagy.count
 
     # unless params[:query].nil?
     #   render turbo_stream: turbo_stream.replace(
@@ -57,30 +57,9 @@ include ActionView::RecordIdentifier
     end
   end
 
-  # GET /rooms/new
-  def new
-    @room = Room.new
-  end
-
   # GET /rooms/1/edit
   def edit
     authorize @room
-  end
-
-  # POST /rooms
-  # POST /rooms.json
-  def create
-    @room = Room.new(room_params)
-
-    respond_to do |format|
-      if @room.save
-        format.html { redirect_to @room, notice: 'Room was successfully created.' }
-        format.json { render :show, status: :created, location: @room }
-      else
-        format.html { render :new }
-        format.json { render json: @room.errors, status: :unprocessable_entity }
-      end
-    end
   end
 
   # PATCH/PUT /rooms/1
@@ -98,18 +77,8 @@ include ActionView::RecordIdentifier
     end
   end
 
-  # DELETE /rooms/1
-  # DELETE /rooms/1.json
-  def destroy
-    @room.destroy
-    respond_to do |format|
-      format.html { redirect_to rooms_url, notice: 'Room was successfully destroyed.' }
-      format.json { head :no_content }
-      format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@room))}
-    end
-  end
-
   def toggle_visibile
+    authorize @room
     @room.toggle! :visible
     respond_to do |format|
       format.html { redirect_to rooms_url, notice: 'Room was successfully updated.' }
@@ -132,10 +101,6 @@ include ActionView::RecordIdentifier
 
     def filtering_params
       params.slice(:bluray, :chalkboard, :doccam, :interactive_screen, :instructor_computer, :lecture_capture, :projector_16mm, :projector_35mm, :projector_digital_cinema, :projector_digial, :projector_slide, :team_board, :team_tables, :team_technology, :vcr, :video_conf, :whiteboard)
-    end
-    
-    def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
     end
 
     def set_filters_list
