@@ -1,3 +1,5 @@
+
+
 <%= turbo_frame_tag "room" do  %>
   <div id="notice">
     <%= notice %>
@@ -7,9 +9,6 @@
       <h1>
         <%= @room.facility_code_heprod%>
       </h1>
-      <div>
-        <%= room_image(@room) %>
-      </div>
       <div class='pl-4 mb-5'>
         <%= render 'room_panorama', room: @room  %>
       </div>
