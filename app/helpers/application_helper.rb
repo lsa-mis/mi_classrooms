@@ -71,7 +71,17 @@ module ApplicationHelper
     "Chkbrd" => "Chalkboard",
     "Proj35mm" => "35mm Film",
     "ProjD-Cin" => "Digital Cinema (DCP)",
-    "ProjDigit" => "Digital Data & Video"
+    "ProjDigit" => "Digital Data & Video",
+    "SoundPrgrm" => "Sound Amplification: Program",
+    "SoundVoice" => "Sound Amplification: Voice",
+    "AudSeat" => "Auditorium Seating",
+    "ChairFix" => "Chairs Fixed",
+    "MoveTablet" => "Moveable Tablet Chair",
+    "TablesAny" => "Tables (Any)",
+    "TablesConf" => "Table Conf/Seminar",
+    "TablesFix" => "Tables Fixed",
+    "TablesMov" => "Tables Moveable",
+    "TeamTables" => " Team Tables"
   }
 
 end

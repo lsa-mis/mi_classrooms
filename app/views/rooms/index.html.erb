@@ -162,6 +162,64 @@
                 </li>
               </ul>
             </div>
+            <br>
+            <hr>
+            <div class="pl-1">
+              <legend class="">Sound Amplification</legend>
+              <ul class="">
+                <li class="">
+                  <%= check_box_tag "room_characteristics[]", "SoundPrgrm", params[:room_characteristics].try(:include?, "SoundPrgrm"), id: "sound-prgrm", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
+                  <label class="text-sm font-medium text-gray-700" for="projector-35mm">Program</label>
+                </li>
+                <li class="">
+                  <%= check_box_tag "room_characteristics[]", "SoundVoice", params[:room_characteristics].try(:include?, "SoundVoice"), id: "sound-voice", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
+                  <label class="text-sm font-medium text-gray-700" for="projector-cin"">Voice</label>
+                </li>
+              </ul>
+            </div>
+            <br>
+            <hr>
+            <div class="pl-1">
+              <legend class="">Seating</legend>
+              <ul class="">
+                <li class="">
+                  <%= check_box_tag "room_characteristics[]", "AudSeat", params[:room_characteristics].try(:include?, "AudSeat"), id: "aud-seat", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
+                  <label class="text-sm font-medium text-gray-700" for="projector-35mm">Auditorium Seating</label>
+                </li>
+                <li class="">
+                  <%= check_box_tag "room_characteristics[]", "ChairFix", params[:room_characteristics].try(:include?, "ChairFix"), id: "chair-fix", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
+                  <label class="text-sm font-medium text-gray-700" for="projector-cin"">Chairs FixeVoice</label>
+                </li>
+                <li class="">
+                  <%= check_box_tag "room_characteristics[]", "MoveTablet", params[:room_characteristics].try(:include?, "MoveTablet"), id: "move-tablet", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
+                  <label class="text-sm font-medium text-gray-700" for="projector-cin"">Chairs</label>
+                </li>
+                <li class="">
+                  <%= check_box_tag "room_characteristics[]", "ChairFix", params[:room_characteristics].try(:include?, "ChairFix"), id: "chair-fix", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
+                  <label class="text-sm font-medium text-gray-700" for="projector-cin"">Moveable Tablet Chair</label>
+                </li>
+                <li class="">
+                  <%= check_box_tag "room_characteristics[]", "TablesAny", params[:room_characteristics].try(:include?, "TablesAny"), id: "tables-any", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
+                  <label class="text-sm font-medium text-gray-700" for="projector-cin"">ChaTables (Any)irs</label>
+                </li>
+                <li class="">
+                  <%= check_box_tag "room_characteristics[]", "TablesConf", params[:room_characteristics].try(:include?, "TablesConf"), id: "tables-conf", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
+                  <label class="text-sm font-medium text-gray-700" for="projector-cin"">Table Conf/Seminar</label>
+                </li>
+                <li class="">
+                  <%= check_box_tag "room_characteristics[]", "TablesFix", params[:room_characteristics].try(:include?, "TablesFix"), id: "tables-fix", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
+                  <label class="text-sm font-medium text-gray-700" for="projector-cin"">Tables Fixed</label>
+                </li>
+                <li class="">
+                  <%= check_box_tag "room_characteristics[]", "TablesMov", params[:room_characteristics].try(:include?, "TablesMov"), id: "tables-mov", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
+                  <label class="text-sm font-medium text-gray-700" for="projector-cin"">Tables Moveable</label>
+                </li>
+                <li class="">
+                  <%= check_box_tag "room_characteristics[]", "TeamTables", params[:room_characteristics].try(:include?, "TeamTables"), id: "team-tables", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
+                  <label class="text-sm font-medium text-gray-700" for="projector-cin"">Team Tables</label>
+                </li>
+              </ul>
+            </div>
             
           </div>
         </div>
