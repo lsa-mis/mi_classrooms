@@ -1,0 +1,29 @@
+<div class="mt-2">
+  <div class="mt-2 text-lg flex justify-between">
+    <div>
+      <h4 class="features-header">
+        Room characteristics
+      </h4>
+    </div>
+    <div>
+      <%= link_to "Room Filters Glossary", room_filters_glossary_path, data: { "turbo-frame": "_top" }, class: "h-layout h-highlight-item" %>
+    </div>
+  </div>
+  <hr>
+
+  <% @all_characteristics_array.each do |category, list| %>
+    <% list_keys = list.keys %>
+    <% if list_keys.intersection(@room_chars_short).present? %>
+      <div class="classroom-row-dropdown-features-group">
+        <h4 class="features-header">
+          <%= category %>
+        </h4>
+        <hr/>
+      </div>
+      <% @room_chars.filter { |char| list_keys.intersection(@room_chars_short).include?(char.chrstc_descrshort) }.each do |characteristic| %>
+        <%= render partial: 'room_characteristic', locals:  {characteristic: characteristic}, cached: true %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
+

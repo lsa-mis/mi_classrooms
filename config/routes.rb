@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   match "toggle_visibile/:id" => "rooms#toggle_visibile", :via => [:get, :post], :as => :toggle_visibile
   
   get '/about', to: 'pages#about'
+  get '/room_filters_glossary', to: 'pages#room_filters_glossary'
   root to: 'pages#index'
   get 'pages/index'
   

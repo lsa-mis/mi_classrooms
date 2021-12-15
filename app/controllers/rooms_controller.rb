@@ -5,6 +5,7 @@ include ActionView::RecordIdentifier
   skip_after_action :verify_policy_scoped, only: :index
   before_action :set_room, only: [:show, :edit, :update, :destroy, :toggle_visibile]
   before_action :set_filters_list, only: [:index]
+  before_action :set_filters_array, only: [:index, :show]
 
   include ApplicationHelper 
 
@@ -19,13 +20,12 @@ include ActionView::RecordIdentifier
       floors = sort_floors(@rooms.pluck(:floor).uniq)
       @rooms = @rooms.order_as_specified(floor: floors).order(:room_number => :asc)
     end
-
-    @rooms = @rooms.classrooms.with_building_name(params[:query]) if params[:query].present?
-    @rooms = @rooms.classrooms.with_school_or_college_name(params[:school_or_college_name]) if params[:school_or_college_name].present?
-    @rooms = @rooms.classrooms.with_all_characteristics(params[:room_characteristics]) if params[:room_characteristics].present?
-    @rooms = @rooms.classrooms.where('instructional_seating_count >= ?', params[:min_capacity].to_i) if params[:max_capacity].present?
-    @rooms = @rooms.classrooms.where('instructional_seating_count <= ?', params[:max_capacity].to_i) if params[:max_capacity].present?
-    @rooms = @rooms.classrooms.where('facility_code_heprod LIKE ?', "%#{params[:classroom_name].upcase}%") if params[:classroom_name].present?
+    @rooms = @rooms.with_building_name(params[:query]) if params[:query].present?
+    @rooms = @rooms.with_school_or_college_name(params[:school_or_college_name]) if params[:school_or_college_name].present?
+    @rooms = @rooms.with_all_characteristics(params[:room_characteristics]) if params[:room_characteristics].present?
+    @rooms = @rooms.where('instructional_seating_count >= ?', params[:min_capacity].to_i) if params[:max_capacity].present?
+    @rooms = @rooms.where('instructional_seating_count <= ?', params[:max_capacity].to_i) if params[:max_capacity].present?
+    @rooms = @rooms.where('facility_code_heprod LIKE ?', "%#{params[:classroom_name].upcase}%") if params[:classroom_name].present?
 
     authorize @rooms
 
@@ -34,22 +34,13 @@ include ActionView::RecordIdentifier
     @pagy, @rooms = pagy(@rooms)
     @rooms_search_count = @pagy.count
 
-    # unless params[:query].nil?
-    #   render turbo_stream: turbo_stream.replace(
-    #     :roomListing,
-    #     partial: "rooms/listing"
-    #   )
-    # end
-
-  end
-
-  def clear
-    
   end
 
   # GET /rooms/1
   # GET /rooms/1.json
   def show
+    @room_chars = @room.room_characteristics.select { |c| c}
+    @room_chars_short = @room.characteristics
     authorize @room
     respond_to do |format|
       format.html
@@ -127,7 +118,7 @@ include ActionView::RecordIdentifier
               when "room_characteristics"
                 names = []
                 v.each do |item|
-                  names << ROOM_CHARACTERISTIC_NAME[item]
+                  names << RoomCharacteristic.find_by(chrstc_descrshort: item).chrstc_descr.sub(/.*?:/, '').lstrip
                 end
                 n = names.join(', ')
                 filters['Filters'] = n
@@ -152,6 +143,31 @@ include ActionView::RecordIdentifier
         end
       end
       return sorted
+    end
+
+    def set_filters_array
+      # create array of room cahracteristics to use in filters
+      characteristics_all = RoomCharacteristic.all.pluck(:chrstc_descr, :chrstc_descrshort).uniq.sort
+      @all_characteristics_array = {}
+      category_prev = ""
+      other = {}
+      characteristics_all.each do |item|
+        filter_key = item[1]
+        if item[0][":"]
+          category = item[0].slice(0, item[0].index(': '))
+          value = item[0].sub(/.*?:/, '').lstrip
+          if category == category_prev
+            @all_characteristics_array[category].merge!(filter_key => value)
+          else 
+            @all_characteristics_array.merge!(category => { filter_key => value })
+          end
+          category_prev = category
+        else
+          other.merge!(filter_key => item[0])
+        end
+      end
+      @all_characteristics_array.merge!("Other" => other)
+
     end
 
 end

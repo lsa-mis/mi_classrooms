@@ -5,12 +5,12 @@ module SearchHelper
     "AudSeat" => "chair",
     "Blackout" => "lightbulb",
     "BluRay" => "compact-disc",
-    "BluRay/DVD" => "compact-disc",
+    "BluRayDVD" => "compact-disc",
     "CaptionDev" => "closed-captioning",
     "Carpet" => "info-circle",
     "ChairFix" => "chair",
     "Chkbrd" => "chalkboard-teacher",
-    "Chkbrd>25" => "chalkboard-teacher",
+    "Chkbrd25" => "chalkboard-teacher",
     "CompLabAny" => "keyboard",
     "CompLabMac" => "keyboard",
     "CompLabPC" => "keyboard",
@@ -46,9 +46,10 @@ module SearchHelper
     "VideoConf" => "satellite",
     "WCInst" => "wheelchair",
     "Whtbrd" => "chalkboard-teacher",
-    "Whtbrd>25" => "chalkboard-teacher",
+    "Whtbrd25" => "chalkboard-teacher",
     "Windows" => "window-close",
     "Wood" => "info-circle",
+    "Default" => "info-circle"
   }
 
   def is_checked?(values)
@@ -84,6 +85,10 @@ module SearchHelper
   end
 
   def room_characteristic_icon(room_characteristic)
-    "#{ROOM_CHARACTERISTIC_ICONS[room_characteristic.chrstc_descrshort]}"
+    if ROOM_CHARACTERISTIC_ICONS[room_characteristic.chrstc_descrshort]
+      "#{ROOM_CHARACTERISTIC_ICONS[room_characteristic.chrstc_descrshort]}"
+    else
+      "#{ROOM_CHARACTERISTIC_ICONS['Default']}"
+    end
   end
 end

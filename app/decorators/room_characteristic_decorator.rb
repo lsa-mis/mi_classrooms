@@ -15,12 +15,12 @@ class RoomCharacteristicDecorator < Draper::Decorator
     "AudSeat" => "fas fa-chair",
     "Blackout" => "far fa-lightbulb",
     "BluRay" => "fas fa-compact-disc",
-    "BluRay/DVD" => "fas fa-compact-disc",
+    "BluRayDVD" => "fas fa-compact-disc",
     "CaptionDev" => "fas fa-closed-captioning",
     "Carpet" => "fas fa-info-circle",
     "ChairFix" => "fas fa-chair",
     "Chkbrd" => "fas fa-chalkboard-teacher",
-    "Chkbrd>25" => "fas fa-chalkboard-teacher",
+    "Chkbrd25" => "fas fa-chalkboard-teacher",
     "CompLabAny" => "fas fa-keyboard",
     "CompLabMac" => "fas fa-keyboard",
     "CompLabPC" => "fas fa-keyboard",
@@ -56,9 +56,10 @@ class RoomCharacteristicDecorator < Draper::Decorator
     "VideoConf" => "fas fa-satellite",
     "WCInst" => "fas fa-wheelchair",
     "Whtbrd" => "fas fa-chalkboard-teacher",
-    "Whtbrd>25" => "fas fa-chalkboard-teacher",
+    "Whtbrd25" => "fas fa-chalkboard-teacher",
     "Windows" => "fas fa-window-close",
     "Wood" => "fas fa-info-circle",
+    "Default" => "fas fa-info-circle"
   }
 
   def characteristic_icon

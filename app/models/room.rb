@@ -63,37 +63,37 @@ class Room < ApplicationRecord
     }
   )
 
-  pg_search_scope(
-    :with_characteristic,
-    against: [:characteristics],
-    using: {
-      tsearch:{
-        dictionary: "english",
-        prefix: true,
-        any_word: true,
-      }
-    }
-  )
+  # pg_search_scope(
+  #   :with_characteristic,
+  #   against: [:characteristics],
+  #   using: {
+  #     tsearch:{
+  #       dictionary: "english",
+  #       prefix: false,
+  #       any_word: false,
+  #     }
+  #   }
+  # )
 
-    pg_search_scope(
-    :with_characteristic,
-    against: [:characteristics],
-    using: {
-      tsearch:{
-        dictionary: "english",
-        prefix: true,
-        any_word: true,
-      }
-    }
-  )
+  #   pg_search_scope(
+  #   :with_characteristic,
+  #   against: [:characteristics],
+  #   using: {
+  #     tsearch:{
+  #       dictionary: "english",
+  #       prefix: true,
+  #       any_word: true,
+  #     }
+  #   }
+  # )
 
   pg_search_scope(
     :with_all_characteristics,
     against: [:characteristics],
     using: {
       tsearch:{
-        dictionary: "english",
-        prefix: true,
+        dictionary: "simple",
+        prefix: false,
         any_word: false,
       }
     }
