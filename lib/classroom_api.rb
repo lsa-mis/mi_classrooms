@@ -176,8 +176,9 @@ class ClassroomApi
 
   def create_classroom_characteristics(characteristics)
     characteristics.each do |row|
+      chrstc_descrshort = row['ChrstcDescrShort'].gsub(/[^0-9A-Za-z]/, '')
       room_char = RoomCharacteristic.new(rmrecnbr: row['RmRecNbr'], chrstc_desc254: row['ChrstcDescr254'], 
-                  chrstc_descr: row['ChrstcDescr'], chrstc_descrshort: row['ChrstcDescrShort'], chrstc: row['Chrstc'])
+                  chrstc_descr: row['ChrstcDescr'], chrstc_descrshort: chrstc_descrshort, chrstc: row['Chrstc'])
       if !room_char.save
         classroom_characteristics_logger.debug "Could not create #{row['RmRecNbr']} because : #{room_char.errors.messages}"
       end
