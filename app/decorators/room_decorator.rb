@@ -52,8 +52,8 @@ class RoomDecorator < Draper::Decorator
   end
 
   def building_name
-    unless room.building.nick_name.nil?
-      "#{room.building.nick_name.titleize}"
+    unless room.building.name.nil?
+      "#{room.building.name.titleize}"
     end
   end
 

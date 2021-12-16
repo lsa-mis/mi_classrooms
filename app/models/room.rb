@@ -51,7 +51,9 @@ class Room < ApplicationRecord
   pg_search_scope(
     :with_building_name,
     associated_against: {
-      building: [:name]
+      building: {name: 'A',
+      nick_name: 'B',
+      abbreviation: 'C'}
     },
     using: {
       tsearch: {
@@ -63,29 +65,6 @@ class Room < ApplicationRecord
     }
   )
 
-  # pg_search_scope(
-  #   :with_characteristic,
-  #   against: [:characteristics],
-  #   using: {
-  #     tsearch:{
-  #       dictionary: "english",
-  #       prefix: false,
-  #       any_word: false,
-  #     }
-  #   }
-  # )
-
-  #   pg_search_scope(
-  #   :with_characteristic,
-  #   against: [:characteristics],
-  #   using: {
-  #     tsearch:{
-  #       dictionary: "english",
-  #       prefix: true,
-  #       any_word: true,
-  #     }
-  #   }
-  # )
 
   pg_search_scope(
     :with_all_characteristics,
