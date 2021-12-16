@@ -29,9 +29,12 @@ module ApplicationHelper
     if room.room_image.representable?
       image_tag room.room_image.representation(resize_to_limit: [600, 400]), class: 'm-2', alt: "#{room.room_number} --  #{room.building.name}" 
     else
-      image_tag 'room_placeholder', height: '150', width: '150', class: 'm-2', alt: "room placeholder" 
+      image_tag 'image_missing.png', alt: "The image for this room is not available"
+
     end
   end
+
+
 
   def room_thumbnail_image( room )
     if room.room_image.representable?

@@ -16,9 +16,10 @@ import "../stylesheets/application.sass"
 import '../stylesheets/_header.sass'
 import '../stylesheets/_flash_errors.sass'
 import '../stylesheets/ribbons.sass'
+import '../stylesheets/rooms.sass'
 import '../stylesheets/search.sass'
 import gtag from '../src/analytics'
-
+import 'pannellum/build/pannellum.css'
 function importAll(r) {
   r.keys().forEach(r);
 }
