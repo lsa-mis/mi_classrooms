@@ -95,18 +95,27 @@
             <span>Room Availability</span>
           </div>
         <% end %>
-        <%= link_to room_layout(@room), target: "_blank" do %>
-          <div class="h-layout h-highlight-item">
-            <%= svg("chair") %>
-            <span>Room Layout</span>
-          </div>
-        <% end %> 
-        <%= link_to "#", target: "_blank" do %>
-          <div class="h-layout h-highlight-item">
+        <% if @room.room_layout.representable? %>
+          <%= link_to room_layout(@room), target: "_blank" do %>
+            <div class="h-layout h-highlight-item">
+              <%= svg("chair") %>
+              <span>Room Layout</span>
+            </div>
+          <% end %> 
+        <% end %>
+        <% if false %>
+          <%= link_to "#", target: "_blank" do %>
+            <div class="h-layout h-highlight-item">
+              <%= svg("layer_group") %>
+              <span>Floor <%= @room.floor.gsub(/[0]/, '') %> Map  </span>
+            </div>
+          <% end %>
+        <% else %>
+          <div class="h-layout h-no-highlight-item">
             <%= svg("layer_group") %>
-            <span>Floor <%= @room.floor.gsub(/[0]/, '') %> Map  </span>
+            <span>Floor <%= @room.floor.gsub(/[0]/, '') %></span>
           </div>
-        <% end %> 
+        <% end %>
       </div>
       <%= render 'characteristics', room: @room%>
     </div>
