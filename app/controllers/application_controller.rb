@@ -29,4 +29,40 @@ class ApplicationController < ActionController::Base
     
   end
 
+  def set_characteristics_array
+    # create array of room cahracteristics to use in filters
+    characteristics_all = RoomCharacteristic.all.pluck(:chrstc_descr, :chrstc_descrshort).uniq.sort
+    @all_characteristics_array = {}
+    category_prev = ""
+    other = {}
+    team = {}
+    characteristics_all.each do |item|
+      next if item[0]["Assisted Listening"]
+      next if item[0]["Blue Ray Disc"]
+      next if item[0]["16mm Film(Movies)"]
+      filter_key = item[1]
+      if item[0][":"]
+        category = item[0].slice(0, item[0].index(': '))
+        next if category["Wheelchair"]
+        # value = item[0].sub(/.*?:/, '').lstrip
+        value = item[0].partition(': ').last
+        if value.downcase["team"]
+          team.merge!(filter_key => value)
+        else 
+          if category == category_prev
+            @all_characteristics_array[category].merge!(filter_key => value)
+          else 
+            @all_characteristics_array.merge!(category => { filter_key => value })
+          end
+          category_prev = category
+        end
+      else
+        other.merge!(filter_key => item[0])
+      end
+    end
+    @all_characteristics_array.merge!("Team Based Learning" => team)
+    @all_characteristics_array.merge!("Other" => other)
+
+  end
+
 end
