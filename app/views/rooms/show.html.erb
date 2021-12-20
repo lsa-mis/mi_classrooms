@@ -88,34 +88,42 @@
         <%= @room.instructional_seating_count %>
       </div>
       <div class="grid grid-cols-3 text-sm font-medium">
-
-        <%= link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{@room.facility_code_heprod }", target: "_blank" do %>
-          <div class="h-layout h-highlight-item">
-            <%= svg("calendar_days")  %>
-            <span>Room Availability</span>
-          </div>
-        <% end %>
-        <% if @room.room_layout.representable? %>
-          <%= link_to room_layout(@room), target: "_blank" do %>
+        <div>
+          <%= link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{@room.facility_code_heprod }", target: "_blank" do %>
             <div class="h-layout h-highlight-item">
-              <%= svg("chair") %>
-              <span>Room Layout</span>
-            </div>
-          <% end %> 
-        <% end %>
-        <% if false %>
-          <%= link_to "#", target: "_blank" do %>
-            <div class="h-layout h-highlight-item">
-              <%= svg("layer_group") %>
-              <span>Floor <%= @room.floor.gsub(/[0]/, '') %> Map  </span>
+              <%= svg("calendar_days")  %>
+              <span>Room Availability</span>
             </div>
           <% end %>
-        <% else %>
-          <div class="h-layout h-no-highlight-item">
-            <%= svg("layer_group") %>
-            <span>Floor <%= @room.floor.gsub(/[0]/, '') %></span>
-          </div>
-        <% end %>
+        </div>
+        <div>
+          <% if @room.room_layout.representable? %>
+            <%= link_to room_layout(@room), target: "_blank" do %>
+              <div class="h-layout h-highlight-item">
+                <%= svg("chair") %>
+                <span>Room Layout</span>
+              </div>
+            <% end %>
+          <% else %>
+          <div>skip</div>
+
+          <% end %>
+        </div>
+        <div>
+          <% if false %>
+            <%= link_to "#", target: "_blank" do %>
+              <div class="h-layout h-highlight-item">
+                <%= svg("layer_group") %>
+                <span>Floor <%= @room.floor.gsub(/[0]/, '') %> Map  </span>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="h-layout h-no-highlight-item">
+              <%= svg("layer_group") %>
+              <span>Floor <%= @room.floor.gsub(/[0]/, '') %></span>
+            </div>
+          <% end %>
+        </div>
       </div>
       <%= render 'characteristics', room: @room%>
     </div>
