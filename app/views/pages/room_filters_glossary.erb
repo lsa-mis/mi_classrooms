@@ -1,14 +1,30 @@
 <div class="container mb-20">
 
   <h1>Room Filters Glossary</h1>
-
-  <% for char in 'A'...'Z' do %>
-    <%= link_to char, room_filters_glossary_path(anchor: "#{char}") %>
-  <% end  %>
-  <div class="ml-4">
-    <% @filters.each do |filter| %>
-      <div class="font-bold text-lg" id="<%= filter[0][0] %>"><a href="<%= filter[0][0] %>"><%= filter[0] %></a></div>
-      <div class="mb-2 text-base"><%= filter[1] %></div>
+  <div class="flex-auto justify-center ml-4">
+    <% for char in 'A' ... 'Z' do %>
+      <% if @category_letters.include?(char) %> 
+        <%= link_to char, room_filters_glossary_path(anchor: "#{char}"), class: "p-2 text-lg text-black hover:underline" %>
+      <% else %>
+        <span class="p-2 text-lg text-gray-400"><%= "#{char}" %></span>
+      <% end %>
+    <% end  %>
+  </div>
+  <div>
+    <% @all_characteristics_array.sort.each do |category, list| %>
+      <div class="mb-2" id="<%= category[0] %>"><a href="<%= category[0] %>"></a>
+        <h2><%= category %></h2>
+        <ul class="ml-4 text-base">
+          <% list.each do |filter, descr| %>
+            <li class="font-semibold ml-2">
+              <%= descr %>:
+              <div class="inline-block font-normal">
+                <%= @filters_hash[filter] %>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </div>
     <% end %>
   </div>
 </div>
