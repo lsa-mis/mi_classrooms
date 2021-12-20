@@ -2,26 +2,13 @@
 
   <h1>Room Filters Glossary</h1>
 
-  <div class="">
-    <div class="">
-      <table class="border-collapse border border-gray-400">
-
-        <thead>
-          <tr>
-            <th scope="col" class="border border-gray-400 text-left p-2">Room Filter</th>
-            <th scope="col" class="border border-gray-400 text-left p-2">Definition</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <% @filters.each do |filter| %>
-            <tr class="border-black">
-              <td class="border border-gray-400 p-2"><%= filter[0] %></td>
-              <td class="border border-gray-400 p-2"><%= filter[1] %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
+  <% for char in 'A'...'Z' do %>
+    <%= link_to char, room_filters_glossary_path(anchor: "#{char}") %>
+  <% end  %>
+  <div class="ml-4">
+    <% @filters.each do |filter| %>
+      <div class="font-bold text-lg" id="<%= filter[0][0] %>"><a href="<%= filter[0][0] %>"><%= filter[0] %></a></div>
+      <div class="mb-2 text-base"><%= filter[1] %></div>
+    <% end %>
   </div>
 </div>
