@@ -1,27 +1,30 @@
 <div class="container mb-20">
 
   <h1>Room Filters Glossary</h1>
-
-  <div class="">
-    <div class="">
-      <table class="border-collapse border border-gray-400">
-
-        <thead>
-          <tr>
-            <th scope="col" class="border border-gray-400 text-left p-2">Room Filter</th>
-            <th scope="col" class="border border-gray-400 text-left p-2">Definition</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <% @filters.each do |filter| %>
-            <tr class="border-black">
-              <td class="border border-gray-400 p-2"><%= filter[0] %></td>
-              <td class="border border-gray-400 p-2"><%= filter[1] %></td>
-            </tr>
+  <div class="flex-auto justify-center ml-4">
+    <% for char in 'A' ... 'Z' do %>
+      <% if @category_letters.include?(char) %> 
+        <%= link_to char, room_filters_glossary_path(anchor: "#{char}"), class: "p-2 text-lg text-black hover:underline" %>
+      <% else %>
+        <span class="p-2 text-lg text-gray-400"><%= "#{char}" %></span>
+      <% end %>
+    <% end  %>
+  </div>
+  <div>
+    <% @all_characteristics_array.sort.each do |category, list| %>
+      <div class="mb-2" id="<%= category[0] %>"><a href="<%= category[0] %>"></a>
+        <h2><%= category %></h2>
+        <ul class="ml-4 text-base">
+          <% list.each do |filter, descr| %>
+            <li class="font-semibold ml-2">
+              <%= descr %>:
+              <div class="inline-block font-normal">
+                <%= @filters_hash[filter] %>
+              </div>
+            </li>
           <% end %>
-        </tbody>
-      </table>
-    </div>
+        </ul>
+      </div>
+    <% end %>
   </div>
 </div>

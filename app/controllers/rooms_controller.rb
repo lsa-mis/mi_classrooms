@@ -5,7 +5,7 @@ include ActionView::RecordIdentifier
   skip_after_action :verify_policy_scoped, only: :index
   before_action :set_room, only: [:show, :edit, :update, :destroy, :toggle_visibile]
   before_action :set_filters_list, only: [:index]
-  before_action :set_filters_array, only: [:index, :show]
+  before_action :set_characteristics_array, only: [:index, :show]
 
   include ApplicationHelper 
 
@@ -143,31 +143,6 @@ include ActionView::RecordIdentifier
         end
       end
       return sorted
-    end
-
-    def set_filters_array
-      # create array of room cahracteristics to use in filters
-      characteristics_all = RoomCharacteristic.all.pluck(:chrstc_descr, :chrstc_descrshort).uniq.sort
-      @all_characteristics_array = {}
-      category_prev = ""
-      other = {}
-      characteristics_all.each do |item|
-        filter_key = item[1]
-        if item[0][":"]
-          category = item[0].slice(0, item[0].index(': '))
-          value = item[0].sub(/.*?:/, '').lstrip
-          if category == category_prev
-            @all_characteristics_array[category].merge!(filter_key => value)
-          else 
-            @all_characteristics_array.merge!(category => { filter_key => value })
-          end
-          category_prev = category
-        else
-          other.merge!(filter_key => item[0])
-        end
-      end
-      @all_characteristics_array.merge!("Other" => other)
-
     end
 
 end
