@@ -82,31 +82,45 @@
   </div>
 
   <div>
-    <div class="container grid p-2 text-xl border-t-2 border-gray-100">Details
+    <div class="container p-2 text-xl border-t-2 border-gray-100">Details
 
       <div class="text-lg">Instructional seating count:
         <%= @room.instructional_seating_count %>
       </div>
       <div class="grid grid-cols-3 text-sm font-medium">
-
-        <%= link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{@room.facility_code_heprod }", target: "_blank" do %>
-          <div class="h-layout h-highlight-item">
-            <%= svg("calendar_days")  %>
-            <span>Room Availability</span>
-          </div>
-        <% end %>
-        <%= link_to room_layout(@room), target: "_blank" do %>
-          <div class="h-layout h-highlight-item">
-            <%= svg("chair") %>
-            <span>Room Layout</span>
-          </div>
-        <% end %> 
-        <%= link_to "#", target: "_blank" do %>
-          <div class="h-layout h-highlight-item">
-            <%= svg("layer_group") %>
-            <span>Floor <%= @room.floor.gsub(/[0]/, '') %> Map  </span>
-          </div>
-        <% end %> 
+        <div>
+          <%= link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{@room.facility_code_heprod }", target: "_blank" do %>
+            <div class="h-layout h-highlight-item">
+              <%= svg("calendar_days")  %>
+              <span>Room Availability</span>
+            </div>
+          <% end %>
+        </div>
+        <div>
+          <% if @room.room_layout.representable? %>
+            <%= link_to room_layout(@room), target: "_blank" do %>
+              <div class="h-layout h-highlight-item">
+                <%= svg("chair") %>
+                <span>Room Layout</span>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+        <div>
+          <% if false %>
+            <%= link_to "#", target: "_blank" do %>
+              <div class="h-layout h-highlight-item">
+                <%= svg("layer_group") %>
+                <span>Floor <%= @room.floor.gsub(/[0]/, '') %> Map  </span>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="h-layout h-no-highlight-item">
+              <%= svg("layer_group") %>
+              <span>Floor <%= @room.floor.gsub(/[0]/, '') %></span>
+            </div>
+          <% end %>
+        </div>
       </div>
       <%= render 'characteristics', room: @room%>
     </div>
@@ -120,9 +134,9 @@
   </div>
 <% end %>
 
-<div class="container p-2 rounded-lg shadow-lg text-xl mb-20 -mt-16 bg-gray-50">Notes:
+<div class="container p-2 rounded-lg shadow-lg text-xl mb-20 -mt-16 bg-gray-50">
   <% if session["user_admin"] %>
-    <div class="mb-20">
+    <div class="mb-20">Notes:
       <% if user_signed_in? %>
         <%= render partial: "notes/form", locals: { note: Note.new, noteable: @room } %>
       <% else %>
@@ -135,14 +149,16 @@
       <% end %>
     </div>
   <% else %>
-    <div>
-      <% @room.notes.each do |note| %>
-        <hr class= "flex-1 border-t border-blue-600 mt-1 mb-2 m-2">
-        <div class="text-sm pb-1">
-          <%= note.updated_at.strftime('%m/%d/%Y') %>
-          <%= note.body  %>
-        </div>
-      <% end %>
-    </div>
+    <% if @room.notes.present? %>
+      <div>Notes:
+        <% @room.notes.each do |note| %>
+          <hr class= "flex-1 border-t border-blue-600 mt-1 mb-2 m-2">
+          <div class="text-sm pb-1">
+            <%= note.updated_at.strftime('%m/%d/%Y') %>
+            <%= note.body  %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
   <% end %>
 </div>
