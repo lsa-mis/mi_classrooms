@@ -1,0 +1,42 @@
+<div class="mb-10" id="roomListing">
+  <% if params.present? %>
+    <div class="pl-2 font-semibold">
+      <% if @rooms_search_count == @all_rooms_number %>
+        <%= "All Rooms" %>
+      <% elsif @rooms_search_count == 1 %>
+        <%= "1 Room" %>
+      <% else  %>
+        <%= "#{@rooms_search_count} Rooms" %>
+      <% end %>
+    </div>
+    <div class="flex">
+      <div class="flex pl-2">
+        <span class="text-gray-700"></span>
+        <%= @filters_list %>
+      </div>
+      <div class="justify-end pr-2">
+        <span class="text-muted" data-autosubmit-target="status"></span>
+      </div>
+    </div>
+    <div class="flex flex-col">
+      <div class="overflow-x-auto">
+        <div class="py-2 align-middle inline-block min-w-full">
+          <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+            <table class="min-w-full divide-y divide-gray-200 max-w-5xl">
+              <thead class="bg-gray-50">
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <% @rooms.each do |room| %>
+                    <%= render 'room_row', room: room %>
+                  <% end %>
+                </tbody>
+              </thead>
+            </table>
+          </div>
+        </div>
+      </div>
+      <%= render partial: "partials/pagination", locals: { pagy: @pagy } %>
+    </div>
+  <% else %>
+    Hello!
+  <% end %>
+</div>

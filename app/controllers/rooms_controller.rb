@@ -10,6 +10,7 @@ include ActionView::RecordIdentifier
   include ApplicationHelper 
 
   def index
+    Rails.logger.debug "******************params #{params}"
     @rooms_page_announcement = Announcement.find_by(location: "find_a_room_page")
     @all_rooms_number = Room.classrooms.count
     @schools = Room.classrooms.pluck(:dept_group_description).uniq.sort
