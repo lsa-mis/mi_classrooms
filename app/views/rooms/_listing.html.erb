@@ -1,5 +1,5 @@
 <div class="mb-10" id="roomListing">
-  <% if params.present? %>
+  <% if @filters_list.present? %>
     <div class="pl-2 font-semibold">
       <% if @rooms_search_count == @all_rooms_number %>
         <%= "All Rooms" %>
@@ -37,6 +37,23 @@
       <%= render partial: "partials/pagination", locals: { pagy: @pagy } %>
     </div>
   <% else %>
-    Hello!
+    <div class="flex flex-col">
+      <div class="-my-2 overflow-x-auto sm:-mx-6.lg:-mx-8">
+        <div class="py-2 align-middle inline-block min-w-full sm:px-6.lg:px-8">
+          <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+            <table class="min-w-full divide-y divide-gray-200 max-w-5xl">
+              <thead class="bg-gray-50">
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <% @buildings.each do |building| %>
+                    <%= render 'building_row', building: building %>
+                  <% end %>
+                </tbody>
+              </thead>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%= render partial: "partials/pagination", locals: { pagy: @pagy } %>
   <% end %>
 </div>
