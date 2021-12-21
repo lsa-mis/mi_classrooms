@@ -1,12 +1,12 @@
 <div class="container mb-20">
 
   <h1>Room Filters Glossary</h1>
-  <div class="flex-auto justify-center ml-4">
+  <div class="flex-auto justify-center mt-2 ml-4">
     <% for char in 'A' ... 'Z' do %>
       <% if @category_letters.include?(char) %> 
-        <%= link_to char, room_filters_glossary_path(anchor: "#{char}"), class: "p-2 text-lg text-black hover:underline" %>
+        <%= link_to char, room_filters_glossary_path(anchor: "#{char}"), class: "p-2 text-sm text-black hover:underline" %>
       <% else %>
-        <span class="p-2 text-lg text-gray-400"><%= "#{char}" %></span>
+        <span class="p-2 text-sm text-gray-400"><%= "#{char}" %></span>
       <% end %>
     <% end  %>
   </div>
