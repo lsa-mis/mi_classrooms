@@ -1,18 +1,18 @@
 <% unless @pagy.items == @pagy.count %>
   <div class="mt-2">
     <% link = pagy_link_proc(pagy) -%>
-    <nav aria-label="pager" class="pagy_nav pagination mb-6" role="navigation">
-      <% if pagy.prev                -%>  <span class="page prev"><%== link.call(pagy.prev, pagy_t('pagy.nav.prev'), 'aria-label="previous"') %></span>
-      <% else                        -%>  <span class="page prev disabled"><%== pagy_t('pagy.nav.prev') %></span>
+    <nav aria-label="pager" class="mb-6" role="navigation">
+      <% if pagy.prev                -%>  <span class="page prev"><%== link.call(pagy.prev, "< ", 'aria-label="previous"') %></span>
+      <% else                        -%>  <span class="page prev disabled">< </span>
       <% end                         -%>
       <% pagy.series.each do |item|  -%>
       <%   if    item.is_a?(Integer) -%>  <span class="page"><%== link.call(item) %></span>
-      <%   elsif item.is_a?(String)  -%>  <span class="page current text-blue-700 underline "><%= item %></span>
+      <%   elsif item.is_a?(String)  -%>  <span class="page current text-white bg-blue-900 rounded  "><%= item %></span>
       <%   elsif item == :gap        -%>  <span class="page gap"><%== pagy_t('pagy.nav.gap') %></span>
       <%   end                       -%>
       <% end                         -%>
-      <% if pagy.next                -%>  <span class="page next"><%== link.call(pagy.next, pagy_t('pagy.nav.next'), 'aria-label="next"') %></span>
-      <% else                        -%>  <span class="page next disabled"><%== pagy_t('pagy.nav.next') %></span>
+      <% if pagy.next                -%>  <span class="page next"><%== link.call(pagy.next, " >", 'aria-label="next"') %></span>
+      <% else                        -%>  <span class="page next disabled"> ></span>
       <% end                         -%>
     </nav>
   </div>
