@@ -11,8 +11,8 @@ include ActionView::RecordIdentifier
 
   def index
     Rails.logger.debug "******************params #{params}"
-    buildings_ids = Room.classrooms.order(:building_name).pluck(:building_bldrecnbr).uniq
-    @buildings = Building.where(bldrecnbr: buildings_ids)
+    buildings_ids = Room.classrooms.pluck(:building_bldrecnbr).uniq
+    @buildings = Building.where(bldrecnbr: buildings_ids).order(:name)
     @rooms_page_announcement = Announcement.find_by(location: "find_a_room_page")
     @all_rooms_number = Room.classrooms.count
     @schools = Room.classrooms.pluck(:dept_group_description).uniq.sort

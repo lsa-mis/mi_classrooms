@@ -44,6 +44,14 @@ module ApplicationHelper
     end
   end
 
+  def building_thumbnail_image( building )
+    if building.building_image.representable?
+      image_tag building.building_image.representation(resize_to_limit: [250, 80]), class: 'p-2', alt: "#{building.name}" 
+    else
+      image_tag 'building_placeholder', height: '150', width: '150', class: 'm-2', alt: "building placeholder" 
+    end
+  end
+
   def room_layout( room )
     if room.room_layout.representable?
       room.room_layout
