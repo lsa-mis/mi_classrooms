@@ -8,9 +8,9 @@
         <% else %>
           <%= link_to image_tag('building_placeholder', height: '150', width: '150', class: 'm-2', alt: "building placeholder"), rooms_path(:query => building.name), data: { "turbo-frame": "_top" } %>
         <% end %>
-        <div class="text-sm pl-2 -mt-2 "><%= building.name.titleize %></div>
+        <div class="text-xs pl-2 -mt-2 font-bold"><%= building.name.titleize %></div>
         <div class="text-xs pl-2">
-          <%= building.address %>
+          <%= building.address.titleize %>
         </div>
       </div>
     </div>  
