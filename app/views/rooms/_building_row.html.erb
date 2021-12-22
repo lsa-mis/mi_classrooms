@@ -2,25 +2,18 @@
   <div class="">
     <div class="mt-2 mb-3 px-2 sm:px-0">
       <h2 class="sr-only">Classroom</h2>
-      <div class="bg-white border border-gray-300 rounded-lg flex flex-col sm:flex-row overflow-hidden sm:leading-tight">
+      <div class="bg-white border border-gray-300 rounded-lg">
         <% if building.building_image.representable? %>
-          <%= link_to image_tag(building.building_image.representation(resize_to_limit: [250, 80]), class: 'p-2', alt: "#{building.name}"), rooms_path(:query => building.name), data: { "turbo-frame": "_top" } %>
+          <%= link_to image_tag(building.building_image.representation(resize_to_limit: [250, 150]), class: 'p-2', alt: "#{building.name}"), rooms_path(:query => building.name), data: { "turbo-frame": "_top" } %>
         <% else %>
           <%= link_to image_tag('building_placeholder', height: '150', width: '150', class: 'm-2', alt: "building placeholder"), rooms_path(:query => building.name), data: { "turbo-frame": "_top" } %>
         <% end %>
-        <div class="flex-1 px-2 sm:pt-0 sm:pl-2 py-2 flex flex-col sm:justify-between">
-          <div class="flex flex-row justify-between w-full font-sans text-gray-900 leading-5">
-            <div class="font-sans text-gray-900 leading-5 pt-2">
-              <div class="truncate font-semibold text-md">
-                <%= building.name %>
-              </div>
-              <div class="text-sm">
-                <%= building.address %>
-              </div>
-            </div>
-          </div>
+        <div class="text-sm pl-2 -mt-2 "><%= building.name.titleize %></div>
+        <div class="text-xs pl-2">
+          <%= building.address %>
         </div>
       </div>
     </div>  
   </div>
+
 <% end %>

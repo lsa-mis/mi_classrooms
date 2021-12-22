@@ -1,5 +1,5 @@
 <div class="mb-10" id="roomListing">
-  <% if @filters_list.present? %>
+  <% if @filters_list.present? || @sorted%>
     <div class="pl-2 font-semibold">
       <% if @rooms_search_count == @all_rooms_number %>
         <%= "All Rooms" %>
@@ -37,26 +37,20 @@
       <%= render partial: "partials/pagination", locals: { pagy: @pagy } %>
     </div>
   <% else %>
-    <div class="flex flex-col">
-      <div class="justify-end pr-2">
-        <span class="text-muted" data-autosubmit-target="status"></span>
-      </div>
-      <div class="-my-2 overflow-x-auto sm:-mx-6.lg:-mx-8">
-        <div class="py-2 align-middle inline-block min-w-full sm:px-6.lg:px-8">
-          <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-            <table class="min-w-full divide-y divide-gray-200 max-w-5xl">
-              <thead class="bg-gray-50">
-                <tbody class="bg-white divide-y divide-gray-200">
-                  <% @buildings.each do |building| %>
-                    <%= render 'building_row', building: building %>
-                  <% end %>
-                </tbody>
-              </thead>
-            </table>
-          </div>
-        </div>
-      </div>
+    <div class="pl-2 font-semibold">
+      <%= "Click on the building image to see classroms" %>
     </div>
-    <%= render partial: "partials/pagination", locals: { pagy: @pagy } %>
+    <div class="justify-end pr-2">
+      <span class="text-muted" data-autosubmit-target="status"></span>
+    </div>
+    <div class="">
+      <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 m-4">
+        <% @buildings.each do |building| %>
+          <li class="col-span-1 bg-white rounded-lg shadow-md divide-y divide-gray-400 px-2">
+            <%= render 'building_row', building: building %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
   <% end %>
 </div>
