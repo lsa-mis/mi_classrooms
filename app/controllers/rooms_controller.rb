@@ -10,10 +10,14 @@ include ActionView::RecordIdentifier
   include ApplicationHelper 
 
   def index
+    @sorted = false
+    buildings_ids = Room.classrooms.pluck(:building_bldrecnbr).uniq
+    @buildings = Building.where(bldrecnbr: buildings_ids).order(:name)
     @rooms_page_announcement = Announcement.find_by(location: "find_a_room_page")
     @all_rooms_number = Room.classrooms.count
     @schools = Room.classrooms.pluck(:dept_group_description).uniq.sort
     if params[:direction].present?
+      @sorted = true
       @rooms = Room.classrooms.includes([:building, :room_contact]).reorder(:instructional_seating_count => params[:direction].to_sym)
     else
       @rooms = Room.classrooms.includes([:building, :room_contact]).reorder(:building_name)
