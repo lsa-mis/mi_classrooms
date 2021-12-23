@@ -1,0 +1,21 @@
+<%= turbo_frame_tag dom_id(building) do  %>
+  <h2 class="sr-only">Building</h2>
+  <div class="mt-2 mb-3 px-2 sm:px-0 hover:underline">
+    <%= link_to rooms_path(:query => building.name), data: { "turbo-frame": "_top" } do %>
+      <% if building.building_image.representable? %>
+        <%=  image_tag(building.building_image.representation(resize_to_limit: [150, 150]), class: 'p-2', alt: "#{building.name}") %>
+      <% else %>
+        <%=  image_tag('building_placeholder', height: '150', width: '150', class: 'm-2', alt: "building placeholder") %>
+      <% end %>
+      <div class="text-xs px-2 font-bold">
+        <%= building.name.titleize %>
+      </div>
+      <div class="text-xs px-2 font-medium">
+        (<%= building.nick_name %>)
+      </div>
+      <div class="text-xs px-2">
+        <%= building.address.titleize %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
