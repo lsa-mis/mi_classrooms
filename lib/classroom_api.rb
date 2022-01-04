@@ -175,8 +175,9 @@ class ClassroomApi
             db_chrstc_list.each do |c|
               RoomCharacteristic.where(rmrecnbr: rmrecnbr).where(chrstc: c).destroy_all
             end
+          else
+            create_classroom_characteristics(characteristics)
           end
-          create_classroom_characteristics(characteristics)
         else 
           classroom_characteristics_logger.info "no characteristics for facility_id: #{facility_id}"
         end
