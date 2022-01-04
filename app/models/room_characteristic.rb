@@ -25,6 +25,8 @@ class RoomCharacteristic < ApplicationRecord
 
   validates_presence_of :rmrecnbr
 
+  validates_uniqueness_of :chrstc, :scope => :rmrecnbr, :message => '- combination of chrstc and rmrecnbr should be unique'
+
   scope :matches_params, ->(params) {
     where(chrstc_descrshort: params).pluck(:rmrecnbr)
     # All of the RoomCharacteristics that have a chrstc_descrshort that matches the params
