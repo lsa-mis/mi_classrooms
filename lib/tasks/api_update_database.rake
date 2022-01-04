@@ -164,7 +164,8 @@ task api_update_database: :environment do
   end
   
   #################################################
-  update classrooms contacts
+  # update classrooms contacts
+  # 
   total_time += time.real.to_i
   if total_time > 3000
     auth_token = AuthTokenApi.new("aa", "classrooms")
