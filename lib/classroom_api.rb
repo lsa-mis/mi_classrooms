@@ -162,7 +162,19 @@ class ClassroomApi
         if result['data']['Characteristics'].present?
           characteristics = result['data']['Characteristics']['Characteristic']
           if RoomCharacteristic.where(rmrecnbr: rmrecnbr).present?
-            RoomCharacteristic.where(rmrecnbr: rmrecnbr).destroy_all
+            db_chrstc_list = RoomCharacteristic.where(rmrecnbr: rmrecnbr).pluck(:chrstc)
+            characteristics.each do |c|
+              # add characteristics if they are not in database
+              if db_chrstc_list.include?(c['Chrstc'].to_i)
+                db_chrstc_list.delete(c['Chrstc'].to_i)
+              else
+                add_classroom_characteristic(c)
+              end
+            end
+            # delete characteristics that are not in API
+            db_chrstc_list.each do |c|
+              RoomCharacteristic.where(rmrecnbr: rmrecnbr).where(chrstc: c).destroy_all
+            end
           end
           create_classroom_characteristics(characteristics)
         else 
@@ -174,12 +186,21 @@ class ClassroomApi
     end
   end
 
+  def add_classroom_characteristic(row)
+    chrstc_descrshort = row['ChrstcDescrShort'].gsub(/[^0-9A-Za-z]/, '')
+    room_char = RoomCharacteristic.new(rmrecnbr: row['RmRecNbr'], chrstc_desc254: row['ChrstcDescr254'], 
+                chrstc_descr: row['ChrstcDescr'], chrstc_descrshort: chrstc_descrshort, chrstc: row['Chrstc'])
+    unless room_char.save
+      classroom_characteristics_logger.debug "Could not create #{row['RmRecNbr']} because : #{room_char.errors.messages}"
+    end
+  end
+
   def create_classroom_characteristics(characteristics)
     characteristics.each do |row|
       chrstc_descrshort = row['ChrstcDescrShort'].gsub(/[^0-9A-Za-z]/, '')
       room_char = RoomCharacteristic.new(rmrecnbr: row['RmRecNbr'], chrstc_desc254: row['ChrstcDescr254'], 
                   chrstc_descr: row['ChrstcDescr'], chrstc_descrshort: chrstc_descrshort, chrstc: row['Chrstc'])
-      if !room_char.save
+      unless room_char.save
         classroom_characteristics_logger.debug "Could not create #{row['RmRecNbr']} because : #{room_char.errors.messages}"
       end
     end
@@ -246,7 +267,7 @@ class ClassroomApi
 
   def update_classroom_contact(row)
     contact = RoomContact.find_by(rmrecnbr: row['RmRecNbr'])
-    if !contact.update(rm_schd_cntct_name: row['ContactName'], rm_schd_email: row['Email'], rm_schd_cntct_phone: row['Phone'],
+    unless contact.update(rm_schd_cntct_name: row['ContactName'], rm_schd_email: row['Email'], rm_schd_cntct_phone: row['Phone'],
                 rm_det_url: row['ScheduleURL'], rm_usage_guidlns_url: row['UsageGuideLinesURL'], rm_sppt_deptid: row['SpptDeptID'],
                 rm_sppt_cntct_email: row['SpptCntctEmail'], rm_sppt_cntct_phone: row['SpptCntctPhone'], rm_sppt_cntct_url: row['SpptCntctURL'])
       contact_logger.debug "Could not update #{row['RmRecNbr']} because : #{contact.errors.messages}"
@@ -257,7 +278,7 @@ class ClassroomApi
     contact = RoomContact.new(rmrecnbr: row['RmRecNbr'], rm_schd_cntct_name: row['ContactName'], rm_schd_email: row['Email'], rm_schd_cntct_phone: row['Phone'],
     rm_det_url: row['ScheduleURL'], rm_usage_guidlns_url: row['UsageGuideLinesURL'], rm_sppt_deptid: row['SpptDeptID'],
     rm_sppt_cntct_email: row['SpptCntctEmail'], rm_sppt_cntct_phone: row['SpptCntctPhone'], rm_sppt_cntct_url: row['SpptCntctURL'])
-    if !contact.save
+    unless contact.save
       contact_logger.debug "Could not create #{row['RmRecNbr']} because : #{contact.errors.messages}"
     end
   end
