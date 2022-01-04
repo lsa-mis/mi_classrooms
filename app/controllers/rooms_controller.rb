@@ -5,15 +5,19 @@ include ActionView::RecordIdentifier
   skip_after_action :verify_policy_scoped, only: :index
   before_action :set_room, only: [:show, :edit, :update, :destroy, :toggle_visibile]
   before_action :set_filters_list, only: [:index]
-  before_action :set_filters_array, only: [:index, :show]
+  before_action :set_characteristics_array, only: [:index, :show]
 
   include ApplicationHelper 
 
   def index
+    @sorted = false
+    buildings_ids = Room.classrooms.pluck(:building_bldrecnbr).uniq
+    @buildings = Building.where(bldrecnbr: buildings_ids).order(:name)
     @rooms_page_announcement = Announcement.find_by(location: "find_a_room_page")
     @all_rooms_number = Room.classrooms.count
     @schools = Room.classrooms.pluck(:dept_group_description).uniq.sort
     if params[:direction].present?
+      @sorted = true
       @rooms = Room.classrooms.includes([:building, :room_contact]).reorder(:instructional_seating_count => params[:direction].to_sym)
     else
       @rooms = Room.classrooms.includes([:building, :room_contact]).reorder(:building_name)
@@ -99,7 +103,7 @@ include ActionView::RecordIdentifier
       if params.present?
         capacity = ""
         params.each do |k, v|
-          unless k == 'controller' || k == 'action' || k == 'direction' || k == 'format' || k == 'page' || k == 'custom_param'
+          unless k == 'controller' || k == 'action' || k == 'direction' || k == 'format' || k == 'page' || k == 'items'
             unless v.empty?
               case k
               when "school_or_college_name"
@@ -143,31 +147,6 @@ include ActionView::RecordIdentifier
         end
       end
       return sorted
-    end
-
-    def set_filters_array
-      # create array of room cahracteristics to use in filters
-      characteristics_all = RoomCharacteristic.all.pluck(:chrstc_descr, :chrstc_descrshort).uniq.sort
-      @all_characteristics_array = {}
-      category_prev = ""
-      other = {}
-      characteristics_all.each do |item|
-        filter_key = item[1]
-        if item[0][":"]
-          category = item[0].slice(0, item[0].index(': '))
-          value = item[0].sub(/.*?:/, '').lstrip
-          if category == category_prev
-            @all_characteristics_array[category].merge!(filter_key => value)
-          else 
-            @all_characteristics_array.merge!(category => { filter_key => value })
-          end
-          category_prev = category
-        else
-          other.merge!(filter_key => item[0])
-        end
-      end
-      @all_characteristics_array.merge!("Other" => other)
-
     end
 
 end

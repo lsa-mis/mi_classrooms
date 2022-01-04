@@ -1,9 +1,9 @@
 .search-by-building-name
-  @apply shadow-sm h-10 w-full  flex flex-row border-gray-300 border-l border-t border-b 
+  @apply shadow-sm h-10 w-full  flex flex-row border-gray-300 border-l border-t border-b
   &:focus
     @apply outline-none ring-2 ring-blue-500 border-transparent
   input
-    @apply block border-none h-full 
+    @apply block border-none h-full
   .submit-search
     @apply bg-blue-300 rounded-r-md w-24 text-blue-800 text-lg font-medium border border-gray-300 h-10
 
@@ -19,7 +19,7 @@
 
 .characteristics-list
   @apply mt-4 space-y-4 mr-6
-  
+
 .characteristic-checkbox
   @apply -m-2 px-2 py-1 flex items-center rounded text-blue-700 transition ease-in-out duration-150 border border-blue-300 bg-blue-100
   svg
@@ -36,19 +36,19 @@
   @apply flex justify-items-stretch flex-wrap  space-y-2 max-w-full lg:max-w-xl
 
 .rounded-checkbox
-  @apply justify-center align-middle mt-2 mx-1 whitespace-nowrap truncate  px-2 py-1 flex items-center rounded-2xl text-sm text-blue-700 transition ease-in-out duration-150 border border-blue-400 bg-blue-100 
+  @apply justify-center align-middle mt-2 mx-1 whitespace-nowrap truncate  px-2 py-1 flex items-center rounded-2xl text-sm text-blue-700 transition ease-in-out duration-150 border border-blue-400 bg-blue-100
   label
-    @apply flex flex-row 
+    @apply flex flex-row
     span
       @apply ml-1
   svg
-    @apply h-3 w-3 
+    @apply h-3 w-3
   &:hover
     @apply bg-blue-200
 
 .check-box
   input[type="checkbox"]:checked + label
-    @apply bg-blue-500 text-blue-100  
+    @apply bg-blue-500 text-blue-100
     svg
       @apply text-blue-100
     &:hover
@@ -58,23 +58,21 @@
   @apply text-base font-bold tracking-wide text-gray-900 uppercase border-b border-gray-400 mt-6 pb-1
 
 .filters-dropdown
-  @apply min-w-full transform shadow-lg border-b absolute inset-x-0 transform shadow-lg pb-20 mt-4 bg-gray-50 
+  @apply min-w-full transform shadow-lg border-b absolute inset-x-0 transform shadow-lg pb-20 mt-4 bg-gray-50
 
 .filters-inner
   @apply relative inset-0 flex
 
 .view-all-link
   // @apply pb-8 pr-8 text-sm font-medium mt-6 sm:mt-auto
-  @apply bg-green-400 relative bottom-0 right-0 
+  @apply bg-green-400 relative bottom-0 right-0
   a
     @apply text-blue-600 p-2
     &:hover
       @apply text-blue-800 bg-blue-100 rounded-lg
 
 .link-to-all-classrooms
-  @apply absolute bottom-0 right-6 text-blue-600 underline 
-
-
+  @apply absolute bottom-0 right-6 text-blue-600 underline
 
 .choices
   @apply  text-left
@@ -107,13 +105,13 @@
   @apply w-full mx-auto  pr-8 h-auto w-auto
 
 #slider
-  @apply h-2 mt-12 z-0 
+  @apply h-2 mt-12 z-0
   @screen xl
     @apply ml-2 mr-4
   .noUi-connect
-    @apply bg-blue-700 h-2 z-0 
+    @apply bg-blue-700 h-2 z-0
   .noUi-base
-    @apply bg-blue-400 z-0 
+    @apply bg-blue-400 z-0
   .noUi-handle
     @apply bg-yellow-500 rounded-full h-6 w-6 border-2 border-blue-700 z-0 -mt-1
     &:before
@@ -133,7 +131,7 @@
   @apply relative w-screen max-w-xs right-0
 
 .h-highlights
-  @apply  grid grid-cols-3 gap-x-1 gap-y-2 px-2 
+  @apply  grid grid-cols-3 gap-x-1 gap-y-2 px-2
   @screen md
     @apply grid-cols-5
   @screen lg
@@ -155,15 +153,31 @@
   @screen lg
     @apply text-sm
     svg
-      @apply h-4 w-4 
-  @screen xl 
+      @apply h-4 w-4
+  @screen xl
     @apply  mx-1
     svg
       @apply h-3 w-3 mr-1
   &:hover
     @apply underline
-    
 
+.h-no-highlight-item
+  @apply inline-flex text-sm text-black whitespace-nowrap items-center font-semibold mx-2
+  svg
+    @apply h-5 w-5 mr-1
+
+  @screen md
+    @apply text-base
+    svg
+      @apply h-5 w-5
+  @screen lg
+    @apply text-sm
+    svg
+      @apply h-4 w-4
+  @screen xl
+    @apply  mx-1
+    svg
+      @apply h-3 w-3 mr-1
 
 .classroom-row-dropdown-toggle
   @apply text-sm text-gray-600 font-light inline-flex
@@ -179,32 +193,29 @@
   @apply  pt-2 text-black
 
 .classroom-row-dropdown-features-section
-  @apply w-full max-w-2xl 
-  @screen lg  
-    
+  @apply w-full max-w-2xl
+  @screen lg
 
-.classroom-row-dropdown-features-group 
+.classroom-row-dropdown-features-group
   hr
     @apply flex-1 border-t border-blue-600 mt-1 mx-2
-  @screen md 
+  @screen md
     @apply mr-4
 
-
-    
 .classroom-row-dropdown-top-matter
-  @apply w-full 
+  @apply w-full
 
 .classroom-row-dropdown-features
   @apply  grid grid-cols-4  grid-flow-row mt-2
-  @screen md 
-    @apply grid-cols-3 
+  @screen md
+    @apply grid-cols-3
   li
     @apply whitespace-nowrap truncate
   svg
     @apply h-4 w-4
 
 .classroom-row-dropdown-feature
-  @apply flex items-start truncate mt-1 ml-1 whitespace-nowrap items-center 
+  @apply flex items-start truncate mt-1 ml-1 whitespace-nowrap items-center
 
 .classroom-row-contact-icon
   @apply flex items-center justify-center h-5 w-5 rounded-md
@@ -213,13 +224,12 @@
 
 .classroom-row-contact-items
   @apply truncate text-left w-full mt-4
-  
 
 .classroom-row-contact-item
   @apply bg-white rounded py-4 pr-6 pl-2 truncate mt-2
 
   h5
-    @apply  truncate text-lg leading-tight -mt-1 
+    @apply  truncate text-lg leading-tight -mt-1
   ul
     @apply leading-tight
     li

@@ -118,7 +118,7 @@ class BuildingsApi
 
   def update_building(row)
     building = Building.find_by(bldrecnbr: row['BuildingRecordNumber'])
-    if building.update(bldrecnbr: row['BuildingRecordNumber'], name: row['BuildingLongDescription'], nick_name: row['BuildingLongDescription'], abbreviation: row['BuildingShortDescription'], 
+    if building.update(bldrecnbr: row['BuildingRecordNumber'], name: row['BuildingLongDescription'], abbreviation: row['BuildingShortDescription'], 
           address: " #{row['BuildingStreetNumber']}  #{row['BuildingStreetDirection']}  #{row['BuildingStreetName']}".strip.gsub(/\s+/, " "), 
           city: row['BuildingCity'], state: row['BuildingState'], zip: row['BuildingPostal'], country: 'usa again', 
           campus_record_id: CampusRecord.find_by(campus_cd: row['BuildingCampusCode']).id)
@@ -129,7 +129,7 @@ class BuildingsApi
   end
 
   def create_building(row)
-    building = Building.new(bldrecnbr: row['BuildingRecordNumber'], name: row['BuildingLongDescription'], nick_name: row['BuildingLongDescription'], abbreviation: row['BuildingShortDescription'], 
+    building = Building.new(bldrecnbr: row['BuildingRecordNumber'], name: row['BuildingLongDescription'], abbreviation: row['BuildingShortDescription'], 
         address: " #{row['BuildingStreetNumber']}  #{row['BuildingStreetDirection']}  #{row['BuildingStreetName']}".strip.gsub(/\s+/, " "), 
         city: row['BuildingCity'], state: row['BuildingState'], zip: row['BuildingPostal'], country: 'USA',
         campus_record_id: CampusRecord.find_by(campus_cd: row['BuildingCampusCode']).id)
