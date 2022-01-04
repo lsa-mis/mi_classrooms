@@ -59,7 +59,7 @@ class BuildingsApi
   def create_campus(row)
     campus = CampusRecord.new(campus_cd: row['CampusCd'], campus_description: row['CampusDescr'])
 
-    if !campus.save
+    unless campus.save
       campus_logger.info "Could not create #{row['CampusCd']} because : #{campus.errors.messages}"
     end
   end
@@ -234,7 +234,7 @@ class BuildingsApi
         if @rooms_not_updated.present?
           @rooms_not_updated.each do |rmrecnbr|
             room = Room.find_by(rmrecnbr: rmrecnbr)
-            if !room.update(visible: false)
+            unless room.update(visible: false)
               room_logger.info "Could not update room #{rmrecnbr} - should have visible = false "
             end
           end
@@ -256,7 +256,7 @@ class BuildingsApi
       if room.update(floor: row['FloorNumber'], room_number: row['RoomNumber'], 
         square_feet: row['RoomSquareFeet'], rmtyp_description: row['RoomTypeDescription'],
         dept_description: row['DepartmentName'], instructional_seating_count: row['RoomStationCount'],
-        campus_record_id: @campus_id, building_name: @building_name)
+        campus_record_id: @campus_id, building_name: @building_name, visible: true)
         @rooms_in_db.delete(row['RoomRecordNumber'])
       else
         room_logger.info "Could not update #{row['RoomRecordNumber']} because : #{room.errors.messages}"
@@ -266,7 +266,7 @@ class BuildingsApi
               square_feet: row['RoomSquareFeet'], rmtyp_description: row['RoomTypeDescription'],
               dept_description: row['DepartmentName'], instructional_seating_count: row['RoomStationCount'],
               dept_id: dept_data['DeptId'], dept_grp: dept_data['DeptGroup'], dept_group_description: dept_data['DeptGroupDescription'],
-              campus_record_id: @campus_id, building_name: @building_name)
+              campus_record_id: @campus_id, building_name: @building_name, visible: true)
         @rooms_in_db.delete(row['RoomRecordNumber'])
       else
         room_logger.info "Could not update #{row['RoomRecordNumber']} because : #{room.errors.messages}"
@@ -287,7 +287,7 @@ class BuildingsApi
             dept_id: dept_data['DeptId'], dept_grp: dept_data['DeptGroup'], dept_group_description: dept_data['DeptGroupDescription'],
             campus_record_id: @campus_id, building_name: @building_name, visible: true)
     end
-    if !room.save
+    unless room.save
       room_logger.info "Could not create #{row['RoomRecordNumber']} because : #{room.errors.messages}"
     end
   end
