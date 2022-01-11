@@ -1,0 +1,43 @@
+<%= form_for @building do |f| %>
+    <% if @building.errors.any? %>
+      <div id="error_explanation">
+        <h2>
+          <%= "#{pluralize(@building.errors.count, "error")} prohibited this building from being saved:" %>
+        </h2>
+        <ul>
+          <% @building.errors.full_messages.each do |message| %>
+            <li>
+              <%= message %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="field">
+      <%= f.label :bldrecnbr %>
+      <%= f.number_field :bldrecnbr %>
+    </div>
+    <div class="field">
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+    </div>
+    <% if @building.building_image.representable? %>
+      <div>
+        <%= image_tag(@building.building_image.representation(resize_to_limit: [200, 200]), class: "building_image pr-2", alt: @building.name ) %>
+      </div>
+    <% end %>
+    <div class="field">
+      <%= f.label :building_image %>
+      <%= f.file_field :building_image %>
+    </div>
+      
+        <div class="field">
+          <%= f.label :floor_plan %>
+          <%= f.file_field :floor_plan %>
+        </div>
+    
+    
+    <div class="actions">
+      <%= f.submit 'Save' %>
+    </div>
+  <% end %>

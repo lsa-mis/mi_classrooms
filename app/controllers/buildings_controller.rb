@@ -36,6 +36,7 @@ class BuildingsController < ApplicationController
 
   # GET /buildings/1/edit
   def edit
+    @floors = @building.rooms.where(rmtyp_description: "Classroom").pluck(:floor).uniq.sort
     authorize @building
   end
 

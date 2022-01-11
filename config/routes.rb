@@ -1,6 +1,10 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  get 'floor/new'
+  get 'floor/create'
+  get 'floor/edit'
+  get 'floor/update'
   devise_for :users, controllers: {omniauth_callbacks: "users/omniauth_callbacks", sessions: "users/sessions"} do
     delete 'sign_out', :to => 'users/sessions#destroy', :as => :destroy_user_session
   end
