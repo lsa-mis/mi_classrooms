@@ -1,9 +1,9 @@
 <div class="bg-white shadow sm:rounded-lg">
   <div class="px-4 sm:p-6">
-    <%= form_for [building, Floor.new], html: { class: "sm:flex sm:items-center" } do |f| %>
+    <%= form_for [building, floor_new], html: { class: "sm:flex sm:items-center" } do |f| %>
       <div class=" sm:max-w-4xl pr-2">
         <%= f.label :floor, "add a floor", class: "sr-only" %>
-        <%= f.text_field :floor, value: floor_name, class: "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" %>
+        <%= f.hidden_field :floor, value: floor_name, class: "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" %>
       </div>
       
       <div class=" sm:max-w-4xl">

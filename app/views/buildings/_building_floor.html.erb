@@ -8,6 +8,15 @@
     floor plan
       <% if this_floor.floor_plan.attached? %>
         <%= image_tag(this_floor.floor_plan.representation(resize_to_limit: [200, 200]), class: "building_image pr-2", alt: @building.name ) %>
+        <% if policy(building).edit? %>
+        Update floor plan:
+          <%= render partial: "building_floor_form", locals: { building: building, floor_name: floor_name, floor_new: this_floor } %>
+        <% end %>
+      <% else %>
+        Upload floor plan
+        <% if policy(building).edit? %>
+          <%= render partial: "building_floor_form", locals: { building: building, floor_name: floor_name, floor_new: Floor.new } %>
+        <% end %>
       <% end %>
     <% else %>
       <li class="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
@@ -19,7 +28,5 @@
       </li>
     <% end %>
   </ul>
-  <% if policy(building).edit? %>
-    <%= render partial: "building_floor_form", locals: { building: building, floor_name: floor_name } %>
-  <% end %>
+  
 </dd>
