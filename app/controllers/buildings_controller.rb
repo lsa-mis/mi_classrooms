@@ -31,8 +31,6 @@ class BuildingsController < ApplicationController
   # GET /buildings/1.json
   def show
     @class_floor_names = @building.rooms.where(rmtyp_description: "Classroom").pluck(:floor).uniq.sort
-    @bld_floor_names = @building.floors.pluck(:floor)
-    @bld_floors = @building.floors
 
     authorize @building
   end
