@@ -1,10 +1,10 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-  get 'floor/new'
-  get 'floor/create'
-  get 'floor/edit'
-  get 'floor/update'
+  # get 'floor/new'
+  # get 'floor/create'
+  # get 'floor/edit'
+  # get 'floor/update'
   devise_for :users, controllers: {omniauth_callbacks: "users/omniauth_callbacks", sessions: "users/sessions"} do
     delete 'sign_out', :to => 'users/sessions#destroy', :as => :destroy_user_session
   end
@@ -22,7 +22,9 @@ Rails.application.routes.draw do
   
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
-  resources :buildings
+  resources :buildings do
+    resources :floors, module: :buildings
+  end
 
   resources :announcements
   post 'announcements/:id/cancel', to: "announcements#cancel", as: 'announcements_cancel'
