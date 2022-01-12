@@ -3,7 +3,7 @@ include ActionView::RecordIdentifier
   devise_group :logged_in, contains: [:user]
   before_action :authenticate_logged_in!  
   skip_after_action :verify_policy_scoped, only: :index
-  before_action :set_room, only: [:show, :edit, :update, :destroy, :toggle_visibile]
+  before_action :set_room, only: [:show, :edit, :update, :destroy, :toggle_visibile, :floor_plan]
   before_action :set_filters_list, only: [:index]
   before_action :set_characteristics_array, only: [:index, :show]
 
@@ -79,6 +79,10 @@ include ActionView::RecordIdentifier
       format.html { redirect_to rooms_url, notice: 'Room was successfully updated.' }
       format.turbo_stream { render turbo_stream: turbo_stream.update(dom_id(@room)), notice: 'Room was successfully updated.' }
     end
+  end
+
+  def floor_plan
+    authorize @room
   end
 
   private
