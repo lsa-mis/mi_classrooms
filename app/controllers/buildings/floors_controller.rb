@@ -1,6 +1,4 @@
 class Buildings::FloorsController < ApplicationController
-  skip_after_action :verify_policy_scoped, only: :index
-
 
   before_action :set_building
 
@@ -13,18 +11,41 @@ class Buildings::FloorsController < ApplicationController
     @floor.building_bldrecnbr = @building.bldrecnbr
     authorize @floor
 
-    @floor.save
+    respond_to do |format|
+      if @floor.save 
+        format.turbo_stream { redirect_to @building, 
+                              notice: "The floor plan was added" 
+                            }
+      else
+        error = @floor.errors.full_messages
+        format.turbo_stream { redirect_to @building, 
+          alert: error
+        }
+      end
+    end
   end
 
   def edit
-    @floor = Floor.find(params[:id])
-    @floor.update(floor_params)
-    authorize @floor
+    @floors = @buildings.floors
+    authorize @floors
 
   end
 
   def update
+    @floor = Floor.find(params[:id])
     authorize @floor
+    respond_to do |format|
+      if @floor.update(floor_params)
+        format.turbo_stream { redirect_to @building, 
+        notice: "The floor plan was updated" 
+      }
+      else
+        error = @floor.errors.full_messages
+        format.turbo_stream { redirect_to @building, 
+        alert: error
+        }
+      end
+    end
 
   end
 
