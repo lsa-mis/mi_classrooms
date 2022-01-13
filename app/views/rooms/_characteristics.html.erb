@@ -20,9 +20,11 @@
         </h4>
         <hr/>
       </div>
-      <% @room_chars.filter { |char| list_keys.intersection(@room_chars_short).include?(char.chrstc_descrshort) }.each do |characteristic| %>
-        <%= render partial: 'room_characteristic', locals:  {characteristic: characteristic}, cached: true %>
-      <% end %>
+      <ul>
+        <% @room_chars.filter { |char| list_keys.intersection(@room_chars_short).include?(char.chrstc_descrshort) }.each do |characteristic| %>
+          <%= render partial: 'room_characteristic', locals:  {characteristic: characteristic}, cached: true %>
+        <% end %>
+      </ul>
     <% end %>
   <% end %>
 </div>
