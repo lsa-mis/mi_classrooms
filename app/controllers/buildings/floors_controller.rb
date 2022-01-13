@@ -2,6 +2,12 @@ class Buildings::FloorsController < ApplicationController
 
   before_action :set_building
 
+  def show 
+    @floors = @building.floors
+    @rooms_list = Room.where(building_bldrecnbr: @building, rmtyp_description: "Classroom")
+    authorize @floors
+  end
+
   def new
 
   end

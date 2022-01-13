@@ -108,7 +108,7 @@
         </div>
         <div>
           <% if @room.building.floors.where(building_bldrecnbr: @room.building.bldrecnbr, floor: @room.floor).first.present? %>
-            <%= link_to "/rooms/2105436/floor_plan" do %>
+            <%= link_to "#{room_path(@room)}/floor_plan", data:{"turbo-frame":"_top"} do %>
               <div class="h-layout h-highlight-item">
                 <%= svg("layer_group") %>
                 <span>Floor <%= @room.floor.gsub(/[0]/, '') %> Map  </span>

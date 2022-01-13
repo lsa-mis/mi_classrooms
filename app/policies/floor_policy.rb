@@ -9,7 +9,8 @@ class FloorPolicy < ApplicationPolicy
   end
 
   def show?
-    user.admin
+    # user.admin
+    user_in_non_admin_group?
   end
 
   def update?
