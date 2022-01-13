@@ -26,7 +26,6 @@
           <% @floor_list.each do |fl| %>
             <li>
             <%= link_to fl.floor.gsub(/[0]/, ''), building_floor_path(@building, @building.floors.find_by(floor: fl.floor)), class: "text-blue-900 hover:underline" %>
-                                                  <%# /buildings/:building_id/floors/:id(.:format) %>
             </li>
           <% end %>
         </div>
