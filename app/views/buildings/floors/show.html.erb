@@ -13,22 +13,25 @@
 
       <div>
         <div>
-        Rooms on this floor
-          <% @floor_rooms_list.each do |rm| %>
-            <li>
-            <%= link_to rm.room_number, room_path(rm), class: "text-blue-900 hover:underline" %>
-            </li>
-          <% end %>
+          Rooms on this floor
+          <ul>
+            <% @floor_rooms_list.each do |rm| %>
+              <li>
+              <%= link_to rm.room_number, room_path(rm), class: "text-blue-900 hover:underline" %>
+              </li>
+            <% end %>
+          </ul>
         </div>
         <hr class"w-25">
         <div>
           Other floors in this building
-          <% @floors.each do |fl| %>
-            <li>
-            <%= link_to fl.floor.gsub(/^0+(?!$)/, ''), building_floor_path(@floor.building_bldrecnbr, @floors.find_by(floor: fl.floor)), class: "text-blue-900 hover:underline" %>
-                                                  <%# /buildings/:building_id/floors/:id(.:format) %>
-            </li>
-          <% end %>
+          <ul>
+            <% @floors.each do |fl| %>
+              <li>
+              <%= link_to fl.floor.gsub(/^0+(?!$)/, ''), building_floor_path(@floor.building_bldrecnbr, @floors.find_by(floor: fl.floor)), class: "text-blue-900 hover:underline" %>
+              </li>
+            <% end %>
+          </ul>
         </div>
       </div>
     </div>
