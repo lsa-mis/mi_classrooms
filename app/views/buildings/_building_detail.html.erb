@@ -7,7 +7,7 @@
           <div class="px-2 py-2 space-y-4 flex flex-col" >
             <div class="flex flex-row justify-center w-full " >
                 <% if @building.building_image.representable? %>
-                  <%= image_tag(@building.building_image.representation(resize_to_limit: [200, 200]), class: "building_image pr-2", alt: @building.name ) %>
+                  <%= image_tag(@building.building_image.representation(resize_to_fill: [200, 200]), class: "building_image pr-2", alt: @building.name ) %>
                 <% else %>
                   <%= image_tag("building_placeholder.png", height: '100', width: '200', class: "building_image", alt: "building placeholder") %>
                 <% end %>
@@ -23,26 +23,22 @@
                   <br>
                     <%= @building.city %>, <%= @building.state %> <%= @building.zip %>
                 </div>
-                <div class="h-layout h-highlight-item">
-                  <%= svg("chalkboard-teacher")  %>
-                  <%= link_to 'Classrooms located in this building', rooms_path(:building_bldrecnbr => @building.bldrecnbr) %>
+                <div class="">
+                  <%= link_to 'Back', :back, class: "text-base hover:underline text-blue-800" %> 
                 </div>
-                <div class="text-sm">
-                  <%= link_to 'Back', buildings_path %> |
-                  <%= link_to 'Edit', edit_building_path(@building) %>
-                </div>
+                
               </div>
             </div>
             <div>
             Upload or update a buliding image
             </div>
-              <%= form_for @building do |f| %>
+              <%= form_for @building, html: { class: "sm:flex sm:items-center" } do |f| %>
                 <div class="field">
-                  <%= f.label :building_image %>
-                  <%= f.file_field :building_image %>
+                  <%= f.label :building_image, class: "sr-only" %>
+                  <%= f.file_field :building_image, class: "shadow- focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-sm" %>
                 </div>
                 <div class="actions">
-                  <%= f.submit 'Save' %>
+                  <%= f.submit 'Save', class: "my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
                 </div>
               <% end %>
             <div>
