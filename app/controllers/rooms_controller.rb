@@ -83,6 +83,8 @@ include ActionView::RecordIdentifier
 
   def floor_plan
     authorize @room
+    @floor_list = @room.building.floors
+    @rooms_list = Room.where(building_bldrecnbr: @room.building, floor: @room.floor, rmtyp_description: "Classroom")
   end
 
   private
