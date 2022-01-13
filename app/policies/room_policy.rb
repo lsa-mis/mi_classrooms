@@ -21,9 +21,10 @@ class RoomPolicy < ApplicationPolicy
     user_in_non_admin_group?
   end
 
-  # def toggle_visibility?
-  #   user && user_in_admin_group?
-  # end
+  def floor_plan?
+    # true
+    user_in_non_admin_group?
+  end
 
   def edit?
     user.admin

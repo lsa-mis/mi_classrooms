@@ -264,6 +264,38 @@ ALTER SEQUENCE public.campus_records_id_seq OWNED BY public.campus_records.id;
 
 
 --
+-- Name: floors; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.floors (
+    id bigint NOT NULL,
+    floor character varying,
+    building_bldrecnbr bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: floors_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.floors_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: floors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.floors_id_seq OWNED BY public.floors.id;
+
+
+--
 -- Name: notes; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -485,8 +517,8 @@ CREATE TABLE public.rooms (
     updated_at timestamp(6) without time zone NOT NULL,
     tsv tsvector,
     dept_group_description character varying,
-    campus_record_id bigint,
-    building_name character varying
+    building_name character varying,
+    campus_record_id bigint
 );
 
 
@@ -611,6 +643,13 @@ ALTER TABLE ONLY public.campus_records ALTER COLUMN id SET DEFAULT nextval('publ
 
 
 --
+-- Name: floors id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.floors ALTER COLUMN id SET DEFAULT nextval('public.floors_id_seq'::regclass);
+
+
+--
 -- Name: notes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -724,6 +763,14 @@ ALTER TABLE ONLY public.campus_records
 
 
 --
+-- Name: floors floors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.floors
+    ADD CONSTRAINT floors_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: notes notes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -834,6 +881,13 @@ CREATE INDEX index_buildings_on_campus_record_id ON public.buildings USING btree
 --
 
 CREATE INDEX index_buildings_on_tsv ON public.buildings USING gin (tsv);
+
+
+--
+-- Name: index_floors_on_building_bldrecnbr; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_floors_on_building_bldrecnbr ON public.floors USING btree (building_bldrecnbr);
 
 
 --
@@ -1006,6 +1060,14 @@ ALTER TABLE ONLY public.active_storage_variant_records
 
 
 --
+-- Name: floors fk_rails_b87e6d71a9; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.floors
+    ADD CONSTRAINT fk_rails_b87e6d71a9 FOREIGN KEY (building_bldrecnbr) REFERENCES public.buildings(bldrecnbr);
+
+
+--
 -- Name: active_storage_attachments fk_rails_c3b3935057; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1053,10 +1115,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211112035659'),
 ('20211113230614'),
 ('20211113231859'),
-('20211124064836'),
-('20211124071308'),
-('20211124131027'),
-('20211127165122'),
-('20211129210918');
-
-
+('20211129210918'),
+('20220104182624'),
+('20220111201258');

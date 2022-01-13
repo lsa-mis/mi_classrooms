@@ -1,3 +1,6 @@
+<h1>
+        Classroom <%= @room.facility_code_heprod%>
+      </h1>
 <%= form_for @room do |f| %>
   <% if @room.errors.any? %>
     <div id="error_explanation">
@@ -13,23 +16,25 @@
       </ul>
     </div>
   <% end %>
-  <div class="field">
-    <%= f.label :visible %>
-    <%= f.check_box :visible %>
-  </div>
-  <div class="field">
-    <%= f.label :room_image %>
-    <%= f.file_field :room_image %>
-  </div>
-  <div class="field">
-    <%= f.label :room_panorama %>
-    <%= f.file_field :room_panorama %>
-  </div>
-  <div class="field">
-    <%= f.label :room_layout %>
-    <%= f.file_field :room_layout %>
+  <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6" >
+    <div class="sm:col-span-4">
+      <%= f.label :visible %>
+      <%= f.check_box :visible %>
+    </div>
+    <div class="sm:col-span-4">
+      <%= f.label :room_image %>
+      <%= f.file_field :room_image %>
+    </div>
+    <div class="sm:col-span-4">
+      <%= f.label :room_panorama %>
+      <%= f.file_field :room_panoram %>
+    </div>
+    <div class="sm:col-span-4">
+      <%= f.label :room_layout %>
+      <%= f.file_field :room_layout %>
+    </div>
   </div>
   <div class="actions">
-    <%= f.submit 'Save' %>
+    <%= f.submit 'Save', class: "my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
   </div>
 <% end %>
