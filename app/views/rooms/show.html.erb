@@ -111,13 +111,13 @@
             <%= link_to "#{room_path(@room)}/floor_plan", data:{"turbo-frame":"_top"} do %>
               <div class="h-layout h-highlight-item">
                 <%= svg("layer_group") %>
-                <span>Floor <%= @room.floor.gsub(/[0]/, '') %> Map  </span>
+                <span>Floor <%= @room.floor.gsub(/^0+(?!$)/, '') %> Map  </span>
               </div>
             <% end %>
           <% else %>
             <div class="h-layout h-no-highlight-item">
               <%= svg("layer_group") %>
-              <span>Floor <%= @room.floor.gsub(/[0]/, '') %></span>
+              <span>Floor <%= @room.floor.gsub(/^0+(?!$)/, '') %></span>
             </div>
           <% end %>
         </div>

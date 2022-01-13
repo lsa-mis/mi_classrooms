@@ -1,4 +1,4 @@
-<h2><%= "#{@building.name} - Floor #{@floor.floor.gsub(/[0]/, '')}" %></h2>
+<h2><%= "#{@building.name} - Floor #{@floor.floor.gsub(/^0+(?!$)/, '')}" %></h2>
 <div class="py-2">
   <%= link_to 'Back', rooms_path, class: "hover:underline text-blue-800", data: {turbo: "false"} %>
 </div>
@@ -8,7 +8,7 @@
 
     <div class="grid grid-cols-2 gap-1">
       <div>
-        <%= image_tag(@floor.floor_plan.representation(resize_to_limit: [600, 600]), class: "building_image pr-2", alt: "#{@building.name} #{@floor.floor.gsub(/[0]/, '')}" ) %>
+        <%= image_tag(@floor.floor_plan.representation(resize_to_limit: [600, 600]), class: "building_image pr-2", alt: "#{@building.name} #{@floor.floor.gsub(/^0+(?!$)/, '')}" ) %>
       </div>
 
       <div>
@@ -25,7 +25,7 @@
           Other floors in this building
           <% @floors.each do |fl| %>
             <li>
-            <%= link_to fl.floor.gsub(/[0]/, ''), building_floor_path(@floor.building_bldrecnbr, @floors.find_by(floor: fl.floor)), class: "text-blue-900 hover:underline" %>
+            <%= link_to fl.floor.gsub(/^0+(?!$)/, ''), building_floor_path(@floor.building_bldrecnbr, @floors.find_by(floor: fl.floor)), class: "text-blue-900 hover:underline" %>
                                                   <%# /buildings/:building_id/floors/:id(.:format) %>
             </li>
           <% end %>
