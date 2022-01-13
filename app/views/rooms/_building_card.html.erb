@@ -5,7 +5,7 @@
       <% if building.building_image.representable? %>
         <%=  image_tag(building.building_image.representation(resize_to_fill: [150, 107]), class: 'p-2', alt: "#{building.name}") %>
       <% else %>
-        <%=  image_tag('building_placeholder', height: '107', width: '150', class: 'm-2', alt: "building placeholder") %>
+        <%=  image_tag('building_placeholder_small', height: '107', width: '150', class: 'p-2', alt: "building placeholder") %>
       <% end %>
       <div class="text-xs px-2 font-bold">
         <%= building.name.titleize %>

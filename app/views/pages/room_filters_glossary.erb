@@ -3,8 +3,10 @@
   <h1>Room Filters Glossary</h1>
   <div class="flex-auto justify-center py-2 ml-4">
     <% for char in 'A' ... 'Z' do %>
-      <% if @category_letters.include?(char) %> 
-        <%= link_to char, room_filters_glossary_path(anchor: "#{char}"), class: "p-2 text-sm text-black hover:underline" %>
+      <% if @category_letters.include?(char) %>
+        <span class="p-2 text-sm text-black hover:underline">
+          <a aria-label='link to #<%= "#{char}" %> heading' aria-describedby='Letter <%= "#{char}" %>' href='room_filters_glossary#<%= "#{char}" %>'><%= "#{char}" %></a> 
+        </span>
       <% else %>
         <span class="p-2 text-sm text-gray-400"><%= "#{char}" %></span>
       <% end %>
@@ -12,7 +14,7 @@
   </div>
   <div>
     <% @all_characteristics_array.sort.each do |category, list| %>
-      <div class="mb-2" id="<%= category[0] %>"><a href="<%= category[0] %>"></a>
+      <div class="mb-2" id="<%= category[0] %>"><a href="<%= category[0] %>" style="display: none;"><%= category[0] %></a>
         <h2><%= category %></h2>
         <ul class="ml-4 text-base">
           <% list.each do |filter, descr| %>
