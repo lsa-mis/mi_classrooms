@@ -28,6 +28,7 @@ class Building < ApplicationRecord
   has_many :rooms, primary_key: 'bldrecnbr', foreign_key: 'building_bldrecnbr'
   geocoded_by :address # can also be an IP address
   has_one_attached :building_image
+  has_many :floors, primary_key: 'bldrecnbr', foreign_key: 'building_bldrecnbr'
 
   multisearchable(
     against: [:name, :nick_name, :abbreviation, :bldrecnbr],

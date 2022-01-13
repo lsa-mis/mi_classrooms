@@ -1,35 +1,56 @@
-<div class="relative">
-  <div class="max-w-3xl mx-2 py-4 px-2 w-screen" >
-    <h2 class="sr-only"><%= @building.name  %></h2>
-    <div class="grid grid-cols-1 gap-y-4 place-content-center" >
-      <div class="bg-white border border-gray-300 rounded-lg flex flex-col overflow-hidden">
-        <div class="px-2 py-2 space-y-4 flex flex-col" >
-          <div class="flex flex-row justify-center w-full " >
-              <% if @building.building_image.representable? %>
-                <%= image_tag(@building.building_image.representation(resize_to_limit: [200, 200]), class: "building_image pr-2", alt: @building.name ) %>
-              <% else %>
-                <%= image_tag("building_placeholder.png", height: '100', width: '200', class: "building_image", alt: "building placeholder") %>
+<div class="container mb-20">
+  <div class="">
+    <%= link_to 'Back', buildings_path, class: "text-base hover:underline text-blue-800" %> 
+  </div>
+  <div class="relative">
+    <div class="max-w-3xl mx-2 py-4 px-2 w-screen" >
+      <h2 class="sr-only"><%= @building.name  %></h2>
+      <div class="grid grid-cols-1 gap-y-4 place-content-start " >
+        <div class="bg-white border border-gray-300 rounded-lg flex flex-col overflow-hidden">
+          <div class="px-2 py-2 space-y-4 flex flex-col" >
+            <div class="flex flex-row w-full " >
+                <% if @building.building_image.representable? %>
+                  <%= image_tag(@building.building_image.representation(resize_to_fill: [200, 200]), class: "building_image pr-2", alt: @building.name ) %>
+                <% else %>
+                  <%= image_tag("building_placeholder.png", height: '100', width: '200', class: "building_image", alt: "building placeholder") %>
+                <% end %>
+              <div class="md:text-2xl font-medium text-gray-900 sm:text-base" >
+                <div class="truncate">
+                  <%= @building.name  %>
+                </div>
+                <div class="text-sm">
+                  <%= @building.abbreviation  %>
+                </div>
+                <div class="text-base">
+                  <%= @building.address %>
+                  <br>
+                    <%= @building.city %>, <%= @building.state %> <%= @building.zip %>
+                </div>               
+              </div>
+            </div>
+            <hr>
+            <div>
+            Upload or update a building image
+            </div>
+              <%= form_for @building, html: { class: "sm:flex sm:items-center" } do |f| %>
+                <div class="field">
+                  <%= f.label :building_image, class: "sr-only" %>
+                  <%= f.file_field :building_image, class: "shadow- focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-sm" %>
+                </div>
+                <div class="actions">
+                  <%= f.submit 'Save', class: "my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
+                </div>
               <% end %>
-            <div class="md:text-2xl font-medium text-gray-900 sm:text-base" >
-              <div class="truncate">
-                <%= @building.name  %>
-              </div>
-              <div class="text-sm">
-                <%= @building.abbreviation  %>
-              </div>
-              <div class="text-base">
-                <%= @building.address %>
-                <br>
-                  <%= @building.city %>, <%= @building.state %> <%= @building.zip %>
-              </div>
-              <div class="h-layout h-highlight-item">
-                <%= svg("chalkboard-teacher")  %>
-                <%= link_to 'Classrooms located in this building', rooms_path(:building_bldrecnbr => @building.bldrecnbr) %>
-              </div>
-              <div class="text-sm">
-                <%= link_to 'Back', buildings_path %> |
-                <%= link_to 'Edit', edit_building_path(@building) %>
-              </div>
+            <div>
+            <hr>
+              <% if @class_floor_names.count > 0 %>
+              Add floor map 
+                <% @class_floor_names.each do |fl| %>
+                  <div class="py-4 sm:grid sm:py-5 sm:grid-cols-3 sm:gap-4">
+                    <%= render partial: "building_floor", locals: { building: @building, floor_name: fl } %>
+                  </div>
+                <% end %>
+              <% end %>
             </div>
           </div>
         </div>
