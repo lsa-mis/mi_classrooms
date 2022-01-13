@@ -1,6 +1,6 @@
-<h2><%= "#{@building.name} - Floor #{@room.floor.gsub(/[0]/, '')}" %></h2>
+<h2><%= "#{@building.name} - Floor #{@floor.floor.gsub(/[0]/, '')}" %></h2>
 <div class="py-2">
-  <%= link_to 'Back', room_path(@room), class: "hover:underline text-blue-800", data: {turbo: "false"} %>
+  <%= link_to 'Back', rooms_path, class: "hover:underline text-blue-800", data: {turbo: "false"} %>
 </div>
 
 <div class="container rounded-lg shadow-lg px-2 pb-5 md:w-3/4 sm:w-full">
@@ -8,13 +8,13 @@
 
     <div class="grid grid-cols-2 gap-1">
       <div>
-        <%= image_tag(@building.floors.find_by(floor: @room.floor).floor_plan.representation(resize_to_limit: [600, 600]), class: "building_image pr-2", alt: "#{@room.building.name} #{@room.floor}" ) %>
+        <%= image_tag(@floor.floor_plan.representation(resize_to_limit: [600, 600]), class: "building_image pr-2", alt: "#{@building.name} #{@floor.floor.gsub(/[0]/, '')}" ) %>
       </div>
 
       <div>
         <div>
         Rooms on this floor
-          <% @rooms_list.each do |rm| %>
+          <% @floor_rooms_list.each do |rm| %>
             <li>
             <%= link_to rm.room_number, room_path(rm), class: "text-blue-900 hover:underline" %>
             </li>
@@ -23,9 +23,9 @@
         <hr class"w-25">
         <div>
           Other floors in this building
-          <% @floor_list.each do |fl| %>
+          <% @floors.each do |fl| %>
             <li>
-            <%= link_to fl.floor.gsub(/[0]/, ''), building_floor_path(@building, @building.floors.find_by(floor: fl.floor)), class: "text-blue-900 hover:underline" %>
+            <%= link_to fl.floor.gsub(/[0]/, ''), building_floor_path(@floor.building_bldrecnbr, @floors.find_by(floor: fl.floor)), class: "text-blue-900 hover:underline" %>
                                                   <%# /buildings/:building_id/floors/:id(.:format) %>
             </li>
           <% end %>

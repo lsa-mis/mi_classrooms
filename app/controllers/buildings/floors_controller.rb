@@ -4,7 +4,9 @@ class Buildings::FloorsController < ApplicationController
 
   def show 
     @floors = @building.floors
-    @rooms_list = Room.where(building_bldrecnbr: @building, rmtyp_description: "Classroom")
+    @floor = @building.floors.find(params[:id])
+    @building_rooms_list = Room.where(building_bldrecnbr: @building, rmtyp_description: "Classroom")
+    @floor_rooms_list = Room.where(building_bldrecnbr: @building, rmtyp_description: "Classroom", floor: @floor.floor)
     authorize @floors
   end
 
