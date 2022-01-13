@@ -1,0 +1,29 @@
+<dt class="text-sm font-medium text-gray-500">
+  <%= "Floor #{floor_name}" %>
+</dt>
+<dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+  <ul class="border border-gray-200 rounded-md divide-y divide-gray-200">
+    <% this_floor = building.floors.find_by(floor: floor_name) %>
+    <% if this_floor.present? %>
+
+      <% if this_floor.floor_plan.attached? %>
+        <%= image_tag(this_floor.floor_plan.representation(resize_to_limit: [200, 200]), class: "building_image pr-2", alt: @building.name ) %>
+        <% if policy(building).edit? %>
+        Update floor map:
+          <%= render partial: "building_floor_form", locals: { building: building, floor_name: floor_name, floor_new: this_floor } %>
+        <% end %>
+      <% else %>
+        Upload floor map
+        <% if policy(building).edit? %>
+          <%= render partial: "building_floor_form", locals: { building: building, floor_name: floor_name, floor_new: Floor.new } %>
+        <% end %>
+      <% end %>
+    <% else %>
+      Upload floor map
+      <% if policy(building).edit? %>
+        <%= render partial: "building_floor_form", locals: { building: building, floor_name: floor_name, floor_new: Floor.new } %>
+      <% end %>
+    <% end %>
+  </ul>
+  
+</dd>

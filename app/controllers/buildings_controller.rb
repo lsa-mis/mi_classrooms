@@ -30,12 +30,15 @@ class BuildingsController < ApplicationController
   # GET /buildings/1
   # GET /buildings/1.json
   def show
+    @class_floor_names = @building.rooms.where(rmtyp_description: "Classroom").pluck(:floor).uniq.sort
+
     authorize @building
   end
 
 
   # GET /buildings/1/edit
   def edit
+    @floors = @building.rooms.where(rmtyp_description: "Classroom").pluck(:floor).uniq.sort
     authorize @building
   end
 
