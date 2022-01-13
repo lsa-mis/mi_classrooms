@@ -3,11 +3,12 @@ class Floor < ApplicationRecord
   has_one_attached :floor_plan
 
   validates_uniqueness_of :floor, :scope => :building_bldrecnbr, :message => '- combination of floor and building_bldrecnbr should be unique'
+  validates :floor_plan, presence: true
   validate :acceptable_floor_plan
 
   def acceptable_floor_plan
     return unless floor_plan.attached?
-
+    
     acceptable_types = ["image/jpg", "image/jpeg", "image/png"]
 
     unless floor_plan.byte_size <= 20.megabyte

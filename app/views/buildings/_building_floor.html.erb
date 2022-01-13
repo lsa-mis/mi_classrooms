@@ -5,11 +5,11 @@
   <ul class="border border-gray-200 rounded-md divide-y divide-gray-200">
     <% this_floor = building.floors.find_by(floor: floor_name) %>
     <% if this_floor.present? %>
-      floor map
+
       <% if this_floor.floor_plan.attached? %>
         <%= image_tag(this_floor.floor_plan.representation(resize_to_limit: [200, 200]), class: "building_image pr-2", alt: @building.name ) %>
         <% if policy(building).edit? %>
-        Update floor plan:
+        Update floor map:
           <%= render partial: "building_floor_form", locals: { building: building, floor_name: floor_name, floor_new: this_floor } %>
         <% end %>
       <% else %>
@@ -19,7 +19,7 @@
         <% end %>
       <% end %>
     <% else %>
-      Upload floor plan
+      Upload floor map
       <% if policy(building).edit? %>
         <%= render partial: "building_floor_form", locals: { building: building, floor_name: floor_name, floor_new: Floor.new } %>
       <% end %>
