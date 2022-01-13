@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resources :rooms do
     resources :notes, module: :rooms
   end
+  get 'rooms/:id/floor_plan', to: 'rooms#floor_plan'
   resources :notes
   
   match "toggle_visibile/:id" => "rooms#toggle_visibile", :via => [:get, :post], :as => :toggle_visibile

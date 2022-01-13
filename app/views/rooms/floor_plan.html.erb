@@ -1,0 +1,24 @@
+<h2><%= "#{@room.building.name} - #{ @room.floor}" %></h2>
+
+<%= image_tag(@room.building.floors.where(building_bldrecnbr: @room.building.bldrecnbr, floor: @room.floor).first.floor_plan.representation(resize_to_limit: [500, 500]), class: "building_image pr-2", alt: @room.building.name ) %>
+
+<div>
+Rooms on this floor
+  <% @rooms_list.each do |rm| %>
+    <li>
+    <%= link_to rm.room_number, room_path(rm) %>
+    </li>
+  <% end %>
+</div>
+
+<div>
+  Other floors in this building
+  <% @floor_list.each do |fl| %>
+    <li>
+    <%= fl.floor %>
+    </li>
+  <% end %>
+</div>
+<div class="py-2 mb-20">
+  <%= link_to 'Back', room_path(@room), class: "hover:underline text-blue-800", data: {turbo: "false"} %>
+</div>
