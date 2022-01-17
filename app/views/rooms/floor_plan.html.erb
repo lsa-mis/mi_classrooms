@@ -1,9 +1,9 @@
 <h2><%= "#{@room.building.name} - Floor #{@room.floor.gsub(/^0+(?!$)/, '')}" %></h2>
 <div class="py-2">
-  <%= link_to 'Back', room_path(@room), class: "hover:underline text-blue-800", data: {turbo: "false"} %>
+  <%= link_to 'Back to Room', room_path(@room), class: "hover:underline text-blue-800", data: {turbo: "false"} %>
 </div>
 
-<div class="container rounded-lg shadow-lg px-2 pb-20 md:w-3/4 sm:w-full">
+<div class="container rounded-lg shadow-lg px-2 pb-20 sm:w-full">
   <div class="flex-col w-full">
 
     <div class="grid grid-cols-2 gap-1">
@@ -12,23 +12,22 @@
       </div>
 
       <div>
-        <div>
-          Rooms on this floor
-          <ul>
+        <div class="pb-4">
+          <h2>Rooms on this floor</h2>
+          <ul class="list-disc ml-8">
             <% @rooms_list.each do |rm| %>
               <li>
-              <%= link_to rm.room_number, room_path(rm), class: "text-blue-900 hover:underline" %>
+              <%= link_to rm.room_number, room_path(rm), class: "text-blue-800 hover:underline" %>
               </li>
             <% end %>
           </ul> 
         </div>
-        <hr class"w-25">
         <div>
-          Other floors in this building
-          <ul>
+          <h2>Other floors in this building</h2>
+          <ul class="list-disc ml-8">
             <% @floor_list.each do |fl| %>
-              <li>
-              <%= link_to fl.floor.gsub(/^0+(?!$)/, ''), building_floor_path(@building, @building.floors.find_by(floor: fl.floor)), class: "text-blue-900 hover:underline" %>
+              <li class="">
+              <%= link_to fl.floor.gsub(/^0+(?!$)/, ''), building_floor_path(@building, @building.floors.find_by(floor: fl.floor)), class: "text-blue-800 hover:underline" %>
               </li>
             <% end %>
           </ul>
