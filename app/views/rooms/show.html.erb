@@ -98,7 +98,7 @@
         </div>
         <div>
           <% if @room.room_layout.attached? %>
-            <%= link_to room_layout(@room), target: "_blank" do %>
+            <%= link_to polymorphic_url(@room.room_layout), target: "_blank" do %>
               <div class="h-layout h-highlight-item">
                 <%= svg("chair") %>
                 <span>Room Layout</span>
