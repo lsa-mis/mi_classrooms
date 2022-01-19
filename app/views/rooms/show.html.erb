@@ -97,7 +97,7 @@
           <% end %>
         </div>
         <div>
-          <% if @room.room_layout.representable? %>
+          <% if @room.room_layout.attached? %>
             <%= link_to room_layout(@room), target: "_blank" do %>
               <div class="h-layout h-highlight-item">
                 <%= svg("chair") %>
