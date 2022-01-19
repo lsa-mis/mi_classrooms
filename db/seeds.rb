@@ -9,14 +9,14 @@
 # The following was run on the staging server manualy
 # Put here to keep records of these updates
 
-# locations = ['home_page', 'find_a_room_page']
-# existing_locations = Announcement.all.pluck(:location)
+locations = ['home_page', 'find_a_room_page']
+existing_locations = Announcement.all.pluck(:location)
 
-# locations.each do |location|
-#   unless existing_locations.include?(location)
-#     Announcement.create!(location: location)
-#   end
-# end
+locations.each do |location|
+  unless existing_locations.include?(location)
+    Announcement.create!(location: location)
+  end
+end
 
 # Building.find_by(bldrecnbr: 1000151).update(nick_name: "UMMA")
 # Building.find_by(bldrecnbr: 1005046).update(nick_name: "USB")
