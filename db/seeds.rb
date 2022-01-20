@@ -8,6 +8,7 @@
 
 # The following was run on the staging server manualy
 # Put here to keep records of these updates
+#
 
 locations = ['home_page', 'find_a_room_page']
 existing_locations = Announcement.all.pluck(:location)
