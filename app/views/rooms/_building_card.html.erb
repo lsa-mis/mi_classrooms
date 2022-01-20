@@ -11,7 +11,9 @@
         <%= building.name.titleize %>
       </div>
       <div class="text-xs px-2 font-medium">
-        (<%= building.nick_name %>)
+        <% if building.nick_name.present? %>
+          (<%= building.nick_name %>)
+        <% end %>
       </div>
       <div class="text-xs px-2">
         <%= building.address.titleize %>
