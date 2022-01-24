@@ -3,90 +3,58 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.0.1"
 
-# Bundle edge Rails instead:
-gem "rails", "~> 6.1.0"
-# gem "rails", "~> 6.0.3"
-
-# Use postgresql as the database for Active Record
-gem "pg", ">= 0.18", "< 2.0"
-# Use Puma as the app server
-gem "puma"
-# Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-# gem "webpacker", git: "https://github.com/rails/webpacker.git"
-# gem "webpacker", "~> 5.2.1"
-gem 'webpacker', '~> 6.0.0.rc.5'
-gem "hotwire-rails"
-
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem "jbuilder", "~> 2.7"
-# Use Redis adapter to run Action Cable in production
-# gem "redis", "~> 4.0"
-# Use ActiveModel has_secure_password
-# gem "bcrypt", "~> 3.1.7"
-
-# Reduces boot times through caching; required in config/boot.rb
+gem "annotate", "~> 3.1.1"
 gem "bootsnap", ">= 1.4.3", require: false
-# gem "administrate", "~> 0.8.1"
+gem "devise", github: "ghiculescu/devise", branch: "error-code-422" # https://github.com/heartcombo/devise/pull/5340 not yet merged
+gem "draper", "~> 4.0"
+gem "geocoder"
 gem "haml-rails"
+gem "hotwire-rails"
+gem "image_processing"
+gem "jbuilder", "~> 2.7"
+gem "ldap_lookup"
+gem "listen"
+gem "omniauth-google-oauth2"
+gem "omniauth-saml"
+gem "omniauth-rails_csrf_protection"
+gem "order_as_specified", "~> 1.7"
+gem "pagy"
+gem "pg", ">= 0.18", "< 2.0"
+gem "pg_search"
+gem "puma"
+gem "pundit"
+gem "rails", "~> 6.1.0"
+gem "responders", github: "heartcombo/responders"
 gem "sassc-rails"
 gem "sidekiq", "~> 6.2.1"
+gem "skylight"
+gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem "uglifier"
-gem "geocoder"
-gem "pagy"
-gem "pg_search"
-# gem "gravatar_image_tag", github: "mdeering/gravatar_image_tag"
-gem "listen"
+gem "webpacker", "~> 6.0.0.rc.5"
 
 group :development, :test do
-  # Call "byebug" anywhere in the code to stop execution and get a debugger console
   gem "bullet"
-  gem "pry"
   gem "factory_bot_rails"
-  gem "standard"
+  gem "pry"
+  gem "rspec-rails", "~> 5.0", ">= 5.0.2"
   gem "rubocop-performance"
-  gem 'rspec-rails', '~> 5.0', '>= 5.0.2'
+  gem "standard"
 end
 
 group :development do
-  gem "web-console", ">= 3.3.0"
-  # Invoke rake tasks on remote server.
-  # example use: cap staging    invoke:rake TASK=db:seed
-  gem "capistrano",         require: false
-  gem "capistrano-rbenv",   require: false
-  gem "capistrano-postgresql"
-  gem "capistrano-rails",   require: false
-  gem "capistrano-bundler", require: false
-  gem "capistrano3-puma", "~> 4.0", require: false
   gem "erb2haml"
+  gem "letter_opener_web", "~> 2.0"
   gem "pry-rails"
   gem "spring"
   gem "spring-watcher-listen"
-  gem 'letter_opener_web', '~> 2.0'
+  gem "web-console", ">= 3.3.0"
 end
 
 group :test do
   gem "capybara"
-  # gem "webdrivers"
-  gem "shoulda-matchers"
-  gem 'faker', '~> 2.19'
-  gem "selenium-webdriver"
-  gem "ffaker"
   gem "database_cleaner"
+  gem "faker", "~> 2.19"
+  gem "ffaker"
+  gem "selenium-webdriver"
+  gem "shoulda-matchers"
 end
-gem "annotate", "~> 3.1.1"
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-
-# gem 'devise', github: 'heartcombo/devise'
-gem "devise", github: "ghiculescu/devise", branch: "error-code-422" # https://github.com/heartcombo/devise/pull/5340 not yet merged
-gem "responders", github: "heartcombo/responders"
-gem "omniauth-google-oauth2"
-gem "omniauth-saml"
-gem 'omniauth-rails_csrf_protection'
-gem "draper", "~> 4.0"
-gem "pundit"
-gem 'ldap_lookup'
-gem 'image_processing'
-gem 'order_as_specified', '~> 1.7'
-# gem 'newrelic_rpm'
-# gem 'newrelic-infinite_tracing'
