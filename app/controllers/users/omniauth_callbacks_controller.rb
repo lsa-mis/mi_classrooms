@@ -74,12 +74,9 @@ def set_user
   if @user
     admin = false
     membership = []
+    access_groups = ['mi-classrooms-admin-staging', 'mi-classrooms-non-admin-staging']
     if Rails.env.production?
       access_groups = ['mi-classrooms-admin', 'mi-classrooms-non-admin']
-    elsif Rails.env.staging?
-      access_groups = ['mi-classrooms-admin-staging', 'mi-classrooms-non-admin-staging']
-    elsif Rails.env.development?
-      access_groups = ['mi-classrooms-admin-staging', 'mi-classrooms-non-admin-staging']
     end
     access_groups.each do |group|
       if  LdapLookup.is_member_of_group?(@user.uniqname, group)

@@ -37,14 +37,11 @@ class ApplicationPolicy
   end
 
   def user_in_non_admin_group?
+    @non_admin_group = ['mi-classrooms-admin-staging', 'mi-classrooms-non-admin-staging']
     if Rails.env.production?
       # When the app is open for the public return true
       # true
       @non_admin_group = ['mi-classrooms-admin', 'mi-classrooms-non-admin']
-    elsif Rails.env.staging?
-      @non_admin_group = ['mi-classrooms-admin-staging', 'mi-classrooms-non-admin-staging']
-    elsif Rails.env.development?
-      @non_admin_group = ['mi-classrooms-admin-staging', 'mi-classrooms-non-admin-staging']
     end
     user.membership && (user.membership & @non_admin_group).any?
   end
