@@ -6,7 +6,7 @@ class BuildingsController < ApplicationController
   # GET /buildings
   # GET /buildings.json
   def index
-    @searchable_buildings =  Building.with_classrooms.ann_arbor_campus.uniq.pluck(:nick_name, :abbreviation).collect{ |building| [building[0].titleize, building[1] ] }.sort
+    @searchable_buildings =  Building.with_classrooms.ann_arbor_campus.uniq.pluck(:name, :abbreviation).collect{ |building| [building[0].titleize, building[1] ] }.sort
     if params[:query].present?
       session[:query] = params[:query]
       @buildings = Building.with_name(params[:query])
