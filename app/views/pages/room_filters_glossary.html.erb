@@ -16,20 +16,17 @@
     <% prev_cat = "" %> 
     <% @all_characteristics_array.sort.each do |category, list| %>
       <% cat = category[0] %>
-      <div class="mb-2" 
-        <% if cat != prev_cat %>
-          id="<%= cat %>">
+       
+      <% if cat != prev_cat %>
+        <div class="mb-2" id="<%= cat %>">
           <a href="<%= cat %>" style="display: none;"><%= cat %></a>
           <% prev_cat = cat %>
-        <% else %>
-          >
-        <% end %>
+      <% else %>
+        <div class="mb-2">
+      <% end %>
         <div class="flex items-center">
           <div class="flex-1">
             <h2><%= category %></h2>
-          </div>
-          <div class="flex justify-end pr-2 text-sm text-black hover:underline">  
-            <a href="#top">Back to top</a>
           </div>
         </div>
         <ul class="ml-4 text-base">
