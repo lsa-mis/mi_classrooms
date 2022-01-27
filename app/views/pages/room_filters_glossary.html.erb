@@ -1,4 +1,4 @@
-<div class="container mb-20">
+<div class="container px-1 mb-20">
 
   <h1>Room Filters Glossary</h1>
   <div class="flex-auto justify-center py-2 ml-4">
@@ -16,12 +16,18 @@
     <% prev_cat = "" %> 
     <% @all_characteristics_array.sort.each do |category, list| %>
       <% cat = category[0] %>
-      <div class="mb-2">
-        <% if cat != prev_cat %>
+      <% if cat != prev_cat %>
+        <div class="mb-2" id="<%= cat %>">
           <a href="<%= cat %>" style="display: none;"><%= cat %></a>
           <% prev_cat = cat %>
-        <% end %>
-        <h2><%= category %></h2>
+      <% else %>
+        <div class="mb-2">
+      <% end %>
+        <div class="flex items-center">
+          <div class="flex-1">
+            <h2><%= category %></h2>
+          </div>
+        </div>
         <ul class="ml-4 text-base">
           <% list.each do |filter, descr| %>
             <li class="font-semibold ml-2">
