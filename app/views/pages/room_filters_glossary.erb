@@ -16,7 +16,7 @@
     <% prev_cat = "" %> 
     <% @all_characteristics_array.sort.each do |category, list| %>
       <% cat = category[0] %>
-      <div class="mb-2">
+      <div class="mb-2" id="<%= cat %>">
         <% if cat != prev_cat %>
           <a href="<%= cat %>" style="display: none;"><%= cat %></a>
           <% prev_cat = cat %>
