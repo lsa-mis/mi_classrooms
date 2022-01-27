@@ -15,6 +15,9 @@ task api_update_database: :environment do
 
   errors = []
   status_report = []
+  # @debug is true if there are errors from API calls or database queries
+  @debug = false
+  
   #################################################
   # update campus list
   # if campus is in the app db, but not in the API, a warning will be added to the log file
@@ -37,9 +40,14 @@ task api_update_database: :environment do
   puts "Update campus list Time: #{time.real.round(2)} seconds"
   status_report << "Update campus list Time: #{time.real.round(2)} seconds"
   if File.exists?("#{Rails.root}/log/#{Date.today}_campus_api.log")
-    errors << "See the log file #{Rails.root}/log/#{Date.today}_campus_api.log for errors or warnings"
-    errors << File.readlines("#{Rails.root}/log/#{Date.today}_campus_api.log")
+    if @debug
+      status_report << "See the log file #{Rails.root}/log/#{Date.today}_campus_api.log for errors or warnings"
+      @debug = false
+    else 
+      status_report << "See the log file #{Rails.root}/log/#{Date.today}_campus_api.log for warnings"
+    end
   end
+  status_report << " "
 
   #################################################
   # update buildings
@@ -79,9 +87,11 @@ task api_update_database: :environment do
   puts "Update buildings Time: #{time.real.round(2)} seconds"
   status_report << "Update buildings Time: #{time.real.round(2)} seconds"
   if File.exists?("#{Rails.root}/log/#{Date.today}_building_api.log")
-    errors << "See the log file #{Rails.root}/log/#{Date.today}_building_api.log for errors or warnings"
-    errors << File.readlines("#{Rails.root}/log/#{Date.today}_building_api.log")
+    if @debug
+      status_report << "See the log file #{Rails.root}/log/#{Date.today}_building_api.log for errors or warnings"
+      @debug = false
   end
+  status_report << " "
 
   #################################################
   # update rooms
@@ -107,9 +117,9 @@ task api_update_database: :environment do
   puts "Update Rooms Time: #{time.real.round(2)} seconds"
   status_report << "Update Rooms Time: #{time.real.round(2)} seconds"
   if File.exists?("#{Rails.root}/log/#{Date.today}_room_api.log")
-    errors << "See the log file #{Rails.root}/log/#{Date.today}_room_api.log for errors or warnings"
-    errors << File.readlines("#{Rails.root}/log/#{Date.today}_room_api.log")
+    status_report << "See the log file #{Rails.root}/log/#{Date.today}_room_api.log for errors or warnings"
   end
+  status_report << " "
 
   #################################################
   # add facility_id to classrooms and update instructional_seating_count
@@ -131,9 +141,9 @@ task api_update_database: :environment do
   puts "Add FacilityID for classroom Time: #{time.real.round(2)} seconds"
   status_report << "Add FacilityID for classroom Time: #{time.real.round(2)} seconds"
   if File.exists?("#{Rails.root}/log/#{Date.today}_facility_id_logger_api.log")
-    errors << "See the log file #{Rails.root}/log/#{Date.today}_facility_id_logger_api.log for errors or warnings"
-    errors << File.readlines("#{Rails.root}/log/#{Date.today}_facility_id_logger_api.log")
+    status_report << "See the log file #{Rails.root}/log/#{Date.today}_facility_id_logger_api.log for errors or warnings"
   end
+  status_report << " "
 
   #################################################
   # update classrooms characteristics
@@ -159,9 +169,9 @@ task api_update_database: :environment do
   puts "Update classroom characteristics Time: #{time.real.round(2)} seconds"
   status_report << "Update classroom characteristics Time: #{time.real.round(2)} seconds"
   if File.exists?("#{Rails.root}/log/#{Date.today}_classroom_characteristics_api.log")
-    errors << "See the log file #{Rails.root}/log/#{Date.today}_classroom_characteristics_api.log for errors or warnings"
-    errors << File.readlines("#{Rails.root}/log/#{Date.today}_classroom_characteristics_api.log")
+    status_report << "See the log file #{Rails.root}/log/#{Date.today}_classroom_characteristics_api.log for errors or warnings"
   end
+  status_report << " "
   
   #################################################
   # update classrooms contacts
@@ -186,9 +196,9 @@ task api_update_database: :environment do
   puts "Update classroom contacts Time: #{time.real.round(2)} seconds"
   status_report << "Update classroom contacts Time: #{time.real.round(2)} seconds"
   if File.exists?("#{Rails.root}/log/#{Date.today}_classroom_contact_api.log")
-    errors << "See the log file #{Rails.root}/log/#{Date.today}_classroom_contact_api.log for errors or warnings"
-    errors << File.readlines("#{Rails.root}/log/#{Date.today}_classroom_contact_api.log")
+    status_report << "See the log file #{Rails.root}/log/#{Date.today}_classroom_contact_api.log for errors or warnings"
   end
+  status_report << " "
 
   # send report email
   subject = "#{Date.today} - Update Classrooms Report"

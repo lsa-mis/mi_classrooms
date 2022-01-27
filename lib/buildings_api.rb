@@ -38,7 +38,8 @@ class BuildingsApi
         campus_logger.info "Campus record(s) not in the API database: #{@campus_cds}"
       end
     else
-      campus_logger.info "API return: #{@result['error']}"
+      campus_logger.debug "API return: #{@result['error']}"
+      @debug = true
     end
   end
 
@@ -52,7 +53,8 @@ class BuildingsApi
     if campus.update(campus_description: row['CampusDescr'])
       @campus_cds.delete(row['CampusCd'])
     else
-      campus_logger.info "Could not update #{row['CampusCd']} because : #{campus.errors.messages}"
+      campus_logger.debug "Could not update #{row['CampusCd']} because : #{campus.errors.messages}"
+      @debug = true
     end
   end
 
@@ -108,7 +110,7 @@ class BuildingsApi
         building_logger.info "Building(s) not in the API database: #{@buildings_ids}"
       end
     else
-      building_logger.info "API return: #{@result['error']}"
+      building_logger.debug "API return: #{@result['error']}"
     end
   end
 
@@ -124,7 +126,7 @@ class BuildingsApi
           campus_record_id: CampusRecord.find_by(campus_cd: row['BuildingCampusCode']).id)
       @buildings_ids.delete(row['BuildingRecordNumber'])
     else
-      building_logger.info "Could not update #{row['BuildingRecordNumber']} because : #{building.errors.messages}"
+      building_logger.debug "Could not update #{row['BuildingRecordNumber']} because : #{building.errors.messages}"
     end
   end
 
@@ -137,7 +139,7 @@ class BuildingsApi
     if building.save
       GeocodeBuildingJob.perform_later(building)
     else
-      building_logger.info "Could not create #{row['BuildingRecordNumber']} because : #{building.errors.messages}"
+      building_logger.debug "Could not create #{row['BuildingRecordNumber']} because : #{building.errors.messages}"
     end
   end
 
