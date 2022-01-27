@@ -26,7 +26,7 @@ gem "pundit"
 gem "rails", "~> 6.1.0"
 gem "responders", github: "heartcombo/responders"
 gem "sassc-rails"
-gem "sidekiq", "~> 6.2.1"
+gem "sidekiq", "~> 6.4.0"
 gem "skylight"
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem "uglifier"
