@@ -43,7 +43,11 @@ class ClassroomApi
             rmrecnbr = room_info['RmRecNbr'].to_i
             room_in_db = Room.find_by(rmrecnbr: rmrecnbr)
             if room_in_db
-              room_in_db.update(facility_code_heprod: facility_id, instructional_seating_count: room_info['RmInstSeatCnt'], campus_record_id: CampusRecord.find_by(campus_cd: room_info['CampusCd']).id)
+              unless room_in_db.update(facility_code_heprod: facility_id, instructional_seating_count: room_info['RmInstSeatCnt'], campus_record_id: CampusRecord.find_by(campus_cd: room_info['CampusCd']).id)
+                facility_id_logger.debug "Could not update: rmrecnbr - #{rmrecnbr}, facility_id - #{facility_id}"
+                @debug = true
+                return @debug
+              end
             else
               facility_id_logger.info "Room not in the database: rmrecnbr - #{rmrecnbr}, facility_id - #{facility_id}"
             end
@@ -54,6 +58,8 @@ class ClassroomApi
       end
     else
       facility_id_logger.debug "API return: #{@result['error']}"
+      @debug = true
+      return @debug
     end
   end
 
