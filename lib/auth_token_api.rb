@@ -31,3 +31,28 @@ class AuthTokenApi
     return @returned_data
   end
 end
+
+class Email
+
+  def initialize(from, to, subject)
+    puts "inisialize email"
+    @result = {'success' => false, 'error' => '', 'data' => {}}
+    @from = from
+    @to = to
+    @subject = subject
+  end
+
+  def update_report(message)
+    puts "send email"
+  # send report email
+  # subject = "#{Date.today} - Update Classrooms Report"
+  # message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Errors and warnings:\r\n" + errors.join("\r\n")
+  ActionMailer::Base.mail(
+      from: @from,
+      to: @to,
+      subject: @subject,
+      body: message
+    ).deliver
+  end
+
+end
