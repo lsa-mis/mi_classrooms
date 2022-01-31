@@ -43,6 +43,7 @@ class BuildingsApi
       @debug = true
       return @debug
     end
+    return @debug
   end
 
   def campus_exists?(campus_cd)
@@ -120,6 +121,7 @@ class BuildingsApi
       @debug = true
       return @debug
     end
+    return @debug
   end
 
   def building_exists?(bldrecnbr)
@@ -264,6 +266,7 @@ class BuildingsApi
       end
       @rooms_not_updated += @rooms_in_db if @rooms_in_db
     end
+    return @debug
   end
 
   def room_exists?(bldrecnbr, rmrecnbr)

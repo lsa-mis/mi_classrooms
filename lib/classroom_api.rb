@@ -4,6 +4,7 @@ class ClassroomApi
     @buildings_ids = Building.all.pluck(:bldrecnbr)
     @result = {'success' => false, 'error' => '', 'data' => {}}
     @access_token = access_token
+    @debug = false
   end
 
   def classroom_logger
@@ -61,6 +62,7 @@ class ClassroomApi
       @debug = true
       return @debug
     end
+    return @debug
   end
 
   def update_all_classrooms
@@ -176,6 +178,7 @@ class ClassroomApi
               else
                 add_classroom_characteristic(c)
               end
+              return @debug if @debug
             end
             # delete characteristics that are not in API
             db_chrstc_list.each do |c|
@@ -189,8 +192,12 @@ class ClassroomApi
         end
       else
         classroom_characteristics_logger.debug "API return: #{@result['error']}"
+        @debug = true
+        return @debug
       end
+      return @debug if @debug
     end
+    return @debug
   end
 
   def add_classroom_characteristic(row)
@@ -199,6 +206,8 @@ class ClassroomApi
                 chrstc_descr: row['ChrstcDescr'], chrstc_descrshort: chrstc_descrshort, chrstc: row['Chrstc'])
     unless room_char.save
       classroom_characteristics_logger.debug "Could not create #{row['RmRecNbr']} because : #{room_char.errors.messages}"
+      @debug = true
+      return @debug
     end
   end
 
@@ -209,6 +218,8 @@ class ClassroomApi
                   chrstc_descr: row['ChrstcDescr'], chrstc_descrshort: chrstc_descrshort, chrstc: row['Chrstc'])
       unless room_char.save
         classroom_characteristics_logger.debug "Could not create #{row['RmRecNbr']} because : #{room_char.errors.messages}"
+        @debug = true
+        return @debug
       end
     end
 
@@ -263,13 +274,16 @@ class ClassroomApi
             create_classroom_contact(row)
           end
         else
-          contact_logger.debug "No contacts for facility_id #{facility_id}"
+          contact_logger.info "No contacts for facility_id #{facility_id}"
         end
       else
         contact_logger.debug "API returns false for facility_id #{facility_id}: #{@result['error']}"
+        @debug = true
+        return @debug
       end
+      return @debug if @debug
     end
-
+    return @debug
   end
 
   def update_classroom_contact(row)
@@ -278,6 +292,8 @@ class ClassroomApi
                 rm_det_url: row['ScheduleURL'], rm_usage_guidlns_url: row['UsageGuideLinesURL'], rm_sppt_deptid: row['SpptDeptID'],
                 rm_sppt_cntct_email: row['SpptCntctEmail'], rm_sppt_cntct_phone: row['SpptCntctPhone'], rm_sppt_cntct_url: row['SpptCntctURL'])
       contact_logger.debug "Could not update #{row['RmRecNbr']} because : #{contact.errors.messages}"
+      @debug = true
+      return @debug
     end
   end
 
@@ -287,6 +303,8 @@ class ClassroomApi
     rm_sppt_cntct_email: row['SpptCntctEmail'], rm_sppt_cntct_phone: row['SpptCntctPhone'], rm_sppt_cntct_url: row['SpptCntctURL'])
     unless contact.save
       contact_logger.debug "Could not create #{row['RmRecNbr']} because : #{contact.errors.messages}"
+      @debug = true
+      return @debug
     end
   end
 
@@ -315,7 +333,6 @@ class ClassroomApi
   end
 
   def get_classroom_meetings(start_date, end_date)
-    puts ("in meetings")
     url = URI("https://apigw.it.umich.edu/um/aa/ClassroomList/Classrooms/#{@rmrecnbr}/Meetings?startDate=#{start_date}&endDate=#{end_date}")
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
