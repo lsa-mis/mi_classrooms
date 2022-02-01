@@ -193,7 +193,6 @@ class BuildingsApi
       puts "Could not get access_token for DepartmentApi. Error: " + dept_auth_token_result['error']
       room_logger.debug "Could not get access_token for DepartmentApi: #{dept_auth_token_result['error']}"
       @debug = true
-      puts "return from room update - no token"
       return @debug
     end
     dept = DepartmentApi.new(dept_access_token)
@@ -237,6 +236,10 @@ class BuildingsApi
                 else
                   room_logger.debug "DepartmentApi: Error for building #{bld}, room #{row['RoomRecordNumber']}, department #{dept_name} - #{dept_result['error']}"
                   dept_data = nil
+                  # don't want to interrupt because Department API gives this error: 
+                  # Error for building 1005036, room 2108446, department EH&S - 404. Please specify Department Description of more than 3 characters
+                  # @debug = true
+                  # return @debug
                 end
               end
               if room_exists?(bld, row['RoomRecordNumber'])
@@ -255,7 +258,9 @@ class BuildingsApi
           @rooms_not_updated.each do |rmrecnbr|
             room = Room.find_by(rmrecnbr: rmrecnbr)
             unless room.update(visible: false)
-              room_logger.info "Could not update room #{rmrecnbr} - should have visible = false "
+              room_logger.debug "Could not update room #{rmrecnbr} - should have visible = false "
+              @debug = true
+              return @debug
             end
           end
         end
