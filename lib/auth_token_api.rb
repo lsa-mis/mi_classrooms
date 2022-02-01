@@ -35,7 +35,6 @@ end
 class Email
 
   def initialize(from, to, subject)
-    @result = {'success' => false, 'error' => '', 'data' => {}}
     @from = from
     @to = to
     @subject = subject
