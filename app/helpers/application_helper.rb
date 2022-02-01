@@ -38,7 +38,7 @@ module ApplicationHelper
 
   def room_thumbnail_image( room )
     if room.room_image.representable?
-      image_tag room.room_image.representation(resize_to_limit: [250, 80]), class: 'p-2', alt: "#{room.room_number} --  #{room.building.name}" 
+      image_tag room.room_image.representation(resize_to_limit: [1000, 800]), class: 'p-2', alt: "#{room.room_number} --  #{room.building.name}" 
     else
       image_tag 'room_placeholder', height: '50', width: '120', class: 'p-2 mr-36', alt: "room placeholder" 
     end
