@@ -17,13 +17,7 @@
       = link_to "About", about_path, class: "mobile-dropdown-link #{class_names(active: current_page?(about_path))} " 
       = link_to "Announcements", announcements_path, class: "mobile-dropdown-link #{class_names(active: current_page?(announcements_path))} " if user_signed_in? && policy(Announcement).edit?
 
-
-
-<<<<<<< HEAD
       %div.grid.grid-col-2.gap-2.justify-items-end.mr-8
-=======
-      %div.grid.grid-col-2.gap-2.justify-items-end
->>>>>>> e7d5bc622095fc36133218e346075637468b86bb
         %div
         %div
           - if user_signed_in?
