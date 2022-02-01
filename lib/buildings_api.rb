@@ -3,6 +3,7 @@ class BuildingsApi
   def initialize(access_token)
     @result = {'success' => false, 'error' => '', 'data' => {}}
     @access_token = access_token
+    @debug = false
   end
 
   def building_logger
@@ -21,7 +22,6 @@ class BuildingsApi
 
   def update_campus_list
     @campus_cds = CampusRecord.all.pluck(:campus_cd)
-
     @result = get_campuses
     if @result['success']
       data = @result['data']['Campus']
@@ -32,14 +32,18 @@ class BuildingsApi
         else
           create_campus(row)
         end
+        return @debug if @debug
       end
       # check if database has information that is not in API anymore
       if @campus_cds.present?
         campus_logger.info "Campus record(s) not in the API database: #{@campus_cds}"
       end
     else
-      campus_logger.info "API return: #{@result['error']}"
+      campus_logger.debug "API return: #{@result['error']}"
+      @debug = true
+      return @debug
     end
+    return @debug
   end
 
   def campus_exists?(campus_cd)
@@ -52,7 +56,9 @@ class BuildingsApi
     if campus.update(campus_description: row['CampusDescr'])
       @campus_cds.delete(row['CampusCd'])
     else
-      campus_logger.info "Could not update #{row['CampusCd']} because : #{campus.errors.messages}"
+      campus_logger.debug "Could not update #{row['CampusCd']} because : #{campus.errors.messages}"
+      @debug = true
+      return @debug
     end
   end
 
@@ -60,7 +66,9 @@ class BuildingsApi
     campus = CampusRecord.new(campus_cd: row['CampusCd'], campus_description: row['CampusDescr'])
 
     unless campus.save
-      campus_logger.info "Could not create #{row['CampusCd']} because : #{campus.errors.messages}"
+      campus_logger.debug "Could not create #{row['CampusCd']} because : #{campus.errors.messages}"
+      @debug = true
+      return @debug
     end
   end
 
@@ -101,6 +109,7 @@ class BuildingsApi
           else
             create_building(row)
           end
+          return @debug if @debug
         end
       end
       # check if there buildings that were not updated
@@ -108,8 +117,11 @@ class BuildingsApi
         building_logger.info "Building(s) not in the API database: #{@buildings_ids}"
       end
     else
-      building_logger.info "API return: #{@result['error']}"
+      building_logger.debug "API return: #{@result['error']}"
+      @debug = true
+      return @debug
     end
+    return @debug
   end
 
   def building_exists?(bldrecnbr)
@@ -124,7 +136,9 @@ class BuildingsApi
           campus_record_id: CampusRecord.find_by(campus_cd: row['BuildingCampusCode']).id)
       @buildings_ids.delete(row['BuildingRecordNumber'])
     else
-      building_logger.info "Could not update #{row['BuildingRecordNumber']} because : #{building.errors.messages}"
+      building_logger.debug "Could not update #{row['BuildingRecordNumber']} because : #{building.errors.messages}"
+      @debug = true
+      return @debug
     end
   end
 
@@ -137,7 +151,9 @@ class BuildingsApi
     if building.save
       GeocodeBuildingJob.perform_later(building)
     else
-      building_logger.info "Could not create #{row['BuildingRecordNumber']} because : #{building.errors.messages}"
+      building_logger.debug "Could not create #{row['BuildingRecordNumber']} because : #{building.errors.messages}"
+      @debug = true
+      return @debug
     end
   end
 
@@ -174,8 +190,10 @@ class BuildingsApi
     if dept_auth_token_result['success']
       dept_access_token = dept_auth_token_result['access_token']
     else
-      puts "Could not get access_token for DepartmentApi. Error: " + result['error']
-      exit
+      puts "Could not get access_token for DepartmentApi. Error: " + dept_auth_token_result['error']
+      room_logger.debug "Could not get access_token for DepartmentApi: #{dept_auth_token_result['error']}"
+      @debug = true
+      return @debug
     end
     dept = DepartmentApi.new(dept_access_token)
     dept_info_array = {}
@@ -216,8 +234,12 @@ class BuildingsApi
                     dept_data = nil
                   end
                 else
-                  room_logger.info "DepartmentApi: Error for building #{bld}, room #{row['RoomRecordNumber']}, department #{dept_name} - #{dept_result['error']}"
+                  room_logger.debug "DepartmentApi: Error for building #{bld}, room #{row['RoomRecordNumber']}, department #{dept_name} - #{dept_result['error']}"
                   dept_data = nil
+                  # don't want to interrupt because Department API gives this error: 
+                  # Error for building 1005036, room 2108446, department EH&S - 404. Please specify Department Description of more than 3 characters
+                  # @debug = true
+                  # return @debug
                 end
               end
               if room_exists?(bld, row['RoomRecordNumber'])
@@ -225,6 +247,7 @@ class BuildingsApi
               else
                 create_room(row, bld, dept_data)
               end
+              return @debug if @debug
             end
           end
         else
@@ -235,15 +258,20 @@ class BuildingsApi
           @rooms_not_updated.each do |rmrecnbr|
             room = Room.find_by(rmrecnbr: rmrecnbr)
             unless room.update(visible: false)
-              room_logger.info "Could not update room #{rmrecnbr} - should have visible = false "
+              room_logger.debug "Could not update room #{rmrecnbr} - should have visible = false "
+              @debug = true
+              return @debug
             end
           end
         end
       else
-        room_logger.info "API return: #{@result['error']}"
+        room_logger.debug "API return: #{@result['error']}"
+        @debug = true
+        return @debug
       end
       @rooms_not_updated += @rooms_in_db if @rooms_in_db
     end
+    return @debug
   end
 
   def room_exists?(bldrecnbr, rmrecnbr)
@@ -259,7 +287,9 @@ class BuildingsApi
         campus_record_id: @campus_id, building_name: @building_name, visible: true)
         @rooms_in_db.delete(row['RoomRecordNumber'])
       else
-        room_logger.info "Could not update #{row['RoomRecordNumber']} because : #{room.errors.messages}"
+        room_logger.debug "Could not update #{row['RoomRecordNumber']} because : #{room.errors.messages}"
+        @debug = true
+        return @debug
       end
     else
       if room.update(floor: row['FloorNumber'], room_number: row['RoomNumber'], 
@@ -269,7 +299,9 @@ class BuildingsApi
               campus_record_id: @campus_id, building_name: @building_name, visible: true)
         @rooms_in_db.delete(row['RoomRecordNumber'])
       else
-        room_logger.info "Could not update #{row['RoomRecordNumber']} because : #{room.errors.messages}"
+        room_logger.debug "Could not update #{row['RoomRecordNumber']} because : #{room.errors.messages}"
+        @debug = true
+        return @debug
       end
     end
   end
@@ -288,11 +320,14 @@ class BuildingsApi
             campus_record_id: @campus_id, building_name: @building_name, visible: true)
     end
     unless room.save
-      room_logger.info "Could not create #{row['RoomRecordNumber']} because : #{room.errors.messages}"
+      room_logger.debug "Could not create #{row['RoomRecordNumber']} because : #{room.errors.messages}"
+      @debug = true
+      return @debug
     end
   end
 
   def get_building_classroom_data(bldrecnbr)
+
     url = URI("https://apigw.it.umich.edu/um/bf/RoomInfo/#{bldrecnbr}")
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
