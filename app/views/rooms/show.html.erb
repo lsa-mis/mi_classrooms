@@ -1,20 +1,18 @@
-
-
 <%= turbo_frame_tag "room" do  %>
   <div id="notice">
     <%= notice %>
   </div>
-  <div class="container rounded-lg shadow-lg px-1 md:w-3/4 sm:w-full">
-    <div class="flex-col w-full">
+  <div class="container rounded-lg shadow-lg px-auto">
+    <div class="flex-col w-full px-2">
       <h1>
         <%= @room.facility_code_heprod%>
       </h1>
-      <div class='pl-4 mb-5'>
+      <div class='px-2 mb-5'>
         <%= render 'room_panorama', room: @room  %>
       </div>
     </div>
     <div class="grid grid-cols-6 gap-2">
-      <div class="col-span-2">
+      <div class="col-span-2 max-h-24">
         <%= building_image( @room ) %>
         <div class="text-xs pl-2 -mt-2 "><%= @room.building.name.titleize %></div>
       </div>
