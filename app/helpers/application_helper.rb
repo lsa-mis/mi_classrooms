@@ -27,10 +27,9 @@ module ApplicationHelper
 
   def room_image( room )
     if room.room_image.representable?
-      image_tag room.room_image.representation(resize_to_limit: [1000, 800]), alt: "#{room.room_number} --  #{room.building.name}" 
+      image_tag room.room_image.representation(resize_to_limit: [1000, 800]), class: 'h-96  p-2', alt: "#{room.room_number} --  #{room.building.name}" 
     else
       image_tag 'room_placeholder.png', class: 'max-h-24 p-2', alt: "The image for this room is not available"
-
     end
   end
 
@@ -38,9 +37,9 @@ module ApplicationHelper
 
   def room_thumbnail_image( room )
     if room.room_image.representable?
-      image_tag room.room_image.representation(resize_to_limit: [1000, 800]), class: 'max-h-full p-2', alt: "#{room.room_number} --  #{room.building.name}" 
+      image_tag room.room_image.representation(resize_to_limit: [1000, 800]), class: 'max-h-24 p-2', alt: "#{room.room_number} --  #{room.building.name}" 
     else
-      image_tag 'room_placeholder', class: 'max-h-24 p-2 mr-36', alt: "room placeholder" 
+      image_tag 'room_placeholder', class: 'max-h-24 p-2', alt: "room placeholder" 
     end
   end
 
