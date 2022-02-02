@@ -94,7 +94,7 @@ class BuildingsApi
     return @result
   end
 
-  # update builgings
+  # update buildings
 
   def update_all_buildings(campus_codes = [100], buildings_codes = [])
     @buildings_ids = Building.all.pluck(:bldrecnbr)
@@ -208,46 +208,49 @@ class BuildingsApi
           @rooms_in_db = Room.where(building_bldrecnbr: bld).pluck(:rmrecnbr)
           if data.present?
             data.each do |row|
-              # get information about department
-              dept_name = row['DepartmentName']
-              if dept_info_array[dept_name].present?
-                dept_data = dept_info_array[dept_name]
-              else
-                # get data from API
-                if number_of_api_calls_per_minutes < 190 
-                  number_of_api_calls_per_minutes += 1
+              # update only Classrooms not all rooms
+              if row['RoomTypeDescription'] == "Classroom"
+                # get information about department
+                dept_name = row['DepartmentName']
+                if dept_info_array[dept_name].present?
+                  dept_data = dept_info_array[dept_name]
                 else
-                  number_of_api_calls_per_minutes = 1
-                  sleep(61.seconds)
-                end
-                dept_result = dept.get_departments_info(dept_name)
-                if dept_result['success']
-                  if dept_result['data']['DeptData'].present?
-                    dept_data_info = dept_result['data']['DeptData'][0]
-                    dept_info_array[dept_name] = 
-                                            {'DeptId' => dept_data_info['DeptId'], 
-                                            'DeptGroup' => dept_data_info['DeptGroup'], 
-                                            'DeptGroupDescription' => dept_data_info['DeptGroupDescription']
-                                            }
-                    dept_data = dept_info_array[dept_name]
+                  # get data from API
+                  if number_of_api_calls_per_minutes < 190 
+                    number_of_api_calls_per_minutes += 1
                   else
-                    dept_data = nil
+                    number_of_api_calls_per_minutes = 1
+                    sleep(61.seconds)
                   end
-                else
-                  room_logger.debug "DepartmentApi: Error for building #{bld}, room #{row['RoomRecordNumber']}, department #{dept_name} - #{dept_result['error']}"
-                  dept_data = nil
-                  # don't want to interrupt because Department API gives this error: 
-                  # Error for building 1005036, room 2108446, department EH&S - 404. Please specify Department Description of more than 3 characters
-                  # @debug = true
-                  # return @debug
+                  dept_result = dept.get_departments_info(dept_name)
+                  if dept_result['success']
+                    if dept_result['data']['DeptData'].present?
+                      dept_data_info = dept_result['data']['DeptData'][0]
+                      dept_info_array[dept_name] = 
+                                              {'DeptId' => dept_data_info['DeptId'], 
+                                              'DeptGroup' => dept_data_info['DeptGroup'], 
+                                              'DeptGroupDescription' => dept_data_info['DeptGroupDescription']
+                                              }
+                      dept_data = dept_info_array[dept_name]
+                    else
+                      dept_data = nil
+                    end
+                  else
+                    room_logger.debug "DepartmentApi: Error for building #{bld}, room #{row['RoomRecordNumber']}, department #{dept_name} - #{dept_result['error']}"
+                    dept_data = nil
+                    # don't want to interrupt because Department API gives this error: 
+                    # Error for building 1005036, room 2108446, department EH&S - 404. Please specify Department Description of more than 3 characters
+                    # @debug = true
+                    # return @debug
+                  end
                 end
+                if room_exists?(bld, row['RoomRecordNumber'])
+                  update_room(row, bld, dept_data)
+                else
+                  create_room(row, bld, dept_data)
+                end
+                return @debug if @debug
               end
-              if room_exists?(bld, row['RoomRecordNumber'])
-                update_room(row, bld, dept_data)
-              else
-                create_room(row, bld, dept_data)
-              end
-              return @debug if @debug
             end
           end
         else
