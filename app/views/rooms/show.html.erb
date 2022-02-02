@@ -26,15 +26,17 @@
                 </svg>
               </div>
             </div>
-            <div class="ml-1 lg:ml-4">
+            <div class="ml-1 lg:ml-4 border border-b-2 border-gray-50">
               <%= @room.room_schedule_contact %>
               <ul>
-                <li class="flex-shrink-0">
-                  <div class="h-highlight-item">
-                    <%= svg("phone") %>
-                  </div>
-                  <%= "#{@room.room_schedule_phone}" %>
-                </li>
+                <% if @room.room_schedule_phone.present? %>
+                  <li>
+                    <div class="h-highlight-item">
+                      <%= svg("phone") %>
+                    </div>
+                    <%= "#{@room.room_schedule_phone}" %>
+                  </li>
+                <% end %>
                 <li>
                   <div class="h-highlight-item">
                     <%= svg("envelope") %>
@@ -42,7 +44,6 @@
                   <%= "Email #{@room.room_schedule_email}" %>
                 </li>
               </ul>
-            <hr>
             </div>
           </div>
           <div>
