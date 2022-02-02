@@ -1,11 +1,9 @@
-
-
 <%= turbo_frame_tag "room" do  %>
   <div id="notice">
     <%= notice %>
   </div>
-  <div class="container rounded-lg shadow-lg px-1 md:w-3/4 sm:w-full">
-    <div class="flex-col w-full">
+  <div class="container rounded-lg shadow-lg px-auto">
+    <div class="flex-col w-full px-2">
       <h1>
         <%= @room.facility_code_heprod%>
       </h1>
