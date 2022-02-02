@@ -3,7 +3,9 @@
     <div class="mt-2 mb-3 px-2">
       <h2 class="sr-only">Classroom</h2>
       <div class="bg-white border border-gray-300 rounded-lg flex flex-col overflow-hidden leading-tight">
-        <%= room_thumbnail_image(room) %>
+        <div class='h-24 lg:h-48'>
+          <%= room_thumbnail_image(room) %>
+        </div>
         <div class="flex-1 px-2 sm:pt-0 sm:pl-2 py-2 flex flex-col sm:justify-between">
           <div class="flex flex-row justify-between w-full font-sans text-gray-900 leading-5">
             <div class="font-sans text-gray-900 leading-5 pt-2">
