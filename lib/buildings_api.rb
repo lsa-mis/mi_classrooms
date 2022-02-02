@@ -94,7 +94,7 @@ class BuildingsApi
     return @result
   end
 
-  # update builgings
+  # update buildings
 
   def update_all_buildings(campus_codes = [100], buildings_codes = [])
     @buildings_ids = Building.all.pluck(:bldrecnbr)
