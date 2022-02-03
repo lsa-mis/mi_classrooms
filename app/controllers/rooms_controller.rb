@@ -85,7 +85,7 @@ include ActionView::RecordIdentifier
     authorize @room
     @floor_list = @room.building.floors
     @building = @room.building
-    @rooms_list = Room.where(building_bldrecnbr: @room.building, floor: @room.floor, rmtyp_description: "Classroom")
+    @rooms_list = Room.where(building_bldrecnbr: @room.building, floor: @room.floor, rmtyp_description: "Classroom").order(:room_number)
   end
 
   private

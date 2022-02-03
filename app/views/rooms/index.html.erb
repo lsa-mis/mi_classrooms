@@ -1,4 +1,4 @@
-<div class="container mb-20" data-controller='autosubmit'>
+<div class="container px-1 mb-20" data-controller='autosubmit'>
   <% if @rooms_page_announcement.present? && @rooms_page_announcement.content.present? %>  
     <div class="relative mb-2">
       <div class="bg-gray-50 shadow borde p-2 w-full flex justify-left mb-2">
@@ -21,13 +21,12 @@
     <div>
       <h1>Classrooms</h1>
     </div>
-    <div class="bg-blue-900 text-white justify-self-end md:hidden mr-4">
-
+    <div class="justify-self-end lg:hidden mr-4">
       <!--  Mobile menu button -->
-      <button class="mobile-menu-button p-4 focus:outline-none focus:bg-blue-900 ">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
+      <button class="mobile-menu-button rounded h-10 w-10 bg-blue-900 text-white focus:outline-none focus:bg-blue-800 ">
+        <div class="mx-auto h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <%= svg("filter-solid")  %>
+        </div>
       </button>
     </div>
   </div>

@@ -1,7 +1,10 @@
 !!!
 %html{lang: "#{I18n.locale}"}
   %head
-    %script{:async => "async", :src => "https://www.googletagmanager.com/gtag/js?id=UA-211737475-1"}
+    - if Rails.env.staging?
+      %script{:async => "async", :src => "https://www.googletagmanager.com/gtag/js?id=G-NE1XRCB19M"}
+    - else
+      %script{:async => "async", :src => "https://www.googletagmanager.com/gtag/js?id=UA-211737475-1"}
 
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}
     %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}

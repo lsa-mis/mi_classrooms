@@ -7,13 +7,11 @@ class AnnouncementPolicy < ApplicationPolicy
   end
 
   def index?
-    # true
-    user_in_non_admin_group?
+    user.admin
   end
 
   def show?
-    # true
-    user_in_non_admin_group?
+    user.admin
   end  
 
   def edit?

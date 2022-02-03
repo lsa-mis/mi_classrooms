@@ -6,7 +6,7 @@ class Buildings::FloorsController < ApplicationController
     @floors = @building.floors
     @floor = @building.floors.find(params[:id])
     @building_rooms_list = Room.where(building_bldrecnbr: @building, rmtyp_description: "Classroom")
-    @floor_rooms_list = Room.where(building_bldrecnbr: @building, rmtyp_description: "Classroom", floor: @floor.floor)
+    @floor_rooms_list = Room.where(building_bldrecnbr: @building, rmtyp_description: "Classroom", floor: @floor.floor).order(:room_number)
     authorize @floors
   end
 

@@ -29,6 +29,7 @@ module MiClassrooms
     config.generators.system_tests = nil
     config.active_job.queue_adapter = :sidekiq
     config.active_record.schema_format = :sql
+    config.skylight.environments << "staging"
   end
   ActiveStorage::Engine.config.active_storage.content_types_to_serve_as_binary.delete("image/svg+xml")
 

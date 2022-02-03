@@ -8,7 +8,6 @@ class RoomPolicy < ApplicationPolicy
   end
 
   def index?
-    # true
     user_in_non_admin_group?
   end
 
@@ -17,12 +16,10 @@ class RoomPolicy < ApplicationPolicy
   end
 
   def show?
-    # true
     user_in_non_admin_group?
   end
 
   def floor_plan?
-    # true
     user_in_non_admin_group?
   end
 

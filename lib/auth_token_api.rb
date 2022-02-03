@@ -31,3 +31,22 @@ class AuthTokenApi
     return @returned_data
   end
 end
+
+class Email
+
+  def initialize(from, to, subject)
+    @from = from
+    @to = to
+    @subject = subject
+  end
+
+  def update_report(message)
+    ActionMailer::Base.mail(
+        from: @from,
+        to: @to,
+        subject: @subject,
+        body: message
+      ).deliver
+  end
+
+end

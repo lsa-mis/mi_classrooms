@@ -15,6 +15,15 @@ task api_update_database: :environment do
 
   errors = []
   status_report = []
+  task_time = 0
+  # @debug is true if there are errors from API calls or database queries
+  @debug = false
+
+  subject = "#{Date.today} - Update Classrooms Report"
+  from = "mi_classrooms@example.com"
+  to = "brita@umich.edu"
+  send_email = Email.new(from, to, subject)
+  
   #################################################
   # update campus list
   # if campus is in the app db, but not in the API, a warning will be added to the log file
@@ -28,18 +37,30 @@ task api_update_database: :environment do
     api = BuildingsApi.new(access_token)
   else
     errors << "No access_token. Error: " + result['error']
+    status_report << "Total time: #{task_time.round(2)} minutes"
+    message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update Campuses errors:\r\n" + errors.join("\r\n")
+    send_email.update_report(message)
     exit
   end
   
   time = Benchmark.measure {
-    api.update_campus_list
+    @debug = api.update_campus_list
   }
   puts "Update campus list Time: #{time.real.round(2)} seconds"
+  task_time += (time.real / 60) % 60
   status_report << "Update campus list Time: #{time.real.round(2)} seconds"
   if File.exists?("#{Rails.root}/log/#{Date.today}_campus_api.log")
-    errors << "See the log file #{Rails.root}/log/#{Date.today}_campus_api.log for errors or warnings"
-    errors << File.readlines("#{Rails.root}/log/#{Date.today}_campus_api.log")
+    if @debug
+      status_report << "Campus updates failed. See the log file #{Rails.root}/log/#{Date.today}_campus_api.log for errors"
+      status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
+      message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
+      send_email.update_report(message)
+      exit
+    else 
+      status_report << "See the log file #{Rails.root}/log/#{Date.today}_campus_api.log for warnings"
+    end
   end
+  status_report << " "
 
   #################################################
   # update buildings
@@ -56,6 +77,9 @@ task api_update_database: :environment do
       api = BuildingsApi.new(access_token)
     else
       errors << "No access_token. Error: " + result['error']
+      status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
+      message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update buildings errors:\r\n" + errors.join("\r\n")
+      send_email.update_report(message)
       exit
     end
   end
@@ -73,15 +97,24 @@ task api_update_database: :environment do
   
   # api = BuildingsApi.new(access_token)
   time = Benchmark.measure {
-    api.update_all_buildings(campus_codes, buildings_codes)
+    @debug = api.update_all_buildings(campus_codes, buildings_codes)
   }
 
   puts "Update buildings Time: #{time.real.round(2)} seconds"
+  task_time += (time.real / 60) % 60
   status_report << "Update buildings Time: #{time.real.round(2)} seconds"
   if File.exists?("#{Rails.root}/log/#{Date.today}_building_api.log")
-    errors << "See the log file #{Rails.root}/log/#{Date.today}_building_api.log for errors or warnings"
-    errors << File.readlines("#{Rails.root}/log/#{Date.today}_building_api.log")
+    if @debug
+      status_report << "Buildings updates failed. See the log file #{Rails.root}/log/#{Date.today}_building_api.log for errors"
+      status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
+      message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
+      send_email.update_report(message)
+      exit
+    else 
+      status_report << "See the log file #{Rails.root}/log/#{Date.today}_building_api.log for warnings"
+    end
   end
+  status_report << " "
 
   #################################################
   # update rooms
@@ -97,19 +130,31 @@ task api_update_database: :environment do
       api = BuildingsApi.new(access_token)
     else
       errors << "No access_token. Error: " + result['error']
+      status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
+      message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update rooms errors:\r\n" + errors.join("\r\n")
+      send_email.update_report(message)
       exit
     end
   end
 
   time = Benchmark.measure {
-    api.update_rooms
+    @debug = api.update_rooms
   }
   puts "Update Rooms Time: #{time.real.round(2)} seconds"
+  task_time += (time.real / 60) % 60
   status_report << "Update Rooms Time: #{time.real.round(2)} seconds"
   if File.exists?("#{Rails.root}/log/#{Date.today}_room_api.log")
-    errors << "See the log file #{Rails.root}/log/#{Date.today}_room_api.log for errors or warnings"
-    errors << File.readlines("#{Rails.root}/log/#{Date.today}_room_api.log")
+    if @debug
+      status_report << "Rooms updates failed. See the log file #{Rails.root}/log/#{Date.today}_room_api.log for errors"
+      status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
+      message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
+      send_email.update_report(message)
+      exit
+    else
+      status_report << "See the log file #{Rails.root}/log/#{Date.today}_room_api.log for warnings"
+    end
   end
+  status_report << " "
 
   #################################################
   # add facility_id to classrooms and update instructional_seating_count
@@ -122,18 +167,30 @@ task api_update_database: :environment do
     api = ClassroomApi.new(access_token)
   else
     errors << "No access_token. Error: " + result['error']
+    status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
+    message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Add facility_id to Classrooms errors:\r\n" + errors.join("\r\n")
+    send_email.update_report(message)
     exit
   end
 
   time = Benchmark.measure {
-    api.add_facility_id_to_classrooms(campus_codes, buildings_codes)
+    @debug = api.add_facility_id_to_classrooms(campus_codes, buildings_codes)
   }
-  puts "Add FacilityID for classroom Time: #{time.real.round(2)} seconds"
+  puts "Add FacilityID to Classrooms Time: #{time.real.round(2)} seconds"
+  task_time += (time.real / 60) % 60
   status_report << "Add FacilityID for classroom Time: #{time.real.round(2)} seconds"
   if File.exists?("#{Rails.root}/log/#{Date.today}_facility_id_logger_api.log")
-    errors << "See the log file #{Rails.root}/log/#{Date.today}_facility_id_logger_api.log for errors or warnings"
-    errors << File.readlines("#{Rails.root}/log/#{Date.today}_facility_id_logger_api.log")
+    if @debug
+      status_report << "Add FacilityID to Classroom updates failed. See the log file #{Rails.root}/log/#{Date.today}_facility_id_logger_api.log for errors"
+      status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
+      message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
+      send_email.update_report(message)
+      exit
+    else
+      status_report << "See the log file #{Rails.root}/log/#{Date.today}_facility_id_logger_api.log for warnings"
+    end
   end
+  status_report << " "
 
   #################################################
   # update classrooms characteristics
@@ -148,20 +205,32 @@ task api_update_database: :environment do
       api = ClassroomApi.new(access_token)
     else
       errors << "No access_token. Error: " + result['error']
+      status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
+      message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update Classroom Characteristics errors:\r\n" + errors.join("\r\n")
+      send_email.update_report(message)
       exit
     end
   end
 
   time = Benchmark.measure {
-    api.update_all_classroom_characteristics
-    UpdateRoomCharacteristicsArrayJob.perform_now
+    @debug = api.update_all_classroom_characteristics
+    UpdateRoomCharacteristicsArrayJob.perform_now unless @debug
   }
   puts "Update classroom characteristics Time: #{time.real.round(2)} seconds"
+  task_time += (time.real / 60) % 60
   status_report << "Update classroom characteristics Time: #{time.real.round(2)} seconds"
   if File.exists?("#{Rails.root}/log/#{Date.today}_classroom_characteristics_api.log")
-    errors << "See the log file #{Rails.root}/log/#{Date.today}_classroom_characteristics_api.log for errors or warnings"
-    errors << File.readlines("#{Rails.root}/log/#{Date.today}_classroom_characteristics_api.log")
+    if @debug
+      status_report << "Classroom Characteristics updates failed. See the log file #{Rails.root}/log/#{Date.today}_classroom_characteristics_api.log for errors"
+      status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
+      message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
+      send_email.update_report(message)
+      exit
+    else 
+      status_report << "See the log file #{Rails.root}/log/#{Date.today}_classroom_characteristics_api.log for warnings"
+    end
   end
+  status_report << " "
   
   #################################################
   # update classrooms contacts
@@ -181,22 +250,26 @@ task api_update_database: :environment do
   end
 
   time = Benchmark.measure {
-    api.update_all_classroom_contacts
+    @debug = api.update_all_classroom_contacts
   }
   puts "Update classroom contacts Time: #{time.real.round(2)} seconds"
+  task_time += (time.real / 60) % 60
   status_report << "Update classroom contacts Time: #{time.real.round(2)} seconds"
   if File.exists?("#{Rails.root}/log/#{Date.today}_classroom_contact_api.log")
-    errors << "See the log file #{Rails.root}/log/#{Date.today}_classroom_contact_api.log for errors or warnings"
-    errors << File.readlines("#{Rails.root}/log/#{Date.today}_classroom_contact_api.log")
+    if @debug
+      status_report << "Classroom Contacts updates failed. See the log file #{Rails.root}/log/#{Date.today}_classroom_contact_api.log for errors"
+      status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
+      message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
+      send_email.update_report(message)
+      exit
+    else 
+      status_report << "See the log file #{Rails.root}/log/#{Date.today}_classroom_contact_api.log for errors or warnings"
+    end
   end
+  status_report << " "
 
-  # send report email
-  subject = "#{Date.today} - Update Classrooms Report"
-  message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Errors and warnings:\r\n" + errors.join("\r\n")
-  ActionMailer::Base.mail(
-      from: "mi_classrooms@example.com",
-      to: "brita@umich.edu",
-      subject: subject,
-      body: message
-    ).deliver
+  status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
+  message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
+  send_email.update_report(message)
+  
 end

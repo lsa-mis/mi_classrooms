@@ -37,8 +37,12 @@ class ApplicationPolicy
   end
 
   def user_in_non_admin_group?
-    @non_admin_group = ['mi-classrooms-admin', 'mi-classrooms-non-admin']
-    user.membership && (user.membership & @non_admin_group).any?
+    if Rails.env.production?
+      true
+    else
+      @non_admin_group = ['mi-classrooms-admin-staging', 'mi-classrooms-non-admin-staging']
+      user.membership && (user.membership & @non_admin_group).any?
+    end
   end
   
 end

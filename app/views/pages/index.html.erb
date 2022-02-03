@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container px-1 mb-20">
   <div class="relative overflow-hidden -mx-10 -mt-6">
     <!-- Decorative background image and gradient -->
     <div aria-hidden="true" class="absolute inset-0">
@@ -30,15 +30,13 @@
       </div>
     </section>
   </div>
-</div>
-<div class="container mb-20">
   <div class="relative static-page-text">
     <% unless @index_page_announcement.nil? %>
       <%= @index_page_announcement.content %>
     <% end %>
   </div>
   <div>
-    <% if current_user && policy(Announcement).edit? %>
+    <% if current_user && policy(Announcement).edit? && @index_page_announcement.present?%>
       <%= link_to edit_announcement_path(@index_page_announcement) do %>
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />

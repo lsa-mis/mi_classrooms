@@ -1,14 +1,15 @@
-<h2><%= "#{@room.building.name} - Floor #{@room.floor.gsub(/^0+(?!$)/, '')}" %></h2>
-<div class="py-2">
-  <%= link_to 'Back to Room', room_path(@room), class: "hover:underline text-blue-800", data: {turbo: "false"} %>
-</div>
+<div class="container rounded-lg shadow-lg px-1 mb-20 sm:w-full">
+  <h1><%= "#{@room.building.name} - Floor #{@room.floor.gsub(/^0+(?!$)/, '')}" %></h1>
+  <div class="py-2">
+    <%= link_to 'Back to Room', room_path(@room), class: "hover:underline text-blue-800", data: {turbo: "false"} %>
+  </div>
 
-<div class="container rounded-lg shadow-lg px-2 pb-20 sm:w-full">
+
   <div class="flex-col w-full">
 
     <div class="grid grid-cols-2 gap-1">
       <div>
-        <%= image_tag(@room.building.floors.find_by(floor: @room.floor).floor_plan.representation(resize_to_limit: [600, 600]), class: "building_image pr-2", alt: "#{@room.building.name} #{@room.floor}" ) %>
+        <%= image_tag(@room.building.floors.find_by(floor: @room.floor).floor_plan.representation(resize_to_limit: [600, 600]), class: "building_image pr-2", alt: "#{@room.building.name} Floor #{@room.floor.gsub(/^0+(?!$)/, '')}" ) %>
       </div>
 
       <div>
