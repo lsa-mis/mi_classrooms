@@ -1,4 +1,5 @@
 class PagesController < ApplicationController
+  before_action :authenticate_user!, only: [:room_filters_glossary]
   before_action :set_characteristics_array, only: [:room_filters_glossary]
   def about
     authorize :page

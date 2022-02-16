@@ -1,3 +1,6 @@
+# if needed update chromedriver from here: https://chromedriver.chromium.org/downloads
+# move chromedriver binary into /usr/local/bin or where you need it
+
 require "selenium-webdriver"
 
 driver = Selenium::WebDriver.for :chrome
