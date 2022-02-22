@@ -491,8 +491,28 @@ CREATE TABLE public.room_contacts (
     rm_sppt_cntct_phone character varying,
     rm_sppt_cntct_url character varying,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    id bigint NOT NULL
 );
+
+
+--
+-- Name: room_contacts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.room_contacts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: room_contacts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.room_contacts_id_seq OWNED BY public.room_contacts.id;
 
 
 --
@@ -685,6 +705,13 @@ ALTER TABLE ONLY public.room_characteristics ALTER COLUMN id SET DEFAULT nextval
 
 
 --
+-- Name: room_contacts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.room_contacts ALTER COLUMN id SET DEFAULT nextval('public.room_contacts_id_seq'::regclass);
+
+
+--
 -- Name: rooms rmrecnbr; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -811,6 +838,14 @@ ALTER TABLE ONLY public.room_characteristics
 
 
 --
+-- Name: room_contacts room_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.room_contacts
+    ADD CONSTRAINT room_contacts_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: rooms rooms_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -923,6 +958,13 @@ CREATE INDEX index_omniauth_services_on_user_id ON public.omniauth_services USIN
 --
 
 CREATE INDEX index_pg_search_documents_on_searchable ON public.pg_search_documents USING btree (searchable_type, searchable_id);
+
+
+--
+-- Name: index_room_characteristics_on_chrstc_and_rmrecnbr; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_room_characteristics_on_chrstc_and_rmrecnbr ON public.room_characteristics USING btree (chrstc, rmrecnbr);
 
 
 --
@@ -1117,4 +1159,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211113231859'),
 ('20211129210918'),
 ('20220104182624'),
-('20220111201258');
+('20220111201258'),
+('20220222151031');
+
+
