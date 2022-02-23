@@ -33,6 +33,8 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => "/sidekiq"
   end
 
+  resources :classrooms, only: [:index, :show]
+
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: "/letter_opener"
   end
