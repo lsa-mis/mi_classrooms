@@ -3,6 +3,7 @@ class PagesController < ApplicationController
   before_action :set_characteristics_array, only: [:room_filters_glossary]
   def about
     authorize :page
+    @about_page_announcement = Announcement.find_by(location: "about_page")
   end
 
   def index

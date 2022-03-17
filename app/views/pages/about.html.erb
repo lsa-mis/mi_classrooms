@@ -2,28 +2,20 @@
 
   <h1> About The MClassrooms application.</h1>
 
-  <p>
-    The application was developed by the
-    <%= link_to "College of Literature, Science & the Arts Technology Services", 'https://lsa.umich.edu/technology-services/', class: 'text-blue-800 hover:underline', target: "_blank" %>
-    group to provide information about classrooms in the academic units at the University of Michigan.
-  </p>
-  <br>
-  <p>
-    This application includes information about installed audio-visual technology, connectivity, room capacity and other characteristics. 
-    This data reflects the room attributes in M-Pathways and the Space Survey. In addition, the
-    site provides photographs, 3D panoramas, maps and contact information specific to each room.
-  </p>
-  <br>
-  <p>
-    As a general rule, the registrar's office manages the schedule for university classrooms. 
-    Schools, colleges, and departments may have their own procedures. Faculty are encouraged to work through their departmental administrative 
-    staff to reserve rooms. 
-    <br><br>
-    Registered student organizations should reserve rooms through Student Organization Accounts Service (SOAS) 
-    <%= link_to "Reservation", 'https://reservations.studentorgs.umich.edu/', class: 'text-blue-800 hover:underline', target: "_blank" %>.
-    <br><br>
-    More information is available in the
-    <%= link_to "Guidebook", 'https://soas.umich.edu/student-org-soas-guidebook', class: 'text-blue-800 hover:underline', target: "_blank" %> for student organizations.
-  </p>
+  <div class="relative p-2">
+    <% unless @about_page_announcement.nil? %>
+      <%= @about_page_announcement.content %>
+    <% end %>
+  </div>
+  <div>
+    <% if current_user && policy(Announcement).edit? && @about_page_announcement.present?%>
+      <%= link_to edit_announcement_path(@about_page_announcement) do %>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          <title>Edit announcement</title>
+        </svg>
+      <% end %>
+    <% end %>
+  </div>
 
 </div>
