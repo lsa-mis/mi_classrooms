@@ -10,7 +10,7 @@
 # Put here to keep records of these updates
 #
 
-locations = ['home_page', 'find_a_room_page']
+locations = ['home_page', 'find_a_room_page', 'about_page']
 existing_locations = Announcement.all.pluck(:location)
 
 locations.each do |location|
