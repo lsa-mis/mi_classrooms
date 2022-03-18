@@ -1,0 +1,59 @@
+<div class="container px-1 mb-20" data-controller='autosubmit'>
+  <div class="grid grid-cols-2 pb-2">
+    <div>
+      <h1>Buildings with classrooms</h1>
+    </div>
+    <div class="justify-self-end lg:hidden mr-4">
+      <!--  Mobile menu button -->
+      <button class="mobile-menu-button rounded h-10 w-10 bg-blue-900 text-white focus:outline-none focus:bg-blue-800 ">
+        <div class="mx-auto h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <%= svg("filter-solid")  %>
+        </div>
+      </button>
+    </div>
+  </div>
+  <div>
+    <%= form_with url: rooms_path, method: :get, class: "", data: { target: "autosubmit.form" } do |form| %>
+      <div class="relative min-h-screen md:flex">
+        
+        <div class="sidebar w-64 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out" data-autosubmit-target="sidebar">
+          <div class="pl-1 bg-gray-50 shadow border">
+            <div class="px-1">
+              <label for="school_or_college_name">Select a School/College</label>
+                <%= select_tag "school_or_college_name", options_for_select(@schools, selected: params[:school_or_college_name]), include_blank: "Select ...", class: "block rounded-none rounded-l-md text-xs border-gray-300",
+                          :"data-action" => "change->autosubmit#search" %>
+            </div>
+            <br>
+            <hr>
+            <div class="px-1">
+              <label for="building_name">Search Building Names</label>
+              <%= form.text_field :query, class: "block rounded-none rounded-l-md sm:text-sm border-gray-300", :placeholder => 'ex. "East Hall"', value: params[:query], :"data-action" => "input->autosubmit#search", :"data-autosubmit-target" => "building_name" %>
+            </div>
+            </div>
+          </div>
+          <div class="flex-1 mx-2">
+            <div class="grid grid-cols-3">
+              <div class="mb-2">
+                <button type="button" class="px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400"
+                  data-action='click->autosubmit#clearFilters'>
+                  Clear
+                </button>
+              </div>
+              <% if user_signed_in? && policy(Room).edit? %>
+                <div class="">
+                  <label for="not_visible">Show non visible buildings</label>
+                  <%= check_box_tag "not_visible", "1", params[:not_visible].try(:include?, "1"), class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
+                </div>
+              <% end %>
+              </div>
+          <div class="">
+            <% if user_signed_in? %>
+              <%= render 'listing' %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+<%= javascript_include_tag 'mobile_menu', async: true %>
