@@ -15,11 +15,16 @@ include ActionView::RecordIdentifier
     @rooms_page_announcement = Announcement.find_by(location: "find_a_room_page")
     @all_rooms_number = Room.classrooms.count
     @schools = Room.classrooms.pluck(:dept_group_description).uniq.sort
+    if params[:not_visible].present?
+      @rooms = Room.classrooms_not_visible
+    else
+      @rooms = Room.classrooms
+    end
     if params[:direction].present?
       @sorted = true
-      @rooms = Room.classrooms.includes([:building, :room_contact]).reorder(:instructional_seating_count => params[:direction].to_sym)
+      @rooms = @rooms.includes([:building, :room_contact]).reorder(:instructional_seating_count => params[:direction].to_sym)
     else
-      @rooms = Room.classrooms.includes([:building, :room_contact]).reorder(:building_name)
+      @rooms = @rooms.includes([:building, :room_contact]).reorder(:building_name)
       floors = sort_floors(@rooms.pluck(:floor).uniq)
       @rooms = @rooms.order_as_specified(floor: floors).order(:room_number => :asc)
     end
@@ -97,7 +102,7 @@ include ActionView::RecordIdentifier
     
     # Only allow a list of trusted parameters through.
     def room_params
-      params.require(:room).permit(:rmrecnbr, :floor, :room_number, :rmtyp_description, :dept_id, :dept_grp, :dept_description, :square_feet, :instructional_seating_count, :visible, :building_bldrecnbr, :room_characteristics, :min_capacity, :max_capacity, :school_or_college_name, :room_image, :room_panorama, :room_layout)
+      params.require(:room).permit(:rmrecnbr, :floor, :room_number, :rmtyp_description, :dept_id, :dept_grp, :dept_description, :square_feet, :instructional_seating_count, :visible, :building_bldrecnbr, :room_characteristics, :min_capacity, :max_capacity, :school_or_college_name, :not_visible, :room_image, :room_panorama, :room_layout)
     end
 
     def filtering_params

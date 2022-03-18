@@ -85,13 +85,19 @@
           </div>
         </div>
         <div class="flex-1 mx-2">
-          <div class="grid grid-cols-2">
+          <div class="grid grid-cols-3">
             <div class="mb-2">
               <button type="button" class="px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400"
                 data-action='click->autosubmit#clearFilters'>
                 Clear
               </button>
             </div>
+            <% if user_signed_in? && policy(Room).edit? %>
+              <div class="">
+                <label for="not_visible">Show non visible rooms</label>
+                <%= check_box_tag "not_visible", "1", params[:not_visible].try(:include?, "1"), class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
+              </div>
+            <% end %>
             <div class="flex justify-end items-center">
               <label for="direction" class="border-0 h-px -m-px overflow-hidden p-0 absolute w-px">Sort by capacity</label>
               <%= select_tag "direction", options_for_select([["Low to High", "asc"], ["High to Low", "desc"]], selected: params[:direction]), include_blank: "Sort Room Capacity", class: "rounded-md sm:text-sm ml-2",
