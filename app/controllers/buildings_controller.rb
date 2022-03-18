@@ -6,17 +6,22 @@ class BuildingsController < ApplicationController
   # GET /buildings
   # GET /buildings.json
   def index
-    @searchable_buildings =  Building.with_classrooms.ann_arbor_campus.uniq.pluck(:name, :abbreviation).collect{ |building| [building[0].titleize, building[1] ] }.sort
+    # @searchable_buildings =  Building.with_classrooms.ann_arbor_campus.uniq.pluck(:name, :abbreviation).collect{ |building| [building[0].titleize, building[1] ] }.sort
+    @schools = Room.classrooms.pluck(:dept_group_description).uniq.sort
+
+    buildings_ids = Room.classrooms.pluck(:building_bldrecnbr).uniq
+    @buildings = Building.where(bldrecnbr: buildings_ids).order(:name)
     if params[:query].present?
       session[:query] = params[:query]
       @buildings = Building.with_name(params[:query])
-      authorize @buildings
-      @pagy, @buildings = pagy(@buildings)
-    else
-      @buildings = Building.all
-      authorize @buildings
-      @pagy, @buildings = pagy(@buildings)
     end
+      authorize @buildings
+      @pagy, @buildings = pagy(@buildings)
+    # else
+    #   @buildings = Building.all
+    #   authorize @buildings
+    #   @pagy, @buildings = pagy(@buildings)
+    # end
 
     # unless params[:query].nil?
     #   render turbo_stream: turbo_stream.replace(
