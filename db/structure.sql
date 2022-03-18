@@ -208,7 +208,8 @@ CREATE TABLE public.buildings (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     tsv tsvector,
-    campus_record_id bigint
+    campus_record_id bigint,
+    visible boolean DEFAULT true
 );
 
 
@@ -1160,6 +1161,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211129210918'),
 ('20220104182624'),
 ('20220111201258'),
-('20220222151031');
+('20220222151031'),
+('20220318205639');
 
 
