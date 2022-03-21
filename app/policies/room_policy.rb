@@ -1,11 +1,4 @@
 class RoomPolicy < ApplicationPolicy
-  
-  class Scope < Scope
-
-    def resolve
-      scope.all
-    end
-  end
 
   def index?
     user_in_non_admin_group?

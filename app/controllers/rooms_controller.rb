@@ -1,7 +1,6 @@
 class RoomsController < ApplicationController
 include ActionView::RecordIdentifier
   before_action :authenticate_user! 
-  skip_after_action :verify_policy_scoped, only: :index
   before_action :set_room, only: [:show, :edit, :update, :destroy, :toggle_visibile, :floor_plan]
   before_action :set_filters_list, only: [:index]
   before_action :set_characteristics_array, only: [:index, :show]

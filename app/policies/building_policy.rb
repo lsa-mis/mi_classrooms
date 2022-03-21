@@ -1,16 +1,4 @@
 class BuildingPolicy < ApplicationPolicy
-  # include LdapableHelper
-  class Scope < Scope
-
-    def resolve
-      if user && user_in_group?
-        scope.all
-      else
-        # scope.where(visible: true)
-        scope.all
-      end
-    end
-  end
 
   def index?
     user.admin

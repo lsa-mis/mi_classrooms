@@ -1,7 +1,6 @@
 class BuildingsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_building, only: [:show, :edit, :update, :destroy]
-  skip_after_action :verify_policy_scoped, only: :index
 
   # GET /buildings
   # GET /buildings.json

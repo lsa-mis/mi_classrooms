@@ -1,7 +1,5 @@
 class AnnouncementsController < ApplicationController
   before_action :authenticate_user!
-  skip_after_action :verify_policy_scoped, only: :index
-
   before_action :set_announcement, only: [:show, :edit, :update, :cancel]
 
   def index
