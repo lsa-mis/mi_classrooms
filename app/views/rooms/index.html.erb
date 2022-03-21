@@ -85,7 +85,7 @@
           </div>
         </div>
         <div class="flex-1 mx-2">
-          <div class="grid grid-cols-3">
+          <div class="grid grid-cols-4">
             <div class="mb-2">
               <button type="button" class="px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400"
                 data-action='click->autosubmit#clearFilters'>
@@ -94,8 +94,12 @@
             </div>
             <% if user_signed_in? && policy(Room).edit? %>
               <div class="">
-                <label for="not_visible">Show non visible rooms</label>
-                <%= check_box_tag "not_visible", "1", params[:not_visible].try(:include?, "1"), class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
+                <label for="_rooms">Not visible buildings</label>
+                <%= check_box_tag "not_visible_buildings", "1", params[:not_visible_buildings].try(:include?, "1"), class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
+              </div>
+              <div class="">
+                <label for="_rooms">Not visible rooms</label>
+                <%= check_box_tag "not_visible_rooms", "1", params[:not_visible_rooms].try(:include?, "1"), class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
               </div>
             <% end %>
             <div class="flex justify-end items-center">

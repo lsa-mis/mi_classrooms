@@ -32,6 +32,18 @@
             </div>
             <hr>
             <div>
+              <%= form_for @building, html: { class: "sm:flex sm:items-center" },
+                data: { target: "updatebuilding.form",
+                        controller: "updatebuilding"
+                      } do |f| %>
+                <div class="sm:col-span-4">
+                  <%= f.label :visible %>
+                  <%= f.check_box :visible, :"data-action" => "change->updatebuilding#visible" %>
+                </div>
+              <% end %>
+            </div>
+            <hr>
+            <div>
             Upload or update a building image
             </div>
               <%= form_for @building, html: { class: "sm:flex sm:items-center" } do |f| %>

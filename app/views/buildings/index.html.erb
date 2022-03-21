@@ -13,7 +13,7 @@
     </div>
   </div>
   <div>
-    <%= form_with url: rooms_path, method: :get, class: "", data: { target: "autosubmit.form" } do |form| %>
+    <%= form_with url: buildings_path, method: :get, class: "", data: { target: "autosubmit.form" } do |form| %>
       <div class="relative min-h-screen md:flex">
         
         <div class="sidebar w-64 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out" data-autosubmit-target="sidebar">
@@ -39,10 +39,10 @@
                   Clear
                 </button>
               </div>
-              <% if user_signed_in? && policy(Room).edit? %>
+              <% if user_signed_in? && policy(Building).edit? %>
                 <div class="">
-                  <label for="not_visible">Show non visible buildings</label>
-                  <%= check_box_tag "not_visible", "1", params[:not_visible].try(:include?, "1"), class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
+                  <label for="not_visible_buildings">Show not visible buildings</label>
+                  <%= check_box_tag "not_visible_buildings", "1", params[:not_visible_buildings].try(:include?, "1"), class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
                 </div>
               <% end %>
               </div>

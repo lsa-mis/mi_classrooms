@@ -11,11 +11,15 @@ include ActionView::RecordIdentifier
   def index
     @sorted = false
     buildings_ids = Room.classrooms.pluck(:building_bldrecnbr).uniq
-    @buildings = Building.where(bldrecnbr: buildings_ids).order(:name)
+    if params[:not_visible_buildings].present?
+      @buildings = Building.where(bldrecnbr: buildings_ids, visible: false).order(:name)
+    else
+      @buildings = Building.where(bldrecnbr: buildings_ids, visible: true).order(:name)
+    end
     @rooms_page_announcement = Announcement.find_by(location: "find_a_room_page")
     @all_rooms_number = Room.classrooms.count
     @schools = Room.classrooms.pluck(:dept_group_description).uniq.sort
-    if params[:not_visible].present?
+    if params[:not_visible_rooms].present?
       @rooms = Room.classrooms_not_visible
     else
       @rooms = Room.classrooms
@@ -102,7 +106,7 @@ include ActionView::RecordIdentifier
     
     # Only allow a list of trusted parameters through.
     def room_params
-      params.require(:room).permit(:rmrecnbr, :floor, :room_number, :rmtyp_description, :dept_id, :dept_grp, :dept_description, :square_feet, :instructional_seating_count, :visible, :building_bldrecnbr, :room_characteristics, :min_capacity, :max_capacity, :school_or_college_name, :not_visible, :room_image, :room_panorama, :room_layout)
+      params.require(:room).permit(:rmrecnbr, :floor, :room_number, :rmtyp_description, :dept_id, :dept_grp, :dept_description, :square_feet, :instructional_seating_count, :visible, :building_bldrecnbr, :room_characteristics, :min_capacity, :max_capacity, :school_or_college_name, not_visible_buildings, :not_visible_rooms, :room_image, :room_panorama, :room_layout)
     end
 
     def filtering_params
@@ -114,6 +118,14 @@ include ActionView::RecordIdentifier
       if params.present?
         capacity = ""
         params.each do |k, v|
+          if k == "not_visible_rooms"
+            filters[k] = v
+            break
+          end
+          if k == "not_visible_buildings"
+            filters = {}
+            break
+          end
           unless k == 'controller' || k == 'action' || k == 'direction' || k == 'format' || k == 'page' || k == 'items'
             unless v.empty?
               case k
