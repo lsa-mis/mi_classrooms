@@ -2,16 +2,7 @@ class NotesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_note
 
-  def show
-    authorize @note
-  end
-
-  def edit
-    authorize @note
-  end
-
   def update
-    authorize @note
     if @note.update(note_params)
       redirect_to @note
     else
@@ -20,7 +11,6 @@ class NotesController < ApplicationController
   end
 
   def destroy
-    authorize @note
     @note.destroy
     respond_to do |format|
       format.turbo_stream {}
@@ -32,6 +22,7 @@ class NotesController < ApplicationController
 
   def set_note
     @note = Note.find(params[:id])
+    authorize @note
   end
 
   def note_params
