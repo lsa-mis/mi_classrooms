@@ -1,9 +1,5 @@
 class FloorPolicy < ApplicationPolicy
 
-  def new?
-    user.admin
-  end
-
   def create?
     user.admin
   end

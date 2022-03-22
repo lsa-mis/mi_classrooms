@@ -13,7 +13,7 @@ class ApplicationPolicy
   end
 
   def show?
-    false
+    scope.where(:id => record.id).exists?
   end
 
   def create?
@@ -36,6 +36,10 @@ class ApplicationPolicy
     false
   end
 
+  def scope
+    Pundit.policy_scope!(user, record.class)
+  end
+
   def user_in_non_admin_group?
     if Rails.env.production?
       true
@@ -44,20 +48,18 @@ class ApplicationPolicy
       user.membership && (user.membership & @non_admin_group).any?
     end
   end
-  
-end
 
- class Scope
+  class Scope
+    attr_reader :user, :scope
+
     def initialize(user, scope)
       @user = user
       @scope = scope
     end
 
     def resolve
-      scope.all
+      scope
     end
-
-    private
-
-    attr_reader :user, :scope
+  end
+  
 end

@@ -1,7 +1,5 @@
 class AnnouncementsController < ApplicationController
   before_action :authenticate_user!
-  skip_after_action :verify_policy_scoped, only: :index
-
   before_action :set_announcement, only: [:show, :edit, :update, :cancel]
 
   def index
@@ -10,16 +8,13 @@ class AnnouncementsController < ApplicationController
   end
 
   def show
-    authorize @announcement
   end
 
   def edit
     session[:return_to] = request.referer
-    authorize @announcement
   end
 
   def update
-    authorize @announcement
     respond_to do |format|
       if @announcement.update(announcement_params)
         format.turbo_stream { redirect_to session.delete(:return_to), 
@@ -32,7 +27,6 @@ class AnnouncementsController < ApplicationController
   end
 
   def cancel
-    authorize @announcement
     redirect_to session.delete(:return_to)
   end
   
@@ -40,6 +34,8 @@ class AnnouncementsController < ApplicationController
 
     def set_announcement
       @announcement = Announcement.find(params[:id])
+      authorize @announcement
+
     end
 
     def announcement_params

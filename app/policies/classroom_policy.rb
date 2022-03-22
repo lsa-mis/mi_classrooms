@@ -1,4 +1,5 @@
 class ClassroomPolicy < ApplicationPolicy
+  # To handle redirects from legacy classroom links
 
   def index?
     true
