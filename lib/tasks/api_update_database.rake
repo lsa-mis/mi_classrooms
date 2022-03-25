@@ -12,7 +12,8 @@
 
 desc "This will update Classrooms database using APIs"
 task api_update_database: :environment do
-
+  
+  log = ApiLog.new
   errors = []
   status_report = []
   task_time = 0
@@ -36,6 +37,7 @@ task api_update_database: :environment do
     total_time = 0
     api = BuildingsApi.new(access_token)
   else
+    log.api_logger.debug "#{Date.today}, get access token to update_campus_list, error: No access_token - #{result['error']}"
     errors << "No access_token. Error: " + result['error']
     status_report << "Total time: #{task_time.round(2)} minutes"
     message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update Campuses errors:\r\n" + errors.join("\r\n")
@@ -49,16 +51,12 @@ task api_update_database: :environment do
   puts "Update campus list Time: #{time.real.round(2)} seconds"
   task_time += (time.real / 60) % 60
   status_report << "Update campus list Time: #{time.real.round(2)} seconds"
-  if File.exists?("#{Rails.root}/log/#{Date.today}_campus_api.log")
-    if @debug
-      status_report << "Campus updates failed. See the log file #{Rails.root}/log/#{Date.today}_campus_api.log for errors"
-      status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
-      message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
-      send_email.update_report(message)
-      exit
-    else 
-      status_report << "See the log file #{Rails.root}/log/#{Date.today}_campus_api.log for warnings"
-    end
+  if @debug
+    status_report << "Campus updates failed. See the log file #{Rails.root}/log/api_nightly_update_db.log for errors"
+    status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
+    message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
+    send_email.update_report(message)
+    exit
   end
   status_report << " "
 
@@ -115,7 +113,7 @@ task api_update_database: :environment do
     end
   end
   status_report << " "
-
+exit
   #################################################
   # update rooms
   # if room is in the app db, but not in the API: room.update(visible: false)

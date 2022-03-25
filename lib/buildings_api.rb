@@ -4,6 +4,7 @@ class BuildingsApi
     @result = {'success' => false, 'error' => '', 'data' => {}}
     @access_token = access_token
     @debug = false
+    @log = ApiLog.new
   end
 
   def building_logger
@@ -12,10 +13,6 @@ class BuildingsApi
 
   def room_logger
     @@room_logger ||= Logger.new("#{Rails.root}/log/#{Date.today}_room_api.log")
-  end
-
-  def campus_logger
-    @@campus_logger ||= Logger.new("#{Rails.root}/log/#{Date.today}_campus_api.log")
   end
 
   # updates campus list
@@ -36,10 +33,17 @@ class BuildingsApi
       end
       # check if database has information that is not in API anymore
       if @campus_cds.present?
-        campus_logger.info "Campus record(s) not in the API database: #{@campus_cds}"
+        @campus_cds.class
+        if CampusRecord.where(campus_cd: @campus_cds).destroy_all
+          @log.api_logger.info "#{Date.today}, update_campus_list, delete #{@campus_cds} campus(es) from the database"
+        else
+          @log.api_logger.debug "#{Date.today}, update_campus_list, error: could not delete records with #{@campus_cds} ids"
+          @debug = true
+          return @debug
+        end
       end
     else
-      campus_logger.debug "API return: #{@result['error']}"
+      @log.api_logger.debug "#{Date.today}, update_campus_list, error: API return: #{@result['error']}"
       @debug = true
       return @debug
     end
@@ -56,7 +60,7 @@ class BuildingsApi
     if campus.update(campus_description: row['CampusDescr'])
       @campus_cds.delete(row['CampusCd'])
     else
-      campus_logger.debug "Could not update #{row['CampusCd']} because : #{campus.errors.messages}"
+      @log.api_logger.debug "#{Date.today}, update_campus_list, error: Could not update #{row['CampusCd']} because #{campus.errors.messages}"
       @debug = true
       return @debug
     end
@@ -66,7 +70,7 @@ class BuildingsApi
     campus = CampusRecord.new(campus_cd: row['CampusCd'], campus_description: row['CampusDescr'])
 
     unless campus.save
-      campus_logger.debug "Could not create #{row['CampusCd']} because : #{campus.errors.messages}"
+      @log.api_logger.debug "#{Date.today}, update_campus_list, error: Could not create #{row['CampusCd']} because #{campus.errors.messages}"
       @debug = true
       return @debug
     end
