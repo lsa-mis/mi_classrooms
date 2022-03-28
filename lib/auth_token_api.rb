@@ -32,27 +32,27 @@ class AuthTokenApi
   end
 end
 
-class Email
-
-  def initialize(from, to, subject)
-    @from = from
-    @to = to
-    @subject = subject
-  end
-
-  def update_report(message)
-    ActionMailer::Base.mail(
-        from: @from,
-        to: @to,
-        subject: @subject,
-        body: message
-      ).deliver
-  end
-
-end
-
 class ApiLog
   def api_logger
     @@api_logger ||= Logger.new("#{Rails.root}/log/api_nightly_update_db.log")
+  end
+end
+
+class TaskResultLog
+  def initialize
+    @log = ApiLog.new
+  end
+
+  def update_log(message, debug)
+    if debug
+      status = "error"
+    else
+      status = "success"
+    end
+    record = ApiUpdateLog.new(result: message, status: status)
+    unless record.save
+      # write it to the log
+      @log.api_logger.debug "api_update_log, error: Could not save: record.errors.full_messages"
+    end
   end
 end
