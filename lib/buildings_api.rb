@@ -26,15 +26,15 @@ class BuildingsApi
       # check if database has information that is not in API anymore
       if @campus_cds.present?
         if CampusRecord.where(campus_cd: @campus_cds).destroy_all
-          @log.api_logger.info "#{Date.today}, update_campus_list, delete #{@campus_cds} campus(es) from the database"
+          @log.api_logger.info "update_campus_list, delete #{@campus_cds} campus(es) from the database"
         else
-          @log.api_logger.debug "#{Date.today}, update_campus_list, error: could not delete records with #{@campus_cds} ids"
+          @log.api_logger.debug "update_campus_list, error: could not delete records with #{@campus_cds} ids"
           @debug = true
           return @debug
         end
       end
     else
-      @log.api_logger.debug "#{Date.today}, update_campus_list, error: API return: #{@result['error']}"
+      @log.api_logger.debug "update_campus_list, error: API return: #{@result['error']}"
       @debug = true
       return @debug
     end
@@ -51,7 +51,7 @@ class BuildingsApi
     if campus.update(campus_description: row['CampusDescr'])
       @campus_cds.delete(row['CampusCd'])
     else
-      @log.api_logger.debug "#{Date.today}, update_campus_list, error: Could not update #{row['CampusCd']} because #{campus.errors.messages}"
+      @log.api_logger.debug "update_campus_list, error: Could not update #{row['CampusCd']} because #{campus.errors.messages}"
       @debug = true
       return @debug
     end
@@ -61,7 +61,7 @@ class BuildingsApi
     campus = CampusRecord.new(campus_cd: row['CampusCd'], campus_description: row['CampusDescr'])
 
     unless campus.save
-      @log.api_logger.debug "#{Date.today}, update_campus_list, error: Could not create #{row['CampusCd']} because #{campus.errors.messages}"
+      @log.api_logger.debug "update_campus_list, error: Could not create #{row['CampusCd']} because #{campus.errors.messages}"
       @debug = true
       return @debug
     end
@@ -110,15 +110,15 @@ class BuildingsApi
       # check if there are buildings in the db that were not updated by API
       if @buildings_ids.present?
         if Building.where(bldrecnbr: @buildings_ids).destroy_all
-          @log.api_logger.info "#{Date.today}, update_all_buildings, delete #{@buildings_ids} building(s) from the database"
+          @log.api_logger.info "update_all_buildings, delete #{@buildings_ids} building(s) from the database"
         else
-          @log.api_logger.debug "#{Date.today}, update_all_buildings, error: could not delete records with #{@buildings_ids} bldrecnbr"
+          @log.api_logger.debug "update_all_buildings, error: could not delete records with #{@buildings_ids} bldrecnbr"
           @debug = true
           return @debug
         end
       end
     else
-      @log.api_logger.debug "#{Date.today}, update_all_buildings, error: API return: #{@result['error']}"
+      @log.api_logger.debug "update_all_buildings, error: API return: #{@result['error']}"
       @debug = true
       return @debug
     end
@@ -137,7 +137,7 @@ class BuildingsApi
           campus_record_id: CampusRecord.find_by(campus_cd: row['BuildingCampusCode']).id)
       @buildings_ids.delete(row['BuildingRecordNumber'])
     else
-      @log.api_logger.debug "#{Date.today}, update_all_buildings, error: Could not update #{row['BuildingRecordNumber']} because : #{building.errors.messages}"
+      @log.api_logger.debug "update_all_buildings, error: Could not update #{row['BuildingRecordNumber']} because : #{building.errors.messages}"
       @debug = true
       return @debug
     end
@@ -152,7 +152,7 @@ class BuildingsApi
     if building.save
       GeocodeBuildingJob.perform_later(building)
     else
-      @log.api_logger.debug "#{Date.today}, update_all_buildings, error: Could not create #{row['BuildingRecordNumber']} because : #{building.errors.messages}"
+      @log.api_logger.debug "update_all_buildings, error: Could not create #{row['BuildingRecordNumber']} because : #{building.errors.messages}"
       @debug = true
       return @debug
     end
@@ -191,7 +191,7 @@ class BuildingsApi
       dept_access_token = dept_auth_token_result['access_token']
     else
       puts "Could not get access_token for DepartmentApi. Error: " + dept_auth_token_result['error']
-      @log.api_logger.debug "#{Date.today}, update_rooms, error: Could not get access_token for DepartmentApi: #{dept_auth_token_result['error']}"
+      @log.api_logger.debug "update_rooms, error: Could not get access_token for DepartmentApi: #{dept_auth_token_result['error']}"
       @debug = true
       return @debug
     end
@@ -238,7 +238,7 @@ class BuildingsApi
                         dept_data = nil
                       end
                     else
-                      @log.api_logger.debug "#{Date.today}, update_rooms, error: DepartmentApi: Error for building #{bld}, room #{row['RoomRecordNumber']}, department #{dept_name} - #{dept_result['error']}"
+                      @log.api_logger.debug "update_rooms, error: DepartmentApi: Error for building #{bld}, room #{row['RoomRecordNumber']}, department #{dept_name} - #{dept_result['error']}"
                       dept_data = nil
                       # don't want to interrupt because Department API gives this error: 
                       # Error for building 1005036, room 2108446, department EH&S - 404. Please specify Department Description of more than 3 characters
@@ -261,15 +261,15 @@ class BuildingsApi
         # check if database has rooms that are not in API anymore
         if @rooms_in_db.present?
           if Room.where(rmrecnbr: @rooms_in_db).destroy_all
-            @log.api_logger.info "#{Date.today}, update_rooms, delete #{@rooms_in_db} room(s) from the database"
+            @log.api_logger.info "update_rooms, delete #{@rooms_in_db} room(s) from the database"
           else
-            @log.api_logger.debug "#{Date.today}, update_rooms, error: could not delete records with #{@rooms_in_db} rmrecnbr"
+            @log.api_logger.debug "update_rooms, error: could not delete records with #{@rooms_in_db} rmrecnbr"
             @debug = true
             return @debug
           end
         end
       else
-        @log.api_logger.debug "#{Date.today}, update_rooms, error: API return: #{@result['error']}"
+        @log.api_logger.debug "update_rooms, error: API return: #{@result['error']}"
         @debug = true
         return @debug
       end
@@ -290,7 +290,7 @@ class BuildingsApi
         campus_record_id: @campus_id, building_name: @building_name)
         @rooms_in_db.delete(row['RoomRecordNumber'])
       else
-        @log.api_logger.debug "#{Date.today}, update_rooms, error: Could not update #{row['RoomRecordNumber']} because : #{room.errors.messages}"
+        @log.api_logger.debug "update_rooms, error: Could not update #{row['RoomRecordNumber']} because : #{room.errors.messages}"
         @debug = true
         return @debug
       end
@@ -302,7 +302,7 @@ class BuildingsApi
               campus_record_id: @campus_id, building_name: @building_name)
         @rooms_in_db.delete(row['RoomRecordNumber'])
       else
-        @log.api_logger.debug "#{Date.today}, update_rooms, error: Could not update #{row['RoomRecordNumber']} because : #{room.errors.messages}"
+        @log.api_logger.debug "update_rooms, error: Could not update #{row['RoomRecordNumber']} because : #{room.errors.messages}"
         @debug = true
         return @debug
       end
@@ -323,7 +323,7 @@ class BuildingsApi
             campus_record_id: @campus_id, building_name: @building_name, visible: true)
     end
     unless room.save
-      @log.api_logger.debug "#{Date.today}, update_rooms, error: Could not create #{row['RoomRecordNumber']} because : #{room.errors.messages}"
+      @log.api_logger.debug "update_rooms, error: Could not create #{row['RoomRecordNumber']} because : #{room.errors.messages}"
       @debug = true
       return @debug
     end

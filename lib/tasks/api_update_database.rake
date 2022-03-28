@@ -37,7 +37,7 @@ task api_update_database: :environment do
     total_time = 0
     api = BuildingsApi.new(access_token)
   else
-    log.api_logger.debug "#{Date.today}, get access token for update_campus_list, error: No access_token - #{result['error']}"
+    log.api_logger.debug "get access token for update_campus_list, error: No access_token - #{result['error']}"
     errors << "No access_token. Error: " + result['error']
     status_report << "Total time: #{task_time.round(2)} minutes"
     message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update Campuses errors:\r\n" + errors.join("\r\n")
@@ -74,7 +74,7 @@ task api_update_database: :environment do
       access_token = result['access_token']
       api = BuildingsApi.new(access_token)
     else
-      log.api_logger.debug "#{Date.today}, get access token for update_all_buildings, error: No access_token - #{result['error']}"
+      log.api_logger.debug "get access token for update_all_buildings, error: No access_token - #{result['error']}"
       errors << "No access_token. Error: " + result['error']
       status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
       message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update buildings errors:\r\n" + errors.join("\r\n")
@@ -123,7 +123,7 @@ task api_update_database: :environment do
       access_token = result['access_token']
       api = BuildingsApi.new(access_token)
     else
-      log.api_logger.debug "#{Date.today}, get access token for update_rooms, error: No access_token - #{result['error']}"
+      log.api_logger.debug "get access token for update_rooms, error: No access_token - #{result['error']}"
       errors << "No access_token. Error: " + result['error']
       status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
       message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update rooms errors:\r\n" + errors.join("\r\n")
@@ -157,7 +157,7 @@ task api_update_database: :environment do
     access_token = result['access_token']
     api = ClassroomApi.new(access_token)
   else
-    log.api_logger.debug "#{Date.today}, get access token for add_facility_id_to_classrooms, error: No access_token - #{result['error']}"
+    log.api_logger.debug "get access token for add_facility_id_to_classrooms, error: No access_token - #{result['error']}"
     errors << "No access_token. Error: " + result['error']
     status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
     message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Add facility_id to Classrooms errors:\r\n" + errors.join("\r\n")
@@ -192,7 +192,7 @@ task api_update_database: :environment do
       access_token = result['access_token']
       api = ClassroomApi.new(access_token)
     else
-      log.api_logger.debug "#{Date.today}, get access token for update_all_classroom_characteristics, error: No access_token - #{result['error']}"
+      log.api_logger.debug "get access token for update_all_classroom_characteristics, error: No access_token - #{result['error']}"
       errors << "No access_token. Error: " + result['error']
       status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
       message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update Classroom Characteristics errors:\r\n" + errors.join("\r\n")
@@ -229,7 +229,7 @@ task api_update_database: :environment do
       access_token = result['access_token']
       api = ClassroomApi.new(access_token)
     else
-      log.api_logger.debug "#{Date.today}, get access token for update_all_classroom_contacts, error: No access_token - #{result['error']}"
+      log.api_logger.debug "get access token for update_all_classroom_contacts, error: No access_token - #{result['error']}"
       errors << "No access_token. Error: " + result['error']
       status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
       message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update classrooms contacts errors:\r\n" + errors.join("\r\n")
