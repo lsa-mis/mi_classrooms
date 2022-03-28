@@ -538,7 +538,8 @@ CREATE TABLE public.rooms (
     tsv tsvector,
     dept_group_description character varying,
     building_name character varying,
-    campus_record_id bigint
+    campus_record_id bigint,
+    ada_seat_count integer
 );
 
 
@@ -1160,6 +1161,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211129210918'),
 ('20220104182624'),
 ('20220111201258'),
-('20220222151031');
+('20220222151031'),
+('20220328220102');
 
 
