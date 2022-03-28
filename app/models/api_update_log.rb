@@ -1,0 +1,2 @@
+class ApiUpdateLog < ApplicationRecord
+end
