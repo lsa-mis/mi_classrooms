@@ -7,14 +7,6 @@ class BuildingsApi
     @log = ApiLog.new
   end
 
-  def building_logger
-    @@building_logger ||= Logger.new("#{Rails.root}/log/#{Date.today}_building_api.log")
-  end
-
-  def room_logger
-    @@room_logger ||= Logger.new("#{Rails.root}/log/#{Date.today}_room_api.log")
-  end
-
   # updates campus list
 
   def update_campus_list
@@ -33,7 +25,6 @@ class BuildingsApi
       end
       # check if database has information that is not in API anymore
       if @campus_cds.present?
-        @campus_cds.class
         if CampusRecord.where(campus_cd: @campus_cds).destroy_all
           @log.api_logger.info "#{Date.today}, update_campus_list, delete #{@campus_cds} campus(es) from the database"
         else
@@ -116,12 +107,18 @@ class BuildingsApi
           return @debug if @debug
         end
       end
-      # check if there buildings that were not updated
+      # check if there are buildings in the db that were not updated by API
       if @buildings_ids.present?
-        building_logger.info "Building(s) not in the API database: #{@buildings_ids}"
+        if Building.where(bldrecnbr: @buildings_ids).destroy_all
+          @log.api_logger.info "#{Date.today}, update_all_buildings, delete #{@buildings_ids} building(s) from the database"
+        else
+          @log.api_logger.debug "#{Date.today}, update_all_buildings, error: could not delete records with #{@buildings_ids} bldrecnbr"
+          @debug = true
+          return @debug
+        end
       end
     else
-      building_logger.debug "API return: #{@result['error']}"
+      @log.api_logger.debug "#{Date.today}, update_all_buildings, error: API return: #{@result['error']}"
       @debug = true
       return @debug
     end
@@ -140,7 +137,7 @@ class BuildingsApi
           campus_record_id: CampusRecord.find_by(campus_cd: row['BuildingCampusCode']).id)
       @buildings_ids.delete(row['BuildingRecordNumber'])
     else
-      building_logger.debug "Could not update #{row['BuildingRecordNumber']} because : #{building.errors.messages}"
+      @log.api_logger.debug "#{Date.today}, update_all_buildings, error: Could not update #{row['BuildingRecordNumber']} because : #{building.errors.messages}"
       @debug = true
       return @debug
     end
@@ -155,7 +152,7 @@ class BuildingsApi
     if building.save
       GeocodeBuildingJob.perform_later(building)
     else
-      building_logger.debug "Could not create #{row['BuildingRecordNumber']} because : #{building.errors.messages}"
+      @log.api_logger.debug "#{Date.today}, update_all_buildings, error: Could not create #{row['BuildingRecordNumber']} because : #{building.errors.messages}"
       @debug = true
       return @debug
     end
@@ -188,14 +185,13 @@ class BuildingsApi
 
   def update_rooms
     @buildings_ids = Building.all.pluck(:bldrecnbr)
-    @rooms_not_updated = []
     dept_auth_token = AuthTokenApi.new("bf", "department")
     dept_auth_token_result = dept_auth_token.get_auth_token
     if dept_auth_token_result['success']
       dept_access_token = dept_auth_token_result['access_token']
     else
       puts "Could not get access_token for DepartmentApi. Error: " + dept_auth_token_result['error']
-      room_logger.debug "Could not get access_token for DepartmentApi: #{dept_auth_token_result['error']}"
+      @log.api_logger.debug "#{Date.today}, update_rooms, error: Could not get access_token for DepartmentApi: #{dept_auth_token_result['error']}"
       @debug = true
       return @debug
     end
@@ -242,7 +238,7 @@ class BuildingsApi
                         dept_data = nil
                       end
                     else
-                      room_logger.debug "DepartmentApi: Error for building #{bld}, room #{row['RoomRecordNumber']}, department #{dept_name} - #{dept_result['error']}"
+                      @log.api_logger.debug "#{Date.today}, update_rooms, error: DepartmentApi: Error for building #{bld}, room #{row['RoomRecordNumber']}, department #{dept_name} - #{dept_result['error']}"
                       dept_data = nil
                       # don't want to interrupt because Department API gives this error: 
                       # Error for building 1005036, room 2108446, department EH&S - 404. Please specify Department Description of more than 3 characters
@@ -255,31 +251,28 @@ class BuildingsApi
                   else
                     create_room(row, bld, dept_data)
                   end
+                  # if update_room or create_room returns true (@debug)
                   return @debug if @debug
                 end
               end
             end
           end
-        else
-          room_logger.info "No rooms for building: #{bld}"
         end
         # check if database has rooms that are not in API anymore
-        if @rooms_not_updated.present?
-          @rooms_not_updated.each do |rmrecnbr|
-            room = Room.find_by(rmrecnbr: rmrecnbr)
-            unless room.update(visible: false)
-              room_logger.debug "Could not update room #{rmrecnbr} - should have visible = false "
-              @debug = true
-              return @debug
-            end
+        if @rooms_in_db.present?
+          if Room.where(rmrecnbr: @rooms_in_db).destroy_all
+            @log.api_logger.info "#{Date.today}, update_rooms, delete #{@rooms_in_db} room(s) from the database"
+          else
+            @log.api_logger.debug "#{Date.today}, update_rooms, error: could not delete records with #{@rooms_in_db} rmrecnbr"
+            @debug = true
+            return @debug
           end
         end
       else
-        room_logger.debug "API return: #{@result['error']}"
+        @log.api_logger.debug "#{Date.today}, update_rooms, error: API return: #{@result['error']}"
         @debug = true
         return @debug
       end
-      @rooms_not_updated += @rooms_in_db if @rooms_in_db
     end
     return @debug
   end
@@ -294,10 +287,10 @@ class BuildingsApi
       if room.update(floor: row['FloorNumber'], room_number: row['RoomNumber'], 
         square_feet: row['RoomSquareFeet'], rmtyp_description: row['RoomTypeDescription'],
         dept_description: row['DepartmentName'], instructional_seating_count: row['RoomStationCount'],
-        campus_record_id: @campus_id, building_name: @building_name, visible: true)
+        campus_record_id: @campus_id, building_name: @building_name)
         @rooms_in_db.delete(row['RoomRecordNumber'])
       else
-        room_logger.debug "Could not update #{row['RoomRecordNumber']} because : #{room.errors.messages}"
+        @log.api_logger.debug "#{Date.today}, update_rooms, error: Could not update #{row['RoomRecordNumber']} because : #{room.errors.messages}"
         @debug = true
         return @debug
       end
@@ -306,10 +299,10 @@ class BuildingsApi
               square_feet: row['RoomSquareFeet'], rmtyp_description: row['RoomTypeDescription'],
               dept_description: row['DepartmentName'], instructional_seating_count: row['RoomStationCount'],
               dept_id: dept_data['DeptId'], dept_grp: dept_data['DeptGroup'], dept_group_description: dept_data['DeptGroupDescription'],
-              campus_record_id: @campus_id, building_name: @building_name, visible: true)
+              campus_record_id: @campus_id, building_name: @building_name)
         @rooms_in_db.delete(row['RoomRecordNumber'])
       else
-        room_logger.debug "Could not update #{row['RoomRecordNumber']} because : #{room.errors.messages}"
+        @log.api_logger.debug "#{Date.today}, update_rooms, error: Could not update #{row['RoomRecordNumber']} because : #{room.errors.messages}"
         @debug = true
         return @debug
       end
@@ -330,7 +323,7 @@ class BuildingsApi
             campus_record_id: @campus_id, building_name: @building_name, visible: true)
     end
     unless room.save
-      room_logger.debug "Could not create #{row['RoomRecordNumber']} because : #{room.errors.messages}"
+      @log.api_logger.debug "#{Date.today}, update_rooms, error: Could not create #{row['RoomRecordNumber']} because : #{room.errors.messages}"
       @debug = true
       return @debug
     end
