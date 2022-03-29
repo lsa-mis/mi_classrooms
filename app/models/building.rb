@@ -51,6 +51,8 @@ class Building < ApplicationRecord
     }
   )
 
+  scope :not_visible, -> { where(visible: false) }
+
   scope :ann_arbor_campus, -> {
     where("zip ILIKE ANY ( array[?] )", ["48103%", "48104%", "48105%", "48109%"])
   }
