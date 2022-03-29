@@ -79,13 +79,19 @@ class RoomDecorator < Draper::Decorator
     end
   end
 
-  def student_capacity
-    helpers.pluralize(room.instructional_seating_count, "Student")
+  def student_capacity 
+      helpers.pluralize(room.instructional_seating_count, "Student")
+  end
+
+  def student_ada_capacity 
+    if room.ada_seat_count
+      "+ #{room.ada_seat_count} ADA"
+    end
   end
 
   def room_schedule_contact
     if
-room.room_contact&.rm_schd_cntct_name
+      room.room_contact&.rm_schd_cntct_name
       "#{room.room_contact.rm_schd_cntct_name.titleize}"
     else
       "Contact Not Available"
