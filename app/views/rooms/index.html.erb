@@ -33,8 +33,17 @@
   <div>
     <%= form_with url: rooms_path, method: :get, class: "", data: { target: "autosubmit.form" } do |form| %>
       <div class="relative min-h-screen md:flex">
-        
         <div class="sidebar w-64 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out" data-autosubmit-target="sidebar">
+          <% if user_signed_in? && policy(Room).edit? %>
+          <p class="bg-blue-700 text-white text-sm p-2">Admin panel</p>
+            <div class="bg-blue-700 px-2 pb-2 text-white text-sm">
+              <label for="_rooms">Show hidden buildings</label>
+              <%= check_box_tag "not_visible_buildings", "1", params[:not_visible_buildings].try(:include?, "1"), class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
+              <br>
+              <label for="_rooms">Show hidden rooms</label>
+              <%= check_box_tag "not_visible_rooms", "1", params[:not_visible_rooms].try(:include?, "1"), class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
+            </div>
+          <% end %>
           <div class="pl-1 bg-gray-50 shadow border">
             <div class="px-1">
               <label for="school_or_college_name">Select a School/College</label>
@@ -92,16 +101,6 @@
                 Clear
               </button>
             </div>
-            <% if user_signed_in? && policy(Room).edit? %>
-              <div class="">
-                <label for="_rooms">Show hidden buildings</label>
-                <%= check_box_tag "not_visible_buildings", "1", params[:not_visible_buildings].try(:include?, "1"), class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
-              </div>
-              <div class="">
-                <label for="_rooms">Show hidden rooms</label>
-                <%= check_box_tag "not_visible_rooms", "1", params[:not_visible_rooms].try(:include?, "1"), class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
-              </div>
-            <% end %>
             <div class="flex justify-end items-center">
               <label for="direction" class="border-0 h-px -m-px overflow-hidden p-0 absolute w-px">Sort by capacity</label>
               <%= select_tag "direction", options_for_select([["Low to High", "asc"], ["High to Low", "desc"]], selected: params[:direction]), include_blank: "Sort Room Capacity", class: "rounded-md sm:text-sm ml-2",

@@ -37,7 +37,11 @@
                         controller: "updatebuilding"
                       } do |f| %>
                 <div class="sm:col-span-4">
-                  <%= f.label :visible, "Check to Show / Uncheck to Hide the building" %>
+                  <% if @building.visible %>
+                    <%= f.label :visible, "Uncheck to hide the building" %>
+                  <% else %>
+                    <%= f.label :visible, "Check to show the building" %>
+                  <% end %>
                   <%= f.check_box :visible, :"data-action" => "change->updatebuilding#visible" %>
                 </div>
               <% end %>
