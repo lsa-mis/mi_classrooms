@@ -24,7 +24,15 @@
             <div class="h-highlight-item">
               <%= svg("users") %>
             </div>
-            <%= "#{room.student_capacity}" %>
+            <span class='lg:-ml-2 ml-0'>
+              <%= "#{room.student_capacity}" %>
+            </span>
+            <% if room.ada_seat_count %>
+                <br>
+              <span class='pl-6'>
+                <%= "#{room.student_ada_capacity}" %>
+              </span> 
+            <% end %>
           </div>
           <div class="text-sm font-medium hover:underline">
             <% if room.facility_code_heprod.present? %>
