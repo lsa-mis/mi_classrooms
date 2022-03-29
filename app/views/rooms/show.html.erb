@@ -81,6 +81,9 @@
 
       <div class="text-lg">Instructional seating count:
         <%= @room.instructional_seating_count %>
+        <% if @room.ada_seat_count %>
+          <%= "+ #{@room.ada_seat_count} accessible seating areas" %>
+        <% end %>
       </div>
       <div class="grid grid-cols-3 gap-0 justify-items-center text-sm">
         <div>

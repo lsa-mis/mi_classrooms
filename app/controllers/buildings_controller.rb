@@ -1,7 +1,6 @@
 class BuildingsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_building, only: [:show, :edit, :update, :destroy]
-  skip_after_action :verify_policy_scoped, only: :index
 
   # GET /buildings
   # GET /buildings.json
@@ -40,21 +39,17 @@ class BuildingsController < ApplicationController
   # GET /buildings/1.json
   def show
     @class_floor_names = @building.rooms.where(rmtyp_description: "Classroom").pluck(:floor).uniq.sort
-
-    authorize @building
   end
 
 
   # GET /buildings/1/edit
   def edit
     @floors = @building.rooms.where(rmtyp_description: "Classroom").pluck(:floor).uniq.sort
-    authorize @building
   end
 
   # PATCH/PUT /buildings/1
   # PATCH/PUT /buildings/1.json
   def update
-    authorize @building
     respond_to do |format|
       if @building.update(building_params)
         format.html { redirect_to @building, notice: 'Building was successfully updated.' }
@@ -71,6 +66,7 @@ class BuildingsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_building
       @building = Building.find(params[:id])
+      authorize @building
     end
 
     # Only allow a list of trusted parameters through.

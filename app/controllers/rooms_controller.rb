@@ -1,7 +1,6 @@
 class RoomsController < ApplicationController
 include ActionView::RecordIdentifier
   before_action :authenticate_user! 
-  skip_after_action :verify_policy_scoped, only: :index
   before_action :set_room, only: [:show, :edit, :update, :destroy, :toggle_visibile, :floor_plan]
   before_action :set_filters_list, only: [:index]
   before_action :set_characteristics_array, only: [:index, :show]
@@ -53,7 +52,6 @@ include ActionView::RecordIdentifier
   def show
     @room_chars = @room.room_characteristics.select { |c| c}
     @room_chars_short = @room.characteristics
-    authorize @room
     respond_to do |format|
       format.html
       format.json { render json: @room, serializer: RoomSerializer }
@@ -62,13 +60,11 @@ include ActionView::RecordIdentifier
 
   # GET /rooms/1/edit
   def edit
-    authorize @room
   end
 
   # PATCH/PUT /rooms/1
   # PATCH/PUT /rooms/1.json
   def update
-    authorize @room
     respond_to do |format|
       if @room.update(room_params)
         format.html { redirect_to @room, notice: 'Room was successfully updated.' }
@@ -81,7 +77,6 @@ include ActionView::RecordIdentifier
   end
 
   def toggle_visibile
-    authorize @room
     @room.toggle! :visible
     respond_to do |format|
       format.html { redirect_to rooms_url, notice: 'Room was successfully updated.' }
@@ -90,7 +85,6 @@ include ActionView::RecordIdentifier
   end
 
   def floor_plan
-    authorize @room
     @floor_list = @room.building.floors
     @building = @room.building
     @rooms_list = Room.where(building_bldrecnbr: @room.building, floor: @room.floor, rmtyp_description: "Classroom").order(:room_number)
@@ -102,6 +96,7 @@ include ActionView::RecordIdentifier
       fresh_when @room
       @room = Room.includes(:building, :room_characteristics, :room_panorama_attachment, :room_contact).find(params[:id])
       @room = @room.decorate
+      authorize @room
     end
     
     # Only allow a list of trusted parameters through.

@@ -12,17 +12,14 @@
 
 desc "This will update Classrooms database using APIs"
 task api_update_database: :environment do
-
+  
+  log = ApiLog.new
   errors = []
   status_report = []
   task_time = 0
   # @debug is true if there are errors from API calls or database queries
   @debug = false
-
-  subject = "#{Date.today} - Update Classrooms Report"
-  from = "mi_classrooms@example.com"
-  to = "brita@umich.edu"
-  send_email = Email.new(from, to, subject)
+  task_result = TaskResultLog.new
   
   #################################################
   # update campus list
@@ -36,10 +33,12 @@ task api_update_database: :environment do
     total_time = 0
     api = BuildingsApi.new(access_token)
   else
+    @debug = true
+    log.api_logger.debug "get access token for update_campus_list, error: No access_token - #{result['error']}"
     errors << "No access_token. Error: " + result['error']
     status_report << "Total time: #{task_time.round(2)} minutes"
     message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update Campuses errors:\r\n" + errors.join("\r\n")
-    send_email.update_report(message)
+    task_result.update_log(message, @debug)
     exit
   end
   
@@ -49,16 +48,12 @@ task api_update_database: :environment do
   puts "Update campus list Time: #{time.real.round(2)} seconds"
   task_time += (time.real / 60) % 60
   status_report << "Update campus list Time: #{time.real.round(2)} seconds"
-  if File.exists?("#{Rails.root}/log/#{Date.today}_campus_api.log")
-    if @debug
-      status_report << "Campus updates failed. See the log file #{Rails.root}/log/#{Date.today}_campus_api.log for errors"
-      status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
-      message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
-      send_email.update_report(message)
-      exit
-    else 
-      status_report << "See the log file #{Rails.root}/log/#{Date.today}_campus_api.log for warnings"
-    end
+  if @debug
+    status_report << "Campus updates failed. See the log file #{Rails.root}/log/api_nightly_update_db.log for errors"
+    status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
+    message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
+    task_result.update_log(message, @debug)
+    exit
   end
   status_report << " "
 
@@ -76,10 +71,12 @@ task api_update_database: :environment do
       access_token = result['access_token']
       api = BuildingsApi.new(access_token)
     else
+      @debug = true
+      log.api_logger.debug "get access token for update_all_buildings, error: No access_token - #{result['error']}"
       errors << "No access_token. Error: " + result['error']
       status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
       message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update buildings errors:\r\n" + errors.join("\r\n")
-      send_email.update_report(message)
+      task_result.update_log(message, @debug)
       exit
     end
   end
@@ -103,22 +100,17 @@ task api_update_database: :environment do
   puts "Update buildings Time: #{time.real.round(2)} seconds"
   task_time += (time.real / 60) % 60
   status_report << "Update buildings Time: #{time.real.round(2)} seconds"
-  if File.exists?("#{Rails.root}/log/#{Date.today}_building_api.log")
-    if @debug
-      status_report << "Buildings updates failed. See the log file #{Rails.root}/log/#{Date.today}_building_api.log for errors"
-      status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
-      message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
-      send_email.update_report(message)
-      exit
-    else 
-      status_report << "See the log file #{Rails.root}/log/#{Date.today}_building_api.log for warnings"
-    end
+  if @debug
+    status_report << "Buildings updates failed. See the log file #{Rails.root}/log/api_nightly_update_db.log for errors"
+    status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
+    message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
+    task_result.update_log(message, @debug)
+    exit
   end
   status_report << " "
 
   #################################################
   # update rooms
-  # if room is in the app db, but not in the API: room.update(visible: false)
   # 
   total_time += time.real.to_i
   if total_time > 3000
@@ -129,10 +121,12 @@ task api_update_database: :environment do
       access_token = result['access_token']
       api = BuildingsApi.new(access_token)
     else
+      @debug = true
+      log.api_logger.debug "get access token for update_rooms, error: No access_token - #{result['error']}"
       errors << "No access_token. Error: " + result['error']
       status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
       message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update rooms errors:\r\n" + errors.join("\r\n")
-      send_email.update_report(message)
+      task_result.update_log(message, @debug)
       exit
     end
   end
@@ -143,19 +137,15 @@ task api_update_database: :environment do
   puts "Update Rooms Time: #{time.real.round(2)} seconds"
   task_time += (time.real / 60) % 60
   status_report << "Update Rooms Time: #{time.real.round(2)} seconds"
-  if File.exists?("#{Rails.root}/log/#{Date.today}_room_api.log")
-    if @debug
-      status_report << "Rooms updates failed. See the log file #{Rails.root}/log/#{Date.today}_room_api.log for errors"
-      status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
-      message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
-      send_email.update_report(message)
-      exit
-    else
-      status_report << "See the log file #{Rails.root}/log/#{Date.today}_room_api.log for warnings"
-    end
+  if @debug
+    status_report << "Rooms updates failed. See the log file #{Rails.root}/log/#{Date.today}_room_api.log for errors"
+    status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
+    message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
+    task_result.update_log(message, @debug)
+    exit
   end
   status_report << " "
-
+  
   #################################################
   # add facility_id to classrooms and update instructional_seating_count
   # 
@@ -166,10 +156,12 @@ task api_update_database: :environment do
     access_token = result['access_token']
     api = ClassroomApi.new(access_token)
   else
+    @debug = true
+    log.api_logger.debug "get access token for add_facility_id_to_classrooms, error: No access_token - #{result['error']}"
     errors << "No access_token. Error: " + result['error']
     status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
     message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Add facility_id to Classrooms errors:\r\n" + errors.join("\r\n")
-    send_email.update_report(message)
+    task_result.update_log(message, @debug)
     exit
   end
 
@@ -179,16 +171,12 @@ task api_update_database: :environment do
   puts "Add FacilityID to Classrooms Time: #{time.real.round(2)} seconds"
   task_time += (time.real / 60) % 60
   status_report << "Add FacilityID for classroom Time: #{time.real.round(2)} seconds"
-  if File.exists?("#{Rails.root}/log/#{Date.today}_facility_id_logger_api.log")
-    if @debug
-      status_report << "Add FacilityID to Classroom updates failed. See the log file #{Rails.root}/log/#{Date.today}_facility_id_logger_api.log for errors"
-      status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
-      message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
-      send_email.update_report(message)
-      exit
-    else
-      status_report << "See the log file #{Rails.root}/log/#{Date.today}_facility_id_logger_api.log for warnings"
-    end
+  if @debug
+    status_report << "Add FacilityID to Classroom updates failed. See the log file #{Rails.root}/log/api_nightly_update_db.log for errors"
+    status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
+    message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
+    task_result.update_log(message, @debug)
+    exit
   end
   status_report << " "
 
@@ -204,10 +192,12 @@ task api_update_database: :environment do
       access_token = result['access_token']
       api = ClassroomApi.new(access_token)
     else
+      @debug = true
+      log.api_logger.debug "get access token for update_all_classroom_characteristics, error: No access_token - #{result['error']}"
       errors << "No access_token. Error: " + result['error']
       status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
       message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update Classroom Characteristics errors:\r\n" + errors.join("\r\n")
-      send_email.update_report(message)
+      task_result.update_log(message, @debug)
       exit
     end
   end
@@ -219,16 +209,12 @@ task api_update_database: :environment do
   puts "Update classroom characteristics Time: #{time.real.round(2)} seconds"
   task_time += (time.real / 60) % 60
   status_report << "Update classroom characteristics Time: #{time.real.round(2)} seconds"
-  if File.exists?("#{Rails.root}/log/#{Date.today}_classroom_characteristics_api.log")
-    if @debug
-      status_report << "Classroom Characteristics updates failed. See the log file #{Rails.root}/log/#{Date.today}_classroom_characteristics_api.log for errors"
-      status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
-      message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
-      send_email.update_report(message)
-      exit
-    else 
-      status_report << "See the log file #{Rails.root}/log/#{Date.today}_classroom_characteristics_api.log for warnings"
-    end
+  if @debug
+    status_report << "Classroom Characteristics updates failed. See the log file #{Rails.root}/log/api_nightly_update_db.log for errors"
+    status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
+    message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
+    task_result.update_log(message, @debug)
+    exit
   end
   status_report << " "
   
@@ -244,7 +230,13 @@ task api_update_database: :environment do
       access_token = result['access_token']
       api = ClassroomApi.new(access_token)
     else
+      @debug = true
+      log.api_logger.debug "get access token for update_all_classroom_contacts, error: No access_token - #{result['error']}"
       errors << "No access_token. Error: " + result['error']
+      status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
+      message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update classrooms contacts errors:\r\n" + errors.join("\r\n")
+      task_result.update_log(message, @debug)
+
       exit
     end
   end
@@ -255,21 +247,17 @@ task api_update_database: :environment do
   puts "Update classroom contacts Time: #{time.real.round(2)} seconds"
   task_time += (time.real / 60) % 60
   status_report << "Update classroom contacts Time: #{time.real.round(2)} seconds"
-  if File.exists?("#{Rails.root}/log/#{Date.today}_classroom_contact_api.log")
-    if @debug
-      status_report << "Classroom Contacts updates failed. See the log file #{Rails.root}/log/#{Date.today}_classroom_contact_api.log for errors"
-      status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
-      message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
-      send_email.update_report(message)
-      exit
-    else 
-      status_report << "See the log file #{Rails.root}/log/#{Date.today}_classroom_contact_api.log for errors or warnings"
-    end
+  if @debug
+    status_report << "Classroom Contacts updates failed. See the log file #{Rails.root}/log/api_nightly_update_db.log for errors"
+    status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
+    message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
+    task_result.update_log(message, @debug)
+    exit
   end
   status_report << " "
 
   status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
   message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
-  send_email.update_report(message)
+  task_result.update_log(message, @debug)
   
 end

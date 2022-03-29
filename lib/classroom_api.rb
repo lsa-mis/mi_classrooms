@@ -5,22 +5,7 @@ class ClassroomApi
     @result = {'success' => false, 'error' => '', 'data' => {}}
     @access_token = access_token
     @debug = false
-  end
-
-  def classroom_logger
-    @@classroom_logger ||= Logger.new("#{Rails.root}/log/#{Date.today}_classroom_api.log")
-  end
-
-  def facility_id_logger
-    @@facility_id_logger ||= Logger.new("#{Rails.root}/log/#{Date.today}_facility_id_logger_api.log")
-  end
-
-  def contact_logger
-    @@contact_logger ||= Logger.new("#{Rails.root}/log/#{Date.today}_classroom_contact_api.log")
-  end
-
-  def classroom_characteristics_logger
-    @@classroom_logger ||= Logger.new("#{Rails.root}/log/#{Date.today}_classroom_characteristics_api.log")
+    @log = ApiLog.new
   end
 
   def add_facility_id_to_classrooms(campus_codes = [100], buildings_codes = [])
@@ -40,68 +25,30 @@ class ClassroomApi
         result = get_classroom_info(ERB::Util.url_encode(facility_id))
         if result['success']
           room_info = result['data'][0]
+          # update only rooms for campuses and buildings from the MClassroom database
           if campus_codes.include?(room_info['CampusCd'].to_i) || buildings_codes.include?(room_info['BuildingID'].to_i)
             rmrecnbr = room_info['RmRecNbr'].to_i
             room_in_db = Room.find_by(rmrecnbr: rmrecnbr)
             if room_in_db
               unless room_in_db.update(facility_code_heprod: facility_id, instructional_seating_count: room_info['RmInstSeatCnt'], campus_record_id: CampusRecord.find_by(campus_cd: room_info['CampusCd']).id)
-                facility_id_logger.debug "Could not update: rmrecnbr - #{rmrecnbr}, facility_id - #{facility_id}"
+                @log.api_logger.debug "add_facility_id_to_classrooms, error: Could not update: rmrecnbr - #{rmrecnbr}, facility_id - #{facility_id}"
                 @debug = true
                 return @debug
               end
-            else
-              facility_id_logger.info "Room not in the database: rmrecnbr - #{rmrecnbr}, facility_id - #{facility_id}"
             end
           end
         else
-          facility_id_logger.info "did not find room in API room_info for facility_id: #{facility_id}"
+          @log.api_logger.debug "add_facility_id_to_classrooms, error: did not find room in API room_info for facility_id: #{facility_id}"
         end
       end
     else
-      facility_id_logger.debug "API return: #{@result['error']}"
+      @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{@result['error']}"
       @debug = true
       return @debug
     end
     return @debug
   end
 
-  def update_all_classrooms
-    result = get_classrooms_list
-    if result['success']
-      data = result['data']
-      data.each do |row|
-        building = row['BuildingID']
-        if building_exists?(building)
-          result1 = get_classroom_info(row['FacilityID'])
-          if classroom_exists?(row['RmRecNbr'])
-            update_classroom(row)
-          else
-            cleate_classroom(row)
-          end
-        else
-          classroom_logger.debug "Building #{row['BuildingID']} doesn't exist in the database"
-        end
-      end
-    end
-  end
-
-  def update_classroom(row)
-    classroom = Room.find_by(rmrecnbr: row['RmRecNbr'])
-
-    if classroom.update(building_bldrecnbr: row['BuildingID'], instructional_seating_count: row['RmInstSeatCnt'])
-      classroom_logger.info "Updated: #{row['RmRecNbr']}"
-    else
-      classroom_logger.debug "Could not save #{row['RmRecNbr']} because : #{classroom.errors.messages}"
-    end
-  end
-
-  def building_exists?(bldrecnbr)
-    @buildings_ids.include?(bldrecnbr.to_i)
-  end
-
-  def classroom_exists?(bldrecnbr, rmrecnbr)
-    Building.find_by(bldrecnbr: bldrecnbr).rooms.find_by(rmrecnbr: rmrecnbr).present?
-  end
 
   def get_classrooms_list
     url = URI("https://apigw.it.umich.edu/um/aa/ClassroomList/Classrooms?BuildingID=1005046")
@@ -187,11 +134,11 @@ class ClassroomApi
           else
             create_classroom_characteristics(characteristics)
           end
-        else 
-          classroom_characteristics_logger.info "no characteristics for facility_id: #{facility_id}"
+        else
+          @log.api_logger.info "update_all_classroom_characteristics, no characteristics for facility_id: #{facility_id}"
         end
       else
-        classroom_characteristics_logger.debug "API return: #{@result['error']}"
+        @log.api_logger.debug "update_all_classroom_characteristics, error: API return: #{@result['error']}"
         @debug = true
         return @debug
       end
@@ -205,7 +152,7 @@ class ClassroomApi
     room_char = RoomCharacteristic.new(rmrecnbr: row['RmRecNbr'], chrstc_desc254: row['ChrstcDescr254'], 
                 chrstc_descr: row['ChrstcDescr'], chrstc_descrshort: chrstc_descrshort, chrstc: row['Chrstc'])
     unless room_char.save
-      classroom_characteristics_logger.debug "Could not create #{row['RmRecNbr']} because : #{room_char.errors.messages}"
+      @log.api_logger.debug "update_all_classroom_characteristics, error: Could not add #{row['RmRecNbr']} because : #{room_char.errors.messages}"
       @debug = true
       return @debug
     end
@@ -217,7 +164,7 @@ class ClassroomApi
       room_char = RoomCharacteristic.new(rmrecnbr: row['RmRecNbr'], chrstc_desc254: row['ChrstcDescr254'], 
                   chrstc_descr: row['ChrstcDescr'], chrstc_descrshort: chrstc_descrshort, chrstc: row['Chrstc'])
       unless room_char.save
-        classroom_characteristics_logger.debug "Could not create #{row['RmRecNbr']} because : #{room_char.errors.messages}"
+        @log.api_logger.debug "update_all_classroom_characteristics, error: Could not create #{row['RmRecNbr']} because : #{room_char.errors.messages}"
         @debug = true
         return @debug
       end
@@ -274,10 +221,10 @@ class ClassroomApi
             create_classroom_contact(row)
           end
         else
-          contact_logger.info "No contacts for facility_id #{facility_id}"
+          @log.api_logger.info "update_all_classroom_contacts, No contacts for facility_id #{facility_id}"
         end
       else
-        contact_logger.debug "API returns false for facility_id #{facility_id}: #{@result['error']}"
+        @log.api_logger.debug "update_all_classroom_contacts, error: API returns false for facility_id #{facility_id}: #{@result['error']}"
         @debug = true
         return @debug
       end
@@ -291,7 +238,8 @@ class ClassroomApi
     unless contact.update(rm_schd_cntct_name: row['ContactName'], rm_schd_email: row['Email'], rm_schd_cntct_phone: row['Phone'],
                 rm_det_url: row['ScheduleURL'], rm_usage_guidlns_url: row['UsageGuideLinesURL'], rm_sppt_deptid: row['SpptDeptID'],
                 rm_sppt_cntct_email: row['SpptCntctEmail'], rm_sppt_cntct_phone: row['SpptCntctPhone'], rm_sppt_cntct_url: row['SpptCntctURL'])
-      contact_logger.debug "Could not update #{row['RmRecNbr']} because : #{contact.errors.messages}"
+      
+      @log.api_logger.debug "update_all_classroom_contacts, error: Could not update #{row['RmRecNbr']} because : #{contact.errors.messages}"
       @debug = true
       return @debug
     end
@@ -302,7 +250,7 @@ class ClassroomApi
     rm_det_url: row['ScheduleURL'], rm_usage_guidlns_url: row['UsageGuideLinesURL'], rm_sppt_deptid: row['SpptDeptID'],
     rm_sppt_cntct_email: row['SpptCntctEmail'], rm_sppt_cntct_phone: row['SpptCntctPhone'], rm_sppt_cntct_url: row['SpptCntctURL'])
     unless contact.save
-      contact_logger.debug "Could not create #{row['RmRecNbr']} because : #{contact.errors.messages}"
+      @log.api_logger.debug "update_all_classroom_contacts, error: Could not create #{row['RmRecNbr']} because : #{contact.errors.messages}"
       @debug = true
       return @debug
     end
