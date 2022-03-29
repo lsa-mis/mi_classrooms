@@ -107,16 +107,18 @@ class BuildingsApi
           return @debug if @debug
         end
       end
+      # do nothing with buildings that are not in API data
+
       # check if there are buildings in the db that were not updated by API
-      if @buildings_ids.present?
-        if Building.where(bldrecnbr: @buildings_ids).destroy_all
-          @log.api_logger.info "update_all_buildings, delete #{@buildings_ids} building(s) from the database"
-        else
-          @log.api_logger.debug "update_all_buildings, error: could not delete records with #{@buildings_ids} bldrecnbr"
-          @debug = true
-          return @debug
-        end
-      end
+      # if @buildings_ids.present?
+      #   if Building.where(bldrecnbr: @buildings_ids).destroy_all
+      #     @log.api_logger.info "update_all_buildings, delete #{@buildings_ids} building(s) from the database"
+      #   else
+      #     @log.api_logger.debug "update_all_buildings, error: could not delete records with #{@buildings_ids} bldrecnbr"
+      #     @debug = true
+      #     return @debug
+      #   end
+      # end
     else
       @log.api_logger.debug "update_all_buildings, error: API return: #{@result['error']}"
       @debug = true
@@ -135,7 +137,7 @@ class BuildingsApi
           address: " #{row['BuildingStreetNumber']}  #{row['BuildingStreetDirection']}  #{row['BuildingStreetName']}".strip.gsub(/\s+/, " "), 
           city: row['BuildingCity'], state: row['BuildingState'], zip: row['BuildingPostal'], country: 'usa again', 
           campus_record_id: CampusRecord.find_by(campus_cd: row['BuildingCampusCode']).id)
-      @buildings_ids.delete(row['BuildingRecordNumber'])
+      # @buildings_ids.delete(row['BuildingRecordNumber'])
     else
       @log.api_logger.debug "update_all_buildings, error: Could not update #{row['BuildingRecordNumber']} because : #{building.errors.messages}"
       @debug = true
