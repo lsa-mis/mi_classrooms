@@ -1,5 +1,6 @@
 class RoomsController < ApplicationController
 include ActionView::RecordIdentifier
+  before_action :set_redirection_url
   before_action :authenticate_user! 
   before_action :set_room, only: [:show, :edit, :update, :destroy, :toggle_visibile, :floor_plan]
   before_action :set_filters_list, only: [:index]
@@ -91,6 +92,10 @@ include ActionView::RecordIdentifier
   end
 
   private
+
+    def set_redirection_url
+      $baseURL = request.fullpath
+    end
 
     def set_room
       fresh_when @room
