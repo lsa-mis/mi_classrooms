@@ -1,4 +1,5 @@
 class BuildingsController < ApplicationController
+  before_action :set_redirection_url
   before_action :authenticate_user!
   before_action :set_building, only: [:show, :edit, :update, :destroy]
 
@@ -63,6 +64,11 @@ class BuildingsController < ApplicationController
 
 
   private
+
+    def set_redirection_url
+      $baseURL = request.fullpath
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_building
       @building = Building.find(params[:id])
