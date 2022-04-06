@@ -9,9 +9,6 @@ require("@rails/actiontext")
 import "@hotwired/turbo-rails"
 require("@rails/ujs").start()
 import "channels"
-require("../src/feedback")
-require("../src/flash_timeout")
-require("../src/mobile_menu")
 
 import * as ActiveStorage from "@rails/activestorage"
 
