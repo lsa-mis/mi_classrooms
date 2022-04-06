@@ -339,7 +339,8 @@ CREATE TABLE public.notes (
     noteable_id bigint NOT NULL,
     parent_id integer,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    alert boolean DEFAULT false
 );
 
 
@@ -1212,4 +1213,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220222151031'),
 ('20220318205639'),
 ('20220328201915'),
-('20220328220102');
+('20220328220102'),
+('20220331125213');
+
+

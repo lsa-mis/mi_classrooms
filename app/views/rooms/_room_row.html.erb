@@ -17,6 +17,12 @@
             <div class="text-sm">
               <%= room.address %>
             </div>
+            <% if room.notes.alert.present? %>
+              <div class="bg-yellow-550 text-sm px-2 mb-1 flex items-center space-x-2">
+                <%= svg('alert') %>
+                <span>Alert</span>
+              </div>
+            <% end %>
           </div>
         </div>
         <div class="px-2 justify-self-end" >
