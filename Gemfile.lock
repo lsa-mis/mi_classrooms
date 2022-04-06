@@ -454,7 +454,7 @@ DEPENDENCIES
   pg_search
   pry
   pry-rails
-  puma
+  puma (= 4.3.12)
   pundit
   rails (~> 6.1.0)
   responders!
