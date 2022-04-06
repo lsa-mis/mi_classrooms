@@ -2,30 +2,22 @@
   <div id="notice">
     <%= notice %>
   </div>
-  <%= turbo_stream_from @room, :alerts %>
-  <%= tag.div id: "#{dom_id(@room)}_alerts" do %>
-    <% if session["user_admin"] %>
-      <% if @room.notes.alert.present? %>
-        <%= render @room.notes.alert %>
-      <% end %>
-    <% end %>
-  <% end %>
-  <% unless session["user_admin"] %>
-    <div>
-      <% @room.notes.alert.each do |note| %>
-        <hr class= "flex-1 border-t border-blue-600 mt-1 mb-2 m-2">
-        <div class="text-sm pb-1">
-          <%= note.updated_at.strftime('%m/%d/%Y') %>
-          <%= note.body  %>
-        </div>
-      <% end %>
-    </div>
-  <% end %>
+  
   <div class="container rounded-lg shadow-lg px-auto">
     <div class="flex-col w-full px-2">
       <h1>
         <%= @room.facility_code_heprod%>
       </h1>
+      <%= turbo_stream_from @room, :alerts %>
+      <%= tag.div id: "#{dom_id(@room)}_alerts", class: "bg-yellow-550 px-2 rounded" do %>
+          <% if @room.notes.alert.present? %>
+            <%= render @room.notes.alert %>
+          <% end %>
+      <% end %>
+      
+
+
+
       <div class='px-2 mb-5'>
         <%= render 'room_panorama', room: @room  %>
       </div>
@@ -152,12 +144,9 @@
 <% end %>
 
 <div class="container p-2 rounded-lg shadow-lg text-xl mb-20 -mt-16 bg-gray-50">
-  <% if session["user_admin"] %>
     <div class="mb-20">Notes:
-      <% if user_signed_in? %>
+      <% if user_signed_in? && session["user_admin"] %>
         <%= render partial: "notes/form", locals: { note: Note.new, noteable: @room } %>
-      <% else %>
-        <%= link_to "Sign up", new_user_registration_path %> or <%= link_to "login", new_user_session_path %> to note
       <% end %>
       
       <%= turbo_stream_from @room, :notes %>
@@ -165,17 +154,5 @@
         <%= render @room.notes.notice %>
       <% end %>
     </div>
-  <% else %>
-    <% if @room.notes.notice.present? %>
-      <div>Notes:
-        <% @room.notes.notice.each do |note| %>
-          <hr class= "flex-1 border-t border-blue-600 mt-1 mb-2 m-2">
-          <div class="text-sm pb-1">
-            <%= note.updated_at.strftime('%m/%d/%Y') %>
-            <%= note.body  %>
-          </div>
-        <% end %>
-      </div>
-    <% end %>
-  <% end %>
+ 
 </div>
