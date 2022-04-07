@@ -3,7 +3,7 @@ class NotesController < ApplicationController
   before_action :set_note
 
   def update
-    if @note.update(note_params)
+    if @note.update(note_params) && @note.update(user: current_user)
       redirect_to @note
     else
       render :edit, status: :unprocessable_entity
