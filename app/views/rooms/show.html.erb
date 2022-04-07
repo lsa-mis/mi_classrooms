@@ -4,16 +4,32 @@
       <h1>
         <%= @room.facility_code_heprod%>
       </h1>
+      <% if @building_alerts.present? %>
+        <div class="bg-yellow-550 px-2 rounded"> 
+          <% @building_alerts.each do |note| %>
+            <hr class= "flex-1 border-t border-blue-600 mt-1 mb-2 m-2">
+            <div class="w-full text-xs">
+              <div class="text-sm px-2 mb-1 flex items-center space-x-2">
+                <span><%= svg('alert') %></span>
+                <span>Building Alert</span>
+                <div class="text-base">
+                  <%= note.body %>
+                </div>
+              </div>
+              <div class="flex items-center">
+                Updated on 
+                <%= note.updated_at.strftime('%m/%d/%Y') %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
       <%= turbo_stream_from @room, :alerts %>
       <%= tag.div id: "#{dom_id(@room)}_alerts", class: "bg-yellow-550 px-2 rounded" do %>
           <% if @room.notes.alert.present? %>
             <%= render @room.notes.alert %>
           <% end %>
       <% end %>
-      
-
-
-
       <div class='px-2 mb-5'>
         <%= render 'room_panorama', room: @room  %>
       </div>

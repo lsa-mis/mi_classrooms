@@ -53,6 +53,7 @@ include ActionView::RecordIdentifier
   def show
     @room_chars = @room.room_characteristics.select { |c| c}
     @room_chars_short = @room.characteristics
+    @building_alerts = Building.find_by(bldrecnbr: @room.building_bldrecnbr).notes.alert
     respond_to do |format|
       format.html
       format.json { render json: @room, serializer: RoomSerializer }

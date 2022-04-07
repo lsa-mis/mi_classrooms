@@ -20,6 +20,18 @@
       </div>
     <% end %>
   </div>
+  <% if building.notes.alert.present? %>
+    <div data-controller="modal" data-modal-allow-background-close="true" class="bg-yellow-550">
+      <a href="#" data-action="click->modal#open" class="h-highlight-item">
+        <div class="bg-yellow-55 text-sm px-2 mb-1 flex items-center space-x-2">
+          <%= svg('alert') %>
+          <span>Alert</span>
+        </div>
+      </a>
+      <!-- Modal Container -->
+      <%= render 'building_alert', alerts: building.notes.alert %>
+    </div>
+  <% end %>
   <div>
     <% if current_user && policy(Building).edit? %>
       <%= link_to building_path(building), data: { "turbo-frame": "_top" } do %>
