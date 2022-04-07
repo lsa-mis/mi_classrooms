@@ -22,6 +22,7 @@ Rails.application.routes.draw do
 
   resources :buildings do
     resources :floors, module: :buildings
+    resources :notes, module: :buildings
   end
 
   resources :announcements
