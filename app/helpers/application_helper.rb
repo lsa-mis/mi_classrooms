@@ -59,6 +59,18 @@ module ApplicationHelper
     end
   end
 
+  def api_status
+    if ApiUpdateLog.find_by(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).nil?
+      return "failed"
+    elsif ApiUpdateLog.find_by(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).status == "error"
+      return 'error'
+    end
+  end
+
+  def api_log_text
+    ApiUpdateLog.find_by(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).result
+  end
+
 
 end
 
