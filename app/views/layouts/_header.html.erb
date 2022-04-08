@@ -1,19 +1,22 @@
 <%= render './layouts/headness.html.haml' %>
 <% if user_signed_in? && current_user.admin %>
-  <% if ApiUpdateLog.find_by(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).nil? %>
+  <% if api_status == 'failed' %>
     <div class="grid w-full bg-yellow-550 text-sm place-content-center py-1">
-      API Update Script failed to run today
+      API Update Script failed to run today. Please report the issue.
     </div>
-  <% elsif ApiUpdateLog.find_by(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).status == "error" %>
-    
-    <div data-controller="modal" data-modal-allow-background-close="true" >
-      <div class="grid w-full bg-yellow-550 text-sm place-content-center py-1">
-        <a href="#" data-action="click->modal#open" class="h-highlight-item">
-          <span>API Update Script ended with errors</span>
-        </a>
+  <% elsif api_status == "error" %>
+    <div id="options" data-controller="visibility">
+      <div class="flex flex-row bg-yellow-550 text-sm justify-center py-1">
+        <button data-action="visibility#toggleTargets" class="h-highlight-item">
+            API Update Script ended with errors.
+        </button>
+        Please report the issue.
       </div>
-      <!-- Modal Container -->
-      <%= render 'partials/api_log_info' %>
+      <div data-visibility-target="hideable" hidden>
+        <div class="bg-gray-300 text-sm flex justify-center py-1 border">
+          <%= api_log_text %>
+        </div>
+      </div>
     </div>
   <% end %>
 <% end %>
