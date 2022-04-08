@@ -1,13 +1,17 @@
 <%= render './layouts/headness.html.haml' %>
 <% if ApiUpdateLog.find_by(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).nil? %>
+  <div class="grid w-full bg-yellow-550 text-sm place-content-center py-1">
     API Update Script failed to run today
+  </div>
 <% elsif ApiUpdateLog.find_by(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).status == "error" %>
   
   <div data-controller="modal" data-modal-allow-background-close="true" >
-  <a href="#" data-action="click->modal#open" class="h-highlight-item">
-    <span>API Update Script ended with errors</span>
-  </a>
-  <!-- Modal Container -->
-  <%= render 'partials/api_log_info' %>
-</div>
+    <div class="grid w-full bg-yellow-550 text-sm place-content-center py-1">
+      <a href="#" data-action="click->modal#open" class="h-highlight-item">
+        <span>API Update Script ended with errors</span>
+      </a>
+    </div>
+    <!-- Modal Container -->
+    <%= render 'partials/api_log_info' %>
+  </div>
 <% end %>
