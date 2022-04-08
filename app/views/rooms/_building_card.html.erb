@@ -19,14 +19,14 @@
         <%= building.address.titleize %>
       </div>
     <% end %>
-  
+  </div>
   <% if building.notes.alert.present? %>
     <div class="bg-yellow-550 text-sm px-2 mb-1 flex items-center space-x-2">
       <%= svg('alert') %>
         <span>Alert</span>
     </div>
   <% end %>
-  </div>
+ 
   <div>
     <% if current_user && policy(Building).edit? %>
       <%= link_to building_path(building), data: { "turbo-frame": "_top" } do %>
