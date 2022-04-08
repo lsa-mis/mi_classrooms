@@ -7,18 +7,22 @@
       <% if @building_alerts.present? %>
         <div class="bg-yellow-550 px-2 rounded"> 
           <% @building_alerts.each do |note| %>
-            <hr class= "flex-1 border-t border-blue-600 mt-1 mb-2 m-2">
+            <hr class= "flex-1 border-t border-blue-600 mb-2">
             <div class="w-full text-xs">
-              <div class="text-sm px-2 mb-1 flex items-center space-x-2">
+              <div class="text-base mb-1 flex items-center space-x-2">
                 <span><%= svg('alert') %></span>
-                <span>Building Alert</span>
-                <div class="text-base">
+                <span>Building Alert:</span>
+                <div class="">
                   <%= note.body %>
                 </div>
               </div>
-              <div class="flex items-center">
+              <div class="flex items-center pb-1">
                 Updated on 
                 <%= note.updated_at.strftime('%m/%d/%Y') %>
+                <% if session["user_admin"] %>
+                  by
+                  <%= note.user.display_name %>
+                <% end %>
               </div>
             </div>
           <% end %>
