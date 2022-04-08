@@ -68,7 +68,11 @@ module ApplicationHelper
   end
 
   def api_log_text
-    ApiUpdateLog.find_by(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).result
+    if ApiUpdateLog.find_by(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).result.present?
+      ApiUpdateLog.find_by(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).result
+    else
+      "The log message is empty"
+    end
   end
 
 
