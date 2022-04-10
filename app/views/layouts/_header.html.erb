@@ -1,0 +1,22 @@
+<%= render './layouts/headness.html.haml' %>
+<% if user_signed_in? && current_user.admin %>
+  <% if api_status == 'failed' %>
+    <div class="grid w-full bg-yellow-550 text-sm place-content-center py-1">
+      API Update Script failed to run today. Please report the issue.
+    </div>
+  <% elsif api_status == "error" %>
+    <div id="options" data-controller="visibility">
+      <div class="flex flex-row bg-yellow-550 text-sm justify-center py-1">
+        <button data-action="visibility#toggleTargets" class="h-highlight-item">
+            API Update Script ended with errors.
+        </button>
+        Please report the issue.
+      </div>
+      <div data-visibility-target="hideable" hidden>
+        <div class="bg-gray-300 text-sm flex justify-center py-1 border">
+          <%= api_log_text %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>
