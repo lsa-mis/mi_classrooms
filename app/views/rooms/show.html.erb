@@ -46,6 +46,12 @@
         <%= building_image( @room ) %>
         <div class="text-xs pl-2 -mt-2 "><%= @room.building.name.titleize %></div>
       </div>
+      <div data-controller="lightbox" class="flex justify-center mt-6">
+        <%= image_tag "IMG_4567", class: "h-48 w-48 m-2 cursor-pointer", data: { src: "../assets/images/IMG_4567.jpg" } %>
+        <%= image_tag "IMG_4616", class: "h-48 w-48 m-2 cursor-pointer", data: { src: "../assets/images/IMG_4616.jpg" } %>
+        <%= image_tag "IMG_4635", class: "h-48 w-48 m-2 cursor-pointer", data: { src: "../assets/images/IMG_4635.jpg" } %>
+        <%= image_tag "IMG_4661", class: "h-48 w-48 m-2 cursor-pointer", data: { src: "../assets/images/IMG_4661.jpg" } %>
+      </div>
       <div class="col-span-4 pl-1 text-left text-xs flex justify-end md:text-sm">
         <div class="grid grid-rows-2 gap-2 pr-2">
           <div class="flex-shrink-0">
