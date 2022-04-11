@@ -4,6 +4,9 @@
       <h1>
         <%= @room.facility_code_heprod%>
       </h1>
+      <% if session["user_admin"] %>
+        <p><i><%= @room.rmrecnbr%></i></p>
+      <% end %>
       <% if @building_alerts.present? %>
         <div class="bg-yellow-550 px-2 rounded"> 
           <% @building_alerts.each do |note| %>
