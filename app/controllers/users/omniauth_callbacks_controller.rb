@@ -97,6 +97,7 @@ def set_user
     
     session[:user_memberships] = membership
     session[:user_admin] = admin
+    session[:user_email] = @user.email
   end
 end
 
