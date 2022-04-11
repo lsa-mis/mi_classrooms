@@ -6,6 +6,7 @@ window.ATL_JQ_PAGE_PROPS =  {
     });
   },
   "fieldValues" : {
-    components : ['15319']
+    components : ['15319'],
+    email : document.getElementById("myCustomTrigger").getAttribute('data-email')
   }
 };
