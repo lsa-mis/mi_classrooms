@@ -94,7 +94,7 @@ class Room < ApplicationRecord
     where(rmtyp_description: ["Classroom"], visible: true).where.not(facility_code_heprod: nil).where('instructional_seating_count > ?', 1)
   }
 
-  scope :classrooms_not_visible, -> {
+  scope :classrooms_inactive, -> {
     where(rmtyp_description: ["Classroom"], visible: false).where.not(facility_code_heprod: nil).where('instructional_seating_count > ?', 1)
   }
 

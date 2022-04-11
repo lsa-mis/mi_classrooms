@@ -10,7 +10,7 @@ class BuildingsController < ApplicationController
     @schools = Room.classrooms.pluck(:dept_group_description).uniq.sort
 
     buildings_ids = Room.classrooms.pluck(:building_bldrecnbr).uniq
-    if params[:not_visible_buildings].present?
+    if params[:inactive_buildings].present?
       @buildings = Building.where(bldrecnbr: buildings_ids, visible: false).order(:name)
     else
       @buildings = Building.where(bldrecnbr: buildings_ids, visible: true).order(:name)
@@ -77,7 +77,7 @@ class BuildingsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def building_params
-      params.require(:building).permit(:bldrecnbr, :latitude, :longitude, :name, :nick_name, :abbreviation, :address, :city, :state, :zip, :country, :query, :visible, :not_visible_buildings, :building_image)
+      params.require(:building).permit(:bldrecnbr, :latitude, :longitude, :name, :nick_name, :abbreviation, :address, :city, :state, :zip, :country, :query, :visible, :inactive_buildings, :building_image)
     end
 
 end
