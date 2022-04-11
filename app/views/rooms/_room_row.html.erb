@@ -8,9 +8,15 @@
       <div class="px-2 flex justify-between">
         <div class="font-sans text-gray-900 leading-5">
           <div class="font-sans text-gray-900 leading-5 pt-2">
-            <div class="truncate font-semibold text-md text-blue-800 hover:underline">
-              <%= link_to room.facility_code_heprod, room, data: { "turbo-frame": "_top" }  %>
-            </div>
+            <% if room.visible %>
+              <div class="truncate font-semibold text-md text-blue-800 hover:underline">
+                <%= link_to room.facility_code_heprod, room, data: { "turbo-frame": "_top" }  %>
+              </div>
+            <% else %>
+              <div class="truncate font-semibold text-md text-blue-800">
+                <%= room.facility_code_heprod %>
+              </div>
+            <% end %>
             <div class="font-semibold text-md">
               <%= room.building_name %>
             </div>
@@ -72,14 +78,18 @@
               </div>
             <% end %>
           </div>
-          <div class="text-sm font-medium highlight hover:underline">
-            <%= link_to room, data: { "turbo-frame": "_top" } do %>
-              <div class="h-highlight-item pb-2">
-                <%= svg("info-circle")  %>
-                <span>Room Details</span>
-              </div>
-            <% end %>
-          </div>
+          <% if room.visible %>
+            <div class="text-sm font-medium highlight hover:underline">
+              <%= link_to room, data: { "turbo-frame": "_top" } do %>
+                <div class="h-highlight-item pb-2">
+                  <%= svg("info-circle")  %>
+                  <span>Room Details</span>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+          <span class="text-yellow-700">Room is inactive</span>
+          <% end %>
         </div>
       </div>
     </div>

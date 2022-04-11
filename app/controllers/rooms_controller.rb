@@ -14,8 +14,9 @@ include ActionView::RecordIdentifier
     if params[:inactive_buildings].present?
       @buildings = Building.where(bldrecnbr: buildings_ids, visible: false).order(:name)
     else
-      @buildings = Building.where(bldrecnbr: buildings_ids, visible: true).order(:name)
+      @buildings = Building.where(bldrecnbr: buildings_ids).order(:name)
     end
+
     @rooms_page_announcement = Announcement.find_by(location: "find_a_room_page")
     @all_rooms_number = Room.classrooms.count
     @schools = Room.classrooms.pluck(:dept_group_description).uniq.sort
