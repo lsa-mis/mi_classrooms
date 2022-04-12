@@ -88,3 +88,7 @@ end
 # Room.find_by(rmrecnbr: 2117778).update(ada_seat_count: 4)
 # Room.find_by(rmrecnbr: 2117781).update(ada_seat_count: 5)
 
+# Room.find_by(facility_code_heprod: "MLB1200").update(nickname: 'Aud 3')
+# Room.find_by(facility_code_heprod: "MLB1220").update(nickname: 'Lec 1')
+# Room.find_by(facility_code_heprod: "MLB1400").update(nickname: 'Aud 4')
+# Room.find_by(facility_code_heprod: "MLB1420").update(nickname: 'Lec 2')
