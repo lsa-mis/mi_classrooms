@@ -113,7 +113,9 @@ include ActionView::RecordIdentifier
                                   :room_characteristics, :min_capacity, :max_capacity, 
                                   :school_or_college_name, :not_visible_buildings, 
                                   :not_visible_rooms, :room_image, :room_panorama, 
-                                  :room_layout, gallery_images: [])
+                                  :room_layout, :gallery_image1, :gallery_image2, 
+                                  :gallery_image3, :gallery_image4, :gallery_image5, 
+                                  :gallery_image6)
     end
 
     def filtering_params

@@ -42,7 +42,12 @@ class Room < ApplicationRecord
   has_one_attached :room_image
   has_one_attached :room_layout
   has_many :notes, as: :noteable
-  has_many_attached :gallery_images
+  has_one_attached :gallery_image1
+  has_one_attached :gallery_image2
+  has_one_attached :gallery_image3
+  has_one_attached :gallery_image4
+  has_one_attached :gallery_image5
+  has_one_attached :gallery_image6
 
   multisearchable(
     against: [:rmrecnbr, :room_number, :building_bldrecnbr],

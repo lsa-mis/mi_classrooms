@@ -44,12 +44,13 @@
         <div>
         </div>
         <div data-controller="lightbox" class="flex justify-center lg:max-h-28 max-h-16 bg-blue-50 rounded">
-          <%= @room.gallery_images.each do |gri| %>
-            <% if gri.representable? %>
-              <%= image_tag gri, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: gri.representation(resize_to_limit: [24, 24]) }, alt: "pizza" %>
-            <% end %>
-          <% end %>
-          <span>text2 here</span>
+          <%= image_tag @room.gallery_image1, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image1.representation(resize_to_limit: [24, 24]) }, alt: "pizza" if @room.gallery_image1.representable? %>
+          <%= image_tag @room.gallery_image2, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image2.representation(resize_to_limit: [24, 24]) }, alt: "pizza" if @room.gallery_image2.representable? %>
+          <%= image_tag @room.gallery_image3, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image3.representation(resize_to_limit: [24, 24]) }, alt: "pizza" if @room.gallery_image3.representable? %>
+          <%= image_tag @room.gallery_image4, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image4.representation(resize_to_limit: [24, 24]) }, alt: "pizza" if @room.gallery_image4.representable? %>
+          <%= image_tag @room.gallery_image5, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image5.representation(resize_to_limit: [24, 24]) }, alt: "pizza" if @room.gallery_image5.representable? %>
+          <%= image_tag @room.gallery_image6, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image6.representation(resize_to_limit: [24, 24]) }, alt: "pizza" if @room.gallery_image6.representable? %>
+
         </div>
         <div>
         </div>
