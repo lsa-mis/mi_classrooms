@@ -2,7 +2,7 @@
   <div class="container rounded-lg shadow-lg px-auto">
     <div class="flex-col w-full px-2">
       <h1>
-        <%= @room.facility_code_heprod%>
+        <%= @room.display_name %>
       </h1>
       <% if session["user_admin"] %>
         <p><i><%= @room.rmrecnbr%></i></p>
