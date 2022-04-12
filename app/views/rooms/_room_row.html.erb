@@ -23,6 +23,11 @@
             <div class="text-sm">
               <%= room.address %>
             </div>
+            <% unless Building.find_by(bldrecnbr: room.building_bldrecnbr).visible %>
+              <div class="text-base text-yellow-700">
+              Building is inactive
+              </div>
+            <% end %>
             <div class="flex w-full bg-yellow-550 text-sm">
               <% if Building.find_by(bldrecnbr: room.building_bldrecnbr).notes.alert.present? %>
                 <div class="px-2 flex items-center space-x-1">
