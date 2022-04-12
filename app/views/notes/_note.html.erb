@@ -6,7 +6,9 @@
       <div class="flex text-base space-x-2 items-center pt-1">
         <% if note.alert %>
           <span><%= svg('alert') %></span>
-          <div>Alert: </div>
+          <div>
+            <%= "#{note.noteable_type} Alert:" %>
+          </div>
         <% end %>
         <div><%= note.body %></div>
       </div>

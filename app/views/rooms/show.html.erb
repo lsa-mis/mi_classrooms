@@ -7,30 +7,14 @@
       <% if session["user_admin"] %>
         <p><i><%= @room.rmrecnbr%></i></p>
       <% end %>
-      <% if @building_alerts.present? %>
-        <div class="bg-yellow-550 px-2 rounded"> 
-          <% @building_alerts.each do |note| %>
-            <hr class= "flex-1 border-t border-blue-600 mb-2">
-            <div class="w-full text-xs">
-              <div class="text-base mb-1 flex items-center space-x-2">
-                <span><%= svg('alert') %></span>
-                <span>Building Alert:</span>
-                <div class="">
-                  <%= note.body %>
-                </div>
-              </div>
-              <div class="flex items-center pb-1">
-                Updated on 
-                <%= note.updated_at.strftime('%m/%d/%Y') %>
-                <% if session["user_admin"] %>
-                  by
-                  <%= note.user.display_name %>
-                <% end %>
-              </div>
-            </div>
+
+      <%= turbo_stream_from @building, :alerts %>
+      <%= tag.div id: "#{dom_id(@building)}_alerts", class: "bg-yellow-550 px-2 rounded" do %>
+          <% if @building.notes.alert.present? %>
+            <%= render @building.notes.alert %>
           <% end %>
-        </div>
       <% end %>
+
       <%= turbo_stream_from @room, :alerts %>
       <%= tag.div id: "#{dom_id(@room)}_alerts", class: "bg-yellow-550 px-2 rounded" do %>
           <% if @room.notes.alert.present? %>
