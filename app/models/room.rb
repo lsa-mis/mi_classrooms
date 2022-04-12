@@ -55,7 +55,7 @@ class Room < ApplicationRecord
       nickname: 'B'},
     using: {
       tsearch: {
-        dictionary: "english",
+        dictionary: "simple",
         prefix: true,
         any_word: false,
 
@@ -79,7 +79,6 @@ class Room < ApplicationRecord
       }
     }
   )
-
 
   pg_search_scope(
     :with_all_characteristics,
