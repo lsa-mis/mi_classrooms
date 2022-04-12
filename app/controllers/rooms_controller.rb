@@ -54,7 +54,7 @@ include ActionView::RecordIdentifier
   def show
     @room_chars = @room.room_characteristics.select { |c| c}
     @room_chars_short = @room.characteristics
-    @building_alerts = Building.find_by(bldrecnbr: @room.building_bldrecnbr).notes.alert
+    @building = Building.find_by(bldrecnbr: @room.building_bldrecnbr)
     respond_to do |format|
       format.html
       format.json { render json: @room, serializer: RoomSerializer }
@@ -108,7 +108,15 @@ include ActionView::RecordIdentifier
     
     # Only allow a list of trusted parameters through.
     def room_params
-      params.require(:room).permit(:rmrecnbr, :floor, :room_number, :rmtyp_description, :dept_id, :dept_grp, :dept_description, :square_feet, :instructional_seating_count, :visible, :building_bldrecnbr, :room_characteristics, :min_capacity, :max_capacity, :school_or_college_name, :inactive_buildings, :inactive_rooms, :room_image, :room_panorama, :room_layout)
+      params.require(:room).permit(:rmrecnbr, :floor, :room_number, :rmtyp_description, 
+                                  :dept_id, :dept_grp, :dept_description, :square_feet, 
+                                  :instructional_seating_count, :visible, :building_bldrecnbr, 
+                                  :room_characteristics, :min_capacity, :max_capacity, 
+                                  :school_or_college_name, :inactive_buildings, :inactive_rooms,
+                                  :room_image, :room_panorama, 
+                                  :room_layout, :gallery_image1, :gallery_image2, 
+                                  :gallery_image3, :gallery_image4, :gallery_image5, 
+                                  :gallery_image6)
     end
 
     def filtering_params
