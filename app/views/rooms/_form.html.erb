@@ -37,6 +37,10 @@
       <%= f.label :room_layout %>
       <%= f.file_field :room_layout %>
     </div>
+   <div class="sm:col-span-4">
+      <%= f.label :gallery_images %>
+      <%= f.file_field :gallery_images, :multiple => true %>
+    </div>
   </div>
   <div class="actions">
     <%= f.submit 'Save', class: "my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>

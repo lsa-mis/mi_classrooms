@@ -37,20 +37,29 @@
             <%= render @room.notes.alert %>
           <% end %>
       <% end %>
-      <div class='px-2 mb-5'>
+      <div class='px-2 mb-2'>
         <%= render 'room_panorama', room: @room  %>
       </div>
+      <div class="flex justify-center border-b border-blue-50 mb-2 py-2">
+        <div>
+        </div>
+        <div data-controller="lightbox" class="flex justify-center lg:max-h-28 max-h-16 bg-blue-50 rounded">
+          <%= @room.gallery_images.each do |gri| %>
+            <% if gri.representable? %>
+              <%= image_tag gri, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: gri.representation(resize_to_limit: [24, 24]) }, alt: "pizza" %>
+            <% end %>
+          <% end %>
+          <span>text2 here</span>
+        </div>
+        <div>
+        </div>
+      </div>
     </div>
+    
     <div class="grid grid-cols-6 gap-2">
       <div class="col-span-2 max-h-24">
         <%= building_image( @room ) %>
         <div class="text-xs pl-2 -mt-2 "><%= @room.building.name.titleize %></div>
-      </div>
-      <div data-controller="lightbox" class="flex justify-center mt-6">
-        <%= image_tag "IMG_4567", class: "h-48 w-48 m-2 cursor-pointer", data: { src: "../assets/images/IMG_4567.jpg" } %>
-        <%= image_tag "IMG_4616", class: "h-48 w-48 m-2 cursor-pointer", data: { src: "../assets/images/IMG_4616.jpg" } %>
-        <%= image_tag "IMG_4635", class: "h-48 w-48 m-2 cursor-pointer", data: { src: "../assets/images/IMG_4635.jpg" } %>
-        <%= image_tag "IMG_4661", class: "h-48 w-48 m-2 cursor-pointer", data: { src: "../assets/images/IMG_4661.jpg" } %>
       </div>
       <div class="col-span-4 pl-1 text-left text-xs flex justify-end md:text-sm">
         <div class="grid grid-rows-2 gap-2 pr-2">
