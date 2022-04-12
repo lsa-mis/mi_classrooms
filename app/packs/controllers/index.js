@@ -23,3 +23,6 @@ import Flatpickr from 'stimulus-flatpickr'
 application.register('flatpickr', Flatpickr)
 
 import "nouislider/dist/nouislider.min.css"
+
+import Lightbox from "stimulus-lightbox"
+application.register("lightbox", Lightbox)

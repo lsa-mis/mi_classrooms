@@ -3828,6 +3828,11 @@ klona@^2.0.4:
   resolved "https://registry.yarnpkg.com/klona/-/klona-2.0.4.tgz#7bb1e3affb0cb8624547ef7e8f6708ea2e39dfc0"
   integrity sha512-ZRbnvdg/NxqzC7L9Uyqzf4psi1OM4Cuc+sJAkQPjO6XkQIJTNbfK2Rsmbw8fx1p2mkZdp2FZYo2+LwXYY/uwIA==
 
+lightgallery@^2.3.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/lightgallery/-/lightgallery-2.4.0.tgz#b22b355bdbd48d3129e15c9d7d17e8e65bb2a17c"
+  integrity sha512-9i/E/w3yaqs56y3k6SWIUS3JTLpeDCZIVnIuNppzAmj5KjLGy5wrFisoDUD0HdxVUdX0wHG5mjvB4h0TXtyf/w==
+
 lilconfig@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/lilconfig/-/lilconfig-2.0.3.tgz#68f3005e921dafbd2a2afb48379986aa6d2579fd"
@@ -6088,6 +6093,13 @@ stimulus-flatpickr@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/stimulus-flatpickr/-/stimulus-flatpickr-1.4.0.tgz#a41071a3e69cfc50b7eaaacf356fc0ab1ab0543c"
   integrity sha512-rcC/c9+E+f5W2kOjaaLShtf3i+p95ACqt+oGzSAgeuZh2YeIN8gW4EWO7h0STBLzSVPl6BjIfPWP7upMPavIVQ==
+
+stimulus-lightbox@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/stimulus-lightbox/-/stimulus-lightbox-3.0.0.tgz#acd2ae81422f1416e38cd0d1aa54300ac88c72a8"
+  integrity sha512-GDzUDMxSxNvO2UmA/WFLoNLiNl0xcCFt92+SKvL2Zt3uflGIBhQpvdykrTkgiLxCaXxhVW4ba/PwEmliDvcQBg==
+  dependencies:
+    lightgallery "^2.3.0"
 
 stimulus@^2.0.0:
   version "2.0.0"
