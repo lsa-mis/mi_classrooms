@@ -22,7 +22,7 @@
       <% end %>
     </div>
   <% else %>
-    <div class="mt-2 mb-3 px-2 sm:px-0 bg-gray-300">
+    <div class="mt-2 mb-3 px-2 sm:px-0 opacity-50">
         <% if building.building_image.representable? %>
           <%=  image_tag(building.building_image.representation(resize_to_fill: [150, 107]), class: 'p-2', alt: "#{building.name}") %>
         <% else %>
@@ -40,7 +40,7 @@
           <%= building.address.titleize %>
         </div>
         <div class="text-base text-yellow-700">
-          The building is inactive 
+          This building is inactive 
         </div>
     </div>
   <% end %>
