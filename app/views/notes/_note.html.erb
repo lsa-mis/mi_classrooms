@@ -4,8 +4,10 @@
   <div>
     <div class="w-full text-xs">
       <div class="flex text-base space-x-2 items-center pt-1">
-        <span><%= svg('alert') %></span>
-        <div>Room Alert: </div>
+        <% if note.alert %>
+          <span><%= svg('alert') %></span>
+          <div>Alert: </div>
+        <% end %>
         <div><%= note.body %></div>
       </div>
       <div class="flex items-center">
