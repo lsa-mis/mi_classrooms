@@ -121,7 +121,7 @@ include ActionView::RecordIdentifier
         capacity = ""
         params.each do |k, v|
           if k == "inactive_rooms"
-            filters[k] = v
+            filters['Filters'] = k.titleize
             break
           end
           if k == "inactive_buildings"
