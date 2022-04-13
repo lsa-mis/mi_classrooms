@@ -573,7 +573,8 @@ CREATE TABLE public.rooms (
     dept_group_description character varying,
     building_name character varying,
     campus_record_id bigint,
-    ada_seat_count integer
+    ada_seat_count integer,
+    nickname character varying
 );
 
 
@@ -1214,6 +1215,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220318205639'),
 ('20220328201915'),
 ('20220328220102'),
-('20220331125213');
+('20220331125213'),
+('20220412123134');
 
 

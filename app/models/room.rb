@@ -55,6 +55,21 @@ class Room < ApplicationRecord
   )
 
   pg_search_scope(
+    :with_classroom_name,
+    against: { 
+      facility_code_heprod: 'A',
+      nickname: 'B'},
+    using: {
+      tsearch: {
+        dictionary: "simple",
+        prefix: true,
+        any_word: false,
+
+      }
+    }
+  )
+
+  pg_search_scope(
     :with_building_name,
     associated_against: {
       building: {name: 'A',
@@ -70,7 +85,6 @@ class Room < ApplicationRecord
       }
     }
   )
-
 
   pg_search_scope(
     :with_all_characteristics,
@@ -111,5 +125,13 @@ class Room < ApplicationRecord
 scope :classrooms_including_labs, -> {
   where(rmtyp_description: ["Classroom", "Class Laboratory"])
 }
+
+def display_name
+  if self.nickname.present?
+    "#{self.facility_code_heprod} - #{self.nickname}"
+  else
+    "#{self.facility_code_heprod}"
+  end
+end
 
 end

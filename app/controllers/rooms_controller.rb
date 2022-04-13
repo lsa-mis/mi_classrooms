@@ -34,11 +34,11 @@ include ActionView::RecordIdentifier
       @rooms = @rooms.order_as_specified(floor: floors).order(:room_number => :asc)
     end
     @rooms = @rooms.with_building_name(params[:query]) if params[:query].present?
+    @rooms = @rooms.with_classroom_name(params[:classroom_name]) if params[:classroom_name].present?
     @rooms = @rooms.with_school_or_college_name(params[:school_or_college_name]) if params[:school_or_college_name].present?
     @rooms = @rooms.with_all_characteristics(params[:room_characteristics]) if params[:room_characteristics].present?
     @rooms = @rooms.where('instructional_seating_count >= ?', params[:min_capacity].to_i) if params[:max_capacity].present?
     @rooms = @rooms.where('instructional_seating_count <= ?', params[:max_capacity].to_i) if params[:max_capacity].present?
-    @rooms = @rooms.where('facility_code_heprod LIKE ?', "%#{params[:classroom_name].upcase}%") if params[:classroom_name].present?
 
     authorize @rooms
 
