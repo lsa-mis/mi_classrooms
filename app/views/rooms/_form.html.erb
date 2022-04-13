@@ -19,9 +19,9 @@
   <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6" >
     <div class="sm:col-span-4">
       <% if @room.visible %>
-        <%= f.label :visible, "Uncheck to hide the room" %>
+        <%= f.label :visible, "Uncheck to make inactive" %>
       <% else %>
-        <%= f.label :visible, "Check to show the room" %>
+        <%= f.label :visible, "Check to change status to active" %>
       <% end %>
       <%= f.check_box :visible %>
     </div>
@@ -36,6 +36,30 @@
     <div class="sm:col-span-4">
       <%= f.label :room_layout %>
       <%= f.file_field :room_layout %>
+    </div>
+    <div class="sm:col-span-4">
+      <%= f.label :gallery_image1 %>
+      <%= f.file_field :gallery_image1 %>
+    </div>
+    <div class="sm:col-span-4">
+      <%= f.label :gallery_image2 %>
+      <%= f.file_field :gallery_image2 %>
+    </div>
+    <div class="sm:col-span-4">
+      <%= f.label :gallery_image3 %>
+      <%= f.file_field :gallery_image3 %>
+    </div>
+    <div class="sm:col-span-4">
+      <%= f.label :gallery_image4 %>
+      <%= f.file_field :gallery_image4 %>
+    </div>
+    <div class="sm:col-span-4">
+      <%= f.label :gallery_image5 %>
+      <%= f.file_field :gallery_image5 %>
+    </div>
+    <div class="sm:col-span-4">
+      <%= f.label :gallery_image6 %>
+      <%= f.file_field :gallery_image6 %>
     </div>
   </div>
   <div class="actions">

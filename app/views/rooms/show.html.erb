@@ -7,40 +7,45 @@
       <% if session["user_admin"] %>
         <p><i><%= @room.rmrecnbr%></i></p>
       <% end %>
-      <% if @building_alerts.present? %>
-        <div class="bg-yellow-550 px-2 rounded"> 
-          <% @building_alerts.each do |note| %>
-            <hr class= "flex-1 border-t border-blue-600 mb-2">
-            <div class="w-full text-xs">
-              <div class="text-base mb-1 flex items-center space-x-2">
-                <span><%= svg('alert') %></span>
-                <span>Building Alert:</span>
-                <div class="">
-                  <%= note.body %>
-                </div>
-              </div>
-              <div class="flex items-center pb-1">
-                Updated on 
-                <%= note.updated_at.strftime('%m/%d/%Y') %>
-                <% if session["user_admin"] %>
-                  by
-                  <%= note.user.display_name %>
-                <% end %>
-              </div>
-            </div>
-          <% end %>
-        </div>
+      <% unless @room.building.visible %>
+        <span class="text-base text-yellow-700">
+          This building is inactive 
+        </span>
       <% end %>
+
+      <%= turbo_stream_from @building, :alerts %>
+      <%= tag.div id: "#{dom_id(@building)}_alerts", class: "bg-yellow-550 px-2 rounded" do %>
+          <% if @building.notes.alert.present? %>
+            <%= render @building.notes.alert %>
+          <% end %>
+      <% end %>
+
       <%= turbo_stream_from @room, :alerts %>
       <%= tag.div id: "#{dom_id(@room)}_alerts", class: "bg-yellow-550 px-2 rounded" do %>
           <% if @room.notes.alert.present? %>
             <%= render @room.notes.alert %>
           <% end %>
       <% end %>
-      <div class='px-2 mb-5'>
+      <div class='px-2 mb-2'>
         <%= render 'room_panorama', room: @room  %>
       </div>
+      <div class="flex justify-center border-b border-blue-50 mb-2 py-2">
+        <div>
+        </div>
+        <div data-controller="lightbox" class="flex justify-center lg:max-h-28 max-h-16 bg-blue-50 rounded">
+          <%= image_tag @room.gallery_image1, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image1.representation(resize_to_limit: [24, 24]) }, alt: "#{@room.facility_code_heprod} - #{@room.gallery_image1.name}" if @room.gallery_image1.representable? %>
+          <%= image_tag @room.gallery_image2, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image2.representation(resize_to_limit: [24, 24]) }, alt: "#{@room.facility_code_heprod} - #{@room.gallery_image2.name}" if @room.gallery_image2.representable? %>
+          <%= image_tag @room.gallery_image3, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image3.representation(resize_to_limit: [24, 24]) }, alt: "#{@room.facility_code_heprod} - #{@room.gallery_image3.name}" if @room.gallery_image3.representable? %>
+          <%= image_tag @room.gallery_image4, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image4.representation(resize_to_limit: [24, 24]) }, alt: "#{@room.facility_code_heprod} - #{@room.gallery_image4.name}" if @room.gallery_image4.representable? %>
+          <%= image_tag @room.gallery_image5, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image5.representation(resize_to_limit: [24, 24]) }, alt: "#{@room.facility_code_heprod} - #{@room.gallery_image5.name}" if @room.gallery_image5.representable? %>
+          <%= image_tag @room.gallery_image6, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image6.representation(resize_to_limit: [24, 24]) }, alt: "#{@room.facility_code_heprod} - #{@room.gallery_image6.name}" if @room.gallery_image6.representable? %>
+
+        </div>
+        <div>
+        </div>
+      </div>
     </div>
+    
     <div class="grid grid-cols-6 gap-2">
       <div class="col-span-2 max-h-24">
         <%= building_image( @room ) %>

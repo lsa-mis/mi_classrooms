@@ -1,87 +1,202 @@
 <%= turbo_frame_tag dom_id(room) do  %>
-  <div class="mt-2 mb-3 px-2">
-    <h2 class="sr-only">Classroom</h2>
-    <div class="grid lg:grid-cols-2 gap-2 bg-white border border-gray-300 rounded-lg leading-tight">
-      <div class='place-self-center max-h-48'>
-        <%= room_thumbnail_image(room) %>
-      </div>
-      <div class="px-2 flex justify-between">
-        <div class="font-sans text-gray-900 leading-5">
-          <div class="font-sans text-gray-900 leading-5 pt-2">
-            <div class="truncate font-semibold text-md text-blue-800 hover:underline">
-              <%= link_to room.display_name, room, data: { "turbo-frame": "_top" }  %>
-            </div>
-            <div class="font-semibold text-md">
-              <%= room.building_name %>
-            </div>
-            <div class="text-sm">
-              <%= room.address %>
-            </div>
-            <div class="flex w-full bg-yellow-550 text-sm">
-              <% if Building.find_by(bldrecnbr: room.building_bldrecnbr).notes.alert.present? %>
-                <div class="px-2 flex items-center space-x-1">
-                  <%= svg('alert') %>
-                  <span>Building</span>
+  <% if room.visible && room.building.visible %>
+    <div class="mt-2 mb-3 px-2">
+      <h2 class="sr-only">Classroom</h2>
+      <div class="grid lg:grid-cols-2 gap-2 bg-white border border-gray-300 rounded-lg leading-tight">
+        <div class='place-self-center max-h-48'>
+          <%= room_thumbnail_image(room) %>
+        </div>
+        <div class="px-2 flex justify-between">
+          <div class="font-sans text-gray-900 leading-5">
+            <div class="font-sans text-gray-900 leading-5 pt-2">
+              <div class="truncate font-semibold text-md text-blue-800 hover:underline">
+                <%= link_to room.display_name, room, data: { "turbo-frame": "_top" }  %>
+              </div>
+              <div class="font-semibold text-md">
+                <%= room.building_name %>
+              </div>
+              <div class="text-sm">
+                <%= room.address %>
+              </div>
+              <% unless Building.find_by(bldrecnbr: room.building_bldrecnbr).visible %>
+                <div class="text-base text-yellow-700">
+                Building is inactive
                 </div>
               <% end %>
-              <% if room.notes.alert.present? %>
-                <div class="px-2 flex items-center space-x-1">
-                  <%= svg('alert') %>
-                  <span>Room</span>
+              <div class="flex w-full bg-yellow-550 text-sm">
+                <% if Building.find_by(bldrecnbr: room.building_bldrecnbr).notes.alert.present? %>
+                  <div class="px-2 flex items-center space-x-1">
+                    <%= svg('alert') %>
+                    <span>Building</span>
+                  </div>
+                <% end %>
+                <% if room.notes.alert.present? %>
+                  <div class="px-2 flex items-center space-x-1">
+                    <%= svg('alert') %>
+                    <span>Room</span>
+                  </div>
+                <% end %>
+              </div>
+              <div>
+                <% if current_user && policy(Room).edit? %>
+                  <%= link_to edit_room_path(room), data: { "turbo-frame": "_top" } do %>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      <title>Edit room</title>
+                    </svg>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+          <div class="px-2 justify-self-end" >
+            <div class="text-sm text-gray-700 pt-2">
+              <div class="h-highlight-item">
+                <%= svg("users") %>
+              </div>
+              <span class='lg:-ml-2 ml-0'>
+                <%= "#{room.student_capacity}" %>
+              </span>
+              <% if room.ada_seat_count %>
+                  <br>
+                <span class='pl-6'>
+                  <%= "#{room.student_ada_capacity}" %>
+                </span> 
+              <% end %>
+            </div>
+            <div class="text-sm font-medium hover:underline">
+              <% if room.facility_code_heprod.present? %>
+                <%= link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{room.facility_code_heprod }", target: "_blank" do %>
+                  <div class="h-highlight-item">
+                    <%= svg("calendar_days")  %>
+                    <span>Room Schedule</span>
+                  </div>
+                <% end %>
+              <% else %>
+                <span>Room Schedule not available</span>
+              <% end %>
+            </div>
+            <div class="text-sm font-medium highlight hover:underline">
+              <% unless room.room_support_phone == "Not Available" && room.room_support_email == "Not Available" %>
+                <div data-controller="modal" data-modal-allow-background-close="true" >
+                  <a href="#" data-action="click->modal#open" class="h-highlight-item">
+                    <%= svg("message_question") %>
+                    <span>Support</span>
+                  </a>
+                  <!-- Modal Container -->
+                  <%= render 'support_info', room: room %>
+                </div>
+              <% end %>
+            </div>
+            <div class="text-sm font-medium highlight hover:underline">
+              <%= link_to room, data: { "turbo-frame": "_top" } do %>
+                <div class="h-highlight-item pb-2">
+                  <%= svg("info-circle")  %>
+                  <span>Room Details</span>
                 </div>
               <% end %>
             </div>
           </div>
         </div>
-        <div class="px-2 justify-self-end" >
-          <div class="text-sm text-gray-700 pt-2">
-            <div class="h-highlight-item">
-              <%= svg("users") %>
+      </div>
+    </div>  
+  <% else %>
+    <div class="mt-2 mb-3 px-2 opacity-50">
+      <h2 class="sr-only">Classroom</h2>
+      <div class="grid lg:grid-cols-2 gap-2 bg-white border border-gray-300 rounded-lg leading-tight">
+        <div class='place-self-center max-h-48'>
+          <%= room_thumbnail_image(room) %>
+        </div>
+        <div class="px-2 flex justify-between">
+          <div class="font-sans text-gray-900 leading-5">
+            <div class="font-sans text-gray-900 leading-5 pt-2">
+              <div class="truncate font-semibold text-md text-blue-800">
+                <%= room.facility_code_heprod %>
+              </div>
+              <div class="font-semibold text-md">
+                <%= room.building_name %>
+              </div>
+              <div class="text-sm">
+                <%= room.address %>
+              </div>
+              <div class="text-base text-yellow-700">
+                <% unless Building.find_by(bldrecnbr: room.building_bldrecnbr).visible %>
+                  <span>Building</span>
+                  <% unless room.visible %>
+                    <span> & </span>
+                    <% end %>
+                <% end %>
+                <% unless room.visible %>
+                  <span>Room</span>
+                <% end %>
+                <span> - inactive</span>
+              </div>
+              <div class="flex w-full bg-yellow-550 text-sm">
+                <% if Building.find_by(bldrecnbr: room.building_bldrecnbr).notes.alert.present? %>
+                  <div class="px-2 flex items-center space-x-1">
+                    <%= svg('alert') %>
+                    <span>Building</span>
+                  </div>
+                <% end %>
+                <% if room.notes.alert.present? %>
+                  <div class="px-2 flex items-center space-x-1">
+                    <%= svg('alert') %>
+                    <span>Room</span>
+                  </div>
+                <% end %>
+              </div>
+              <% if current_user && policy(Room).edit? %>
+                <%= link_to edit_room_path(room), data: { "turbo-frame": "_top" }, class: "text-black pb-1" do %>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 " fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    <title>Edit room</title>
+                  </svg>
+                <% end %>
+              <% end %>
             </div>
-            <span class='lg:-ml-2 ml-0'>
-              <%= "#{room.student_capacity}" %>
-            </span>
-            <% if room.ada_seat_count %>
-                <br>
-              <span class='pl-6'>
-                <%= "#{room.student_ada_capacity}" %>
-              </span> 
-            <% end %>
           </div>
-          <div class="text-sm font-medium hover:underline">
-            <% if room.facility_code_heprod.present? %>
-              <%= link_to "https://csprod.dsc.umich.edu/services/facilitycalendar?facilityid=#{room.facility_code_heprod }", target: "_blank" do %>
-                <div class="h-highlight-item">
+          <div class="px-2 justify-self-end" >
+            <div class="text-sm text-gray-700 pt-2">
+              <div class="h-no-highlight-item">
+                <%= svg("users") %>
+              </div>
+              <span class='lg:-ml-2 ml-0'>
+                <%= "#{room.student_capacity}" %>
+              </span>
+              <% if room.ada_seat_count %>
+                  <br>
+                <span class='pl-6'>
+                  <%= "#{room.student_ada_capacity}" %>
+                </span> 
+              <% end %>
+            </div>
+            <div class="text-sm font-medium">
+              <% if room.facility_code_heprod.present? %>
+                <div class="h-no-highlight-item">
                   <%= svg("calendar_days")  %>
                   <span>Room Schedule</span>
                 </div>
+              <% else %>
+                <span>Room Schedule not available</span>
               <% end %>
-            <% else %>
-              <span>Room Schedule not available</span>
-            <% end %>
-          </div>
-          <div class="text-sm font-medium highlight hover:underline">
-            <% unless room.room_support_phone == "Not Available" && room.room_support_email == "Not Available" %>
-              <div data-controller="modal" data-modal-allow-background-close="true" >
-                <a href="#" data-action="click->modal#open" class="h-highlight-item">
-                  <%= svg("message_question") %>
-                  <span>Support</span>
-                </a>
-                <!-- Modal Container -->
-                <%= render 'support_info', room: room %>
-              </div>
-            <% end %>
-          </div>
-          <div class="text-sm font-medium highlight hover:underline">
-            <%= link_to room, data: { "turbo-frame": "_top" } do %>
-              <div class="h-highlight-item pb-2">
-                <%= svg("info-circle")  %>
-                <span>Room Details</span>
-              </div>
-            <% end %>
+            </div>
+            <div class="text-sm font-medium highlight">
+              <% unless room.room_support_phone == "Not Available" && room.room_support_email == "Not Available" %>
+                  <div class="h-no-highlight-item">
+                    <%= svg("message_question") %>
+                    <span>Support</span>
+                  </div>
+              <% end %>
+            </div>
+            <div class="text-sm font-medium highlight">
+                <div class="h-no-highlight-item pb-2">
+                  <%= svg("info-circle")  %>
+                  <span>Room Details</span>
+                </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>  
+    </div>  
+  <% end %>
 <% end %>

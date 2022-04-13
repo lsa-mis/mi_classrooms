@@ -42,6 +42,12 @@ class Room < ApplicationRecord
   has_one_attached :room_image
   has_one_attached :room_layout
   has_many :notes, as: :noteable
+  has_one_attached :gallery_image1
+  has_one_attached :gallery_image2
+  has_one_attached :gallery_image3
+  has_one_attached :gallery_image4
+  has_one_attached :gallery_image5
+  has_one_attached :gallery_image6
 
   multisearchable(
     against: [:rmrecnbr, :room_number, :building_bldrecnbr],
@@ -105,10 +111,10 @@ class Room < ApplicationRecord
   )
 
   scope :classrooms, -> {
-    where(rmtyp_description: ["Classroom"], visible: true).where.not(facility_code_heprod: nil).where('instructional_seating_count > ?', 1)
+    where(rmtyp_description: ["Classroom"]).where.not(facility_code_heprod: nil).where('instructional_seating_count > ?', 1)
   }
 
-  scope :classrooms_not_visible, -> {
+  scope :classrooms_inactive, -> {
     where(rmtyp_description: ["Classroom"], visible: false).where.not(facility_code_heprod: nil).where('instructional_seating_count > ?', 1)
   }
 
