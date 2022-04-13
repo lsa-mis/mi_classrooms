@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "building" do  %>
   <div class="container px-1 mb-20">
     <div class="">
-      <%= link_to 'Back', buildings_path, class: "text-base hover:underline text-blue-800" %> 
+      <%= link_to 'Back', buildings_path, class: "text-base hover:underline text-blue-800", data: {turbo: "false"} %> 
     </div>
 
     <%= turbo_stream_from @building, :alerts %>
