@@ -11,16 +11,17 @@ include ActionView::RecordIdentifier
   def index
     @sorted = false
     buildings_ids = Room.classrooms.pluck(:building_bldrecnbr).uniq
-    if params[:not_visible_buildings].present?
+    if params[:inactive_buildings].present?
       @buildings = Building.where(bldrecnbr: buildings_ids, visible: false).order(:name)
     else
-      @buildings = Building.where(bldrecnbr: buildings_ids, visible: true).order(:name)
+      @buildings = Building.where(bldrecnbr: buildings_ids).order(:name)
     end
+
     @rooms_page_announcement = Announcement.find_by(location: "find_a_room_page")
     @all_rooms_number = Room.classrooms.count
     @schools = Room.classrooms.pluck(:dept_group_description).uniq.sort
-    if params[:not_visible_rooms].present?
-      @rooms = Room.classrooms_not_visible
+    if params[:inactive_rooms].present?
+      @rooms = Room.classrooms_inactive
     else
       @rooms = Room.classrooms
     end
@@ -51,6 +52,7 @@ include ActionView::RecordIdentifier
   # GET /rooms/1
   # GET /rooms/1.json
   def show
+    redirect_to rooms_path unless ( @room.visible && @room.building.visible ) || session[:user_admin]
     @room_chars = @room.room_characteristics.select { |c| c}
     @room_chars_short = @room.characteristics
     @building = Building.find_by(bldrecnbr: @room.building_bldrecnbr)
@@ -111,8 +113,8 @@ include ActionView::RecordIdentifier
                                   :dept_id, :dept_grp, :dept_description, :square_feet, 
                                   :instructional_seating_count, :visible, :building_bldrecnbr, 
                                   :room_characteristics, :min_capacity, :max_capacity, 
-                                  :school_or_college_name, :not_visible_buildings, 
-                                  :not_visible_rooms, :room_image, :room_panorama, 
+                                  :school_or_college_name, :inactive_buildings, :inactive_rooms,
+                                  :room_image, :room_panorama, 
                                   :room_layout, :gallery_image1, :gallery_image2, 
                                   :gallery_image3, :gallery_image4, :gallery_image5, 
                                   :gallery_image6)
@@ -127,11 +129,11 @@ include ActionView::RecordIdentifier
       if params.present?
         capacity = ""
         params.each do |k, v|
-          if k == "not_visible_rooms"
-            filters[k] = v
+          if k == "inactive_rooms"
+            filters['Filters'] = k.titleize
             break
           end
-          if k == "not_visible_buildings"
+          if k == "inactive_buildings"
             filters = {}
             break
           end

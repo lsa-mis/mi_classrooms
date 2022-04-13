@@ -7,6 +7,11 @@
       <% if session["user_admin"] %>
         <p><i><%= @room.rmrecnbr%></i></p>
       <% end %>
+      <% unless @room.building.visible %>
+        <span class="text-base text-yellow-700">
+          This building is inactive 
+        </span>
+      <% end %>
 
       <%= turbo_stream_from @building, :alerts %>
       <%= tag.div id: "#{dom_id(@building)}_alerts", class: "bg-yellow-550 px-2 rounded" do %>

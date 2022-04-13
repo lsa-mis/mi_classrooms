@@ -19,9 +19,9 @@
   <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6" >
     <div class="sm:col-span-4">
       <% if @room.visible %>
-        <%= f.label :visible, "Uncheck to hide the room" %>
+        <%= f.label :visible, "Uncheck to make inactive" %>
       <% else %>
-        <%= f.label :visible, "Check to show the room" %>
+        <%= f.label :visible, "Check to change status to active" %>
       <% end %>
       <%= f.check_box :visible %>
     </div>
