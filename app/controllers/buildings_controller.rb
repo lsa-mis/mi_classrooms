@@ -13,7 +13,7 @@ class BuildingsController < ApplicationController
     if params[:inactive_buildings].present?
       @buildings = Building.where(bldrecnbr: buildings_ids, visible: false).order(:name)
     else
-      @buildings = Building.where(bldrecnbr: buildings_ids, visible: true).order(:name)
+      @buildings = Building.where(bldrecnbr: buildings_ids).order(:name)
     end
     if params[:query].present?
       session[:query] = params[:query]
