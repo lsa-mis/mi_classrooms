@@ -1,5 +1,5 @@
 <h1>
-        Classroom <%= @room.facility_code_heprod%>
+        Classroom <%= @room.display_name%>
       </h1>
 <%= form_for @room do |f| %>
   <% if @room.errors.any? %>

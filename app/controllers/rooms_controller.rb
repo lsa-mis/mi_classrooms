@@ -52,7 +52,7 @@ include ActionView::RecordIdentifier
   # GET /rooms/1
   # GET /rooms/1.json
   def show
-    redirect_to rooms_path unless ( @room.visible && @room.building.visible ) || session[:user_admin]
+    redirect_to rooms_path, notice: "Room is inactive" unless ( @room.visible && @room.building.visible ) || session[:user_admin]
     @room_chars = @room.room_characteristics.select { |c| c}
     @room_chars_short = @room.characteristics
     @building = Building.find_by(bldrecnbr: @room.building_bldrecnbr)
