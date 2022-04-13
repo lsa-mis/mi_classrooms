@@ -1,7 +1,7 @@
 class BuildingsController < ApplicationController
   before_action :set_redirection_url
   before_action :authenticate_user!
-  before_action :set_building, only: [:show, :edit, :update, :destroy]
+  before_action :set_building, only: [:show, :edit, :update]
 
   # GET /buildings
   # GET /buildings.json
@@ -21,19 +21,6 @@ class BuildingsController < ApplicationController
     end
       authorize @buildings
       @pagy, @buildings = pagy(@buildings)
-    # else
-    #   @buildings = Building.all
-    #   authorize @buildings
-    #   @pagy, @buildings = pagy(@buildings)
-    # end
-
-    # unless params[:query].nil?
-    #   render turbo_stream: turbo_stream.replace(
-    #   :buildingListing,
-    #   partial: "buildings/listing"
-    # )
-    # end
-
   end
 
   # GET /buildings/1
@@ -41,7 +28,6 @@ class BuildingsController < ApplicationController
   def show
     @class_floor_names = @building.rooms.where(rmtyp_description: "Classroom").pluck(:floor).uniq.sort
   end
-
 
   # GET /buildings/1/edit
   def edit
@@ -61,7 +47,6 @@ class BuildingsController < ApplicationController
       end
     end
   end
-
 
   private
 

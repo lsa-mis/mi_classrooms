@@ -67,15 +67,16 @@
                   </div>
                   <div class="actions">
                     <%= f.submit 'Save', class: "my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
+                    <%= link_to 'Remove', delete_file_path(@building.building_image.id), data: { confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @building.building_image.attached? %>
                   </div>
                 <% end %>
               <div>
               <hr>
                 <% if @class_floor_names.count > 0 %>
                 Add floor map 
-                  <% @class_floor_names.each do |fl| %>
+                  <% @class_floor_names.each do |floor_name| %>
                     <div class="py-4 sm:grid sm:py-5 sm:grid-cols-3 sm:gap-4">
-                      <%= render partial: "building_floor", locals: { building: @building, floor_name: fl } %>
+                      <%= render partial: "building_floor", locals: { building: @building, floor_name: floor_name } %>
                     </div>
                   <% end %>
                 <% end %>

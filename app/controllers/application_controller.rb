@@ -6,6 +6,13 @@ class ApplicationController < ActionController::Base
   before_action :set_membership
   after_action :verify_authorized, unless: :devise_controller?
 
+  def delete_file_attachment
+    @delete_file = ActiveStorage::Attachment.find(params[:id])
+    authorize @delete_file
+    @delete_file.purge
+    redirect_back(fallback_location: request.referer)
+  end
+
   private
 
   def user_not_authorized
