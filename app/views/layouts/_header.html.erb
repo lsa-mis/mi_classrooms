@@ -2,14 +2,14 @@
 <% if user_signed_in? && current_user.admin %>
   <% if api_status == 'failed' %>
     <div class="grid w-full bg-yellow-550 text-sm place-content-center py-1">
-      API Update Script failed to run today. Please report the issue.
+      The Classrooms Update Script failed to run today. Please report the issue.
     </div>
   <% elsif api_status == "error" %>
     <div id="options" data-controller="visibility">
       <div class="flex flex-row justify-center items-center bg-red-800 text-red-100">
         <div class="py-1 ">
           <button data-action="visibility#toggleTargets" class="text-sm hover:underline">
-              API Update Script ended with errors.
+            The Classrooms Update Script ended up with errors.
           </button>
         </div>
         <div>
