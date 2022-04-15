@@ -32,14 +32,13 @@
       <div class="flex justify-center border-b border-blue-50 mb-2 py-2">
         <div>
         </div>
-        <div data-controller="lightbox" class="flex justify-center lg:max-h-28 max-h-16 bg-blue-50 rounded">
+        <div data-controller="lightbox" data-lightbox-options-value='{"index": 0, "mode": "lg-fade", "licenseKey": "0000-0000-000-0000"}' class="flex justify-center lg:max-h-28 max-h-16 bg-blue-50 rounded">
+          <%= image_tag @room.room_image, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.room_image.representation(resize_to_limit: [24, 24]) }, alt: "#{@room.facility_code_heprod} - #{@room.room_image.name}" if @room.room_image.representable? %>
           <%= image_tag @room.gallery_image1, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image1.representation(resize_to_limit: [24, 24]) }, alt: "#{@room.facility_code_heprod} - #{@room.gallery_image1.name}" if @room.gallery_image1.representable? %>
           <%= image_tag @room.gallery_image2, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image2.representation(resize_to_limit: [24, 24]) }, alt: "#{@room.facility_code_heprod} - #{@room.gallery_image2.name}" if @room.gallery_image2.representable? %>
           <%= image_tag @room.gallery_image3, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image3.representation(resize_to_limit: [24, 24]) }, alt: "#{@room.facility_code_heprod} - #{@room.gallery_image3.name}" if @room.gallery_image3.representable? %>
           <%= image_tag @room.gallery_image4, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image4.representation(resize_to_limit: [24, 24]) }, alt: "#{@room.facility_code_heprod} - #{@room.gallery_image4.name}" if @room.gallery_image4.representable? %>
           <%= image_tag @room.gallery_image5, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image5.representation(resize_to_limit: [24, 24]) }, alt: "#{@room.facility_code_heprod} - #{@room.gallery_image5.name}" if @room.gallery_image5.representable? %>
-          <%= image_tag @room.gallery_image6, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image6.representation(resize_to_limit: [24, 24]) }, alt: "#{@room.facility_code_heprod} - #{@room.gallery_image6.name}" if @room.gallery_image6.representable? %>
-
         </div>
         <div>
         </div>

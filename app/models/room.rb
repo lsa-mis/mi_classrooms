@@ -47,7 +47,8 @@ class Room < ApplicationRecord
   has_one_attached :gallery_image3
   has_one_attached :gallery_image4
   has_one_attached :gallery_image5
-  has_one_attached :gallery_image6
+
+  validate :acceptable_image
 
   multisearchable(
     against: [:rmrecnbr, :room_number, :building_bldrecnbr],
@@ -122,16 +123,34 @@ class Room < ApplicationRecord
   where(rmtyp_description: ["Class Laboratory"])
   }
 
-scope :classrooms_including_labs, -> {
-  where(rmtyp_description: ["Classroom", "Class Laboratory"])
-}
+  scope :classrooms_including_labs, -> {
+    where(rmtyp_description: ["Classroom", "Class Laboratory"])
+  }
 
-def display_name
-  if self.nickname.present?
-    "#{self.facility_code_heprod} - #{self.nickname}"
-  else
-    "#{self.facility_code_heprod}"
+  def display_name
+    if self.nickname.present?
+      "#{self.facility_code_heprod} - #{self.nickname}"
+    else
+      "#{self.facility_code_heprod}"
+    end
   end
-end
+
+  def acceptable_image
+    return unless room_panorama.attached? || room_image.attached? || room_layout.attached? || gallery_image1.attached? || gallery_image2.attached? || gallery_image3.attached? || gallery_image4.attached? || gallery_image5.attached?
+
+    [room_panorama, room_image, room_layout, gallery_image1, gallery_image2, gallery_image3, gallery_image4, gallery_image5].each do |image|
+
+      if image.attached?
+        unless image.blob.byte_size <= 10.megabyte
+          errors.add(image, "is too big - file size cannot exceed 5Mbyte")
+        end
+
+        acceptable_types = ["image/png", "image/jpeg", "application/pdf"]
+        unless acceptable_types.include?(image.content_type)
+          errors.add(image, "must be file type PDF, JPEG or PNG")
+        end
+      end
+    end
+  end
 
 end

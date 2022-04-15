@@ -1,0 +1,26 @@
+ <div class="container px-1 mb-20">
+ <h1>Room Management</h1>
+ <p>You are able to manage the availabilty (whether a room is active or not-actve), the panorama, gallery images and room layout.</p>
+   <ul>
+    <li>To make a room inactive, toggle the switch to the off <span class="italic">(grayed)</span> position
+    <li>The Room's page will display a main image in the following order of available images:
+      <ol>
+        <li>Panorama -> Room Image -> Block M placeholder <span class="italic">(The Block M is always available and does not need to be uploaded)</span></li> 
+      </ol>
+    </li>
+    <li>There is a gallery of images just below the main image on the Room's page that includes the Room Flat Image and up to five other images that help to present any special features.</li>
+    <li>The Room layout is displayed when a user clicks the small chair icon 
+    <div class="h-layout h-highlight-item"><%= svg("chair") %></div>.</li>
+  </ul>
+  <%= render 'form', room: @room %>
+
+  <%= link_to 'Show', @room, data: { "turbo-frame": "_top" } %>
+  |
+  <%= link_to 'Back', rooms_path, data: { "turbo-frame": "_top" } %>
+
+  <br><br>
+  <%= link_to 'Update a Building Image or Floor Maps', @room.building, class: "rounded-md hover:underline bg-blue-800 text-white px-2 py-1 mt-4"%>
+  <br>
+
+</div>
+
