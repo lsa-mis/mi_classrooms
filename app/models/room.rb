@@ -56,21 +56,6 @@ class Room < ApplicationRecord
   )
 
   pg_search_scope(
-    :with_classroom_name,
-    against: { 
-      facility_code_heprod: 'A',
-      nickname: 'B'},
-    using: {
-      tsearch: {
-        dictionary: "simple",
-        prefix: true,
-        any_word: false,
-
-      }
-    }
-  )
-
-  pg_search_scope(
     :with_building_name,
     associated_against: {
       building: {name: 'A',
