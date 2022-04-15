@@ -47,12 +47,15 @@
                           controller: "updatebuilding"
                         } do |f| %>
                   <div class="sm:col-span-4">
-                    <% if @building.visible %>
-                      <%= f.label :visible, "Uncheck to make inactive" %>
-                    <% else %>
-                      <%= f.label :visible, "Check to change status to active" %>
-                    <% end %>
-                    <%= f.check_box :visible, :"data-action" => "change->updatebuilding#visible" %>
+                    <ol class="switches">
+                      <li>
+                        <%= f.check_box :visible, :"data-action" => "change->updatebuilding#visible"  %>
+                        <%= f.label :visible do %>
+                          <span class="label-text">Active</span>
+                          <span></span>
+                        <% end %>
+                      </li>
+                    </ol>
                   </div>
                 <% end %>
               </div>
