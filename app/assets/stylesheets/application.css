@@ -116,3 +116,12 @@ label {
     display: none;
   }
 }
+
+/* show/hide information panel */
+.infopanel--display {
+  display: block;
+}
+
+.infopanel--hide {
+  display: none;
+}
