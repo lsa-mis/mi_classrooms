@@ -37,7 +37,7 @@
 
   <%= link_to 'Show', @room, data: { "turbo-frame": "_top" } %>
   |
-  <%= link_to 'Back', rooms_path, data: { "turbo-frame": "_top" } %>
+  <%= link_to 'Back', room_path(@room), data: { "turbo-frame": "_top" } %>
 
   <br><br>
   <%= link_to 'Update a Building Image or Floor Maps', @room.building, class: "rounded-md hover:underline bg-blue-800 text-white px-2 py-1 mt-4"%>
