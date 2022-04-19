@@ -123,7 +123,7 @@ class Room < ApplicationRecord
   def acceptable_image
     return unless room_panorama.attached? || room_image.attached? || room_layout.attached? || gallery_image1.attached? || gallery_image2.attached? || gallery_image3.attached? || gallery_image4.attached? || gallery_image5.attached?
 
-    [room_panorama, room_image, room_layout, gallery_image1, gallery_image2, gallery_image3, gallery_image4, gallery_image5].each do |image|
+    [room_panorama, room_image, room_layout, gallery_image1, gallery_image2, gallery_image3, gallery_image4, gallery_image5].compact.each do |image|
 
       if image.attached?
         unless image.blob.byte_size <= 10.megabyte
