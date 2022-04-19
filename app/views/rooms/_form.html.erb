@@ -1,4 +1,4 @@
-<div class="mt-2">
+<div class="mt-2" data-controller="updateroom">
   <h2>
     Classroom <%= @room.display_name %>
   </h2>
@@ -6,7 +6,7 @@
     <%= "Room Rec #: #{@room.rmrecnbr}" %>
   </div>
   <hr>
-  <%= form_for @room do |f| %>
+  <%= form_with model: @room do |f| %>
     <% if @room.errors.any? %>
       <div id="error_explanation">
         <h2>
@@ -30,7 +30,7 @@
       <div>
         <ol class="switches">
           <li>
-            <%= f.check_box :visible, :"data-action" => "change->updateroom#visible" %>
+            <%= f.check_box :visible, :"data-action" => "change->updateroom#roomvisible" %>
             <%= f.label :visible do %>
               <span class="label-text">Active</span>
               <span></span>
@@ -52,7 +52,7 @@
             <%  if @room.room_panorama.attached? %>
               <%= render 'room_panorama', room: @room  %>
             <% end %>
-            <%= link_to 'Remove', delete_file_path(@room.room_panorama.id), data: { confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.room_panorama.attached? %>
+            <%= link_to 'Remove', delete_file_path(@room.room_panorama.id), remote: :true, data: { confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.room_panorama.attached? %>
             <br>
             <%= f.file_field :room_panorama %>
           </div>
@@ -65,42 +65,44 @@
           <div class="shadow pl-1">
             <%= f.label :room_image %>
             <%= image_tag(@room.room_image.representation(resize_to_fit: [100,100]), class: "building_image pr-2", alt: @room.facility_code_heprod ) if @room.room_image.representable? %>
-            <%= link_to 'Remove', delete_file_path(@room.room_image.id), data: { confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.room_image.attached? %>
+            <%= link_to 'Remove', delete_file_path(@room.room_image.id), remote: :true, data:{ confirm: "Are sure you?", "updateroom-target": "image1", action: "click->updateroom#tobedeleted" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.room_image.attached? %>
             <br>
-            <%= f.file_field :room_image %>    
+            <%= f.file_field :room_image %>
+            <div data-updateroom-target="image1text"> image room message</div>    
           </div>
-          <div class="shadow pl-1">
+          <div class="shadow pl-1" >
             <%= f.label :gallery_image1 %>
             <%= image_tag(@room.gallery_image1.representation(resize_to_fit: [100,100]), class: "building_image pr-2", alt: @room.facility_code_heprod ) if @room.gallery_image1.representable? %>
-            <%= link_to 'Remove', delete_file_path(@room.gallery_image1.id), data: { confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.gallery_image1.attached? %>
+            <%= link_to 'Remove', delete_file_path(@room.gallery_image1.id), remote: :true, data:{ confirm: "Are sure you?", "updateroom-target": "image2", action: "click->updateroom#tobedeleted" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.gallery_image1.attached? %>
             <br>
             <%= f.file_field :gallery_image1 %>
+            <div> image one message</div> 
           </div>
           <div class="shadow pl-1">
             <%= f.label :gallery_image2 %>
             <%= image_tag(@room.gallery_image2.representation(resize_to_fit: [100,100]), class: "building_image pr-2", alt: @room.facility_code_heprod ) if @room.gallery_image2.representable? %>
-            <%= link_to 'Remove', delete_file_path(@room.gallery_image2.id), data: { confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.gallery_image2.attached? %>
+            <%= link_to 'Remove', delete_file_path(@room.gallery_image2.id), remote: :true, data:{ confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.gallery_image2.attached? %>
             <br>
             <%= f.file_field :gallery_image2 %>
           </div>
           <div class="shadow pl-1">
             <%= f.label :gallery_image3 %>      
             <%= image_tag(@room.gallery_image3.representation(resize_to_fit: [100, 100]), class: "building_image pr-2", alt: @room.facility_code_heprod ) if @room.gallery_image3.representable? %>
-            <%= link_to 'Remove', delete_file_path(@room.gallery_image3.id), data: { confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.gallery_image3.attached? %>
+            <%= link_to 'Remove', delete_file_path(@room.gallery_image3.id), remote: :true, data:{ confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.gallery_image3.attached? %>
             <br>
             <%= f.file_field :gallery_image3 %>
           </div>
           <div class="shadow pl-1">
             <%= f.label :gallery_image4 %>
             <%= image_tag(@room.gallery_image4.representation(resize_to_fit: [100, 100]), class: "building_image pr-2", alt: @room.facility_code_heprod ) if @room.gallery_image4.representable? %>
-            <%= link_to 'Remove', delete_file_path(@room.gallery_image4.id), data: { confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.gallery_image4.attached? %>
+            <%= link_to 'Remove', delete_file_path(@room.gallery_image4.id), remote: :true, data:{ confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.gallery_image4.attached? %>
             <br>
             <%= f.file_field :gallery_image4 %>
           </div>
           <div class="shadow pl-1">
             <%= f.label :gallery_image5 %>      
             <%= image_tag(@room.gallery_image5.representation(resize_to_fit: [100, 100]), class: "building_image pr-2", alt: @room.facility_code_heprod ) if @room.gallery_image5.representable? %>
-            <%= link_to 'Remove', delete_file_path(@room.gallery_image5.id), data: { confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.gallery_image5.attached? %>
+            <%= link_to 'Remove', delete_file_path(@room.gallery_image5.id), remote: :true, data:{ confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.gallery_image5.attached? %>
             <br>
             <%= f.file_field :gallery_image5 %>
           </div>
@@ -113,7 +115,7 @@
           <div class=" shadow w-64">
             <%= f.label :room_layout %>
             <%= image_tag(@room.room_layout.representation(resize_to_limit: [100, 100]), class: "building_image pr-2", alt: @room.facility_code_heprod ) if @room.room_layout.representable? %>
-            <%= link_to 'Remove', delete_file_path(@room.room_layout.id), data: { confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.room_layout.attached? %>
+            <%= link_to 'Remove', delete_file_path(@room.room_layout.id), remote: :true, data: { confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.room_layout.attached? %>
             <br>
             <%= f.file_field :room_layout %>
           </div>
