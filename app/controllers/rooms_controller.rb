@@ -2,7 +2,7 @@ class RoomsController < ApplicationController
 include ActionView::RecordIdentifier
   before_action :set_redirection_url
   before_action :authenticate_user! 
-  before_action :set_room, only: [:show, :edit, :update, :destroy, :toggle_visibile, :floor_plan]
+  before_action :set_room, only: [:show, :edit, :update, :destroy, :floor_plan]
   before_action :set_filters_list, only: [:index]
   before_action :set_characteristics_array, only: [:index, :show]
 
@@ -80,14 +80,6 @@ include ActionView::RecordIdentifier
     end
   end
 
-  def toggle_visibile
-    @room.toggle! :visible
-    respond_to do |format|
-      format.html { redirect_to rooms_url, notice: 'Room was successfully updated.' }
-      format.turbo_stream { render turbo_stream: turbo_stream.update(dom_id(@room)), notice: 'Room was successfully updated.' }
-    end
-  end
-
   def floor_plan
     @floor_list = @room.building.floors
     @building = @room.building
@@ -101,8 +93,10 @@ include ActionView::RecordIdentifier
     end
 
     def set_room
-      fresh_when @room
-      @room = Room.includes(:building, :room_characteristics, :room_panorama_attachment, :room_contact).find(params[:id])
+      # fresh_when @room
+      # @room = Room.includes(:building, :room_characteristics, :room_panorama_attachment, :room_contact).find(params[:id])
+      @room = Room.find(params[:id])
+      fresh_when last_modified: @room.updated_at
       @room = @room.decorate
       authorize @room
     end

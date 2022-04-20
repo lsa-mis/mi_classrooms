@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
     @delete_file = ActiveStorage::Attachment.find(params[:id])
     authorize @delete_file
     @delete_file.purge
-    redirect_back(fallback_location: request.referer)
+    redirect_back(fallback_location: rooms_path)
   end
 
   private

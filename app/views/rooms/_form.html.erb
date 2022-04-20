@@ -1,118 +1,159 @@
 <div class="mt-2">
-<h2>
-  Classroom <%= @room.display_name %>
-</h2>
-<div class="ml-6 -mt-2">
-  <%= "Room Rec #: #{@room.rmrecnbr}" %>
-</div>
-<hr>
-<%= form_for @room do |f| %>
-  <% if @room.errors.any? %>
-    <div id="error_explanation">
-      <h2>
-        <%= "#{pluralize(@room.errors.count, "error")} prohibited this room from being saved:" %>
-      </h2>
-      <ul>
-        <% @room.errors.full_messages.each do |message| %>
-          <li>
-            <%= message %>
-          </li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit 'Save Room', class: "my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
+  <h2>
+    Classroom <%= @room.display_name %>
+  </h2>
+  <div class="ml-6 -mt-2">
+    <%= "Room Rec #: #{@room.rmrecnbr}" %>
   </div>
-
-  <div class="flex justify-start">
-    <div>
-      <ol class="switches">
-        <li>
-          <%= f.check_box :visible, :"data-action" => "change->updateroom#visible" %>
-          <%= f.label :visible do %>
-            <span class="label-text">Active</span>
-            <span></span>
+  <hr>
+  <%= form_with model: @room do |f| %>
+    <% if @room.errors.any? %>
+      <div id="error_explanation">
+        <h2>
+          <%= "#{pluralize(@room.errors.count, "error")} prohibited this room from being saved:" %>
+        </h2>
+        <ul>
+          <% @room.errors.full_messages.each do |message| %>
+            <li>
+              <%= message %>
+            </li>
           <% end %>
-        </li>
-      </ol>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="actions">
+      <%= f.submit 'Save Room', class: "my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
     </div>
-  </div>
 
-  <div class="grid grid-row-5" >
-
-    <div class="flex justify-start max-w-full">
-      <div class="px-2 m-2">
-        <%= f.label :room_panorama %>
-        <%  if @room.room_panorama.attached? %>
-          <%= render 'room_panorama', room: @room  %>
-        <% end %>
-        <%= f.file_field :room_panorama %>
-        <%= link_to 'Remove', delete_file_path(@room.room_panorama.id), data: { confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.room_panorama.attached? %>
-      </div>
-    </div>
-    <hr class="m-2">
-
-    <div class="grid grid-cols-1 justify-items-start lg:grid-cols-3 lg:gap-2">
-      <div class="shadow pl-1">
-        <%= f.label :room_image %>
-        <%= image_tag(@room.room_image.representation(resize_to_fit: [100,100]), class: "building_image pr-2", alt: @room.facility_code_heprod ) if @room.room_image.representable? %>
-        <%= link_to 'Remove', delete_file_path(@room.room_image.id), data: { confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.room_image.attached? %>
-        <br>
-        <%= f.file_field :room_image %>    
-      </div>
-      <div class="shadow pl-1">
-        <%= f.label :gallery_image1 %>
-        <%= image_tag(@room.gallery_image1.representation(resize_to_fit: [100,100]), class: "building_image pr-2", alt: @room.facility_code_heprod ) if @room.gallery_image1.representable? %>
-        <%= link_to 'Remove', delete_file_path(@room.gallery_image1.id), data: { confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.gallery_image1.attached? %>
-        <br>
-        <%= f.file_field :gallery_image1 %>
-      </div>
-      <div class="shadow pl-1">
-        <%= f.label :gallery_image2 %>
-        <%= image_tag(@room.gallery_image2.representation(resize_to_fit: [100,100]), class: "building_image pr-2", alt: @room.facility_code_heprod ) if @room.gallery_image2.representable? %>
-        <%= link_to 'Remove', delete_file_path(@room.gallery_image2.id), data: { confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.gallery_image2.attached? %>
-        <br>
-        <%= f.file_field :gallery_image2 %>
-      </div>
-
-      <div class="shadow pl-1">
-        <%= f.label :gallery_image3 %>      
-        <%= image_tag(@room.gallery_image3.representation(resize_to_fit: [100, 100]), class: "building_image pr-2", alt: @room.facility_code_heprod ) if @room.gallery_image3.representable? %>
-        <%= link_to 'Remove', delete_file_path(@room.gallery_image3.id), data: { confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.gallery_image3.attached? %>
-        <br>
-        <%= f.file_field :gallery_image3 %>
-      </div>
-      <div class="shadow pl-1">
-        <%= f.label :gallery_image4 %>
-        <%= image_tag(@room.gallery_image4.representation(resize_to_fit: [100, 100]), class: "building_image pr-2", alt: @room.facility_code_heprod ) if @room.gallery_image4.representable? %>
-        <%= link_to 'Remove', delete_file_path(@room.gallery_image4.id), data: { confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.gallery_image4.attached? %>
-        <br>
-        <%= f.file_field :gallery_image4 %>
-      </div>
-      <div class="shadow pl-1">
-        <%= f.label :gallery_image5 %>      
-        <%= image_tag(@room.gallery_image5.representation(resize_to_fit: [100, 100]), class: "building_image pr-2", alt: @room.facility_code_heprod ) if @room.gallery_image5.representable? %>
-        <%= link_to 'Remove', delete_file_path(@room.gallery_image5.id), data: { confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.gallery_image5.attached? %>
-        <br>
-        <%= f.file_field :gallery_image5 %>
+    <div class="flex justify-start">
+      <div>
+        <ol class="switches">
+          <li>
+            <%= f.check_box :visible, :"data-action" => "change->updateroom#roomvisible" %>
+            <%= f.label :visible do %>
+              <span class="label-text">Active</span>
+              <span></span>
+            <% end %>
+          </li>
+        </ol>
       </div>
     </div>
 
-    <hr class="m-2">
-    <div class="flex justify-start max-w-full">
-      <div class=" shadow w-64">
-        <%= f.label :room_layout %>
-        <%= image_tag(@room.room_layout.representation(resize_to_limit: [100, 100]), class: "building_image pr-2", alt: @room.facility_code_heprod ) if @room.room_layout.representable? %>
-        <%= f.file_field :room_layout %>
-        <%= link_to 'Remove', delete_file_path(@room.room_layout.id), data: { confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.room_layout.attached? %>
+    <hr class="m-2 w-1/4">
+
+    <div class="grid grid-row-3 gap-2" >
+      <div class="py-2 border-b-2 border-gray-400">
+        <h3>Main Image</h3>
+        <div class="flex-row justify-start max-w-full">
+          <div class="shadow pl-1" data-controller="updateroom" data-updateroom-image-value="panorama">
+            <%= f.label :panoramaimage, 'Panorama' %>
+            <%  if @room.room_panorama.attached? %>
+              <%= render 'room_panorama', room: @room  %>
+            <% end %>            
+            <div class="flex-row" data-updateroom-target="panorama">
+              <div>
+                <%= link_to 'Remove', delete_file_path(@room.room_panorama.id), remote: :true, data:{ action: "click->updateroom#deletepanorama" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.room_panorama.attached? %>
+              </div>
+              <div>
+                <%= f.file_field :room_panorama %>
+              </div>   
+            </div>
+            <div class="px-2" data-updateroom-target="panoramatext"></div> 
+          </div>
+        </div>
+      </div>
+
+      <div class="py-2 border-b-2 border-gray-400">
+        <h3>Gallery Images</h3>
+        <div class="grid grid-cols-1 justify-items-start lg:grid-cols-3 lg:gap-2">
+
+          <div class="shadow pl-1" data-controller="updateroom" data-updateroom-image-value="roomimage">
+            <%= f.label :room_image, 'Room Image' %>
+            <%= image_tag(@room.room_image.representation(resize_to_fit: [100,100]), class: "building_image pr-2", alt: @room.facility_code_heprod ) if @room.room_image.representable? %>
+            <div data-updateroom-target="roomimage">
+              <%= link_to 'Remove', delete_file_path(@room.room_image.id), remote: :true, data:{ action: "click->updateroom#deleteroomimage" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.room_image.attached? %>
+              <%= f.file_field :room_image %>   
+            </div>
+            <div class="px-2" data-updateroom-target="roomimagetext"></div> 
+          </div>
+
+          <div class="shadow pl-1" data-controller="updateroom" data-updateroom-image-value="galleryimage1">
+            <%= f.label :gallery_image1, 'Gallery Image #1' %>
+            <%= image_tag(@room.gallery_image1.representation(resize_to_fit: [100,100]), class: "building_image pr-2", alt: @room.facility_code_heprod ) if @room.gallery_image1.representable? %>
+            <div data-updateroom-target="galleryimage1">
+              <%= link_to 'Remove', delete_file_path(@room.gallery_image1.id), remote: :true, data:{ action: "click->updateroom#deletegalleryimage1" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.gallery_image1.attached? %>
+              <%= f.file_field :gallery_image1 %>   
+            </div>
+            <div class="px-2" data-updateroom-target="galleryimage1text"></div> 
+          </div>
+
+          <div class="shadow pl-1" data-controller="updateroom" data-updateroom-image-value="galleryimage2">
+            <%= f.label :gallery_image2, 'Gallery Image #2' %>
+            <%= image_tag(@room.gallery_image2.representation(resize_to_fit: [100,100]), class: "building_image pr-2", alt: @room.facility_code_heprod ) if @room.gallery_image2.representable? %>
+            <div data-updateroom-target="galleryimage2">
+              <%= link_to 'Remove', delete_file_path(@room.gallery_image2.id), remote: :true, data:{ action: "click->updateroom#deletegalleryimage2" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.gallery_image2.attached? %>
+              <%= f.file_field :gallery_image2 %>   
+            </div>
+            <div class="px-2" data-updateroom-target="galleryimage2text"></div> 
+          </div>
+
+          <div class="shadow pl-1" data-controller="updateroom" data-updateroom-image-value="galleryimage3">
+            <%= f.label :gallery_image3, 'Gallery Image #3' %>
+            <%= image_tag(@room.gallery_image3.representation(resize_to_fit: [100,100]), class: "building_image pr-2", alt: @room.facility_code_heprod ) if @room.gallery_image3.representable? %>
+            <div data-updateroom-target="galleryimage3">
+              <%= link_to 'Remove', delete_file_path(@room.gallery_image3.id), remote: :true, data:{ action: "click->updateroom#deletegalleryimage3" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.gallery_image3.attached? %>
+              <%= f.file_field :gallery_image3 %>   
+            </div>
+            <div class="px-2" data-updateroom-target="galleryimage3text"></div> 
+          </div>
+
+          <div class="shadow pl-1" data-controller="updateroom" data-updateroom-image-value="galleryimage4">
+            <%= f.label :gallery_image4, 'Gallery Image #4' %>
+            <%= image_tag(@room.gallery_image4.representation(resize_to_fit: [100,100]), class: "building_image pr-2", alt: @room.facility_code_heprod ) if @room.gallery_image4.representable? %>
+            <div data-updateroom-target="galleryimage4">
+              <%= link_to 'Remove', delete_file_path(@room.gallery_image4.id), remote: :true, data:{ action: "click->updateroom#deletegalleryimage4" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.gallery_image4.attached? %>
+              <%= f.file_field :gallery_image4 %>   
+            </div>
+            <div class="px-2" data-updateroom-target="galleryimage4text"></div> 
+          </div>
+
+          <div class="shadow pl-1" data-controller="updateroom" data-updateroom-image-value="galleryimage5">
+            <%= f.label :gallery_image5, 'Gallery Image #5' %>
+            <%= image_tag(@room.gallery_image5.representation(resize_to_fit: [100,100]), class: "building_image pr-2", alt: @room.facility_code_heprod ) if @room.gallery_image5.representable? %>
+            <div data-updateroom-target="galleryimage5">
+              <%= link_to 'Remove', delete_file_path(@room.gallery_image5.id), remote: :true, data:{ action: "click->updateroom#deletegalleryimage5" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.gallery_image5.attached? %>
+              <%= f.file_field :gallery_image5 %>   
+            </div>
+            <div class="px-2" data-updateroom-target="galleryimage5text"></div> 
+          </div>
+        </div>
+      </div>
+
+      <div class="py-2 border-b-2 border-gray-400">
+        <h3>Room Layout</h3>
+        <div class="flex-row justify-start max-w-full">
+          <div class="shadow pl-1" data-controller="updateroom" data-updateroom-image-value="roomlayout">
+            <%= f.label :room_layout, 'Room Layout' %>
+            <%= image_tag(@room.room_layout.representation(resize_to_fit: [100,100]), class: "building_image pr-2", alt: @room.facility_code_heprod ) if @room.room_layout.representable? %>
+            <div data-updateroom-target="roomlayout">
+              <div>
+                <%= link_to 'Remove', delete_file_path(@room.room_layout.id), remote: :true, data:{ action: "click->updateroom#deleteroomlayout" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.room_layout.attached? %>
+              </div>
+              <div>
+                <%= f.file_field :room_layout %> 
+              </div>   
+            </div>
+            <div class="px-2" data-updateroom-target="roomlayouttext"></div> 
+          </div>
+
+        </div>
       </div>
     </div>
-  </div>
-  <hr class="m-2">
-  <div class="actions">
-    <%= f.submit 'Save Room', class: "my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
-  </div>
-<% end %>
+
+    <div class="actions pt-2">
+      <%= f.submit 'Save Room', class: "my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
+    </div>
+
+  <% end %>
 </div>
