@@ -1,23 +1,65 @@
 <%= turbo_frame_tag dom_id(building) do  %>
   <h2 class="sr-only">Building</h2>
-  <div class="mt-2 mb-3 px-2 sm:px-0 hover:underline">
-    <%= link_to rooms_path(:query => building.name), data: { "turbo-frame": "_top" } do %>
-      <% if building.building_image.representable? %>
-        <%=  image_tag(building.building_image.representation(resize_to_fill: [150, 107]), class: 'p-2', alt: "#{building.name}") %>
-      <% else %>
-        <%=  image_tag('building_placeholder_small', height: '107', width: '150', class: 'p-2', alt: "building placeholder") %>
-      <% end %>
-      <div class="text-xs px-2 font-bold">
-        <%= building.name.titleize %>
-      </div>
-      <div class="text-xs px-2 font-medium">
-        <% if building.nick_name.present? %>
-          (<%= building.nick_name %>)
+  <% if building.visible %>
+    <div class="mt-2 mb-3 px-2 sm:px-0 hover:underline">
+      <%= link_to rooms_path(:query => building.name), data: { "turbo-frame": "_top" } do %>
+        <% if building.building_image.representable? %>
+          <%=  image_tag(building.building_image.representation(resize_to_fill: [150, 107]), class: 'p-2', alt: "#{building.name}") %>
+        <% else %>
+          <%=  image_tag('building_placeholder_small', height: '107', width: '150', class: 'p-2', alt: "building placeholder") %>
         <% end %>
-      </div>
-      <div class="text-xs px-2">
-        <%= building.address.titleize %>
-      </div>
+        <div class="text-xs px-2 font-bold">
+          <%= building.name.titleize %>
+        </div>
+        <div class="text-xs px-2 font-medium">
+          <% if building.nick_name.present? %>
+            (<%= building.nick_name %>)
+          <% end %>
+        </div>
+        <div class="text-xs px-2">
+          <%= building.address.titleize %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="mt-2 mb-3 px-2 sm:px-0">
+        <% if building.building_image.representable? %>
+          <%=  image_tag(building.building_image.representation(resize_to_fill: [150, 107]), class: 'opacity-50 saturate-0 p-2', alt: "#{building.name}") %>
+        <% else %>
+          <%=  image_tag('building_placeholder_small', height: '107', width: '150', class: 'opacity-50 saturate-0 p-2', alt: "building placeholder") %>
+        <% end %>
+        <div class="text-xs px-2 font-bold">
+          <%= building.name.titleize %>
+        </div>
+        <div class="text-xs px-2 font-medium">
+          <% if building.nick_name.present? %>
+            (<%= building.nick_name %>)
+          <% end %>
+        </div>
+        <div class="text-xs px-2">
+          <%= building.address.titleize %>
+        </div>
+        <div class="text-base text-yellow-700">
+          This building is inactive 
+        </div>
+    </div>
+  <% end %>
+
+  <% if building.notes.alert.present? %>
+    <div class="bg-yellow-550 text-sm px-2 mb-1 flex items-center space-x-2">
+      <%= svg('alert') %>
+        <span>Alert</span>
+    </div>
+  <% end %>
+ 
+  <div>
+    <% if current_user && policy(Building).edit? %>
+      <%= link_to building_path(building), data: { "turbo-frame": "_top" } do %>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          <title>Edit building</title>
+        </svg>
+      <% end %>
     <% end %>
   </div>
 <% end %>

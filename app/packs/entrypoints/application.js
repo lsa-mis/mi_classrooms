@@ -18,6 +18,8 @@ import '../stylesheets/_flash_errors.sass'
 import '../stylesheets/ribbons.sass'
 import '../stylesheets/rooms.sass'
 import '../stylesheets/search.sass'
+import 'lightgallery/css/lightgallery.css'
+
 import gtag from '../src/analytics'
 import 'pannellum/build/pannellum.css'
 function importAll(r) {

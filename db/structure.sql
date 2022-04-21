@@ -178,6 +178,38 @@ ALTER SEQUENCE public.announcements_id_seq OWNED BY public.announcements.id;
 
 
 --
+-- Name: api_update_logs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.api_update_logs (
+    id bigint NOT NULL,
+    result text NOT NULL,
+    status character varying NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: api_update_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.api_update_logs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: api_update_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.api_update_logs_id_seq OWNED BY public.api_update_logs.id;
+
+
+--
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -208,7 +240,8 @@ CREATE TABLE public.buildings (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     tsv tsvector,
-    campus_record_id bigint
+    campus_record_id bigint,
+    visible boolean DEFAULT true
 );
 
 
@@ -306,7 +339,8 @@ CREATE TABLE public.notes (
     noteable_id bigint NOT NULL,
     parent_id integer,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    alert boolean DEFAULT false
 );
 
 
@@ -538,7 +572,9 @@ CREATE TABLE public.rooms (
     tsv tsvector,
     dept_group_description character varying,
     building_name character varying,
-    campus_record_id bigint
+    campus_record_id bigint,
+    ada_seat_count integer,
+    nickname character varying
 );
 
 
@@ -646,6 +682,13 @@ ALTER TABLE ONLY public.active_storage_variant_records ALTER COLUMN id SET DEFAU
 --
 
 ALTER TABLE ONLY public.announcements ALTER COLUMN id SET DEFAULT nextval('public.announcements_id_seq'::regclass);
+
+
+--
+-- Name: api_update_logs id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.api_update_logs ALTER COLUMN id SET DEFAULT nextval('public.api_update_logs_id_seq'::regclass);
 
 
 --
@@ -763,6 +806,14 @@ ALTER TABLE ONLY public.active_storage_variant_records
 
 ALTER TABLE ONLY public.announcements
     ADD CONSTRAINT announcements_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: api_update_logs api_update_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.api_update_logs
+    ADD CONSTRAINT api_update_logs_pkey PRIMARY KEY (id);
 
 
 --
@@ -1160,6 +1211,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211129210918'),
 ('20220104182624'),
 ('20220111201258'),
-('20220222151031');
+('20220222151031'),
+('20220318205639'),
+('20220328201915'),
+('20220328220102'),
+('20220331125213'),
+('20220412123134');
 
 

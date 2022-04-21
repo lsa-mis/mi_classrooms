@@ -10,7 +10,7 @@
 # Put here to keep records of these updates
 #
 
-locations = ['home_page', 'find_a_room_page']
+locations = ['home_page', 'find_a_room_page', 'about_page']
 existing_locations = Announcement.all.pluck(:location)
 
 locations.each do |location|
@@ -63,3 +63,32 @@ end
 # Building.find_by(bldrecnbr: 1005047).update(nick_name: "PALM")
 # Building.find_by(bldrecnbr: 1000208).update(nick_name: "RAND")
 
+# Room.find_by(rmrecnbr: 2020239).update(ada_seat_count: 1)
+# Room.find_by(rmrecnbr: 2113853).update(ada_seat_count: 4)
+# Room.find_by(rmrecnbr: 2017506).update(ada_seat_count: 3)
+# Room.find_by(rmrecnbr: 2017509).update(ada_seat_count: 8)
+# Room.find_by(rmrecnbr: 2017518).update(ada_seat_count: 2)
+# Room.find_by(rmrecnbr: 2017526).update(ada_seat_count: 4)
+# Room.find_by(rmrecnbr: 2017624).update(ada_seat_count: 10)
+# Room.find_by(rmrecnbr: 2020228).update(ada_seat_count: 4)
+# Room.find_by(rmrecnbr: 2026595).update(ada_seat_count: 2)
+# Room.find_by(rmrecnbr: 2031968).update(ada_seat_count: 4)
+# Room.find_by(rmrecnbr: 2031973).update(ada_seat_count: 2)
+# Room.find_by(rmrecnbr: 2031976).update(ada_seat_count: 8)
+# Room.find_by(rmrecnbr: 2031981).update(ada_seat_count: 8)
+# Room.find_by(rmrecnbr: 2032110).update(ada_seat_count: 6)
+# Room.find_by(rmrecnbr: 2032118).update(ada_seat_count: 2)
+# Room.find_by(rmrecnbr: 2032119).update(ada_seat_count: 3)
+# Room.find_by(rmrecnbr: 2032133).update(ada_seat_count: 2)
+# Room.find_by(rmrecnbr: 2019609).update(ada_seat_count: 2)
+# # Room.find_by(rmrecnbr: 2043027).update(ada_seat_count: 2)
+# Room.find_by(rmrecnbr: 2020098).update(ada_seat_count: 3)
+# Room.find_by(rmrecnbr: 2186754).update(ada_seat_count: 4)
+# Room.find_by(rmrecnbr: 2016322).update(ada_seat_count: 4)
+# Room.find_by(rmrecnbr: 2117778).update(ada_seat_count: 4)
+# Room.find_by(rmrecnbr: 2117781).update(ada_seat_count: 5)
+
+# Room.find_by(facility_code_heprod: "MLB1200").update(nickname: 'Aud 3')
+# Room.find_by(facility_code_heprod: "MLB1220").update(nickname: 'Lec 1')
+# Room.find_by(facility_code_heprod: "MLB1400").update(nickname: 'Aud 4')
+# Room.find_by(facility_code_heprod: "MLB1420").update(nickname: 'Lec 2')

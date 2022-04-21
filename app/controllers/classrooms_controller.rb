@@ -1,4 +1,5 @@
 class ClassroomsController < ApplicationController
+  # To handle redirects from legacy classroom links
   before_action :authenticate_user!
 
   def index

@@ -1,0 +1,28 @@
+<%= render './layouts/headness.html.haml' %>
+<% if user_signed_in? && current_user.admin %>
+  <% if api_status == 'failed' %>
+    <div class="grid w-full bg-yellow-550 text-sm place-content-center py-1">
+      The Classrooms Update Script failed to run today. Please report the issue.
+    </div>
+  <% elsif api_status == "error" %>
+    <div id="options" data-controller="visibility">
+      <div class="flex flex-row justify-center items-center bg-red-800 text-red-100">
+        <div class="py-1 ">
+          <button data-action="visibility#toggleTargets" class="text-sm hover:underline">
+            The Classrooms Update Script ended up with errors.
+          </button>
+        </div>
+        <div>
+          <a id="myCustomTrigger" class="text-sm hover:underline px-1" href="#" data-email="<%= session[:user_email]%>">Report an Issue</a>
+        </div>
+      </div>
+      <div data-visibility-target="hideable" hidden>
+        <div class="bg-red-800 text-red-100 text-sm flex justify-center py-1 border">
+          <%= api_log_text %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <script type="text/javascript" src="https://umlsait.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/r5gghz/b/3/bc54840da492f9ca037209037ef0522a/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=51ecac03"></script>
+  <%= javascript_include_tag 'feedback', async: true %>
+<% end %>

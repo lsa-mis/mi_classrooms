@@ -22,6 +22,7 @@ Rails.application.routes.draw do
 
   resources :buildings do
     resources :floors, module: :buildings
+    resources :notes, module: :buildings
   end
 
   resources :announcements
@@ -38,5 +39,7 @@ Rails.application.routes.draw do
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: "/letter_opener"
   end
+
+  get 'application/delete_file_attachment/:id', to: 'application#delete_file_attachment', as: :delete_file
   
 end

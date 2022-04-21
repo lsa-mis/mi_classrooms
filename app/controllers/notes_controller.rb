@@ -2,17 +2,8 @@ class NotesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_note
 
-  def show
-    authorize @note
-  end
-
-  def edit
-    authorize @note
-  end
-
   def update
-    authorize @note
-    if @note.update(note_params)
+    if @note.update(note_params) && @note.update(user: current_user)
       redirect_to @note
     else
       render :edit, status: :unprocessable_entity
@@ -20,7 +11,6 @@ class NotesController < ApplicationController
   end
 
   def destroy
-    authorize @note
     @note.destroy
     respond_to do |format|
       format.turbo_stream {}
@@ -32,9 +22,10 @@ class NotesController < ApplicationController
 
   def set_note
     @note = Note.find(params[:id])
+    authorize @note
   end
 
   def note_params
-    params.require(:note).permit(:body)
+    params.require(:note).permit(:body, :alert)
   end
 end

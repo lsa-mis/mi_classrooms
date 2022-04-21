@@ -1,6 +1,5 @@
 class NotePolicy < ApplicationPolicy
   
-
   def index?
     user_in_non_admin_group?
   end
@@ -12,16 +11,9 @@ class NotePolicy < ApplicationPolicy
   def create?
     user.admin
   end
-  # def toggle_visibility?
-  #   user && user_in_admin_group?
-  # end
-
-  def edit?
-    user.admin
-  end
 
   def update?
-    edit?
+    user.admin
   end
 
   def destroy?

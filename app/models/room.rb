@@ -42,6 +42,13 @@ class Room < ApplicationRecord
   has_one_attached :room_image
   has_one_attached :room_layout
   has_many :notes, as: :noteable
+  has_one_attached :gallery_image1
+  has_one_attached :gallery_image2
+  has_one_attached :gallery_image3
+  has_one_attached :gallery_image4
+  has_one_attached :gallery_image5
+
+  validate :acceptable_image
 
   multisearchable(
     against: [:rmrecnbr, :room_number, :building_bldrecnbr],
@@ -64,7 +71,6 @@ class Room < ApplicationRecord
       }
     }
   )
-
 
   pg_search_scope(
     :with_all_characteristics,
@@ -94,12 +100,42 @@ class Room < ApplicationRecord
     where(rmtyp_description: ["Classroom"]).where.not(facility_code_heprod: nil).where('instructional_seating_count > ?', 1)
   }
 
+  scope :classrooms_inactive, -> {
+    where(rmtyp_description: ["Classroom"], visible: false).where.not(facility_code_heprod: nil).where('instructional_seating_count > ?', 1)
+  }
+
   scope :classroom_labs, -> {
   where(rmtyp_description: ["Class Laboratory"])
   }
 
-scope :classrooms_including_labs, -> {
-  where(rmtyp_description: ["Classroom", "Class Laboratory"])
-}
+  scope :classrooms_including_labs, -> {
+    where(rmtyp_description: ["Classroom", "Class Laboratory"])
+  }
+
+  def display_name
+    if self.nickname.present?
+      "#{self.facility_code_heprod} - #{self.nickname}"
+    else
+      "#{self.facility_code_heprod}"
+    end
+  end
+
+  def acceptable_image
+    return unless room_panorama.attached? || room_image.attached? || room_layout.attached? || gallery_image1.attached? || gallery_image2.attached? || gallery_image3.attached? || gallery_image4.attached? || gallery_image5.attached?
+
+    [room_panorama, room_image, room_layout, gallery_image1, gallery_image2, gallery_image3, gallery_image4, gallery_image5].compact.each do |image|
+
+      if image.attached?
+        unless image.blob.byte_size <= 10.megabyte
+          errors.add(image.name, "is too big - file size cannot exceed 5Mbyte")
+        end
+
+        acceptable_types = ["image/png", "image/jpeg", "application/pdf"]
+        unless acceptable_types.include?(image.content_type)
+          errors.add(image.name, "must be file type PDF, JPEG or PNG")
+        end
+      end
+    end
+  end
 
 end

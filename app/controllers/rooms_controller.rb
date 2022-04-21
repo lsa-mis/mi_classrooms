@@ -1,8 +1,8 @@
 class RoomsController < ApplicationController
 include ActionView::RecordIdentifier
+  before_action :set_redirection_url
   before_action :authenticate_user! 
-  skip_after_action :verify_policy_scoped, only: :index
-  before_action :set_room, only: [:show, :edit, :update, :destroy, :toggle_visibile, :floor_plan]
+  before_action :set_room, only: [:show, :edit, :update, :destroy, :floor_plan]
   before_action :set_filters_list, only: [:index]
   before_action :set_characteristics_array, only: [:index, :show]
 
@@ -11,15 +11,25 @@ include ActionView::RecordIdentifier
   def index
     @sorted = false
     buildings_ids = Room.classrooms.pluck(:building_bldrecnbr).uniq
-    @buildings = Building.where(bldrecnbr: buildings_ids).order(:name)
+    if params[:inactive_buildings].present?
+      @buildings = Building.where(bldrecnbr: buildings_ids, visible: false).order(:name)
+    else
+      @buildings = Building.where(bldrecnbr: buildings_ids).order(:name)
+    end
+
     @rooms_page_announcement = Announcement.find_by(location: "find_a_room_page")
     @all_rooms_number = Room.classrooms.count
     @schools = Room.classrooms.pluck(:dept_group_description).uniq.sort
+    if params[:inactive_rooms].present?
+      @rooms = Room.classrooms_inactive
+    else
+      @rooms = Room.classrooms
+    end
     if params[:direction].present?
       @sorted = true
-      @rooms = Room.classrooms.includes([:building, :room_contact]).reorder(:instructional_seating_count => params[:direction].to_sym)
+      @rooms = @rooms.includes([:building, :room_contact]).reorder(:instructional_seating_count => params[:direction].to_sym)
     else
-      @rooms = Room.classrooms.includes([:building, :room_contact]).reorder(:building_name)
+      @rooms = @rooms.includes([:building, :room_contact]).reorder(:building_name)
       floors = sort_floors(@rooms.pluck(:floor).uniq)
       @rooms = @rooms.order_as_specified(floor: floors).order(:room_number => :asc)
     end
@@ -28,7 +38,7 @@ include ActionView::RecordIdentifier
     @rooms = @rooms.with_all_characteristics(params[:room_characteristics]) if params[:room_characteristics].present?
     @rooms = @rooms.where('instructional_seating_count >= ?', params[:min_capacity].to_i) if params[:max_capacity].present?
     @rooms = @rooms.where('instructional_seating_count <= ?', params[:max_capacity].to_i) if params[:max_capacity].present?
-    @rooms = @rooms.where('facility_code_heprod LIKE ?', "%#{params[:classroom_name].upcase}%") if params[:classroom_name].present?
+    @rooms = @rooms.where('facility_code_heprod LIKE ? OR UPPER(nickname) LIKE ?', "%#{params[:classroom_name].upcase}%", "%#{params[:classroom_name].upcase}%") if params[:classroom_name].present?
 
     authorize @rooms
 
@@ -42,9 +52,10 @@ include ActionView::RecordIdentifier
   # GET /rooms/1
   # GET /rooms/1.json
   def show
+    redirect_to rooms_path, notice: "Room is inactive" unless ( @room.visible && @room.building.visible ) || session[:user_admin]
     @room_chars = @room.room_characteristics.select { |c| c}
     @room_chars_short = @room.characteristics
-    authorize @room
+    @building = Building.find_by(bldrecnbr: @room.building_bldrecnbr)
     respond_to do |format|
       format.html
       format.json { render json: @room, serializer: RoomSerializer }
@@ -53,13 +64,11 @@ include ActionView::RecordIdentifier
 
   # GET /rooms/1/edit
   def edit
-    authorize @room
   end
 
   # PATCH/PUT /rooms/1
   # PATCH/PUT /rooms/1.json
   def update
-    authorize @room
     respond_to do |format|
       if @room.update(room_params)
         format.html { redirect_to @room, notice: 'Room was successfully updated.' }
@@ -71,17 +80,7 @@ include ActionView::RecordIdentifier
     end
   end
 
-  def toggle_visibile
-    authorize @room
-    @room.toggle! :visible
-    respond_to do |format|
-      format.html { redirect_to rooms_url, notice: 'Room was successfully updated.' }
-      format.turbo_stream { render turbo_stream: turbo_stream.update(dom_id(@room)), notice: 'Room was successfully updated.' }
-    end
-  end
-
   def floor_plan
-    authorize @room
     @floor_list = @room.building.floors
     @building = @room.building
     @rooms_list = Room.where(building_bldrecnbr: @room.building, floor: @room.floor, rmtyp_description: "Classroom").order(:room_number)
@@ -89,15 +88,29 @@ include ActionView::RecordIdentifier
 
   private
 
+    def set_redirection_url
+      $baseURL = request.fullpath
+    end
+
     def set_room
-      fresh_when @room
-      @room = Room.includes(:building, :room_characteristics, :room_panorama_attachment, :room_contact).find(params[:id])
+      # fresh_when @room
+      # @room = Room.includes(:building, :room_characteristics, :room_panorama_attachment, :room_contact).find(params[:id])
+      @room = Room.find(params[:id])
+      fresh_when last_modified: @room.updated_at
       @room = @room.decorate
+      authorize @room
     end
     
     # Only allow a list of trusted parameters through.
     def room_params
-      params.require(:room).permit(:rmrecnbr, :floor, :room_number, :rmtyp_description, :dept_id, :dept_grp, :dept_description, :square_feet, :instructional_seating_count, :visible, :building_bldrecnbr, :room_characteristics, :min_capacity, :max_capacity, :school_or_college_name, :room_image, :room_panorama, :room_layout)
+      params.require(:room).permit(:rmrecnbr, :floor, :room_number, :rmtyp_description, 
+                                  :dept_id, :dept_grp, :dept_description, :square_feet, 
+                                  :instructional_seating_count, :visible, :building_bldrecnbr, 
+                                  :room_characteristics, :min_capacity, :max_capacity, 
+                                  :school_or_college_name, :inactive_buildings, :inactive_rooms,
+                                  :room_image, :room_panorama, 
+                                  :room_layout, :gallery_image1, :gallery_image2, 
+                                  :gallery_image3, :gallery_image4, :gallery_image5)
     end
 
     def filtering_params
@@ -109,6 +122,14 @@ include ActionView::RecordIdentifier
       if params.present?
         capacity = ""
         params.each do |k, v|
+          if k == "inactive_rooms"
+            filters['Filters'] = k.titleize
+            break
+          end
+          if k == "inactive_buildings"
+            filters = {}
+            break
+          end
           unless k == 'controller' || k == 'action' || k == 'direction' || k == 'format' || k == 'page' || k == 'items'
             unless v.empty?
               case k

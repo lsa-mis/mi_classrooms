@@ -57,6 +57,14 @@ class Buildings::FloorsController < ApplicationController
 
   end
 
+  def destroy
+    @floor = Floor.find(params[:id])
+    authorize @floor
+    @floor.destroy
+    redirect_back(fallback_location: request.referer, 
+                  notice: "Floor map was deleted")
+  end
+
   private
   
     def floor_params

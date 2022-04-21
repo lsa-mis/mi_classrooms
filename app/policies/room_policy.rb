@@ -1,18 +1,7 @@
 class RoomPolicy < ApplicationPolicy
-  
-  class Scope < Scope
-
-    def resolve
-      scope.all
-    end
-  end
 
   def index?
     user_in_non_admin_group?
-  end
-
-  def new?
-    false
   end
 
   def show?
@@ -23,12 +12,8 @@ class RoomPolicy < ApplicationPolicy
     user_in_non_admin_group?
   end
 
-  def edit?
-    user.admin
-  end
-
   def update?
-    edit?
+    user.admin
   end
 
 end

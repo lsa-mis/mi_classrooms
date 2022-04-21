@@ -29,6 +29,7 @@ class Building < ApplicationRecord
   geocoded_by :address # can also be an IP address
   has_one_attached :building_image
   has_many :floors, primary_key: 'bldrecnbr', foreign_key: 'building_bldrecnbr'
+  has_many :notes, as: :noteable
 
   multisearchable(
     against: [:name, :nick_name, :abbreviation, :bldrecnbr],
@@ -50,6 +51,8 @@ class Building < ApplicationRecord
       }
     }
   )
+
+  scope :inactive, -> { where(visible: false) }
 
   scope :ann_arbor_campus, -> {
     where("zip ILIKE ANY ( array[?] )", ["48103%", "48104%", "48105%", "48109%"])

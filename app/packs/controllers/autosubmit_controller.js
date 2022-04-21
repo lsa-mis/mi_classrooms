@@ -14,7 +14,6 @@ export default class extends Controller {
 
   checkboxSubmit() {
     clearTimeout(this.timeout)
-
     this.timeout = setTimeout(() => {
       this.statusTarget.textContent = 'Updating...'
       Turbo.navigator.submitForm(this.formTarget)

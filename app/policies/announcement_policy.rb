@@ -1,10 +1,4 @@
 class AnnouncementPolicy < ApplicationPolicy
-  attr_reader :user, :announcement
-
-  def initialize(user, announcement)
-    @user = user
-    @announcement = announcement
-  end
 
   def index?
     user.admin
@@ -14,12 +8,8 @@ class AnnouncementPolicy < ApplicationPolicy
     user.admin
   end  
 
-  def edit?
-    user.admin
-  end
-
   def update?
-    edit?
+    user.admin
   end
 
   def cancel?

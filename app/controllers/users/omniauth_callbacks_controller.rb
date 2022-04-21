@@ -1,5 +1,6 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   skip_before_action :verify_authenticity_token, only: :saml
+  before_action :store_user_location!
   before_action :set_omni_auth_service
   before_action :set_user
   attr_reader :omni_auth_service, :user, :service
@@ -12,8 +13,9 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     handle_auth "Saml"
   end
 
-  def after_sign_in_path_for(resource_or_scope)
-    stored_location_for(resource_or_scope) || super
+  def store_user_location!
+    # :user is the scope we are authenticating
+    store_location_for(:user, $baseURL)
   end
 
   private
@@ -95,6 +97,7 @@ def set_user
     
     session[:user_memberships] = membership
     session[:user_admin] = admin
+    session[:user_email] = @user.email
   end
 end
 

@@ -1,0 +1,47 @@
+<div class="container px-1 mb-20">
+ <h1>Room Management</h1>
+
+  <div class="ml-6 -mt-2 px-2 shadow-md" data-controller="infopanel">
+    <div data-infopanel-target="info_text_short_area" class="infopanel--display">
+      <p>Use this view to manage a room <span class="pl-2 italic">...more</span>
+      <button class="" type="button" aria-hidden="true" title="Expand infotext area" data-action="click->infopanel#toggle touch->infopanel#toggle" >
+        <div class="h-layout h-highlight-item"><%= svg("info-down") %></div>
+        <span class="sr-only">Expand infotext area</span>
+      </button>
+      </p>
+    </div>
+    <div data-infopanel-target="info_text_area" class="infopanel--hide">
+      <p>You are able to manage the availabilty (whether a room is active or not-actve), the panorama, gallery images and room layout.</p>
+      <ul class="list-disc p-4">
+        <li>To make a room inactive, toggle the switch to the off <span class="italic">(grayed)</span> position
+        <li>The Room's page will display a main image in the following order of available images:
+          <ol class="px-6 list-disc">
+            <li>Panorama > Room Image > Block M<br> <span class="italic text-sm">(The Block M is always available and does not need to be uploaded)</span></li> 
+          </ol>
+        </li>
+        <li>There is a gallery of images just below the main image on the Room's page that includes the Room Flat Image and up to five other images that help to present any special features.</li>
+        <li>The Room layout is displayed when a user clicks the small chair icon 
+        <div class="h-layout h-highlight-item"><%= svg("chair") %></div></li>
+      </ul>
+      <button type="button" data-action="click->infopanel#toggle2 touch->infopanel#toggle2" >
+        <div class="h-layout h-highlight-item"><%= svg("info-up") %></div>
+        <span class="sr-only">Collapse infotext area</span>
+      </button>
+    </div>
+  </div>
+
+
+
+
+  <%= render 'form', room: @room %>
+
+  <%= link_to 'Show', @room, data: { "turbo-frame": "_top" } %>
+  |
+  <%= link_to 'Back', room_path(@room), data: { "turbo-frame": "_top" } %>
+
+  <br><br>
+  <%= link_to 'Update a Building Image or Floor Maps', @room.building, class: "rounded-md hover:underline bg-blue-800 text-white px-2 py-1 mt-4"%>
+  <br>
+
+</div>
+

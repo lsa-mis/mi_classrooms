@@ -31,6 +31,6 @@ module Noteable
   private
 
   def note_params
-    params.require(:note).permit(:body, :parent_id)
+    params.require(:note).permit(:body, :parent_id, :alert)
   end
 end
