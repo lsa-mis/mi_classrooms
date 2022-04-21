@@ -1,23 +1,17 @@
 <%= render './layouts/headness.html.haml' %>
 <% if user_signed_in? && current_user.admin %>
   <% if api_status == 'failed' %>
-    <div class="flex flex-row justify-center items-center bg-red-800 text-red-100 text-sm place-content-center py-1">
+    <div class="flex flex-row bg-red-800 text-red-100 text-sm place-content-center py-1">
       The Classrooms Update Script failed to run today.
-      <div>
-        <a id="myCustomTrigger" class="text-sm hover:underline px-1" href="#" data-email="<%= session[:user_email]%>">Report an Issue</a>
-      </div>
+      <a id="myCustomTrigger" class="hover:underline px-1" href="#" data-email="<%= session[:user_email]%>">Report an Issue</a>
     </div>
   <% elsif api_status == "error" %>
     <div id="options" data-controller="visibility">
-      <div class="flex flex-row justify-center items-center bg-red-800 text-red-100">
-        <div class="py-1 ">
-          <button data-action="visibility#toggleTargets" class="text-sm hover:underline">
-            The Classrooms Update Script ended up with errors.
-          </button>
-        </div>
-        <div>
-          <a id="myCustomTrigger" class="text-sm hover:underline px-1" href="#" data-email="<%= session[:user_email]%>">Report an Issue</a>
-        </div>
+      <div class="flex flex-row bg-red-800 text-red-100 text-sm place-content-center py-1">
+        <button data-action="visibility#toggleTargets" class="hover:underline">
+          The Classrooms Update Script ended up with errors.
+        </button>
+        <a id="myCustomTrigger" class="px-1 hover:underline" href="#" data-email="<%= session[:user_email]%>">Report an Issue</a>
       </div>
       <div data-visibility-target="hideable" hidden>
         <div class="bg-red-800 text-red-100 text-sm flex justify-center py-1 border">
