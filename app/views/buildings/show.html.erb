@@ -11,13 +11,31 @@
       <% end %>
     <% end %>
 
-
     <div class="relative">
       <div class="max-w-3xl mx-2 py-4 px-2 w-screen" >
         <h2 class="sr-only"><%= @building.name  %></h2>
         <div class="grid grid-cols-1 gap-y-4 place-content-start " >
           <div class="bg-white border border-gray-300 rounded-lg flex flex-col overflow-hidden">
             <div class="px-2 py-2 space-y-4 flex flex-col" >
+              <div>
+                <%= form_for @building, html: { class: "sm:flex sm:items-center" },
+                  data: { target: "updatebuilding.form",
+                          controller: "updatebuilding"
+                        } do |f| %>
+                  <div class="sm:col-span-4">
+                    <ol class="switches">
+                      <li>
+                        <%= f.check_box :visible, :"data-action" => "change->updatebuilding#visible"  %>
+                        <%= f.label :visible do %>
+                          <span class="label-text">Active</span>
+                          <span></span>
+                        <% end %>
+                      </li>
+                    </ol>
+                  </div>
+                <% end %>
+              </div>
+              <hr>
               <div class="flex flex-row w-full " >
                   <% if @building.building_image.representable? %>
                     <%= image_tag(@building.building_image.representation(resize_to_fill: [200, 200]), class: "building_image pr-2", alt: @building.name ) %>
@@ -40,43 +58,37 @@
                   </div>
                 </div>
               </div>
-              <hr>
               <div>
-                <%= form_for @building, html: { class: "sm:flex sm:items-center" },
-                  data: { target: "updatebuilding.form",
-                          controller: "updatebuilding"
-                        } do |f| %>
-                  <div class="sm:col-span-4">
-                    <ol class="switches">
-                      <li>
-                        <%= f.check_box :visible, :"data-action" => "change->updatebuilding#visible"  %>
-                        <%= f.label :visible do %>
-                          <span class="label-text">Active</span>
-                          <span></span>
-                        <% end %>
-                      </li>
-                    </ol>
-                  </div>
-                <% end %>
+                Upload or update a building image
               </div>
+              <%= form_for @building, html: { class: "sm:flex sm:items-center" }, data: { turbo: "false" } do |f| %>
+                <div class="field">
+                  <%= f.label :building_image, class: "sr-only" %>
+                  <%= f.file_field :building_image, class: "shadow- focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-sm" %>
+                </div>
+                <div class="actions">
+                  <%= f.submit 'Save', class: "my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
+                  <%= link_to 'Remove', delete_file_path(@building.building_image.id), data: { confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @building.building_image.attached? %>
+                </div>
+              <% end %>
               <hr>
               <div>
-              Upload or update a building image
+                Update a building nickname
               </div>
-                <%= form_for @building, html: { class: "sm:flex sm:items-center" } do |f| %>
-                  <div class="field">
-                    <%= f.label :building_image, class: "sr-only" %>
-                    <%= f.file_field :building_image, class: "shadow- focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-sm" %>
-                  </div>
-                  <div class="actions">
-                    <%= f.submit 'Save', class: "my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
-                    <%= link_to 'Remove', delete_file_path(@building.building_image.id), data: { confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @building.building_image.attached? %>
-                  </div>
-                <% end %>
+              <%= form_for @building, html: { class: "sm:flex sm:items-center" }, data: { turbo: "false" } do |f| %>
+                <div class="field">
+                  <%= f.label :nick_name, class: "sr-only" %>
+                  <%= f.text_field :nick_name, class: "mt-1 block w-1/2 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+                  focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500" %>
+                </div>
+                <div class="actions">
+                  <%= f.submit 'Save', class: "my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
+                </div>
+              <% end %>
               <div>
-              <hr>
+                <hr>
                 <% if @class_floor_names.count > 0 %>
-                Add floor map 
+                  Add floor map 
                   <% @class_floor_names.each do |floor_name| %>
                     <div class="py-4 sm:grid sm:py-5 sm:grid-cols-3 sm:gap-4">
                       <%= render partial: "building_floor", locals: { building: @building, floor_name: floor_name } %>
