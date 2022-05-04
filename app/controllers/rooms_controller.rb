@@ -75,7 +75,7 @@ include ActionView::RecordIdentifier
         format.html { redirect_to @room, notice: 'Room was successfully updated.' }
         format.json { render :show, status: :ok, location: @room }
       else
-        format.html { render :edit }
+        format.html { redirect_to @room, alert:  @room.errors.full_messages }
         format.json { render json: @room.errors, status: :unprocessable_entity }
       end
     end
