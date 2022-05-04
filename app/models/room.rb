@@ -127,7 +127,7 @@ class Room < ApplicationRecord
 
       if image.attached?
         unless image.blob.byte_size <= 10.megabyte
-          errors.add(image.name, "is too big - file size cannot exceed 5Mbyte")
+          errors.add(image.name, "is too big - file size cannot exceed 10Mbyte")
         end
 
         acceptable_types = ["image/png", "image/jpeg", "application/pdf"]
