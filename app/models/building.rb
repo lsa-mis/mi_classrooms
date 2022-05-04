@@ -31,6 +31,8 @@ class Building < ApplicationRecord
   has_many :floors, primary_key: 'bldrecnbr', foreign_key: 'building_bldrecnbr'
   has_many :notes, as: :noteable
 
+  validate :acceptable_image
+
   multisearchable(
     against: [:name, :nick_name, :abbreviation, :bldrecnbr],
     update_if: :updated_at_changed?
@@ -64,5 +66,23 @@ class Building < ApplicationRecord
 
   def self.classrooms?
     where(room.classrooms.any?)
+  end
+
+  def acceptable_image
+    return unless building_image.attached?
+
+    [building_image].compact.each do |image|
+
+      if image.attached?
+        unless image.blob.byte_size <= 10.megabyte
+          errors.add(image.name, "is too big")
+        end
+
+        acceptable_types = ["image/png", "image/jpeg", "application/pdf"]
+        unless acceptable_types.include?(image.content_type)
+          errors.add(image.name, "incorrect file type")
+        end
+      end
+    end
   end
 end
