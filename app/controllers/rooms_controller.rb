@@ -5,6 +5,7 @@ include ActionView::RecordIdentifier
   before_action :set_room, only: [:show, :edit, :update, :destroy, :floor_plan]
   before_action :set_filters_list, only: [:index]
   before_action :set_characteristics_array, only: [:index, :show]
+  before_action :set_cache_headers, only: [:show]
 
   include ApplicationHelper 
 
@@ -74,7 +75,7 @@ include ActionView::RecordIdentifier
         format.html { redirect_to @room, notice: 'Room was successfully updated.' }
         format.json { render :show, status: :ok, location: @room }
       else
-        format.html { render :edit }
+        format.html { redirect_to @room, alert:  @room.errors.full_messages }
         format.json { render json: @room.errors, status: :unprocessable_entity }
       end
     end
@@ -174,6 +175,12 @@ include ActionView::RecordIdentifier
         end
       end
       return sorted
+    end
+
+    def set_cache_headers
+      response.headers["Cache-Control"] = "no-cache, no-store"
+      response.headers["Pragma"] = "no-cache"
+      response.headers["Expires"] = "Mon, 01 Jan 1990 00:00:00 GMT"
     end
 
 end

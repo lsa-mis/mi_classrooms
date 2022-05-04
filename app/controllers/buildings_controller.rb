@@ -42,7 +42,7 @@ class BuildingsController < ApplicationController
         format.html { redirect_to @building, notice: 'Building was successfully updated.' }
         format.json { render :show, status: :ok, location: @building }
       else
-        format.html { render :edit }
+        format.html { redirect_to @building, alert:  @building.errors.full_messages }
         format.json { render json: @building.errors, status: :unprocessable_entity }
       end
     end
