@@ -84,7 +84,7 @@ include ActionView::RecordIdentifier
   def floor_plan
     @floor_list = @room.building.floors
     @building = @room.building
-    @rooms_list = Room.where(building_bldrecnbr: @room.building, floor: @room.floor, rmtyp_description: "Classroom").order(:room_number)
+    @rooms_list = Room.where(building_bldrecnbr: @room.building, floor: @room.floor, rmtyp_description: "Classroom").where.not(facility_code_heprod: nil).order(:room_number)
   end
 
   private

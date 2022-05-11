@@ -5,8 +5,8 @@ class Buildings::FloorsController < ApplicationController
   def show 
     @floors = @building.floors
     @floor = @building.floors.find(params[:id])
-    @building_rooms_list = Room.where(building_bldrecnbr: @building, rmtyp_description: "Classroom")
-    @floor_rooms_list = Room.where(building_bldrecnbr: @building, rmtyp_description: "Classroom", floor: @floor.floor).order(:room_number)
+    @building_rooms_list = Room.where(building_bldrecnbr: @building, rmtyp_description: "Classroom").where.not(facility_code_heprod: nil)
+    @floor_rooms_list = Room.where(building_bldrecnbr: @building, rmtyp_description: "Classroom", floor: @floor.floor).where.not(facility_code_heprod: nil).order(:room_number)
     authorize @floors
   end
 
