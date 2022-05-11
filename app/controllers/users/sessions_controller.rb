@@ -1,6 +1,7 @@
 class Users::SessionsController < Devise::SessionsController
   def destroy
     # Preserve the saml_uid and saml_session_index in the session
+    $baseURL = ''
     saml_uid = session['saml_uid']
     saml_session_index = session['saml_session_index']
     super do
