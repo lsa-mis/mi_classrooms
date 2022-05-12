@@ -2,8 +2,6 @@ class ClassroomApi
 
   def initialize(access_token)
     @buildings_ids = Building.all.pluck(:bldrecnbr)
-    remove_bldg = [1000890]
-    @buildings_ids = @buildings_ids - remove_bldg
     
     @result = {'success' => false, 'error' => '', 'data' => {}}
     @access_token = access_token
