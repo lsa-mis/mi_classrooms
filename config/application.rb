@@ -30,6 +30,7 @@ module MiClassrooms
     config.active_job.queue_adapter = :sidekiq
     config.active_record.schema_format = :sql
     config.skylight.environments << "staging"
+    config.time_zone = 'Eastern Time (US & Canada)'
   end
   ActiveStorage::Engine.config.active_storage.content_types_to_serve_as_binary.delete("image/svg+xml")
 
