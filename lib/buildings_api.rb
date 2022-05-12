@@ -93,6 +93,8 @@ class BuildingsApi
 
   def update_all_buildings(campus_codes = [100], buildings_codes = [])
     @buildings_ids = Building.all.pluck(:bldrecnbr)
+    remove_bldg = [1000890]
+    @buildings_ids = @buildings_ids - remove_bldg
 
     @result = get_buildings_for_current_fiscal_year
     if @result['success']
@@ -181,6 +183,9 @@ class BuildingsApi
 
   def update_rooms
     @buildings_ids = Building.all.pluck(:bldrecnbr)
+    remove_bldg = [1000890]
+    @buildings_ids = @buildings_ids - remove_bldg
+    
     dept_auth_token = AuthTokenApi.new("bf", "department")
     dept_auth_token_result = dept_auth_token.get_auth_token
     if dept_auth_token_result['success']
