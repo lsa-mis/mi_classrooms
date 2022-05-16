@@ -2,6 +2,7 @@ class ClassroomApi
 
   def initialize(access_token)
     @buildings_ids = Building.all.pluck(:bldrecnbr)
+    
     @result = {'success' => false, 'error' => '', 'data' => {}}
     @access_token = access_token
     @debug = false

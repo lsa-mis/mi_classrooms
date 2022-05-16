@@ -1,5 +1,7 @@
 class BuildingsApi
 
+  REMOVE_BLDG = [1000890]
+
   def initialize(access_token)
     @result = {'success' => false, 'error' => '', 'data' => {}}
     @access_token = access_token
@@ -98,6 +100,9 @@ class BuildingsApi
     if @result['success']
       data = @result['data']
       data.each do |row|
+        if REMOVE_BLDG.include?(row['BuildingRecordNumber'])
+          next
+        end
         if campus_codes.include?(row['BuildingCampusCode']) || buildings_codes.include?(row['BuildingRecordNumber'])
           if building_exists?(row['BuildingRecordNumber'])
             update_building(row)
@@ -181,6 +186,7 @@ class BuildingsApi
 
   def update_rooms
     @buildings_ids = Building.all.pluck(:bldrecnbr)
+     
     dept_auth_token = AuthTokenApi.new("bf", "department")
     dept_auth_token_result = dept_auth_token.get_auth_token
     if dept_auth_token_result['success']
