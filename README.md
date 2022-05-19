@@ -38,3 +38,7 @@ Check _Getting started_ instruction here https://api.umich.edu/start
         - add_panos_to_rooms.rake
 
 ** NOTE: The task create log files in {Rails.root}/log/#{Date.today}_<task_name>.log to store errors of warnings.
+
+
+# Support / Questions
+  Please email the [LSA W&ADS Rails Team](mailto:lsa-was-rails-devs@umich.edu)
