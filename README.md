@@ -32,10 +32,11 @@ Check _Getting started_ instruction here https://api.umich.edu/start
      - buildings_api.rb
      - classrooms_api.rb
      - department_api.rb
-     - Note: you will initially run the rake tasks to add images to the application
-        - add_chairs_to_rooms.rake
-        - add_images_to_rooms.rake
-        - add_panos_to_rooms.rake
+  - Note: you will initially run these rake tasks to add images to the application and the seed file to add intial data
+    - add_chairs_to_rooms.rake
+    - add_images_to_rooms.rake
+    - add_panos_to_rooms.rake
+    - rails db:seed
 
 ** NOTE: The task create log files in {Rails.root}/log/api_nightly_update_db.log to store errors of warnings.
 
