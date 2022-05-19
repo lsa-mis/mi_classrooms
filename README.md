@@ -16,7 +16,7 @@
   ### Database loading data
 
 
-   - The application uses Buildings ans Classroms APIs from the UofM API directory https://api.umich.edu. 
+   - The application uses Buildings and Classrooms APIs from the UofM API directory https://api.umich.edu. 
 Check _Getting started_ instruction here https://api.umich.edu/start
 
       - Browse the UMAPI Directory
@@ -25,19 +25,19 @@ Check _Getting started_ instruction here https://api.umich.edu/start
       - Subscribe to an API Plan
       - Publish/Develop an API
 
-      To update the database the following tasks must be run in the following order, the next task afer the previous is finished:
+   - To update the database run bin/rake api_update_database
 
-  - bin/rake api_update_database _which calls the following classes_
-    - auth_token_api.rb
-    - buildings_api.rb
-    - classrooms_api.rb
-    - department_api.rb
-    - Note: you will initially run the rake tasks to add images to the application
+   - bin/rake api_update_database _calls the following classes_
+     - auth_token_api.rb
+     - buildings_api.rb
+     - classrooms_api.rb
+     - department_api.rb
+     - Note: you will initially run the rake tasks to add images to the application
         - add_chairs_to_rooms.rake
         - add_images_to_rooms.rake
         - add_panos_to_rooms.rake
 
-** NOTE: The task create log files in {Rails.root}/log/#{Date.today}_<task_name>.log to store errors of warnings.
+** NOTE: The task create log files in {Rails.root}/log/api_nightly_update_db.log to store errors of warnings.
 
 
 # Support / Questions
