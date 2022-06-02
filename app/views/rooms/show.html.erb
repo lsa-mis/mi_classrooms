@@ -71,14 +71,18 @@
                     <div class="h-highlight-item">
                       <%= svg("phone") %>
                     </div>
-                    <%= "#{@room.room_schedule_phone}" %>
+                    <%= @room.room_schedule_phone %>
                   </li>
                 <% end %>
                 <li>
                   <div class="h-highlight-item">
                     <%= svg("envelope") %>
                   </div>
-                  <%= "Email #{@room.room_schedule_email}" %>
+                  <% if @room.room_schedule_email == "Not Available" %>
+                    <%= @room.room_schedule_email %>
+                  <% else %>
+                    <%= mail_to @room.room_schedule_email %>
+                  <% end %>
                 </li>
               </ul>
             </div>
@@ -94,19 +98,23 @@
                 </div>
               </div>
               <div class="ml-1 lg:ml-4">
-                <%= "#{@room.department_name}" %>
+                <%= @room.department_name %>
                 <ul>
                   <li>
                     <div class="h-highlight-item">
                       <%= svg("phone") %>
                     </div>
-                    <%= "#{@room.room_support_phone}" %>
+                    <%= @room.room_support_phone %>
                   </li>
                   <li>
                     <div class="h-highlight-item">
                       <%= svg("envelope") %>
                     </div>
-                    <%= "#{@room.room_support_email}" %>
+                    <% if @room.room_support_email == "Not Available" %>
+                      <%= @room.room_support_email %>
+                    <% else %>
+                      <%= mail_to @room.room_support_email %>
+                    <% end %>
                   </li>
                 </ul>
               </div>
