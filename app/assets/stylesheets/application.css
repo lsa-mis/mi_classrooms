@@ -19,7 +19,7 @@ ol {
   list-style: none;
 }
 
-label {
+.switches label {
   cursor: pointer;
 }
 
@@ -94,15 +94,15 @@ label {
   background-size: 12px 12px;
 }
 
-.switches [type="checkbox"]:checked + label span:last-child {
+.switches [type="checkbox"]:checked+label span:last-child {
   background: green;
 }
 
-.switches [type="checkbox"]:checked + label span:last-child::before {
+.switches [type="checkbox"]:checked+label span:last-child::before {
   transform: translateX(24px);
 }
 
-.switches [type="checkbox"]:checked + label span:last-child::after {
+.switches [type="checkbox"]:checked+label span:last-child::after {
   width: 14px;
   height: 14px;
   /*right: auto;*/
