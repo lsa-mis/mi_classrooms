@@ -14,8 +14,6 @@
  *= require_self
  */
 
-/* the switch toggle was influenced by https://codepen.io/tutsplus/pen/qBOjjvO */
-
 /* show/hide information panel */
 .infopanel--display {
   display: block;

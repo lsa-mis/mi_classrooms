@@ -86,6 +86,8 @@ trix-editor
 ol
   list-style: none
 
+/* the switch toggle was influenced by https://codepen.io/tutsplus/pen/qBOjjvO */
+
 .switches
   [type="checkbox"]
     position: absolute
@@ -98,9 +100,6 @@ ol
   color: white
   background: RoyalBlue
 
-  label
-    cursor: pointer
-
   li
     position: relative
     counter-increment: switchCounter
@@ -112,6 +111,7 @@ ol
     padding-right: 2px
 
   label
+    cursor: pointer
     display: flex
     align-items: center
     justify-content: space-between
@@ -158,8 +158,6 @@ ol
     &::after
       width: 14px
       height: 14px
-
-      /*right: auto;
       left: 8px
       background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/162656/checkmark-switcher.svg)
       background-size: 14px 14px
