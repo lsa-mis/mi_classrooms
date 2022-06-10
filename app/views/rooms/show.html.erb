@@ -81,7 +81,7 @@
                   <% if @room.room_schedule_email == "Not Available" %>
                     <%= @room.room_schedule_email %>
                   <% else %>
-                    <%= mail_to @room.room_schedule_email %>
+                    <%= mail_to @room.room_schedule_email, nil, class: "hover:underline text-blue-800" %>
                   <% end %>
                 </li>
               </ul>
@@ -113,7 +113,7 @@
                     <% if @room.room_support_email == "Not Available" %>
                       <%= @room.room_support_email %>
                     <% else %>
-                      <%= mail_to @room.room_support_email %>
+                      <%= mail_to @room.room_support_email, nil, class: "hover:underline text-blue-800" %>
                     <% end %>
                   </li>
                 </ul>
