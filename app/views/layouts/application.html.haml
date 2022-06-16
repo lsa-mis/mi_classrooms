@@ -17,9 +17,8 @@
       = yield :head
 
   %body{'data-environment' => Rails.env}
-    .skip-to-content-link= link_to "Skip to content", "#main"
+    = link_to "Skip to content", "#main", class: "skip-to-content-link"
     #page-top
-    
     = render 'layouts/header'
     - if Rails.env.development?
       = render 'layouts/tailwindcss_breakpoints'
