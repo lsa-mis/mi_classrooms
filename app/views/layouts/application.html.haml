@@ -17,13 +17,12 @@
       = yield :head
 
   %body{'data-environment' => Rails.env}
+    = skip_links
     #page-top
-    
-
     = render 'layouts/header'
     - if Rails.env.development?
       = render 'layouts/tailwindcss_breakpoints'
-    %main{:class => controller.controller_name}
+    %main{:class => controller.controller_name, id: "main"}
       .max-w-7xl{class: "mx-auto py-6 sm:px-6 lg:px-8"}
         / Replace with your content
         = render 'layouts/flash_messages'
