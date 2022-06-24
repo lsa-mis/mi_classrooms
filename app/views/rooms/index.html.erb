@@ -1,4 +1,7 @@
-<%- @skip_links = {filters: "Filters"} %>
+
+<%- @skip_links.shift %> 
+<%- @skip_links[:filters] = "Skip to filters" %>
+<%- @skip_links[:rooms] = "Skip to main content" %>
 
 <div class="container px-1 mb-20" data-controller='autosubmit'>
   <% if @rooms_page_announcement.present? && @rooms_page_announcement.content.present? %>  
@@ -109,7 +112,7 @@
               :"data-action" => "change->autosubmit#sortCapacity" %>
             </div>
           </div>
-          <div class="">
+          <div class="" id="rooms">
             <% if user_signed_in? %>
               <%= render 'listing' %>
             <% end %>
