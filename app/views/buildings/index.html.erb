@@ -34,7 +34,7 @@
             <hr>
             <div class="px-1">
               <label for="building_name">Search Building Names</label>
-              <%= form.text_field :query, class: "block rounded-none rounded-l-md sm:text-sm border-gray-300", :placeholder => 'ex. "East Hall"', value: params[:query], :"data-action" => "input->autosubmit#search", :"data-autosubmit-target" => "building_name" %>
+              <%= form.text_field :building_name, class: "block rounded-none rounded-l-md sm:text-sm border-gray-300", :placeholder => 'ex. "East Hall"', value: params[:building_name], :"data-action" => "input->autosubmit#search", :"data-autosubmit-target" => "building_name" %>
             </div>
             </div>
           </div>

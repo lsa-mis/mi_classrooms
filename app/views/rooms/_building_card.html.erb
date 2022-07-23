@@ -2,7 +2,7 @@
   <h2 class="sr-only">Building</h2>
   <% if building.visible %>
     <div class="mt-2 mb-3 px-2 sm:px-0 hover:underline">
-      <%= link_to rooms_path(:query => building.name), data: { "turbo-frame": "_top" } do %>
+      <%= link_to rooms_path(:building_name => building.name), data: { "turbo-frame": "_top" } do %>
         <% if building.building_image.representable? %>
           <%=  image_tag(building.building_image.representation(resize_to_fill: [150, 107]), class: 'p-2', alt: "#{building.name}") %>
         <% else %>

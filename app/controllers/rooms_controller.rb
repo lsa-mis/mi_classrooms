@@ -34,7 +34,7 @@ include ActionView::RecordIdentifier
       floors = sort_floors(@rooms.pluck(:floor).uniq)
       @rooms = @rooms.order_as_specified(floor: floors).order(:room_number => :asc)
     end
-    @rooms = @rooms.with_building_name(params[:query]) if params[:query].present?
+    @rooms = @rooms.with_building_name(params[:building_name]) if params[:building_name].present?
     @rooms = @rooms.with_school_or_college_name(params[:school_or_college_name]) if params[:school_or_college_name].present?
     @rooms = @rooms.with_all_characteristics(params[:room_characteristics]) if params[:room_characteristics].present?
     @rooms = @rooms.where('instructional_seating_count >= ?', params[:min_capacity].to_i) if params[:max_capacity].present?
@@ -136,7 +136,7 @@ include ActionView::RecordIdentifier
               case k
               when "school_or_college_name"
                 filters['School'] = v
-              when "query"
+              when "building_name"
                 filters['Building'] = "*" + v + "*"
               when "classroom_name"
                 filters['Classroom'] = "*" + v + "*"
