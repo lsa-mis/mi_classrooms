@@ -1,0 +1,32 @@
+%div.flex.items-center.sm:hidden   
+  / Mobile menu, show/hide based on menu state.
+  - if user_signed_in?
+    #mobile-menu{aria: {"labelledby" => "header-nav-menu-button",
+                                  "orientation" => "vertical"},
+                          role: "menu", 
+                          tabindex: "-1",
+                          data: 
+                              {"dropdown-target" => "menu",
+                              "dropdown-invisible-class" => "opacity-0 -translate-y-1 scale-95",
+                              "dropdown-visible-class" => "opacity-100  -translate-y-0",
+                              "dropdown-entering-class" => "transition ease-out duration-200",
+                              "dropdown-leaving-class" => "transition ease-in duration-150"
+                              }}
+      #header-nav-menu-button.pt-2.pb-3.space-y-1.text-white
+        = link_to "Find a Room", rooms_path, class: "mobile-dropdown-link #{class_names(active: current_page?(rooms_path))} " if user_signed_in?
+        = link_to "Room Filters Glossary", room_filters_glossary_path, class: "mobile-dropdown-link #{class_names(active: current_page?(room_filters_glossary_path))}" if user_signed_in?
+        = link_to "About", about_path, class: "mobile-dropdown-link #{class_names(active: current_page?(about_path))} " 
+        = link_to "Announcements", announcements_path, class: "mobile-dropdown-link #{class_names(active: current_page?(announcements_path))} " if user_signed_in? && policy(Announcement).edit?
+        = link_to "AdminDoc", "https://docs.google.com/document/d/1wg_MvJRzeZwl8x1292AYp3JoS4AHd1xSgw7THpqflCU/edit?usp=sharing", target: "_blank", class: "mobile-dropdown-link" if user_signed_in? && policy(Announcement).edit?
+
+        %div.grid.grid-col-2.gap-2.justify-items-end.mr-8
+          %div
+          %div
+            - if user_signed_in?
+              .leading-tight.text-md.font-medium.text-white=current_user.email
+              = button_to destroy_user_session_path, method: :delete, role: "menuitem", tabindex: "-1", data: {turbo: "false"} do 
+                .w-60.py-3.shadow-sm.font-medium.rounded.text-blue-900.bg-yellow-550.hover:bg-yellow-500.hover:underline Sign Out
+              
+            - else
+              = button_to user_saml_omniauth_authorize_path, data: {turbo: "false"} do
+                .w-60.py-3.shadow-sm.font-medium.rounded.text-blue-900.bg-yellow-550.hover:bg-yellow-500.hover:underline Sign In
