@@ -6,15 +6,11 @@
         data-dropdown-target="menu" data-dropdown-visible-class="opacity-100  -translate-y-0" 
          tabindex="-1">
     <div class="pt-2 pb-3 space-y-1 text-white" id="header-nav-menu-button">
-      <% if user_signed_in? %>
-        <%= link_to "Find a Room", rooms_path, class: "mobile-dropdown-link #{class_names(active: current_page?(rooms_path))} " if user_signed_in? %>
-        <%= link_to "Room Filters Glossary", room_filters_glossary_path, class: "mobile-dropdown-link #{class_names(active: current_page?(room_filters_glossary_path))}" if user_signed_in? %>
-        <%= link_to "About", about_path, class: "mobile-dropdown-link #{class_names(active: current_page?(about_path))} "  %>
-        <%= link_to "Announcements", announcements_path, class: "mobile-dropdown-link #{class_names(active: current_page?(announcements_path))} " if user_signed_in? && policy(Announcement).edit? %>
-        <%= link_to "AdminDoc", "https://docs.google.com/document/d/1wg_MvJRzeZwl8x1292AYp3JoS4AHd1xSgw7THpqflCU/edit?usp=sharing", target: "_blank", class: "mobile-dropdown-link" if user_signed_in? && policy(Announcement).edit? %>
-      <% else %>
-        <%= link_to "About", about_path, class: "mobile-dropdown-link #{class_names(active: current_page?(about_path))} "  %>
-      <% end %>
+      <%= link_to "Find a Room", rooms_path, class: "mobile-dropdown-link #{class_names(active: current_page?(rooms_path))} " if user_signed_in? %>
+      <%= link_to "Room Filters Glossary", room_filters_glossary_path, class: "mobile-dropdown-link #{class_names(active: current_page?(room_filters_glossary_path))}" if user_signed_in? %>
+      <%= link_to "About", about_path, class: "mobile-dropdown-link #{class_names(active: current_page?(about_path))} "  %>
+      <%= link_to "Announcements", announcements_path, class: "mobile-dropdown-link #{class_names(active: current_page?(announcements_path))} " if user_signed_in? && policy(Announcement).edit? %>
+      <%= link_to "AdminDoc", "https://docs.google.com/document/d/1wg_MvJRzeZwl8x1292AYp3JoS4AHd1xSgw7THpqflCU/edit?usp=sharing", target: "_blank", class: "mobile-dropdown-link" if user_signed_in? && policy(Announcement).edit? %>
       <div class="grid grid-col-2 gap-2 justify-items-end mr-8">
         <div>
           <% if user_signed_in? %>
