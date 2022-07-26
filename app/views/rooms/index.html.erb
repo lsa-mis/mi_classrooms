@@ -27,6 +27,7 @@
       <button class="mobile-menu-button rounded h-10 w-10 bg-blue-900 text-white focus:outline-none focus:bg-blue-800 ">
         <div class="mx-auto h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <%= svg("filter-solid")  %>
+          <span class="sr-only">Filters</span>
         </div>
       </button>
     </div>
@@ -55,7 +56,7 @@
             <hr>
             <div class="px-1">
               <label for="building_name">Search Building Names</label>
-              <%= form.text_field :query, class: "block rounded-none rounded-l-md sm:text-sm border-gray-300", :placeholder => 'ex. "East Hall"', value: params[:query], :"data-action" => "input->autosubmit#search", :"data-autosubmit-target" => "building_name" %>
+              <%= form.text_field :building_name, class: "block rounded-none rounded-l-md sm:text-sm border-gray-300", :placeholder => 'ex. "East Hall"', value: params[:building_name], :"data-action" => "input->autosubmit#search", :"data-autosubmit-target" => "building_name" %>
             </div>
             <br>
             <hr>

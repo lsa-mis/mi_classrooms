@@ -73,7 +73,7 @@ module SearchHelper
     end
   end
   def capacity_slider_maximum
-    if params[:query]
+    if params[:building_name]
       if params[:max_capacity]
         params[:max_capacity]
       else
