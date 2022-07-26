@@ -2,14 +2,14 @@
   <div class="px-4 sm:p-6">
     <%= form_for [building, floor_new], html: { class: "sm:flex sm:items-center" } do |f| %>
       <div class=" sm:max-w-4xl pr-2">
-        <%= f.label :floor, "add a floor", class: "sr-only" %>
         <%= f.hidden_field :floor, value: floor_name, class: "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" %>
       </div>
-      
       <div class=" sm:max-w-4xl">
-      <%= f.label :floor_plan, "add a floor map", class: "sr-only" %>
-      <%= f.file_field :floor_plan, class: "shadow- focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-sm" %>
-    </div>
+        <label for="<%= "floor_#{floor_name}_plan" %>" class="sr-only">
+          <%= "floor_#{floor_name}_plan" %>
+        </label>
+        <%= f.file_field :floor_plan, id: "floor_#{floor_name}_plan", class: "shadow- focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-sm" %>
+      </div>
       <%= f.submit 'Save', class: "my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
       <%= link_to 'Remove', building_floor_path(building,floor_new), data: { confirm: "Are sure you?"}, method: :delete, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if floor_new.persisted? %>
     <% end %>
