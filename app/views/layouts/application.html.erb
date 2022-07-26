@@ -14,12 +14,8 @@
     <%= csrf_meta_tags %>
     <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbo-track': 'reload' %>
-    <% if content_for? :head %>
-      <%= yield :head %>
-    <% end %>
   </head>
   <body data-environment="<%= Rails.env %>">
-    <%= skip_links %>
     <div id="page-top"></div>
     <%= render 'layouts/header' %>
     <% if Rails.env.development? %>
