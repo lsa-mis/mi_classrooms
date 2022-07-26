@@ -33,11 +33,6 @@ module ApplicationHelper
     end
   end
 
-  # Creates skip to content links from an array of id names
-  def skip_links
-    sanitize @skip_links.collect { |skip_link| link_to "#{skip_link[1]}", "##{skip_link[0]}", class: "skip-to-content-link" }.join(" <span class='sr-only' > or </span>")
-  end
-
   def room_thumbnail_image( room )
     if room.room_image.representable?
       image_tag room.room_image.representation(resize_to_limit: [1000, 800]), class: 'max-h-24 p-2', alt: "#{room.room_number} --  #{room.building.name}" 

@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_in_group
   before_action :set_membership
-  before_action :set_skip_links
   after_action :verify_authorized, unless: :devise_controller?
 
   def delete_file_attachment
@@ -33,10 +32,6 @@ class ApplicationController < ActionController::Base
     else
       new_user_session_path
     end
-  end
-
-  def set_skip_links
-    @skip_links = {main: "Skip to main content"}
   end
 
   def set_characteristics_array
