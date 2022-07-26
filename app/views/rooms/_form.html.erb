@@ -47,7 +47,6 @@
         <h3>Main Image</h3>
         <div class="flex-row justify-start max-w-full">
           <div class="shadow pl-1" data-controller="updateroom" data-updateroom-image-value="panorama">
-            <%= f.label :panoramaimage, 'Panorama' %>
             <%  if @room.room_panorama.attached? %>
               <%= render 'room_panorama', room: @room  %>
             <% end %>            
