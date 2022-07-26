@@ -28,7 +28,7 @@
           %div.grid.justify-items-end.flex.flex-wrap.items-center
             - if user_signed_in?
               %button#user-menu-button.bg-white.rounded-full.flex-1.text-sm.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-blue-500{"aria-expanded" => "false", "aria-haspopup" => "true", type: "button", "data-action" => "click->dropdown#toggle click@window->dropdown#hide"}
-                %span.sr-only Open user menu
+                %span.sr-only.bg-white.text-black Open user menu
               .leading-tight.text-sm.font-medium.text-white=current_user.email
               = button_to destroy_user_session_path, method: :delete, role: "menuitem", tabindex: "-1", data: {turbo: "false"} do
                 .px-1.ml-2.shadow-sm.font-medium.rounded.text-blue-900.bg-yellow-550.hover:bg-yellow-500.flex-1.hover:underline Sign Out
