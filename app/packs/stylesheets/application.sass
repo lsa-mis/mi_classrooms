@@ -170,5 +170,12 @@ ol
   [type="checkbox"], label
     cursor: pointer
 
-.skip-to-content-link
-  @apply sr-only font-bold text-2xl text-white focus-visible:not-sr-only focus-within:bg-green-700 relative self-center flex justify-center  focus-within:p-5 focus-within:underline
+.skiplink
+  @apply left-2 text-white
+  &:focus
+    @apply text-blue-900
+
+// .skiplink
+//   @apply absolute top-0 left-2 -translate-y-full
+//   &:focus
+//     @apply translate-y-0 bg-white
