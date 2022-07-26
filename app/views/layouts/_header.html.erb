@@ -1,4 +1,4 @@
-<%= render './layouts/headness.html.haml' %>
+<%= render 'layouts/headness' %>
 <% if user_signed_in? && current_user.admin %>
   <% if api_status == 'failed' %>
     <div class="flex flex-row bg-red-800 text-red-100 text-sm place-content-center py-1">
