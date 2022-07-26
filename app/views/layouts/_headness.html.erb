@@ -30,13 +30,13 @@
         <div class="ml-2 relative">
           <div class="grid justify-items-end flex flex-wrap items-center">
             <% if user_signed_in? %>
-              <button id="user-menu-button" class="bg-white rounded-full flex-1 text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" aria-expanded="false" aria-haspopup="true" type="button" data-action="click->dropdown#toggle click@window->dropdown#hide">
+              <button id="user-menu-button" class="bg-white rounded-full flex-1 text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" tabindex="-1" aria-expanded="false" aria-haspopup="true" type="button" data-action="click->dropdown#toggle click@window->dropdown#hide">
                 <span class="sr-only">Open user menu</span>
               </button>
               <div class="leading-tight text-sm font-medium text-white">
                 <%= current_user.email %>
               </div>
-              <%= button_to destroy_user_session_path, method: :delete, role: "menuitem", tabindex: "-1", data: {turbo: "false"} do %>
+              <%= button_to destroy_user_session_path, method: :delete, role: "menuitem", data: {turbo: "false"} do %>
                 <div class="px-1 ml-2 shadow-sm font-medium rounded text-blue-900 bg-yellow-550 hover:bg-yellow-500 flex-1 hover:underline">Sign Out</div>
               <% end %>
             <% else %>
