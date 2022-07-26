@@ -55,6 +55,7 @@
                 <%= link_to 'Remove', delete_file_path(@room.room_panorama.id), remote: :true, data:{ action: "click->updateroom#deletepanorama" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @room.room_panorama.attached? %>
               </div>
               <div>
+                <%= f.label :room_panorama %>
                 <%= f.file_field :room_panorama %>
               </div>   
             </div>
