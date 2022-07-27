@@ -16,10 +16,7 @@
     <%= javascript_pack_tag 'application', 'data-turbo-track': 'reload' %>
   </head>
   <body data-environment="<%= Rails.env %>">
-    <div id="page-top"></div>
-    <% if current_page?(controller: 'rooms', action: 'index') %>
-      <a class="skiplink" href="#roomListing">Skip to main content</a>
-    <% end %>
+    <a class="skiplink" href="#maincontent">Skip to main content</a>
     <%= render 'layouts/header' %>
     <% if Rails.env.development? %>
       <%= render 'layouts/tailwindcss_breakpoints' %>
