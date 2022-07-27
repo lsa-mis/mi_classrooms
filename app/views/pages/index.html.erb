@@ -18,15 +18,17 @@
         <p class="mt-4 max-w-xl md:max-w-3xl mx-auto text-xl text-gray-700">
           MClassrooms provides an intuitive, accessible interface to find the room you are looking for. Whether you are an instructor searching for a classroom with the technologies to meet your pedagogy, a student trying to find their way to class, or a staff member looking to schedule a room, MClassrooms has your back.
         </p>
-        <% if current_user %>
-          <%= button_to rooms_path, method: :get do %>
-            <div class="mt-10 inline-block w-full bg-gray-900 border border-transparent rounded-md py-3 px-8 font-medium text-white hover:bg-gray-800 sm:w-auto mb-10 sm:mb-0 href="#">Log In To Find A Room!</div>
+       
+          <% if current_user %>
+              <%= button_to rooms_path, class: "mt-10", method: :get do %>
+                <div id="maincontent" class="focus:ring focus:ring-offset-2 focus:ring-blue-400 inline-block w-full bg-gray-900 border border-transparent rounded-md py-3 px-8 font-medium text-white hover:bg-gray-800 sm:w-auto mb-10 sm:mb-0" href="#" tabindex="0">Log In To Find A Room!</div>
+              <% end %>
+          <% else %>
+            <%= button_to user_saml_omniauth_authorize_path, class: "mt-10", data: {turbo: "false"} do %>
+              <div id="maincontent" class="focus:ring focus:ring-offset-2 focus:ring-blue-400 inline-block w-full bg-gray-900 border border-transparent rounded-md py-3 px-8 font-medium text-white hover:bg-gray-800 sm:w-auto mb-10 sm:mb-0" href="#" tabindex="0">Log In To Find A Room!</div>
+            <% end %>
           <% end %>
-        <% else %>
-          <%= button_to user_saml_omniauth_authorize_path, data: {turbo: "false"} do %>
-            <div class="mt-10 inline-block w-full bg-gray-900 border border-transparent rounded-md py-3 px-8 font-medium text-white hover:bg-gray-800 sm:w-auto mb-10 sm:mb-0 href="#">Log In To Find A Room!</div>
-          <% end %>
-        <% end %>
+
       </div>
     </section>
   </div>
