@@ -17,14 +17,15 @@
   </head>
   <body data-environment="<%= Rails.env %>">
     <div id="page-top"></div>
+    <% if current_page?(controller: 'rooms', action: 'index') %>
+      <a class="skiplink" href="#roomListing">Skip to main content</a>
+    <% end %>
     <%= render 'layouts/header' %>
     <% if Rails.env.development? %>
       <%= render 'layouts/tailwindcss_breakpoints' %>
     <% end %>
     <main class="<%= controller.controller_name %>" id="main">
       <div class="mx-auto py-6 sm:px-6 lg:px-8 max-w-7xl">
-        <!-- Replace with your content
-        -->
         <%= render 'layouts/flash_messages' %>
         <%= yield %>
       </div>
