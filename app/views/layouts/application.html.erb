@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="<%= I18n.locale %>">
+  <head>
+    <% if Rails.env.staging? %>
+      <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-NE1XRCB19M"></script>
+    <% else %>
+      <script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-211737475-1"></script>
+    <% end %>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>
+      <%= (t :sitename) %>
+    </title>
+    <%= csrf_meta_tags %>
+    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbo-track': 'reload' %>
+  </head>
+  <body data-environment="<%= Rails.env %>">
+    <a class="skiplink" href="#maincontent">Skip to main content</a>
+    <%= render 'layouts/header' %>
+    <% if Rails.env.development? %>
+      <%= render 'layouts/tailwindcss_breakpoints' %>
+    <% end %>
+    <main class="<%= controller.controller_name %>" id="main">
+      <div class="mx-auto py-6 sm:px-6 lg:px-8 max-w-7xl">
+        <%= render 'layouts/flash_messages' %>
+        <%= yield %>
+      </div>
+    </main>
+    <%= render 'layouts/footer' %>
+  </body>
+</html>
+

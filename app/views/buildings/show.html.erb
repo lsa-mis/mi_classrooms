@@ -13,7 +13,7 @@
 
     <div class="relative">
       <div class="max-w-3xl mx-2 py-4 px-2 w-screen" >
-        <h2 class="sr-only"><%= @building.name  %></h2>
+        <h1 class="sr-only"><%= @building.name  %></h1>
         <div class="grid grid-cols-1 gap-y-4 place-content-start " >
           <div class="bg-white border border-gray-300 rounded-lg flex flex-col overflow-hidden">
             <div class="px-2 py-2 space-y-4 flex flex-col" >
@@ -59,7 +59,7 @@
                 </div>
               </div>
               <div>
-                Upload or update a building image <br> <span class="text-xs text-gray-600" >NOTE: PNG, JPG or PDF and less than 10 MB</span>
+                Upload or update a building image <br> <span class="text-xs text-gray-700" >NOTE: PNG, JPG or PDF and less than 10 MB</span>
               </div>
               <%= form_for @building, html: { class: "sm:flex sm:items-center" }, data: { turbo: "false" } do |f| %>
                 <div class="field">

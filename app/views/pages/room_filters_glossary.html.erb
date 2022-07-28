@@ -1,11 +1,12 @@
 <div class="container px-1 mb-20">
-
+<div id="maincontent"></div>
   <h1>Room Filters Glossary</h1>
   <div class="flex-auto justify-center py-2 ml-4">
     <% for char in 'A' ... 'Z' do %>
       <% if @category_letters.include?(char) %>
         <span class="p-2 text-sm text-black hover:underline">
-          <a aria-label='link to #<%= "#{char}" %> heading' aria-describedby='Letter <%= "#{char}" %>' href='room_filters_glossary#<%= "#{char}" %>'><%= "#{char}" %></a> 
+          <a aria-label='link to #<%= "#{char}" %> heading' aria-describedby='Letter_<%= "#{char}" %>' href='room_filters_glossary#<%= "#{char}" %>'>
+          <span id='Letter_<%= "#{char}" %>'><%= "#{char}" %></span></a> 
         </span>
       <% else %>
         <span class="p-2 text-sm text-gray-400"><%= "#{char}" %></span>

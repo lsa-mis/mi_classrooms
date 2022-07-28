@@ -32,7 +32,6 @@ class ApplicationController < ActionController::Base
     else
       new_user_session_path
     end
-    
   end
 
   def set_characteristics_array

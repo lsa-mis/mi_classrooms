@@ -1,0 +1,56 @@
+<nav class="static bg-blue-900 shadow min-w-screen" data-controller="dropdown">
+  <div class="w-auto max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <div class="flex-shrink-0 flex items-center">
+        <div class="flex">
+          <%= link_to root_path do %>
+            <div class="flex items-center">
+              <div class="inline-block h-8 justify-self-start content-start items-start">
+                <%= image_tag 'block_m-hex.png', alt: 'University of Michigan Logo', height: '35.75', width: '50', class: '' %>
+              </div>
+              <span class="text-white font text-3xl pl-2 font-sans font-medium">
+                Classrooms
+              </span>
+            </div>
+          <% end %>
+        </div>
+        <div class="hidden sm:ml-6 sm:flex sm:space-x-4 pl-2">
+          <div class="border-transparent text-blue-50 hover:border-blue-300 hover:text-white inline-flex items-center pl-1 pt-1 border-b-2 text-base font-normal"><%= link_to "Find a Room", rooms_path, class: "#{class_names(active: current_page?(rooms_path))}" if user_signed_in? %></div>
+          <div class="border-transparent text-blue-50 hover:border-blue-300 hover:text-white inline-flex items-center pr-1 pt-1 border-b-2 text-base font-normal"><%= link_to "Room Filters Glossary", room_filters_glossary_path, class: "#{class_names(active: current_page?(room_filters_glossary_path))}" if user_signed_in?%></div>
+          <div class="border-transparent text-blue-50 hover:border-blue-300 hover:text-white inline-flex items-center pr-1 pt-1 border-b-2 text-base font-normal"><%= link_to "About", about_path, class: "#{class_names(active: current_page?(about_path))}"%></div>
+          <% if user_signed_in? && policy(Announcement).edit? %>
+            <div class="border-transparent text-blue-50 hover:border-blue-300 hover:text-white inline-flex items-center pr-1 pt-1 border-b-2 text-base font-normal"><%= link_to "Announcements", announcements_path, class: "#{class_names(active: current_page?(announcements_path))}"%></div>
+          <% end %>
+          <% if user_signed_in? && policy(Announcement).edit? %>
+            <div class="border-transparent text-blue-50 hover:border-blue-300 hover:text-white inline-flex items-center pr-1 pt-1 border-b-2 text-base font-normal"><%= link_to "AdminDoc", "https://docs.google.com/document/d/1wg_MvJRzeZwl8x1292AYp3JoS4AHd1xSgw7THpqflCU/edit?usp=sharing", target: "_blank"%></div>
+          <% end %>
+        </div>
+      </div>
+      <div class="hidden sm:ml-6 sm:flex sm:items-center">
+        <div class="ml-2 relative">
+          <div class="grid justify-items-end flex flex-wrap items-center">
+            <% if user_signed_in? %>
+              <button id="user-menu-button" class="bg-white rounded-full flex-1 text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" tabindex="-1" aria-expanded="false" aria-haspopup="true" type="button" data-action="click->dropdown#toggle click@window->dropdown#hide">
+                <span class="sr-only bg-white text-black">Open user menu</span>
+              </button>
+              <div class="leading-tight text-sm font-medium text-white">
+                <%= current_user.email %>
+              </div>
+              <%= button_to destroy_user_session_path, method: :delete, role: "menuitem", data: {turbo: "false"} do %>
+                <div class="px-1 ml-2 shadow-sm font-medium rounded text-blue-900 bg-yellow-550 hover:bg-yellow-500 flex-1 hover:underline">Sign Out</div>
+              <% end %>
+            <% else %>
+              <div class="user-action-link">
+                <%= button_to user_saml_omniauth_authorize_path, data: {turbo: "false"} do %>
+                  <div class="px-1 shadow-sm font-medium rounded text-blue-900 bg-yellow-550 hover:bg-yellow-500 hover:underline">Sign In</div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <div class="sm:hidden items-center mt-1"><%= render './layouts/headness_mobile_menu_toggle.html.haml' %></div>
+    </div>
+    <%= render './layouts/headness_mobile_menu_dropdown' %>
+  </div>
+</nav>

@@ -15,9 +15,9 @@ class BuildingsController < ApplicationController
     else
       @buildings = Building.where(bldrecnbr: buildings_ids).order(:name)
     end
-    if params[:query].present?
-      session[:query] = params[:query]
-      @buildings = @buildings.with_name(params[:query])
+    if params[:building_name].present?
+      session[:building_name] = params[:building_name]
+      @buildings = @buildings.with_name(params[:building_name])
     end
       authorize @buildings
       @pagy, @buildings = pagy(@buildings)
@@ -62,7 +62,7 @@ class BuildingsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def building_params
-      params.require(:building).permit(:bldrecnbr, :latitude, :longitude, :name, :nick_name, :abbreviation, :address, :city, :state, :zip, :country, :query, :visible, :inactive_buildings, :building_image)
+      params.require(:building).permit(:bldrecnbr, :latitude, :longitude, :name, :nick_name, :abbreviation, :address, :city, :state, :zip, :country, :building_name, :visible, :inactive_buildings, :building_image)
     end
 
 end
