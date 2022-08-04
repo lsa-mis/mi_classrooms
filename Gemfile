@@ -15,7 +15,7 @@ gem "jbuilder", "~> 2.7"
 gem "ldap_lookup"
 gem "listen"
 gem "omniauth-google-oauth2"
-gem "omniauth-saml"
+gem 'omniauth-saml', '~> 2.1'
 gem "omniauth-rails_csrf_protection"
 gem "order_as_specified", "~> 1.7"
 gem "pagy"
