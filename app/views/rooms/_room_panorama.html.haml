@@ -1,7 +1,0 @@
-
-.room-show-image
-  - if @room.room_panorama.attached?
-    #panorama{ "data-controller" => "pannellum", "data-pannellum-panoimage" => "#{url_for(@room.room_panorama)}",  "data-pannellum-panopreview" => "#{url_for(@room.room_panorama.variant(resize: "25%").processed)}" }
-   
-  -else
-    = room_image(@room)

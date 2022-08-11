@@ -1,3 +1,4 @@
+<div id="maincontent"></div>
 <%= turbo_frame_tag "room" do  %>
   <div class="container rounded-lg shadow-lg px-auto">
     <div class="flex-col w-full px-2">
@@ -140,6 +141,9 @@
             <div class="h-layout h-highlight-item">
               <%= svg("calendar_days")  %>
               <span>Room Availability</span>
+              <span class="pl-1" title="opens in a new tab">
+                <%= svg("external-link-alt-solid") %>
+              </span>
             </div>
           <% end %>
         </div>
@@ -163,7 +167,7 @@
             <%= link_to polymorphic_url(@room.room_layout), target: "_blank" do %>
               <div class="h-layout h-highlight-item">
                 <%= svg("chair") %>
-                <span>Room Layout</span>
+                <span>Room Layout (pdf)</span>
               </div>
             <% end %>
           <% end %>
@@ -173,7 +177,7 @@
     </div>
   </div>
   <div class="py-2 pl-2 mb-20">
-    <%= link_to 'Back', :back, class: "hover:underline text-blue-800", data: {turbo: "false"} %>
+    <%= link_to 'Back to Previous Page', :back, class: "hover:underline text-blue-800", data: {turbo: "false"} %>
     <% if user_signed_in? && policy(Room).edit? %>
       |
       <%= link_to 'Edit', edit_room_path(@room), class: "hover:underline text-blue-800", data: {turbo: "false"} %>

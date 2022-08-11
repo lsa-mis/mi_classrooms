@@ -1,0 +1,15 @@
+<div class="room-show-image">
+<% if @room.room_panorama.attached? %>
+  <div id="panorama"
+    data-controller="pannellum"
+    data-pannellum-panoimage=<%= "#{url_for(@room.room_panorama)}" %>
+    data-pannellum-panopreview=<%= "#{url_for(@room.room_panorama.variant(resize: "25%").processed)}" %>
+    aria-hidden="true" focusable="false">
+  </div>
+<% else %>
+  <%= room_image(@room) %>
+<% end %>
+</div>
+<%#
+tabindex has to be changed from s.tabIndex = 0; to s.tabIndex = -1; in /mi_classrooms/node_modules/pannellum/build/pannellum.js
+%>
