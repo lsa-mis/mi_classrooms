@@ -25,7 +25,7 @@
     "local-time": "^2.1.0",
     "mini-css-extract-plugin": "^1.4.1",
     "nouislider": "^15.2.0",
-    "pannellum": "^2.5.6",
+    "pannellum-rooms": "^1.0.0",
     "postcss": "^8.2.9",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-import": "^14.0.1",
