@@ -1,12 +1,7 @@
 import { Controller } from "stimulus"
-require('pannellum')
-
-
-// import 'pannellum/src/css/pannellum.css';
-
+require('pannellum-rooms')
 export default class extends Controller {
   static targets = [ "panorama" ]
-  // static values = { panoimage: String }
 
   connect(){
     let panoImage = this.data.get("panoimage")
