@@ -21,7 +21,7 @@ import '../stylesheets/search.sass'
 import 'lightgallery/css/lightgallery.css'
 
 import gtag from '../src/analytics'
-import 'pannellum/build/pannellum.css'
+import 'pannellum-rooms/pannellum.css'
 function importAll(r) {
   r.keys().forEach(r);
 }
