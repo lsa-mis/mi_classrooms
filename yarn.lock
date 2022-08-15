@@ -4539,17 +4539,10 @@ p-try@^2.0.0:
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.2.0.tgz#cb2868540e313d61de58fafbe35ce9004d5540e6"
   integrity sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
 
-pannellum-rooms@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/pannellum-rooms/-/pannellum-rooms-1.0.1.tgz#d15bf02df95f77cf0b98bd2cdf95eaadf6fac93c"
-  integrity sha512-CMlApf5OqEgIW2g8bisuceSmStU9UCoU3l9aagtrj6Zvj4tP/Jx3ZTjy1ZvJnihTbktycaiZUAilE+iGJAZnQA==
-  dependencies:
-    pannellum-rooms "^2.5.6"
-
-pannellum-rooms@^2.5.6:
-  version "2.5.6"
-  resolved "https://registry.yarnpkg.com/pannellum-rooms/-/pannellum-rooms-2.5.6.tgz#23047fa126d42e4e48e18c6e4520db4f2da5a236"
-  integrity sha512-vfGSjlaLRXkPxyPgUcBK+hiUyfZims+3DyMDtCGoIW5aJyMMg4OWiIBUN9OH94Ow5bYIt+mKTrByu7QpfpnfDg==
+pannellum-rooms@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/pannellum-rooms/-/pannellum-rooms-1.0.2.tgz#c6441fb9d58fb48611cd6bb764a49e65563f1823"
+  integrity sha512-uQ77aDJnDfr3jptFYZpRqU/wiDJ6PBhzd6Dr/ZXDTpYI1e66R0C+pmw4euDd5PRRNCiVD+lGctUTQhzwPiwH5Q==
 
 parent-module@^1.0.0:
   version "1.0.1"
