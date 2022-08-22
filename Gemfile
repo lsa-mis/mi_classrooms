@@ -24,7 +24,7 @@ gem "pg_search"
 gem 'poppler', '~> 3.5', '>= 3.5.1'
 gem "puma", "4.3.12"
 gem "pundit"
-gem "rails", "~> 6.1.0"
+gem "rails", "~> 6.1.5"
 gem "responders", github: "heartcombo/responders"
 gem "sassc-rails"
 gem "sidekiq", "~> 6.4.0"
