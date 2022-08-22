@@ -1,6 +1,6 @@
 # MClassrooms
 
-![](https://img.shields.io/badge/Ruby%20Version-3.0.1-red) ![](https://img.shields.io/badge/Rails%20Version-6.1.0-red)
+![](https://img.shields.io/badge/Ruby%20Version-3.0.1-red) ![](https://img.shields.io/badge/Rails%20Version-6.1.5-red)
 
   ## Authorization
   - Devise:  This application uses Devise for user authorization.
@@ -8,8 +8,8 @@
   - ldap_lookup used to gather user information (especially group affiliation for authorization)
 
   ## Background Jobs
-  - Sidekiq 6.x
-  - Redis 6.x
+  - Sidekiq 6.4.x
+  - Redis 4.x
 
   ## Database
   - Postgresql 12 (or higher)
