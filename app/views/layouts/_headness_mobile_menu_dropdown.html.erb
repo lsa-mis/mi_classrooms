@@ -18,11 +18,11 @@
               <%= current_user.email %>
             </div>
             <%= button_to destroy_user_session_path, method: :delete, role: "menuitem", tabindex: "-1", data: {turbo: "false"} do  %>
-              <div class="w-60 py-3 shadow-sm font-medium rounded text-blue-900 bg-yellow-550 hover:bg-yellow-500.hover:underline">Sign Out</div>
+              <div class="w-60 py-3 shadow-sm font-medium rounded text-blue-900 bg-yellow-550 hover:bg-yellow-500 hover:underline">Sign Out</div>
             <% end %>
           <% else %>
             <%= button_to user_saml_omniauth_authorize_path, data: {turbo: "false"} do %>
-              <div class="w-60 py-3 shadow-sm font-medium rounded text-blue-900 bg-yellow-550 hover:bg-yellow-500.hover:underline">Sign In</div>
+              <div class="w-60 py-3 shadow-sm font-medium rounded text-blue-900 bg-yellow-550 hover:bg-yellow-500 hover:underline">Sign In</div>
             <% end %>
           <% end %>
         </div>
