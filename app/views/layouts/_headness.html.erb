@@ -40,7 +40,7 @@
                 <div class="px-1 ml-2 shadow-sm font-medium rounded text-blue-900 bg-yellow-550 hover:bg-yellow-500 flex-1 hover:underline">Sign Out</div>
               <% end %>
             <% else %>
-              <div class="user-action-link">
+              <div>
                 <%= button_to user_saml_omniauth_authorize_path, data: {turbo: "false"} do %>
                   <div class="px-1 shadow-sm font-medium rounded text-blue-900 bg-yellow-550 hover:bg-yellow-500 hover:underline">Sign In</div>
                 <% end %>
