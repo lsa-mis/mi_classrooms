@@ -201,6 +201,7 @@ class BuildingsApi
     dept_info_array = {}
     number_of_api_calls_per_minutes = 0
     @buildings_ids.each do |bld|
+      @rooms_in_db = Room.where(building_bldrecnbr: bld).where(rmtyp_description: "Classroom").pluck(:rmrecnbr)
       @campus_id = Building.find_by(bldrecnbr: bld).campus_record_id
       @building_name = Building.find_by(bldrecnbr: bld).name
       result = get_building_classroom_data(bld)
@@ -210,7 +211,6 @@ class BuildingsApi
           if data.present?
             # check data for buildings that have rooms with RoomTypeDescription == "Classroom"
             if data.pluck("RoomTypeDescription").uniq.include?("Classroom")
-              @rooms_in_db = Room.where(building_bldrecnbr: bld).where(rmtyp_description: "Classroom").pluck(:rmrecnbr)
               data.each do |row|
                 # update only Classrooms not all rooms
                 if row['RoomTypeDescription'] == "Classroom"
