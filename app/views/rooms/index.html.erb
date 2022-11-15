@@ -86,7 +86,7 @@
                   <% if params[:min_capacity].present? %>
                     <%= number_field_tag 'min_capacity', nil, min: 1, value: params[:min_capacity], :"data-autosubmit-target" => "min_capacity", data: { action: "input->autosubmit#capacitySubmit" }, class: 'w-full block rounded sm:text-sm border-gray-300' %>
                   <% else %>
-                    <%= number_field_tag 'min_capacity', nil, min: 1, value: 0, :"data-autosubmit-target" => "min_capacity", data: { action: "input->autosubmit#capacitySubmit" }, class: 'w-full block rounded sm:text-sm border-gray-300' %>
+                    <%= number_field_tag 'min_capacity', 1, min: 1, :"data-autosubmit-target" => "min_capacity", data: { action: "input->autosubmit#capacitySubmit" }, class: 'w-full block rounded sm:text-sm border-gray-300' %>
                   <% end %>
                 </div>
                 <div class="ml-1 mr-2 w-1/2">
