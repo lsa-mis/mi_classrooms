@@ -1,15 +1,17 @@
-<div class="justify-end pr-2">
-      <span class="text-muted" data-autosubmit-target="status"></span>
-    </div>
-    <div class="pl-2 font-semibold">
-      All buildings
-    </div>
-    <div class="">
-      <ul role="list" class="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4 m-4">
-        <% @buildings.each do |building| %>
-          <li class="col-span-1 bg-white rounded-lg shadow-md divide-y divide-gray-400 px-2 grid place-items-stretch bg-white border border-gray-300 rounded-lg">
-            <%= render 'building_card', building: building %>
-          </li>
-        <% end %>
-      </ul>
-    </div>
+<%= turbo_frame_tag "turbo-buildings" do %>
+  <div class="justify-end pr-2">
+    <span class="text-muted" data-autosubmit-target="status"></span>
+  </div>
+  <div class="pl-2 font-semibold">
+    All buildings
+  </div>
+  <div class="">
+    <ul role="list" class="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4 m-4">
+      <% @buildings.each do |building| %>
+        <li class="col-span-1 bg-white rounded-lg shadow-md divide-y divide-gray-400 px-2 grid place-items-stretch bg-white border border-gray-300 rounded-lg">
+          <%= render 'building_card', building: building %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

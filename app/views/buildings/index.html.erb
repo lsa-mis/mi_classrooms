@@ -13,7 +13,7 @@
     </div>
   </div>
   <div>
-    <%= form_with url: buildings_path, method: :get, class: "", data: { target: "autosubmit.form" } do |form| %>
+    <%= form_with url: buildings_path, method: :get, class: "", data: { autosubmit_target: "form", turbo_frame: "turbo-buildings" } do |form| %>
       <div class="relative min-h-screen md:flex">
         
         <div class="sidebar w-64 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out" data-autosubmit-target="sidebar">
