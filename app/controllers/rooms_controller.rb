@@ -48,6 +48,11 @@ include ActionView::RecordIdentifier
     @pagy, @rooms = pagy(@rooms)
     @rooms_search_count = @pagy.count
 
+    if turbo_frame_request?
+      render partial: "listing"
+    else
+      render "index"
+    end
   end
 
   # GET /rooms/1
