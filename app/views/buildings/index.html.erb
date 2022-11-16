@@ -26,16 +26,10 @@
           <% end %>
           <div class="pl-1 bg-gray-50 shadow border">
             <div class="px-1">
-              <label for="school_or_college_name">Select a School/College</label>
-                <%= select_tag "school_or_college_name", options_for_select(@schools, selected: params[:school_or_college_name]), include_blank: "Select ...", class: "block rounded-none rounded-l-md text-xs border-gray-300",
-                          :"data-action" => "change->autosubmit#search" %>
-            </div>
-            <br>
-            <hr>
-            <div class="px-1">
               <label for="building_name">Search Building Names</label>
               <%= form.text_field :building_name, class: "block rounded-none rounded-l-md sm:text-sm border-gray-300", :placeholder => 'ex. "East Hall"', value: params[:building_name], :"data-action" => "input->autosubmit#search", :"data-autosubmit-target" => "building_name" %>
             </div>
+            <br>
             </div>
           </div>
           <div class="flex-1 mx-2">
