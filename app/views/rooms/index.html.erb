@@ -32,7 +32,7 @@
     </div>
   </div>
   <div>
-    <%= form_with url: rooms_path, method: :get, class: "", data: { target: "autosubmit.form" } do |form| %>
+    <%= form_with url: rooms_path, method: :get, class: "", data: { autosubmit_target: "form", turbo_frame: "turbo-rooms" } do |form| %>
       <div class="grid grid-cols-2">
         <div class="flex justify-start items-center">
           <button type="button" class="px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400"
@@ -86,7 +86,7 @@
                   <% if params[:min_capacity].present? %>
                     <%= number_field_tag 'min_capacity', nil, min: 1, value: params[:min_capacity], :"data-autosubmit-target" => "min_capacity", data: { action: "input->autosubmit#capacitySubmit" }, class: 'w-full block rounded sm:text-sm border-gray-300' %>
                   <% else %>
-                    <%= number_field_tag 'min_capacity', nil, min: 1, value: 0, :"data-autosubmit-target" => "min_capacity", data: { action: "input->autosubmit#capacitySubmit" }, class: 'w-full block rounded sm:text-sm border-gray-300' %>
+                    <%= number_field_tag 'min_capacity', 1, min: 1, :"data-autosubmit-target" => "min_capacity", data: { action: "input->autosubmit#capacitySubmit" }, class: 'w-full block rounded sm:text-sm border-gray-300' %>
                   <% end %>
                 </div>
                 <div class="ml-1 mr-2 w-1/2">

@@ -1,24 +1,19 @@
 import { Controller } from 'stimulus'
 export default class extends Controller {
-  static targets = ['form', 'status', 'sidebar', 'min_capacity', 'max_capacity', 'capacity_error']
+  static targets = ['form', 'sidebar', 'min_capacity', 'max_capacity', 'capacity_error']
 
   search() {
     clearTimeout(this.timeout)
 
     this.timeout = setTimeout(() => {
-      this.statusTarget.textContent = 'Updating...'
-      Turbo.navigator.submitForm(this.formTarget)
+      this.formTarget.requestSubmit()
       this.sidebarTarget.classList.toggle('-translate-x-full')
-    }, 600)
+    }, 200)
   }
 
   checkboxSubmit() {
-    clearTimeout(this.timeout)
-    this.timeout = setTimeout(() => {
-      this.statusTarget.textContent = 'Updating...'
-      Turbo.navigator.submitForm(this.formTarget)
-      this.sidebarTarget.classList.toggle('-translate-x-full')
-    }, 0)
+    this.formTarget.requestSubmit()
+    this.sidebarTarget.classList.toggle('-translate-x-full')
   }
 
   capacitySubmit(event) {
@@ -37,32 +32,18 @@ export default class extends Controller {
         this.capacity_errorTarget.classList.remove("capacity-error--display")
         this.capacity_errorTarget.innerText = ""
 
-        this.statusTarget.textContent = 'Updating...'
-        Turbo.navigator.submitForm(this.formTarget)
+        this.formTarget.requestSubmit()
         this.sidebarTarget.classList.toggle('-translate-x-full')
       }
-    }, 600)
+    }, 200)
   }
 
   sortCapacity() {
-    clearTimeout(this.timeout)
-
-    this.timeout = setTimeout(() => {
-      this.statusTarget.textContent = 'Updating...'
-      Turbo.navigator.submitForm(this.formTarget)
-    }, 0)
-  }
-
-  change(event) {
-    event.preventDefault()
-    Turbo.navigator.submitForm(this.formTarget)
+    this.formTarget.requestSubmit()
   }
 
   clearFilters() {
     var url = window.location.pathname
-    // console.log(url)
     Turbo.visit(url)
-    // this.formTarget.reset()
-    // Turbo.navigator.submitForm(this.formTarget)
   }
 }

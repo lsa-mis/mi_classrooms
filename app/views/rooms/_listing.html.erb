@@ -1,3 +1,4 @@
+<%= turbo_frame_tag "turbo-rooms" do %>
 <div id="maincontent"></div>
 <div class="mb-10" id="roomListing">
   <% if @filters_list.present? || @sorted%>
@@ -49,3 +50,4 @@
     </div>
   <% end %>
 </div>
+<% end %>

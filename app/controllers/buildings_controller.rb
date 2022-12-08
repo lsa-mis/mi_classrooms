@@ -21,6 +21,12 @@ class BuildingsController < ApplicationController
     end
       authorize @buildings
       @pagy, @buildings = pagy(@buildings)
+
+    if turbo_frame_request?
+      render partial: "listing"
+    else
+      render "index"
+    end
   end
 
   # GET /buildings/1
