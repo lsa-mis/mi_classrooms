@@ -204,15 +204,12 @@ class BuildingsApi
       puts bld
       @rooms_in_db = Room.where(building_bldrecnbr: bld).where(rmtyp_description: "Classroom").pluck(:rmrecnbr)
       @campus_id = Building.find_by(bldrecnbr: bld).campus_record_id
-      puts @campus_id
       @building_name = Building.find_by(bldrecnbr: bld).name
       puts @building_name
       result = get_building_classroom_data(bld)
       if result['success']
         if result['data'].present?
-          data = result['data']
-          puts data
-          fail
+          data = result['data']          
           if data.present?
             # check data for buildings that have rooms with RoomTypeDescription == "Classroom"
             if data.pluck("RoomTypeDescription").uniq.include?("Classroom")

@@ -90,7 +90,7 @@ task api_update_database: :environment do
   # "BuildingRecordNumber": 1000333, "BuildingLongDescription": "400 NORTH INGALLS BUILDING",
   # "BuildingRecordNumber": 1005224, "BuildingLongDescription": "STAMPS AUDITORIUM",
   # "BuildingRecordNumber": 1005059, "BuildingLongDescription": "WALGREEN CHARLES R JR DRAMA CENTER",
-  # buildings_codes = [1000440, 1000234, 1000204, 1000333, 1005224, 1005059, 1005347]
+  buildings_codes = [1000440, 1000234, 1000204, 1000333, 1005224, 1005059, 1005347]
   
   # api = BuildingsApi.new(access_token)
   # time = Benchmark.measure {
