@@ -52,7 +52,7 @@ class ClassroomApi
 
 
   def get_classrooms_list
-    url = URI("https://apigw.it.umich.edu/um/aa/ClassroomList/Classrooms?BuildingID=1005046")
+    url = URI("https://gw-test.api.it.umich.edu/um/aa/ClassroomList/Classrooms?BuildingID=1005046")
 
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
@@ -76,7 +76,7 @@ class ClassroomApi
   end
 
   def get_classroom_info(facility_id)
-    url = URI("https://apigw.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}")
+    url = URI("https://gw-test.api.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}")
 
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
@@ -174,7 +174,7 @@ class ClassroomApi
   end
 
   def get_classroom_characteristics(facility_id)
-    url = URI("https://apigw.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}/Characteristics")
+    url = URI("https://gw-test.api.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}/Characteristics")
 
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
@@ -258,7 +258,7 @@ class ClassroomApi
   end
 
   def get_classroom_contact(facility_id)
-    url = URI("https://apigw.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}/Contacts")
+    url = URI("https://gw-test.api.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}/Contacts")
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -282,7 +282,7 @@ class ClassroomApi
   end
 
   def get_classroom_meetings(start_date, end_date)
-    url = URI("https://apigw.it.umich.edu/um/aa/ClassroomList/Classrooms/#{@rmrecnbr}/Meetings?startDate=#{start_date}&endDate=#{end_date}")
+    url = URI("https://gw-test.api.it.umich.edu/um/aa/ClassroomList/Classrooms/#{@rmrecnbr}/Meetings?startDate=#{start_date}&endDate=#{end_date}")
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
