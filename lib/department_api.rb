@@ -6,7 +6,7 @@ class DepartmentApi
   end
 
   def get_departments_info(dept_name)
-    url = URI("https://gw-test.api.it.umich.edu/um/bf/Department/DeptData?deptDescr=#{dept_name}")
+    url = URI("https://gw.api.it.umich.edu/um/bf/Department/DeptData?deptDescr=#{dept_name}")
 
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true

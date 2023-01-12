@@ -7,7 +7,7 @@ class AuthTokenApi
 
   def get_auth_token
     begin
-      url = URI("https://gw-test.api.it.umich.edu/um/oauth2/token")
+      url = URI("https://gw.api.it.umich.edu/um/oauth2/token")
       http = Net::HTTP.new(url.host, url.port)
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE

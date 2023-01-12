@@ -15,10 +15,12 @@ class ClassroomApi
       classrooms_list = result['data'] 
       number_of_api_calls_per_minutes = 0
       classrooms_list.each do |room|
-        if number_of_api_calls_per_minutes < 190 
+        if number_of_api_calls_per_minutes < 99 
           number_of_api_calls_per_minutes += 1
         else
+          puts number_of_api_calls_per_minutes
           number_of_api_calls_per_minutes = 1
+          puts "sleep"
           sleep(61.seconds)
         end
         facility_id = room['FacilityID'].to_s
@@ -52,7 +54,7 @@ class ClassroomApi
 
 
   def get_classrooms_list
-    url = URI("https://gw-test.api.it.umich.edu/um/aa/ClassroomList/Classrooms?BuildingID=1005046")
+    url = URI("https://gw.api.it.umich.edu/um/aa/ClassroomList/Classrooms?BuildingID=1005046")
 
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
@@ -76,7 +78,9 @@ class ClassroomApi
   end
 
   def get_classroom_info(facility_id)
-    url = URI("https://gw-test.api.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}")
+    # puts "in get_classroom_info"
+    # puts facility_id
+    url = URI("https://gw.api.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}")
 
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
@@ -89,14 +93,16 @@ class ClassroomApi
 
     response = http.request(request)
     response_json = JSON.parse(response.read_body)
-    if response_json['httpCode'].present?
-      @result['error'] = response_json['httpMessage'] + ". " + response_json['moreInformation']
-    else
-      @result['success'] = true
-      @result['data'] = response_json['Classrooms']['Classroom']
+    if response_json.present?
+      if response_json['errorCode'].present?
+        puts response_json
+        @result['error'] = response_json['errorMessage']
+      else
+        @result['success'] = true
+        @result['data'] = response_json['Classrooms']['Classroom']
+      end
     end
     return @result
-    
   end
 
   def update_all_classroom_characteristics
@@ -104,7 +110,7 @@ class ClassroomApi
     classrooms = Room.where(rmtyp_description: "Classroom").where.not(facility_code_heprod: nil)
     number_of_api_calls_per_minutes = 0
     classrooms.each do |room|
-      if number_of_api_calls_per_minutes < 190 
+      if number_of_api_calls_per_minutes < 180 
         number_of_api_calls_per_minutes += 1
       else
         number_of_api_calls_per_minutes = 1
@@ -174,7 +180,7 @@ class ClassroomApi
   end
 
   def get_classroom_characteristics(facility_id)
-    url = URI("https://gw-test.api.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}/Characteristics")
+    url = URI("https://gw.api.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}/Characteristics")
 
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
@@ -202,7 +208,7 @@ class ClassroomApi
     classrooms = Room.where(rmtyp_description: "Classroom").where.not(facility_code_heprod: nil)
     number_of_api_calls_per_minutes = 0
     classrooms.each do |room|
-      if number_of_api_calls_per_minutes < 190 
+      if number_of_api_calls_per_minutes < 180 
         number_of_api_calls_per_minutes += 1
       else
         number_of_api_calls_per_minutes = 1
@@ -258,7 +264,7 @@ class ClassroomApi
   end
 
   def get_classroom_contact(facility_id)
-    url = URI("https://gw-test.api.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}/Contacts")
+    url = URI("https://gw.api.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}/Contacts")
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -282,7 +288,7 @@ class ClassroomApi
   end
 
   def get_classroom_meetings(start_date, end_date)
-    url = URI("https://gw-test.api.it.umich.edu/um/aa/ClassroomList/Classrooms/#{@rmrecnbr}/Meetings?startDate=#{start_date}&endDate=#{end_date}")
+    url = URI("https://gw.api.it.umich.edu/um/aa/ClassroomList/Classrooms/#{@rmrecnbr}/Meetings?startDate=#{start_date}&endDate=#{end_date}")
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE

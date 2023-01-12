@@ -70,7 +70,7 @@ class BuildingsApi
   end
 
   def get_campuses 
-    url = URI("https://gw-test.api.it.umich.edu/um/bf/Campuses")
+    url = URI("https://gw.api.it.umich.edu/um/bf/Campuses")
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -160,7 +160,7 @@ class BuildingsApi
   end
 
   def get_buildings_for_current_fiscal_year
-    url = URI("https://gw-test.api.it.umich.edu/um/bf/BuildingInfo")
+    url = URI("https://gw.api.it.umich.edu/um/bf/BuildingInfo")
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -336,7 +336,7 @@ class BuildingsApi
   def get_building_classroom_data(bldrecnbr)
     puts "in get_building_classroom_data"
 
-    url = URI("https://gw-test.api.it.umich.edu/um/bf/RoomInfo/#{bldrecnbr}")
+    url = URI("https://gw.api.it.umich.edu/um/bf/RoomInfo/#{bldrecnbr}")
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
