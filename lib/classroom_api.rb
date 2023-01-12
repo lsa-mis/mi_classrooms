@@ -67,8 +67,8 @@ class ClassroomApi
 
     response = http.request(request)
     response_json = JSON.parse(response.read_body)
-    if response_json['httpCode'].present?
-      @result['error'] = response_json['httpMessage'] + ". " + response_json['moreInformation']
+    if response_json['errorCode'].present?
+      @result['error'] = response_json['errorMessage']
     else
       @result['success'] = true
       @result['data'] = response_json['Classrooms']['Classroom']
@@ -194,8 +194,8 @@ class ClassroomApi
     response = http.request(request)
     response_json = JSON.parse(response.read_body)
 
-    if response_json['httpCode'].present?
-      @result['error'] = response_json['httpMessage'] + ". " + response_json['moreInformation']
+    if response_json['errorCode'].present?
+      @result['error'] = response_json['errorMessage']
     else
       @result['success'] = true
       @result['data'] = response_json
@@ -277,8 +277,8 @@ class ClassroomApi
     response = http.request(request)
     response_json = JSON.parse(response.read_body)
 
-    if response_json['httpCode'].present?
-      @result['error'] = response_json['httpMessage'] + ". " + response_json['moreInformation']
+    if response_json['errorCode'].present?
+      @result['error'] = response_json['errorMessage']
     else
       @result['success'] = true
       @result['data'] = response_json
