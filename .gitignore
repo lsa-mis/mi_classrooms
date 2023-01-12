@@ -40,3 +40,5 @@ working_files/
 uploads/
 **/.DS_Store
 /config/credentials/staging.key
+
+/config/skylight.yml
