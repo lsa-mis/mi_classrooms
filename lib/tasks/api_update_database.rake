@@ -25,7 +25,7 @@ task api_update_database: :environment do
   # update campus list
   # if campus is in the app db, but not in the API, a warning will be added to the log file
   # 
-  auth_token = AuthTokenApi.new("bf", "buildings")
+  auth_token = AuthTokenApi.new("buildings")
   # auth_token "expires_in":3600 seconds
   result = auth_token.get_auth_token
   if result['success']
@@ -64,7 +64,7 @@ task api_update_database: :environment do
   total_time += time.real.to_i
   # check auth_token expiration time
   if total_time > 3000
-    auth_token = AuthTokenApi.new("bf", "buildings")
+    auth_token = AuthTokenApi.new("buildings")
     result = auth_token.get_auth_token
     if result['success']
       total_time = 0
@@ -114,7 +114,7 @@ task api_update_database: :environment do
   # 
   # total_time += time.real.to_i
   # if total_time > 3000
-  #   auth_token = AuthTokenApi.new("bf", "buildings")
+  #   auth_token = AuthTokenApi.new("buildings")
   #   result = auth_token.get_auth_token
   #   if result['success']
   #     puts "token success"
@@ -151,7 +151,7 @@ task api_update_database: :environment do
   ################################################
   # add facility_id to classrooms and update instructional_seating_count
   # 
-  auth_token = AuthTokenApi.new("aa", "classrooms")
+  auth_token = AuthTokenApi.new("classrooms")
   result = auth_token.get_auth_token
   if result['success']
     total_time = 0
@@ -187,7 +187,7 @@ task api_update_database: :environment do
   # 
   total_time += time.real.to_i
   # if total_time > 3000
-    auth_token = AuthTokenApi.new("aa", "classrooms")
+    auth_token = AuthTokenApi.new("classrooms")
     result = auth_token.get_auth_token
     if result['success']
       total_time = 0
@@ -225,7 +225,7 @@ task api_update_database: :environment do
   # 
   total_time += time.real.to_i
   if total_time > 3000
-    auth_token = AuthTokenApi.new("aa", "classrooms")
+    auth_token = AuthTokenApi.new("classrooms")
     result = auth_token.get_auth_token
     if result['success']
       total_time = 0

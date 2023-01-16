@@ -186,7 +186,7 @@ class BuildingsApi
 
   def update_rooms
     @buildings_ids = Building.all.pluck(:bldrecnbr)
-    dept_auth_token = AuthTokenApi.new("bf", "department")
+    dept_auth_token = AuthTokenApi.new("department")
     dept_auth_token_result = dept_auth_token.get_auth_token
     if dept_auth_token_result['success']
       puts "depts token ok"

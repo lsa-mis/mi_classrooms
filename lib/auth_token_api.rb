@@ -1,6 +1,5 @@
 class AuthTokenApi
-  def initialize(type, scope)
-    @type = type
+  def initialize(scope)
     @scope = scope
     @returned_data = {'success' => false, "error" => "", 'access_token' => nil}
   end
