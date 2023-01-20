@@ -15,21 +15,24 @@ class ClassroomApi
       classrooms_list = result['data'] 
       number_of_api_calls_per_minutes = 0
       classrooms_list.each do |room|
-        if number_of_api_calls_per_minutes < 99 
-          number_of_api_calls_per_minutes += 1
-        else
-          puts number_of_api_calls_per_minutes
-          number_of_api_calls_per_minutes = 1
-          puts "sleep"
-          sleep(61.seconds)
-        end
-        facility_id = room['FacilityID'].to_s
-        # add facility_id and number of seats
-        result = get_classroom_info(ERB::Util.url_encode(facility_id))
-        if result['success']
-          room_info = result['data'][0]
-          # update only rooms for campuses and buildings from the MClassroom database
-          if campus_codes.include?(room_info['CampusCd'].to_i) || buildings_codes.include?(room_info['BuildingID'].to_i)
+        # update only rooms for campuses and buildings from the MClassroom database
+        # if campus_codes.include?(room['CampusCd'].to_i) || buildings_codes.include?(room['BuildingID'].to_i)
+        if @buildings_ids.include?(room['BuildingID'].to_i)
+          if number_of_api_calls_per_minutes < 99
+            number_of_api_calls_per_minutes += 1
+          else
+            puts number_of_api_calls_per_minutes
+            number_of_api_calls_per_minutes = 1
+            puts "sleep"
+            sleep(61.seconds)
+          end
+          facility_id = room['FacilityID'].to_s
+          # add facility_id and number of seats
+          result = get_classroom_info(ERB::Util.url_encode(facility_id))
+          if result['success']
+            room_info = result['data'][0]
+            # # update only rooms for campuses and buildings from the MClassroom database
+            # if campus_codes.include?(room_info['CampusCd'].to_i) || buildings_codes.include?(room_info['BuildingID'].to_i)
             rmrecnbr = room_info['RmRecNbr'].to_i
             room_in_db = Room.find_by(rmrecnbr: rmrecnbr)
             if room_in_db
@@ -39,9 +42,10 @@ class ClassroomApi
                 return @debug
               end
             end
+          else
+            # @log.api_logger.debug "add_facility_id_to_classrooms, error: did not find room in API room_info for facility_id: #{facility_id}"
+            @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{@result['error']}"
           end
-        else
-          @log.api_logger.debug "add_facility_id_to_classrooms, error: did not find room in API room_info for facility_id: #{facility_id}"
         end
       end
     else
@@ -68,7 +72,7 @@ class ClassroomApi
     response = http.request(request)
     response_json = JSON.parse(response.read_body)
     if response_json['errorCode'].present?
-      @result['error'] = response_json['errorMessage']
+      @result['error'] = response_json['errorCode'] + " - " + response_json['errorMessage']
     else
       @result['success'] = true
       @result['data'] = response_json['Classrooms']['Classroom']
@@ -110,7 +114,7 @@ class ClassroomApi
     classrooms = Room.where(rmtyp_description: "Classroom").where.not(facility_code_heprod: nil)
     number_of_api_calls_per_minutes = 0
     classrooms.each do |room|
-      if number_of_api_calls_per_minutes < 180 
+      if number_of_api_calls_per_minutes < 99
         number_of_api_calls_per_minutes += 1
       else
         number_of_api_calls_per_minutes = 1
@@ -208,7 +212,7 @@ class ClassroomApi
     classrooms = Room.where(rmtyp_description: "Classroom").where.not(facility_code_heprod: nil)
     number_of_api_calls_per_minutes = 0
     classrooms.each do |room|
-      if number_of_api_calls_per_minutes < 180 
+      if number_of_api_calls_per_minutes < 99
         number_of_api_calls_per_minutes += 1
       else
         number_of_api_calls_per_minutes = 1
