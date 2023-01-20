@@ -112,41 +112,41 @@ task api_update_database: :environment do
   #################################################
   # update rooms
   # 
-  # total_time += time.real.to_i
-  # if total_time > 3000
-  #   auth_token = AuthTokenApi.new("buildings")
-  #   result = auth_token.get_auth_token
-  #   if result['success']
-  #     puts "token success"
-  #     total_time = 0
-  #     access_token = result['access_token']
-  #     api = BuildingsApi.new(access_token)
-  #   else
-  #     @debug = true
-  #     log.api_logger.debug "get access token for update_rooms, error: No access_token - #{result['error']}"
-  #     errors << "No access_token. Error: " + result['error']
-  #     status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
-  #     message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update rooms errors:\r\n" + errors.join("\r\n")
-  #     task_result.update_log(message, @debug)
-  #     exit
-  #   end
-  # end
+  total_time += time.real.to_i
+  if total_time > 3000
+    auth_token = AuthTokenApi.new("buildings")
+    result = auth_token.get_auth_token
+    if result['success']
+      puts "token success"
+      total_time = 0
+      access_token = result['access_token']
+      api = BuildingsApi.new(access_token)
+    else
+      @debug = true
+      log.api_logger.debug "get access token for update_rooms, error: No access_token - #{result['error']}"
+      errors << "No access_token. Error: " + result['error']
+      status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
+      message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update rooms errors:\r\n" + errors.join("\r\n")
+      task_result.update_log(message, @debug)
+      exit
+    end
+  end
 
-  # time = Benchmark.measure {
-  #   puts "lets update rooms"
-  #   @debug = api.update_rooms
-  # }
-  # puts "Update Rooms Time: #{time.real.round(2)} seconds"
-  # task_time += (time.real / 60) % 60
-  # status_report << "Update Rooms Time: #{time.real.round(2)} seconds"
-  # if @debug
-  #   status_report << "Rooms updates failed. See the log file #{Rails.root}/log/#{Date.today}_room_api.log for errors"
-  #   status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
-  #   message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
-  #   task_result.update_log(message, @debug)
-  #   exit
-  # end
-  # status_report << " "
+  time = Benchmark.measure {
+    # puts "lets update rooms"
+    @debug = api.update_rooms
+  }
+  puts "Update Rooms Time: #{time.real.round(2)} seconds"
+  task_time += (time.real / 60) % 60
+  status_report << "Update Rooms Time: #{time.real.round(2)} seconds"
+  if @debug
+    status_report << "Rooms updates failed. See the log file #{Rails.root}/log/#{Date.today}_room_api.log for errors"
+    status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
+    message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
+    task_result.update_log(message, @debug)
+    exit
+  end
+  status_report << " "
   
   ################################################
   # add facility_id to classrooms and update instructional_seating_count
