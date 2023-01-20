@@ -82,8 +82,8 @@ class BuildingsApi
 
     response = http.request(request)
     response_json = JSON.parse(response.read_body)
-    if response_json['httpCode'].present?
-      @result['error'] = response_json['httpMessage'] + ". " + response_json['moreInformation']
+    if response_json['errorCode'].present?
+      @result['error'] = response_json['errorCode'] + " - " + response_json['errorMessage'] + ". " + response_json['moreInformation']
     else
       @result['success'] = true
       @result['data'] = response_json['Campuses']
@@ -172,8 +172,8 @@ class BuildingsApi
 
     response = http.request(request)
     response_json = JSON.parse(response.read_body)
-    if response_json['httpCode'].present?
-      @result['error'] = response_json['httpMessage'] + ". " + response_json['moreInformation']
+    if response_json['errorCode'].present?
+      @result['error'] = response_json['errorCode'] + " - " + response_json['errorMessage'] + ". " + response_json['moreInformation']
     else
       @result['success'] = true
       @result['data'] = response_json['ListOfBldgs']['Buildings']
@@ -189,7 +189,7 @@ class BuildingsApi
     dept_auth_token = AuthTokenApi.new("department")
     dept_auth_token_result = dept_auth_token.get_auth_token
     if dept_auth_token_result['success']
-      puts "depts token ok"
+      # puts "depts token ok"
       dept_access_token = dept_auth_token_result['access_token']
     else
       puts "Could not get access_token for DepartmentApi. Error: " + dept_auth_token_result['error']
@@ -201,11 +201,11 @@ class BuildingsApi
     dept_info_array = {}
     number_of_api_calls_per_minutes = 0
     @buildings_ids.each do |bld|
-      puts bld
+      # puts bld
       @rooms_in_db = Room.where(building_bldrecnbr: bld).where(rmtyp_description: "Classroom").pluck(:rmrecnbr)
       @campus_id = Building.find_by(bldrecnbr: bld).campus_record_id
       @building_name = Building.find_by(bldrecnbr: bld).name
-      puts @building_name
+      # puts @building_name
       result = get_building_classroom_data(bld)
       if result['success']
         if result['data'].present?
@@ -222,7 +222,7 @@ class BuildingsApi
                     dept_data = dept_info_array[dept_name]
                   else
                     # get data from API
-                    if number_of_api_calls_per_minutes < 190 
+                    if number_of_api_calls_per_minutes < 99
                       number_of_api_calls_per_minutes += 1
                     else
                       number_of_api_calls_per_minutes = 1
@@ -334,7 +334,7 @@ class BuildingsApi
   end
 
   def get_building_classroom_data(bldrecnbr)
-    puts "in get_building_classroom_data"
+    # puts "in get_building_classroom_data"
 
     url = URI("https://gw.api.it.umich.edu/um/bf/RoomInfo/#{bldrecnbr}")
     http = Net::HTTP.new(url.host, url.port)
@@ -348,8 +348,8 @@ class BuildingsApi
 
     response = http.request(request)
     response_json = JSON.parse(response.read_body)
-    if response_json['httpCode'].present?
-      @result['error'] = response_json['httpMessage'] + ". " + response_json['moreInformation']
+    if response_json['errorCode'].present?
+      @result['error'] = response_json['errorCode'] + " - " + response_json['errorMessage'] + ". " + response_json['moreInformation']
     else
       @result['success'] = true
       building_data = []
