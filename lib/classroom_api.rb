@@ -10,6 +10,8 @@ class ClassroomApi
   end
 
   def add_facility_id_to_classrooms(campus_codes = [100], buildings_codes = [])
+    # @rooms_in_db = Room.where(rmtyp_description: "Classroom").pluck(:rmrecnbr)
+    @rooms_in_db = Room.all.pluck(:rmrecnbr)
     result = get_classrooms_list
     if result['success']
       classrooms_list = result['data'] 
@@ -36,22 +38,34 @@ class ClassroomApi
             rmrecnbr = room_info['RmRecNbr'].to_i
             room_in_db = Room.find_by(rmrecnbr: rmrecnbr)
             if room_in_db
-              unless room_in_db.update(facility_code_heprod: facility_id, instructional_seating_count: room_info['RmInstSeatCnt'], campus_record_id: CampusRecord.find_by(campus_cd: room_info['CampusCd']).id)
+              if room_in_db.update(facility_code_heprod: facility_id, instructional_seating_count: room_info['RmInstSeatCnt'], campus_record_id: CampusRecord.find_by(campus_cd: room_info['CampusCd']).id)
+                @rooms_in_db.delete(rmrecnbr)
+              else
                 @log.api_logger.debug "add_facility_id_to_classrooms, error: Could not update: rmrecnbr - #{rmrecnbr}, facility_id - #{facility_id}"
                 @debug = true
                 return @debug
               end
             end
-          else
-            # @log.api_logger.debug "add_facility_id_to_classrooms, error: did not find room in API room_info for facility_id: #{facility_id}"
-            @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{@result['error']}"
           end
+        else
+          # @log.api_logger.debug "add_facility_id_to_classrooms, error: did not find room in API room_info for facility_id: #{facility_id}"
+          @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{@result['error']}"
         end
       end
     else
       @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{@result['error']}"
       @debug = true
       return @debug
+    end
+    # check if database has rooms that are not in API anymore
+    if @rooms_in_db.present?
+      if Room.where(rmrecnbr: @rooms_in_db).destroy_all
+        @log.api_logger.info "add_facility_id_to_classrooms, delete #{@rooms_in_db} room(s) from the database"
+      else
+        @log.api_logger.debug "add_facility_id_to_classrooms, error: could not delete records with #{@rooms_in_db} rmrecnbr"
+        @debug = true
+        return @debug
+      end
     end
     return @debug
   end
