@@ -134,7 +134,8 @@ task api_update_database: :environment do
 
   time = Benchmark.measure {
     # puts "lets update rooms"
-    @debug = api.update_rooms
+    # @debug = api.update_rooms
+    @debug = false
   }
   puts "Update Rooms Time: #{time.real.round(2)} seconds"
   task_time += (time.real / 60) % 60
@@ -181,7 +182,7 @@ task api_update_database: :environment do
     exit
   end
   status_report << " "
-
+exit
   #################################################
   # update classrooms characteristics
   # 

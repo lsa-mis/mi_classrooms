@@ -20,7 +20,7 @@ class ClassroomApi
         # update only rooms for campuses and buildings from the MClassroom database
         # if campus_codes.include?(room['CampusCd'].to_i) || buildings_codes.include?(room['BuildingID'].to_i)
         if @buildings_ids.include?(room['BuildingID'].to_i)
-          if number_of_api_calls_per_minutes < 99
+          if number_of_api_calls_per_minutes < 150
             number_of_api_calls_per_minutes += 1
           else
             puts number_of_api_calls_per_minutes
@@ -226,7 +226,7 @@ class ClassroomApi
     classrooms = Room.where(rmtyp_description: "Classroom").where.not(facility_code_heprod: nil)
     number_of_api_calls_per_minutes = 0
     classrooms.each do |room|
-      if number_of_api_calls_per_minutes < 99
+      if number_of_api_calls_per_minutes < 150
         number_of_api_calls_per_minutes += 1
       else
         number_of_api_calls_per_minutes = 1

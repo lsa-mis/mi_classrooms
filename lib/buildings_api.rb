@@ -222,7 +222,7 @@ class BuildingsApi
                     dept_data = dept_info_array[dept_name]
                   else
                     # get data from API
-                    if number_of_api_calls_per_minutes < 99
+                    if number_of_api_calls_per_minutes < 150
                       number_of_api_calls_per_minutes += 1
                     else
                       number_of_api_calls_per_minutes = 1
