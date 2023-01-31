@@ -189,23 +189,18 @@ class BuildingsApi
     dept_auth_token = AuthTokenApi.new("department")
     dept_auth_token_result = dept_auth_token.get_auth_token
     if dept_auth_token_result['success']
-      # puts "depts token ok"
       dept_access_token = dept_auth_token_result['access_token']
     else
-      puts "Could not get access_token for DepartmentApi. Error: " + dept_auth_token_result['error']
       @log.api_logger.debug "update_rooms, error: Could not get access_token for DepartmentApi: #{dept_auth_token_result['error']}"
       @debug = true
       return @debug
     end
-    # dept = DepartmentApi.new(dept_access_token)
     dept_info_array = {}
     number_of_api_calls_per_minutes = 0
     @buildings_ids.each do |bld|
-      # puts bld
       @rooms_in_db = Room.where(building_bldrecnbr: bld).where(rmtyp_description: "Classroom").pluck(:rmrecnbr)
       @campus_id = Building.find_by(bldrecnbr: bld).campus_record_id
       @building_name = Building.find_by(bldrecnbr: bld).name
-      # puts @building_name
       result = get_building_classroom_data(bld)
       if result['success']
         if result['data'].present?
@@ -228,7 +223,6 @@ class BuildingsApi
                       number_of_api_calls_per_minutes = 1
                       sleep(61.seconds)
                     end
-                    # dept_result = dept.get_departments_info(dept_name)
                     dept_result = DepartmentApi.new(dept_access_token).get_departments_info(dept_name)
                     if dept_result['success']
                       if dept_result['data']['DeptData'].present?
@@ -335,7 +329,6 @@ class BuildingsApi
   end
 
   def get_building_classroom_data(bldrecnbr)
-    # puts "in get_building_classroom_data"
     @result = {'success' => false, 'error' => '', 'data' => {}}
     @debug = false
 
