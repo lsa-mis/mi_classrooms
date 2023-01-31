@@ -209,7 +209,7 @@ class BuildingsApi
       result = get_building_classroom_data(bld)
       if result['success']
         if result['data'].present?
-          data = result['data']          
+          data = result['data']
           if data.present?
             # check data for buildings that have rooms with RoomTypeDescription == "Classroom"
             if data.pluck("RoomTypeDescription").uniq.include?("Classroom")
