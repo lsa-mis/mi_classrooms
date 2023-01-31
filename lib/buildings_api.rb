@@ -197,7 +197,7 @@ class BuildingsApi
       @debug = true
       return @debug
     end
-    dept = DepartmentApi.new(dept_access_token)
+    # dept = DepartmentApi.new(dept_access_token)
     dept_info_array = {}
     number_of_api_calls_per_minutes = 0
     @buildings_ids.each do |bld|
@@ -222,13 +222,14 @@ class BuildingsApi
                     dept_data = dept_info_array[dept_name]
                   else
                     # get data from API
-                    if number_of_api_calls_per_minutes < 150
+                    if number_of_api_calls_per_minutes < 400
                       number_of_api_calls_per_minutes += 1
                     else
                       number_of_api_calls_per_minutes = 1
                       sleep(61.seconds)
                     end
-                    dept_result = dept.get_departments_info(dept_name)
+                    # dept_result = dept.get_departments_info(dept_name)
+                    dept_result = DepartmentApi.new(dept_access_token).get_departments_info(dept_name)
                     if dept_result['success']
                       if dept_result['data']['DeptData'].present?
                         dept_data_info = dept_result['data']['DeptData'][0]
@@ -335,6 +336,8 @@ class BuildingsApi
 
   def get_building_classroom_data(bldrecnbr)
     # puts "in get_building_classroom_data"
+    @result = {'success' => false, 'error' => '', 'data' => {}}
+    @debug = false
 
     url = URI("https://gw.api.it.umich.edu/um/bf/RoomInfo/#{bldrecnbr}")
     http = Net::HTTP.new(url.host, url.port)
