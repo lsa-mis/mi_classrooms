@@ -98,8 +98,7 @@ class ClassroomApi
   def get_classroom_info(facility_id)
     @result = {'success' => false, 'error' => '', 'data' => {}}
     @debug = false
-    # puts "in get_classroom_info"
-    # puts facility_id
+    
     url = URI("https://gw.api.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}")
 
     http = Net::HTTP.new(url.host, url.port)

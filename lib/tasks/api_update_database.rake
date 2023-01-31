@@ -186,7 +186,7 @@ task api_update_database: :environment do
   # update classrooms characteristics
   # 
   total_time += time.real.to_i
-  # if total_time > 3000
+  if total_time > 3000
     auth_token = AuthTokenApi.new("classrooms")
     result = auth_token.get_auth_token
     if result['success']
@@ -202,7 +202,7 @@ task api_update_database: :environment do
       task_result.update_log(message, @debug)
       exit
     end
-  # end
+  end
 
   time = Benchmark.measure {
     @debug = api.update_all_classroom_characteristics
