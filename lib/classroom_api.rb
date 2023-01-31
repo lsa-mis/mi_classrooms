@@ -17,7 +17,6 @@ class ClassroomApi
       number_of_api_calls_per_minutes = 0
       classrooms_list.each do |room|
         # update only rooms for campuses and buildings from the MClassroom database
-        # if campus_codes.include?(room['CampusCd'].to_i) || buildings_codes.include?(room['BuildingID'].to_i)
         if @buildings_ids.include?(room['BuildingID'].to_i)
           if number_of_api_calls_per_minutes < 400
             number_of_api_calls_per_minutes += 1
@@ -60,7 +59,7 @@ class ClassroomApi
     end
     # check if database has rooms that are not in API anymore
     if @rooms_in_db.present?
-      if Room.where(rmrecnbr: @rooms_in_db).destroy_all
+      if Room.where(rmrecnbr: @rooms_in_db).delete_all
         @log.api_logger.info "add_facility_id_to_classrooms, delete #{@rooms_in_db} room(s) from the database"
       else
         @log.api_logger.debug "add_facility_id_to_classrooms, error: could not delete records with #{@rooms_in_db} rmrecnbr"
