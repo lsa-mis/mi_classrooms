@@ -10,7 +10,6 @@ class ClassroomApi
   end
 
   def add_facility_id_to_classrooms(campus_codes = [100], buildings_codes = [])
-    # @rooms_in_db = Room.where(rmtyp_description: "Classroom").pluck(:rmrecnbr)
     @rooms_in_db = Room.all.pluck(:rmrecnbr)
     result = get_classrooms_list
     if result['success']
@@ -20,21 +19,24 @@ class ClassroomApi
         # update only rooms for campuses and buildings from the MClassroom database
         # if campus_codes.include?(room['CampusCd'].to_i) || buildings_codes.include?(room['BuildingID'].to_i)
         if @buildings_ids.include?(room['BuildingID'].to_i)
-          if number_of_api_calls_per_minutes < 150
+          if number_of_api_calls_per_minutes < 400
             number_of_api_calls_per_minutes += 1
           else
-            puts number_of_api_calls_per_minutes
+            @log.api_logger.debug "add_facility_id_to_classrooms, the script sleeps after #{number_of_api_calls_per_minutes} calls"
             number_of_api_calls_per_minutes = 1
-            puts "sleep"
             sleep(61.seconds)
           end
           facility_id = room['FacilityID'].to_s
           # add facility_id and number of seats
           result = get_classroom_info(ERB::Util.url_encode(facility_id))
+          if result['error'] == "Resource access limit reached"
+            @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{@result['error']} after #{number_of_api_calls_per_minutes} calls"
+            number_of_api_calls_per_minutes = 1
+            sleep(61.seconds)
+            result = get_classroom_info(ERB::Util.url_encode(facility_id))
+          end
           if result['success']
             room_info = result['data'][0]
-            # # update only rooms for campuses and buildings from the MClassroom database
-            # if campus_codes.include?(room_info['CampusCd'].to_i) || buildings_codes.include?(room_info['BuildingID'].to_i)
             rmrecnbr = room_info['RmRecNbr'].to_i
             room_in_db = Room.find_by(rmrecnbr: rmrecnbr)
             if room_in_db
@@ -46,14 +48,13 @@ class ClassroomApi
                 return @debug
               end
             end
+          else
+            @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{@result['error']} for #{facility_id}"
           end
-        else
-          # @log.api_logger.debug "add_facility_id_to_classrooms, error: did not find room in API room_info for facility_id: #{facility_id}"
-          @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{@result['error']}"
         end
       end
     else
-      @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{@result['error']}"
+      @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{@result['error']} for #{facility_id}"
       @debug = true
       return @debug
     end
@@ -96,6 +97,8 @@ class ClassroomApi
   end
 
   def get_classroom_info(facility_id)
+    @result = {'success' => false, 'error' => '', 'data' => {}}
+    @debug = false
     # puts "in get_classroom_info"
     # puts facility_id
     url = URI("https://gw.api.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}")
@@ -113,8 +116,8 @@ class ClassroomApi
     response_json = JSON.parse(response.read_body)
     if response_json.present?
       if response_json['errorCode'].present?
-        puts response_json
         @result['error'] = response_json['errorMessage']
+        @result['success'] = false
       else
         @result['success'] = true
         @result['data'] = response_json['Classrooms']['Classroom']
@@ -128,9 +131,10 @@ class ClassroomApi
     classrooms = Room.where(rmtyp_description: "Classroom").where.not(facility_code_heprod: nil)
     number_of_api_calls_per_minutes = 0
     classrooms.each do |room|
-      if number_of_api_calls_per_minutes < 99
+      if number_of_api_calls_per_minutes < 400
         number_of_api_calls_per_minutes += 1
       else
+        @log.api_logger.debug "update_all_classroom_characteristics, the script sleeps after #{number_of_api_calls_per_minutes} calls"
         number_of_api_calls_per_minutes = 1
         sleep(61.seconds)
       end
@@ -138,6 +142,12 @@ class ClassroomApi
       rmrecnbr = room.rmrecnbr
 
       result = get_classroom_characteristics(ERB::Util.url_encode(facility_id))
+      if result['error'] == "Resource access limit reached"
+        @log.api_logger.debug "update_all_classroom_characteristics, error: API return: #{@result['error']} after #{number_of_api_calls_per_minutes} calls"
+        number_of_api_calls_per_minutes = 1
+        sleep(61.seconds)
+        result = get_classroom_characteristics(ERB::Util.url_encode(facility_id))
+      end
       if result['success']
         if result['data']['Characteristics'].present?
           characteristics = result['data']['Characteristics']['Characteristic']
@@ -198,6 +208,8 @@ class ClassroomApi
   end
 
   def get_classroom_characteristics(facility_id)
+    @result = {'success' => false, 'error' => '', 'data' => {}}
+    @debug = false
     url = URI("https://gw.api.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}/Characteristics")
 
     http = Net::HTTP.new(url.host, url.port)
@@ -223,12 +235,15 @@ class ClassroomApi
   end
 
   def update_all_classroom_contacts
+    @result = {'success' => false, 'error' => '', 'data' => {}}
+    @debug = false
     classrooms = Room.where(rmtyp_description: "Classroom").where.not(facility_code_heprod: nil)
     number_of_api_calls_per_minutes = 0
     classrooms.each do |room|
-      if number_of_api_calls_per_minutes < 150
+      if number_of_api_calls_per_minutes < 400
         number_of_api_calls_per_minutes += 1
       else
+        @log.api_logger.debug "update_all_classroom_contacts, the script sleeps after #{number_of_api_calls_per_minutes} calls"
         number_of_api_calls_per_minutes = 1
         sleep(61.seconds)
       end
@@ -241,9 +256,9 @@ class ClassroomApi
           row = result['data']['Classrooms']['Classroom'][0]
           
           if RoomContact.find_by(rmrecnbr: rmrecnbr).present?
-            update_classroom_contact(row)
+            update_classroom_contact(row, rmrecnbr)
           else
-            create_classroom_contact(row)
+            create_classroom_contact(row, rmrecnbr)
           end
         else
           @log.api_logger.info "update_all_classroom_contacts, No contacts for facility_id #{facility_id}"
@@ -258,24 +273,24 @@ class ClassroomApi
     return @debug
   end
 
-  def update_classroom_contact(row)
-    contact = RoomContact.find_by(rmrecnbr: row['RmRecNbr'])
+  def update_classroom_contact(row, rmrecnbr)
+    contact = RoomContact.find_by(rmrecnbr: rmrecnbr)
     unless contact.update(rm_schd_cntct_name: row['ContactName'], rm_schd_email: row['Email'], rm_schd_cntct_phone: row['Phone'],
                 rm_det_url: row['ScheduleURL'], rm_usage_guidlns_url: row['UsageGuideLinesURL'], rm_sppt_deptid: row['SpptDeptID'],
                 rm_sppt_cntct_email: row['SpptCntctEmail'], rm_sppt_cntct_phone: row['SpptCntctPhone'], rm_sppt_cntct_url: row['SpptCntctURL'])
       
-      @log.api_logger.debug "update_all_classroom_contacts, error: Could not update #{row['RmRecNbr']} because : #{contact.errors.messages}"
+      @log.api_logger.debug "update_all_classroom_contacts, error: Could not update #{rmrecnbr} because : #{contact.errors.messages}"
       @debug = true
       return @debug
     end
   end
 
-  def create_classroom_contact(row)
-    contact = RoomContact.new(rmrecnbr: row['RmRecNbr'], rm_schd_cntct_name: row['ContactName'], rm_schd_email: row['Email'], rm_schd_cntct_phone: row['Phone'],
+  def create_classroom_contact(row, rmrecnbr)
+    contact = RoomContact.new(rmrecnbr: rmrecnbr, rm_schd_cntct_name: row['ContactName'], rm_schd_email: row['Email'], rm_schd_cntct_phone: row['Phone'],
     rm_det_url: row['ScheduleURL'], rm_usage_guidlns_url: row['UsageGuideLinesURL'], rm_sppt_deptid: row['SpptDeptID'],
     rm_sppt_cntct_email: row['SpptCntctEmail'], rm_sppt_cntct_phone: row['SpptCntctPhone'], rm_sppt_cntct_url: row['SpptCntctURL'])
     unless contact.save
-      @log.api_logger.debug "update_all_classroom_contacts, error: Could not create #{row['RmRecNbr']} because : #{contact.errors.messages}"
+      @log.api_logger.debug "update_all_classroom_contacts, error: Could not create #{rmrecnbr} because : #{contact.errors.messages}"
       @debug = true
       return @debug
     end
