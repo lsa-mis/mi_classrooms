@@ -83,7 +83,7 @@ class BuildingsApi
     response = http.request(request)
     response_json = JSON.parse(response.read_body)
     if response_json['errorCode'].present?
-      @result['error'] = response_json['errorCode'] + " - " + response_json['errorMessage'] + ". " + response_json['moreInformation']
+      @result['error'] = response_json['errorCode'] + " - " + response_json['errorMessage']
     else
       @result['success'] = true
       @result['data'] = response_json['Campuses']
@@ -173,7 +173,7 @@ class BuildingsApi
     response = http.request(request)
     response_json = JSON.parse(response.read_body)
     if response_json['errorCode'].present?
-      @result['error'] = response_json['errorCode'] + " - " + response_json['errorMessage'] + ". " + response_json['moreInformation']
+      @result['error'] = response_json['errorCode'] + " - " + response_json['errorMessage']
     else
       @result['success'] = true
       @result['data'] = response_json['ListOfBldgs']['Buildings']
@@ -352,7 +352,7 @@ class BuildingsApi
     response = http.request(request)
     response_json = JSON.parse(response.read_body)
     if response_json['errorCode'].present?
-      @result['error'] = response_json['errorCode'] + " - " + response_json['errorMessage'] + ". " + response_json['moreInformation']
+      @result['error'] = response_json['errorCode'] + " - " + response_json['errorMessage']
     else
       @result['success'] = true
       building_data = []

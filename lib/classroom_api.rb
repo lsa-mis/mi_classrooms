@@ -116,7 +116,7 @@ class ClassroomApi
     response_json = JSON.parse(response.read_body)
     if response_json.present?
       if response_json['errorCode'].present?
-        @result['error'] = response_json['errorMessage']
+        @result['error'] = response_json['errorCode'] + " - " + response_json['errorMessage']
         @result['success'] = false
       else
         @result['success'] = true
@@ -225,7 +225,7 @@ class ClassroomApi
     response_json = JSON.parse(response.read_body)
 
     if response_json['errorCode'].present?
-      @result['error'] = response_json['errorMessage']
+      @result['error'] = response_json['errorCode'] + " - " + response_json['errorMessage']
     else
       @result['success'] = true
       @result['data'] = response_json
@@ -311,7 +311,7 @@ class ClassroomApi
     response_json = JSON.parse(response.read_body)
 
     if response_json['errorCode'].present?
-      @result['error'] = response_json['errorMessage']
+      @result['error'] = response_json['errorCode'] + " - " + response_json['errorMessage']
     else
       @result['success'] = true
       @result['data'] = response_json
