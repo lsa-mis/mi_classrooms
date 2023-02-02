@@ -63,7 +63,7 @@ task api_update_database: :environment do
   # 
   total_time += time.real.to_i
   # check auth_token expiration time
-  if total_time > 3000
+  if total_time > 3600
     auth_token = AuthTokenApi.new("buildings")
     result = auth_token.get_auth_token
     if result['success']
@@ -113,7 +113,7 @@ task api_update_database: :environment do
   # update rooms
   # 
   total_time += time.real.to_i
-  if total_time > 3000
+  if total_time > 3600
     auth_token = AuthTokenApi.new("buildings")
     result = auth_token.get_auth_token
     if result['success']
@@ -186,7 +186,7 @@ task api_update_database: :environment do
   # update classrooms characteristics
   # 
   total_time += time.real.to_i
-  if total_time > 3000
+  if total_time > 3600
     auth_token = AuthTokenApi.new("classrooms")
     result = auth_token.get_auth_token
     if result['success']
@@ -224,7 +224,7 @@ task api_update_database: :environment do
   # update classrooms contacts
   # 
   total_time += time.real.to_i
-  if total_time > 3000
+  if total_time > 3600
     auth_token = AuthTokenApi.new("classrooms")
     result = auth_token.get_auth_token
     if result['success']
