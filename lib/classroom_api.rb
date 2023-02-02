@@ -26,8 +26,8 @@ class ClassroomApi
           facility_id = room['FacilityID'].to_s
           # add facility_id and number of seats
           result = get_classroom_info(ERB::Util.url_encode(facility_id))
-          if result['error'] == "Resource access limit reached"
-            @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{result['error']} after #{number_of_api_calls_per_minutes} calls"
+          if result['errorcode'] == "ERR429"
+            @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls"
             number_of_api_calls_per_minutes = 1
             sleep(61.seconds)
             result = get_classroom_info(ERB::Util.url_encode(facility_id))
@@ -46,14 +46,14 @@ class ClassroomApi
               end
             end
           else
-            @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{result['error']} for #{facility_id}"
+            @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{result['errorcode']} - #{result['error']} for #{facility_id}"
             @debug = true
             return @debug
           end
         end
       end
     else
-      @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{result['error']} for #{facility_id}"
+      @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{result['errorcode']} - #{result['error']} for #{facility_id}"
       @debug = true
       return @debug
     end
@@ -143,8 +143,8 @@ class ClassroomApi
       rmrecnbr = room.rmrecnbr
 
       result = get_classroom_characteristics(ERB::Util.url_encode(facility_id))
-      if result['error'] == "Resource access limit reached"
-        @log.api_logger.debug "update_all_classroom_characteristics, error: API return: #{result['error']} after #{number_of_api_calls_per_minutes} calls"
+      if result['errorcode'] == "ERR429"
+        @log.api_logger.debug "update_all_classroom_characteristics, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls"
         number_of_api_calls_per_minutes = 1
         sleep(61.seconds)
         result = get_classroom_characteristics(ERB::Util.url_encode(facility_id))
@@ -174,7 +174,7 @@ class ClassroomApi
           @log.api_logger.info "update_all_classroom_characteristics, no characteristics for facility_id: #{facility_id}"
         end
       else
-        @log.api_logger.debug "update_all_classroom_characteristics, error: API return: #{result['error']}"
+        @log.api_logger.debug "update_all_classroom_characteristics, error: API return: #{result['errorcode']} - #{result['error']}"
         @debug = true
         return @debug
       end
@@ -266,7 +266,7 @@ class ClassroomApi
           @log.api_logger.info "update_all_classroom_contacts, No contacts for facility_id #{facility_id}"
         end
       else
-        @log.api_logger.debug "update_all_classroom_contacts, error: API returns false for facility_id #{facility_id}: #{result['error']}"
+        @log.api_logger.debug "update_all_classroom_contacts, error: API returns false for facility_id #{facility_id}: #{result['errorcode']} - #{result['error']}"
         @debug = true
         return @debug
       end
