@@ -1,7 +1,7 @@
 class AuthTokenApi
   def initialize(scope)
     @scope = scope
-    @returned_data = {'success' => false, "error" => "", 'access_token' => nil}
+    @returned_data = {'success' => false, 'errorcode' => '', 'error' => '', 'access_token' => nil}
   end
 
   def get_auth_token
@@ -14,9 +14,11 @@ class AuthTokenApi
       request = Net::HTTP::Post.new(url)
       request["content-type"] = 'application/x-www-form-urlencoded'
       request["accept"] = 'application/json'
-      request.body = "grant_type=client_credentials&client_id=#{Rails.application.credentials.um_api[:buildings_client_id]}&client_secret=#{Rails.application.credentials.um_api[:buildings_client_secret]}&scope=#{@scope}"
+      request.body = "grant_type=client_credentials&client_id=#{Rails.application.credentials.um_api[:buildings_client_id]}&client_secret=111&scope=#{@scope}"
 
       response = http.request(request)
+      puts JSON.parse(response.read_body)
+      fail
       if JSON.parse(response.read_body)['error'].present?
         @returned_data['error'] = JSON.parse(response.read_body)['error']
       else

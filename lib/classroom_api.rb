@@ -2,8 +2,6 @@ class ClassroomApi
 
   def initialize(access_token)
     @buildings_ids = Building.all.pluck(:bldrecnbr)
-    
-    @result = {'success' => false, 'error' => '', 'data' => {}}
     @access_token = access_token
     @debug = false
     @log = ApiLog.new
@@ -29,7 +27,7 @@ class ClassroomApi
           # add facility_id and number of seats
           result = get_classroom_info(ERB::Util.url_encode(facility_id))
           if result['error'] == "Resource access limit reached"
-            @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{@result['error']} after #{number_of_api_calls_per_minutes} calls"
+            @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{result['error']} after #{number_of_api_calls_per_minutes} calls"
             number_of_api_calls_per_minutes = 1
             sleep(61.seconds)
             result = get_classroom_info(ERB::Util.url_encode(facility_id))
@@ -48,12 +46,14 @@ class ClassroomApi
               end
             end
           else
-            @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{@result['error']} for #{facility_id}"
+            @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{result['error']} for #{facility_id}"
+            @debug = true
+            return @debug
           end
         end
       end
     else
-      @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{@result['error']} for #{facility_id}"
+      @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{result['error']} for #{facility_id}"
       @debug = true
       return @debug
     end
@@ -72,6 +72,7 @@ class ClassroomApi
 
 
   def get_classrooms_list
+    result = {'success' => false, 'errorcode' => '', 'error' => '', 'data' => {}}
     url = URI("https://gw.api.it.umich.edu/um/aa/ClassroomList/Classrooms?BuildingID=1005046")
 
     http = Net::HTTP.new(url.host, url.port)
@@ -86,17 +87,18 @@ class ClassroomApi
     response = http.request(request)
     response_json = JSON.parse(response.read_body)
     if response_json['errorCode'].present?
-      @result['error'] = response_json['errorCode'] + " - " + response_json['errorMessage']
+      result['errorcode'] = response_json['errorCode']
+      result['error'] = response_json['errorMessage']
     else
-      @result['success'] = true
-      @result['data'] = response_json['Classrooms']['Classroom']
+      result['success'] = true
+      result['data'] = response_json['Classrooms']['Classroom']
     end
-    return @result
+    return result
     
   end
 
   def get_classroom_info(facility_id)
-    @result = {'success' => false, 'error' => '', 'data' => {}}
+    result = {'success' => false, 'errorcode' => '', 'error' => '', 'data' => {}}
     @debug = false
     
     url = URI("https://gw.api.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}")
@@ -114,14 +116,15 @@ class ClassroomApi
     response_json = JSON.parse(response.read_body)
     if response_json.present?
       if response_json['errorCode'].present?
-        @result['error'] = response_json['errorCode'] + " - " + response_json['errorMessage']
-        @result['success'] = false
+        result['errorcode'] = response_json['errorCode']
+        result['error'] = response_json['errorMessage']
+        result['success'] = false
       else
-        @result['success'] = true
-        @result['data'] = response_json['Classrooms']['Classroom']
+        result['success'] = true
+        result['data'] = response_json['Classrooms']['Classroom']
       end
     end
-    return @result
+    return result
   end
 
   def update_all_classroom_characteristics
@@ -141,7 +144,7 @@ class ClassroomApi
 
       result = get_classroom_characteristics(ERB::Util.url_encode(facility_id))
       if result['error'] == "Resource access limit reached"
-        @log.api_logger.debug "update_all_classroom_characteristics, error: API return: #{@result['error']} after #{number_of_api_calls_per_minutes} calls"
+        @log.api_logger.debug "update_all_classroom_characteristics, error: API return: #{result['error']} after #{number_of_api_calls_per_minutes} calls"
         number_of_api_calls_per_minutes = 1
         sleep(61.seconds)
         result = get_classroom_characteristics(ERB::Util.url_encode(facility_id))
@@ -171,7 +174,7 @@ class ClassroomApi
           @log.api_logger.info "update_all_classroom_characteristics, no characteristics for facility_id: #{facility_id}"
         end
       else
-        @log.api_logger.debug "update_all_classroom_characteristics, error: API return: #{@result['error']}"
+        @log.api_logger.debug "update_all_classroom_characteristics, error: API return: #{result['error']}"
         @debug = true
         return @debug
       end
@@ -206,7 +209,7 @@ class ClassroomApi
   end
 
   def get_classroom_characteristics(facility_id)
-    @result = {'success' => false, 'error' => '', 'data' => {}}
+    result = {'success' => false, 'errorcode' => '', 'error' => '', 'data' => {}}
     @debug = false
     url = URI("https://gw.api.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}/Characteristics")
 
@@ -223,17 +226,18 @@ class ClassroomApi
     response_json = JSON.parse(response.read_body)
 
     if response_json['errorCode'].present?
-      @result['error'] = response_json['errorCode'] + " - " + response_json['errorMessage']
+      result['errorcode'] = response_json['errorCode']
+      result['error'] = response_json['errorMessage']
     else
-      @result['success'] = true
-      @result['data'] = response_json
+      result['success'] = true
+      result['data'] = response_json
     end
-    return @result
+    return result
 
   end
 
   def update_all_classroom_contacts
-    @result = {'success' => false, 'error' => '', 'data' => {}}
+    result = {'success' => false, 'errorcode' => '', 'error' => '', 'data' => {}}
     @debug = false
     classrooms = Room.where(rmtyp_description: "Classroom").where.not(facility_code_heprod: nil)
     number_of_api_calls_per_minutes = 0
@@ -262,7 +266,7 @@ class ClassroomApi
           @log.api_logger.info "update_all_classroom_contacts, No contacts for facility_id #{facility_id}"
         end
       else
-        @log.api_logger.debug "update_all_classroom_contacts, error: API returns false for facility_id #{facility_id}: #{@result['error']}"
+        @log.api_logger.debug "update_all_classroom_contacts, error: API returns false for facility_id #{facility_id}: #{result['error']}"
         @debug = true
         return @debug
       end
@@ -295,6 +299,7 @@ class ClassroomApi
   end
 
   def get_classroom_contact(facility_id)
+    result = {'success' => false, 'errorcode' => '', 'error' => '', 'data' => {}}
     url = URI("https://gw.api.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}/Contacts")
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
@@ -309,12 +314,13 @@ class ClassroomApi
     response_json = JSON.parse(response.read_body)
 
     if response_json['errorCode'].present?
-      @result['error'] = response_json['errorCode'] + " - " + response_json['errorMessage']
+      result['errorcode'] = response_json['errorCode']
+      result['error'] = response_json['errorMessage']
     else
-      @result['success'] = true
-      @result['data'] = response_json
+      result['success'] = true
+      result['data'] = response_json
     end
-    return @result
+    return result
 
   end
 

@@ -1,7 +1,7 @@
 class DepartmentApi
 
   def initialize(access_token)
-    @result = {'success' => false, 'error' => '', 'data' => {}}
+    @result = {'success' => false, 'errorcode' => '', 'error' => '', 'data' => {}}
     @access_token = access_token
   end
 
@@ -25,7 +25,8 @@ class DepartmentApi
     if response_json['ErrorResponse'].present?
       @result['success'] = false
       error = response_json['ErrorResponse']
-      @result['error'] = error['responseCode'].to_s + ". " + error['responseDescription']
+      @result['errorcode'] = error['responseCode'].to_s
+      @result['error'] = error['responseDescription']
     else
       @result['success'] = true
       @result['data'] = response_json['DepartmentList']

@@ -3,7 +3,6 @@ class BuildingsApi
   REMOVE_BLDG = [1000890]
 
   def initialize(access_token)
-    @result = {'success' => false, 'error' => '', 'data' => {}}
     @access_token = access_token
     @debug = false
     @log = ApiLog.new
@@ -13,9 +12,9 @@ class BuildingsApi
 
   def update_campus_list
     @campus_cds = CampusRecord.all.pluck(:campus_cd)
-    @result = get_campuses
-    if @result['success']
-      data = @result['data']['Campus']
+    result = get_campuses
+    if result['success']
+      data = result['data']['Campus']
       data.each do |row|
         campus_cd = row['CampusCd']
         if campus_exists?(row['CampusCd'])
@@ -36,7 +35,7 @@ class BuildingsApi
         end
       end
     else
-      @log.api_logger.debug "update_campus_list, error: API return: #{@result['error']}"
+      @log.api_logger.debug "update_campus_list, error: API return: #{result['errorcode']} - #{result['error']}"
       @debug = true
       return @debug
     end
@@ -69,7 +68,8 @@ class BuildingsApi
     end
   end
 
-  def get_campuses 
+  def get_campuses
+    result = {'success' => false, 'errorcode' => '', 'error' => '', 'data' => {}}
     url = URI("https://gw.api.it.umich.edu/um/bf/Campuses")
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
@@ -83,12 +83,13 @@ class BuildingsApi
     response = http.request(request)
     response_json = JSON.parse(response.read_body)
     if response_json['errorCode'].present?
-      @result['error'] = response_json['errorCode'] + " - " + response_json['errorMessage']
+      result['errorcode'] = response_json['errorCode']
+      result['error'] = response_json['errorMessage']
     else
-      @result['success'] = true
-      @result['data'] = response_json['Campuses']
+      result['success'] = true
+      result['data'] = response_json['Campuses']
     end
-    return @result
+    return result
   end
 
   # update buildings
@@ -96,9 +97,9 @@ class BuildingsApi
   def update_all_buildings(campus_codes = [100], buildings_codes = [])
     @buildings_ids = Building.all.pluck(:bldrecnbr)
 
-    @result = get_buildings_for_current_fiscal_year
-    if @result['success']
-      data = @result['data']
+    result = get_buildings_for_current_fiscal_year
+    if result['success']
+      data = result['data']
       data.each do |row|
         if REMOVE_BLDG.include?(row['BuildingRecordNumber'])
           next
@@ -119,7 +120,7 @@ class BuildingsApi
       end
 
     else
-      @log.api_logger.debug "update_all_buildings, error: API return: #{@result['error']}"
+      @log.api_logger.debug "update_all_buildings, error: API return: #{result['errorcode']} - #{result['error']}"
       @debug = true
       return @debug
     end
@@ -160,6 +161,7 @@ class BuildingsApi
   end
 
   def get_buildings_for_current_fiscal_year
+    result = {'success' => false, 'errorcode' => '', 'error' => '', 'data' => {}}
     url = URI("https://gw.api.it.umich.edu/um/bf/BuildingInfo")
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
@@ -173,12 +175,13 @@ class BuildingsApi
     response = http.request(request)
     response_json = JSON.parse(response.read_body)
     if response_json['errorCode'].present?
-      @result['error'] = response_json['errorCode'] + " - " + response_json['errorMessage']
+      result['errorcode'] = response_json['errorCode']
+      result['error'] = response_json['errorMessage']
     else
-      @result['success'] = true
-      @result['data'] = response_json['ListOfBldgs']['Buildings']
+      result['success'] = true
+      result['data'] = response_json['ListOfBldgs']['Buildings']
     end
-    return @result
+    return result
 
   end
 
@@ -237,7 +240,7 @@ class BuildingsApi
                         dept_data = nil
                       end
                     else
-                      @log.api_logger.debug "update_rooms, error: DepartmentApi: Error for building #{bld}, room #{row['RoomRecordNumber']}, department #{dept_name} - #{dept_result['error']}"
+                      @log.api_logger.debug "update_rooms, error: DepartmentApi: Error for building #{bld}, room #{row['RoomRecordNumber']}, department #{dept_name} - #{dept_result['errorcode']}: #{dept_result['error']}"
                       dept_data = nil
                       # don't want to interrupt because Department API gives this error: 
                       # Error for building 1005036, room 2108446, department EH&S - 404. Please specify Department Description of more than 3 characters
@@ -268,7 +271,7 @@ class BuildingsApi
           end
         end
       else
-        @log.api_logger.debug "update_rooms, error: API return: #{@result['error']}"
+        @log.api_logger.debug "update_rooms, error: API return: #{result['errorcode']} - #{result['error']}"
         @debug = true
         return @debug
       end
@@ -329,7 +332,7 @@ class BuildingsApi
   end
 
   def get_building_classroom_data(bldrecnbr)
-    @result = {'success' => false, 'error' => '', 'data' => {}}
+    result = {'success' => false, 'errorcode' => '', 'error' => '', 'data' => {}}
     @debug = false
 
     url = URI("https://gw.api.it.umich.edu/um/bf/RoomInfo/#{bldrecnbr}")
@@ -345,22 +348,23 @@ class BuildingsApi
     response = http.request(request)
     response_json = JSON.parse(response.read_body)
     if response_json['errorCode'].present?
-      @result['error'] = response_json['errorCode'] + " - " + response_json['errorMessage']
+      result['errorcode'] = response_json['errorCode']
+      result['error'] = response_json['errorMessage']
     else
-      @result['success'] = true
+      result['success'] = true
       building_data = []
       if response_json['ListOfRooms'].nil?
-        @result['data'] = nil
+        result['data'] = nil
       else
         data = response_json['ListOfRooms']['RoomData']
         if data.is_a?(Hash) 
           data = []
           data << response_json['ListOfRooms']['RoomData']
         end
-        @result['data'] = data
+        result['data'] = data
       end
     end
-    return @result
+    return result
 
   end
   
