@@ -22,7 +22,7 @@ class AuthTokenApi
         @returned_data['error'] = response_json['errorCode'] + " - " + response_json['errorMessage']
       elsif response_json['fault'].present?
         @returned_data['error'] = response_json['fault']['faultstring']
-      elsif response_json.present?
+      elsif response_json['access_token'].present?
         @returned_data['success'] = true
         @returned_data['access_token'] = response_json['access_token']
       else
