@@ -59,6 +59,8 @@ class ClassroomApi
     end
     # check if database has rooms that are not in API anymore
     if @rooms_in_db.present?
+      RoomContact.where(rmrecnbr: @rooms_in_db).delete_all
+      RoomCharacteristic.where(rmrecnbr: @rooms_in_db).delete_all
       if Room.where(rmrecnbr: @rooms_in_db).delete_all
         @log.api_logger.info "add_facility_id_to_classrooms, delete #{@rooms_in_db} room(s) from the database"
       else
