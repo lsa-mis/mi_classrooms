@@ -262,7 +262,9 @@ class BuildingsApi
         end
         # check if database has rooms that are not in API anymore
         if @rooms_in_db.present?
-          if Room.where(rmrecnbr: @rooms_in_db).destroy_all
+          RoomContact.where(rmrecnbr: @rooms_in_db).delete_all
+          RoomCharacteristic.where(rmrecnbr: @rooms_in_db).delete_all
+          if Room.where(rmrecnbr: @rooms_in_db).delete_all
             @log.api_logger.info "update_rooms, delete #{@rooms_in_db} room(s) from the database"
           else
             @log.api_logger.debug "update_rooms, error: could not delete records with #{@rooms_in_db} rmrecnbr"
