@@ -108,6 +108,7 @@ task api_update_database: :environment do
     exit
   end
   status_report << " "
+  sleep(61.seconds)
 
   #################################################
   # update rooms
@@ -181,6 +182,7 @@ task api_update_database: :environment do
     exit
   end
   status_report << " "
+  sleep(61.seconds)
 
   #################################################
   # update classrooms characteristics
@@ -219,6 +221,7 @@ task api_update_database: :environment do
     exit
   end
   status_report << " "
+  sleep(61.seconds)
   
   #################################################
   # update classrooms contacts
