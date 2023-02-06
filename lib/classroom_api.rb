@@ -13,6 +13,7 @@ class ClassroomApi
     if result['success']
       classrooms_list = result['data'] 
       number_of_api_calls_per_minutes = 0
+      redo_loop_number = 1
       classrooms_list.each do |room|
         # update only rooms for campuses and buildings from the MClassroom database
         if @buildings_ids.include?(room['BuildingID'].to_i)
@@ -28,11 +29,16 @@ class ClassroomApi
           result = get_classroom_info(ERB::Util.url_encode(facility_id))
           if result['errorcode'] == "ERR429"
             @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls"
-            number_of_api_calls_per_minutes = 1
+            number_of_api_calls_per_minutes = 0
             sleep(61.seconds)
-            result = get_classroom_info(ERB::Util.url_encode(facility_id))
-          end
-          if result['success']
+            if redo_loop_number > 9
+              @debug = true
+              @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls #{redo_loop_number} times "
+              return @debug
+            end
+            redo_loop_number += 1
+            redo
+          elsif result['success']
             room_info = result['data'][0]
             rmrecnbr = room_info['RmRecNbr'].to_i
             room_in_db = Room.find_by(rmrecnbr: rmrecnbr)
@@ -133,6 +139,7 @@ class ClassroomApi
 
     classrooms = Room.where(rmtyp_description: "Classroom").where.not(facility_code_heprod: nil)
     number_of_api_calls_per_minutes = 0
+    redo_loop_number = 1
     classrooms.each do |room|
       if number_of_api_calls_per_minutes < 400
         number_of_api_calls_per_minutes += 1
@@ -143,15 +150,19 @@ class ClassroomApi
       end
       facility_id = room.facility_code_heprod
       rmrecnbr = room.rmrecnbr
-
       result = get_classroom_characteristics(ERB::Util.url_encode(facility_id))
       if result['errorcode'] == "ERR429"
         @log.api_logger.debug "update_all_classroom_characteristics, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls"
-        number_of_api_calls_per_minutes = 1
-        sleep(61.seconds)
-        result = get_classroom_characteristics(ERB::Util.url_encode(facility_id))
-      end
-      if result['success']
+        number_of_api_calls_per_minutes = 0
+        sleep(6.seconds)
+        if redo_loop_number > 9
+          @debug = true
+          @log.api_logger.debug "update_all_classroom_characteristics, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls #{redo_loop_number} times "
+          return @debug
+        end
+        redo_loop_number += 1
+        redo
+      elsif result['success']
         if result['data']['Characteristics'].present?
           characteristics = result['data']['Characteristics']['Characteristic']
           if RoomCharacteristic.where(rmrecnbr: rmrecnbr).present?
@@ -167,7 +178,7 @@ class ClassroomApi
             end
             # delete characteristics that are not in API
             db_chrstc_list.each do |c|
-              RoomCharacteristic.where(rmrecnbr: rmrecnbr).where(chrstc: c).destroy_all
+              RoomCharacteristic.where(rmrecnbr: rmrecnbr).where(chrstc: c).delete_all
             end
           else
             create_classroom_characteristics(characteristics)
@@ -243,6 +254,7 @@ class ClassroomApi
     @debug = false
     classrooms = Room.where(rmtyp_description: "Classroom").where.not(facility_code_heprod: nil)
     number_of_api_calls_per_minutes = 0
+    redo_loop_number = 1
     classrooms.each do |room|
       if number_of_api_calls_per_minutes < 400
         number_of_api_calls_per_minutes += 1
@@ -254,8 +266,18 @@ class ClassroomApi
       facility_id = room.facility_code_heprod
       rmrecnbr = room.rmrecnbr
       result = get_classroom_contact(ERB::Util.url_encode(facility_id))
-
-      if result['success']
+      if result['errorcode'] == "ERR429"
+        @log.api_logger.debug "update_all_classroom_contacts, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls"
+        number_of_api_calls_per_minutes = 0
+        sleep(61.seconds)
+        if redo_loop_number > 9
+          @debug = true
+          @log.api_logger.debug "update_all_classroom_contacts, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls #{redo_loop_number} times "
+          return @debug
+        end
+        redo_loop_number += 1
+        redo
+      elsif result['success']
         if result['data']['Classrooms'].present?
           row = result['data']['Classrooms']['Classroom'][0]
           
