@@ -154,7 +154,7 @@ class ClassroomApi
       if result['errorcode'] == "ERR429"
         @log.api_logger.debug "update_all_classroom_characteristics, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls"
         number_of_api_calls_per_minutes = 0
-        sleep(6.seconds)
+        sleep(61.seconds)
         if redo_loop_number > 9
           @debug = true
           @log.api_logger.debug "update_all_classroom_characteristics, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls #{redo_loop_number} times "
