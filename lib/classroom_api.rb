@@ -7,7 +7,7 @@ class ClassroomApi
     @log = ApiLog.new
   end
 
-  def add_facility_id_to_classrooms(campus_codes = [100], buildings_codes = [])
+  def add_facility_id_to_classrooms
     @rooms_in_db = Room.all.pluck(:rmrecnbr)
     result = get_classrooms_list
     if result['success']
