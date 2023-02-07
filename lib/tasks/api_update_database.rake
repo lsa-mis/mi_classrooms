@@ -81,20 +81,9 @@ task api_update_database: :environment do
     end
   end
   
-  campus_codes = [100]
-
-  # include buildings that are not in the campuses described by campus_codes
-  # "BuildingRecordNumber": 1000440, "BuildingLongDescription": "MOORE EARL V BLDG", 
-  # "BuildingRecordNumber": 1000234, "BuildingLongDescription": "FRANCIS THOMAS JR PUBLIC HEALTH",
-  # "BuildingRecordNumber": 1000204, "BuildingLongDescription": "VAUGHAN HENRY FRIEZE PUBLIC HEALTH BUILDING",
-  # "BuildingRecordNumber": 1000333, "BuildingLongDescription": "400 NORTH INGALLS BUILDING",
-  # "BuildingRecordNumber": 1005224, "BuildingLongDescription": "STAMPS AUDITORIUM",
-  # "BuildingRecordNumber": 1005059, "BuildingLongDescription": "WALGREEN CHARLES R JR DRAMA CENTER",
-  buildings_codes = [1000440, 1000234, 1000204, 1000333, 1005224, 1005059, 1005347]
-  
   api = BuildingsApi.new(access_token)
   time = Benchmark.measure {
-    @debug = api.update_all_buildings(campus_codes, buildings_codes)
+    @debug = api.update_all_buildings
   }
 
   puts "Update buildings Time: #{time.real.round(2)} seconds"
@@ -169,7 +158,7 @@ task api_update_database: :environment do
   end
 
   time = Benchmark.measure {
-    @debug = api.add_facility_id_to_classrooms(campus_codes, buildings_codes)
+    @debug = api.add_facility_id_to_classrooms
   }
   puts "Add FacilityID to Classrooms Time: #{time.real.round(2)} seconds"
   task_time += (time.real / 60) % 60

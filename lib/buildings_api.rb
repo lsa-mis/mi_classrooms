@@ -1,6 +1,16 @@
 class BuildingsApi
 
   REMOVE_BLDG = [1000890]
+  CAMPUS_CODES = [100]
+
+  # include buildings that are not in the campuses described by CAMPUS_CODES
+  # "BuildingRecordNumber": 1000440, "BuildingLongDescription": "MOORE EARL V BLDG", 
+  # "BuildingRecordNumber": 1000234, "BuildingLongDescription": "FRANCIS THOMAS JR PUBLIC HEALTH",
+  # "BuildingRecordNumber": 1000204, "BuildingLongDescription": "VAUGHAN HENRY FRIEZE PUBLIC HEALTH BUILDING",
+  # "BuildingRecordNumber": 1000333, "BuildingLongDescription": "400 NORTH INGALLS BUILDING",
+  # "BuildingRecordNumber": 1005224, "BuildingLongDescription": "STAMPS AUDITORIUM",
+  # "BuildingRecordNumber": 1005059, "BuildingLongDescription": "WALGREEN CHARLES R JR DRAMA CENTER",
+  BUILDINGS_CODES = [1000440, 1000234, 1000204, 1000333, 1005224, 1005059, 1005347]
 
   def initialize(access_token)
     @access_token = access_token
@@ -94,7 +104,7 @@ class BuildingsApi
 
   # update buildings
 
-  def update_all_buildings(campus_codes = [100], buildings_codes = [])
+  def update_all_buildings
     @buildings_ids = Building.all.pluck(:bldrecnbr)
 
     result = get_buildings_for_current_fiscal_year
@@ -104,7 +114,7 @@ class BuildingsApi
         if REMOVE_BLDG.include?(row['BuildingRecordNumber'])
           next
         end
-        if campus_codes.include?(row['BuildingCampusCode']) || buildings_codes.include?(row['BuildingRecordNumber'])
+        if CAMPUS_CODES.include?(row['BuildingCampusCode']) || BUILDINGS_CODES.include?(row['BuildingRecordNumber'])
           if building_exists?(row['BuildingRecordNumber'])
             update_building(row)
           else
