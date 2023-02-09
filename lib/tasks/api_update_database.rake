@@ -25,7 +25,7 @@ task api_update_database: :environment do
   # update campus list
   # if campus is in the app db, but not in the API, a warning will be added to the log file
   # 
-  auth_token = AuthTokenApi.new("bf", "buildings")
+  auth_token = AuthTokenApi.new("buildings")
   # auth_token "expires_in":3600 seconds
   result = auth_token.get_auth_token
   if result['success']
@@ -63,8 +63,8 @@ task api_update_database: :environment do
   # 
   total_time += time.real.to_i
   # check auth_token expiration time
-  if total_time > 3000
-    auth_token = AuthTokenApi.new("bf", "buildings")
+  if total_time > 3600
+    auth_token = AuthTokenApi.new("buildings")
     result = auth_token.get_auth_token
     if result['success']
       total_time = 0
@@ -81,20 +81,9 @@ task api_update_database: :environment do
     end
   end
   
-  campus_codes = [100]
-
-  # include buildings that are not in the campuses described by campus_codes
-  # "BuildingRecordNumber": 1000440, "BuildingLongDescription": "MOORE EARL V BLDG", 
-  # "BuildingRecordNumber": 1000234, "BuildingLongDescription": "FRANCIS THOMAS JR PUBLIC HEALTH",
-  # "BuildingRecordNumber": 1000204, "BuildingLongDescription": "VAUGHAN HENRY FRIEZE PUBLIC HEALTH BUILDING",
-  # "BuildingRecordNumber": 1000333, "BuildingLongDescription": "400 NORTH INGALLS BUILDING",
-  # "BuildingRecordNumber": 1005224, "BuildingLongDescription": "STAMPS AUDITORIUM",
-  # "BuildingRecordNumber": 1005059, "BuildingLongDescription": "WALGREEN CHARLES R JR DRAMA CENTER",
-  buildings_codes = [1000440, 1000234, 1000204, 1000333, 1005224, 1005059, 1005347]
-  
-  # api = BuildingsApi.new(access_token)
+  api = BuildingsApi.new(access_token)
   time = Benchmark.measure {
-    @debug = api.update_all_buildings(campus_codes, buildings_codes)
+    @debug = api.update_all_buildings
   }
 
   puts "Update buildings Time: #{time.real.round(2)} seconds"
@@ -108,15 +97,17 @@ task api_update_database: :environment do
     exit
   end
   status_report << " "
+  sleep(61.seconds)
 
   #################################################
   # update rooms
   # 
   total_time += time.real.to_i
-  if total_time > 3000
-    auth_token = AuthTokenApi.new("bf", "buildings")
+  if total_time > 3600
+    auth_token = AuthTokenApi.new("buildings")
     result = auth_token.get_auth_token
     if result['success']
+      puts "token success"
       total_time = 0
       access_token = result['access_token']
       api = BuildingsApi.new(access_token)
@@ -132,6 +123,7 @@ task api_update_database: :environment do
   end
 
   time = Benchmark.measure {
+    # puts "lets update rooms"
     @debug = api.update_rooms
   }
   puts "Update Rooms Time: #{time.real.round(2)} seconds"
@@ -146,10 +138,10 @@ task api_update_database: :environment do
   end
   status_report << " "
   
-  #################################################
+  ################################################
   # add facility_id to classrooms and update instructional_seating_count
   # 
-  auth_token = AuthTokenApi.new("aa", "classrooms")
+  auth_token = AuthTokenApi.new("classrooms")
   result = auth_token.get_auth_token
   if result['success']
     total_time = 0
@@ -166,7 +158,7 @@ task api_update_database: :environment do
   end
 
   time = Benchmark.measure {
-    @debug = api.add_facility_id_to_classrooms(campus_codes, buildings_codes)
+    @debug = api.add_facility_id_to_classrooms
   }
   puts "Add FacilityID to Classrooms Time: #{time.real.round(2)} seconds"
   task_time += (time.real / 60) % 60
@@ -179,13 +171,14 @@ task api_update_database: :environment do
     exit
   end
   status_report << " "
+  sleep(61.seconds)
 
   #################################################
   # update classrooms characteristics
   # 
   total_time += time.real.to_i
-  if total_time > 3000
-    auth_token = AuthTokenApi.new("aa", "classrooms")
+  if total_time > 3600
+    auth_token = AuthTokenApi.new("classrooms")
     result = auth_token.get_auth_token
     if result['success']
       total_time = 0
@@ -217,13 +210,14 @@ task api_update_database: :environment do
     exit
   end
   status_report << " "
+  sleep(61.seconds)
   
   #################################################
   # update classrooms contacts
   # 
   total_time += time.real.to_i
-  if total_time > 3000
-    auth_token = AuthTokenApi.new("aa", "classrooms")
+  if total_time > 3600
+    auth_token = AuthTokenApi.new("classrooms")
     result = auth_token.get_auth_token
     if result['success']
       total_time = 0

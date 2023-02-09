@@ -2,57 +2,86 @@ class ClassroomApi
 
   def initialize(access_token)
     @buildings_ids = Building.all.pluck(:bldrecnbr)
-    
-    @result = {'success' => false, 'error' => '', 'data' => {}}
     @access_token = access_token
     @debug = false
     @log = ApiLog.new
   end
 
-  def add_facility_id_to_classrooms(campus_codes = [100], buildings_codes = [])
+  def add_facility_id_to_classrooms
+    @rooms_in_db = Room.all.pluck(:rmrecnbr)
     result = get_classrooms_list
     if result['success']
       classrooms_list = result['data'] 
       number_of_api_calls_per_minutes = 0
+      redo_loop_number = 1
       classrooms_list.each do |room|
-        if number_of_api_calls_per_minutes < 190 
-          number_of_api_calls_per_minutes += 1
-        else
-          number_of_api_calls_per_minutes = 1
-          sleep(61.seconds)
-        end
-        facility_id = room['FacilityID'].to_s
-        # add facility_id and number of seats
-        result = get_classroom_info(ERB::Util.url_encode(facility_id))
-        if result['success']
-          room_info = result['data'][0]
-          # update only rooms for campuses and buildings from the MClassroom database
-          if campus_codes.include?(room_info['CampusCd'].to_i) || buildings_codes.include?(room_info['BuildingID'].to_i)
+        # update only rooms for campuses and buildings from the MClassroom database
+        if @buildings_ids.include?(room['BuildingID'].to_i)
+          if number_of_api_calls_per_minutes < 400
+            number_of_api_calls_per_minutes += 1
+          else
+            @log.api_logger.debug "add_facility_id_to_classrooms, the script sleeps after #{number_of_api_calls_per_minutes} calls"
+            number_of_api_calls_per_minutes = 1
+            sleep(61.seconds)
+          end
+          facility_id = room['FacilityID'].to_s
+          # add facility_id and number of seats
+          result = get_classroom_info(ERB::Util.url_encode(facility_id))
+          if result['errorcode'] == "ERR429"
+            @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls"
+            number_of_api_calls_per_minutes = 0
+            sleep(61.seconds)
+            if redo_loop_number > 9
+              @debug = true
+              @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls #{redo_loop_number} times "
+              return @debug
+            end
+            redo_loop_number += 1
+            redo
+          elsif result['success']
+            room_info = result['data'][0]
             rmrecnbr = room_info['RmRecNbr'].to_i
             room_in_db = Room.find_by(rmrecnbr: rmrecnbr)
             if room_in_db
-              unless room_in_db.update(facility_code_heprod: facility_id, instructional_seating_count: room_info['RmInstSeatCnt'], campus_record_id: CampusRecord.find_by(campus_cd: room_info['CampusCd']).id)
+              if room_in_db.update(facility_code_heprod: facility_id, instructional_seating_count: room_info['RmInstSeatCnt'], campus_record_id: CampusRecord.find_by(campus_cd: room_info['CampusCd']).id)
+                @rooms_in_db.delete(rmrecnbr)
+              else
                 @log.api_logger.debug "add_facility_id_to_classrooms, error: Could not update: rmrecnbr - #{rmrecnbr}, facility_id - #{facility_id}"
                 @debug = true
                 return @debug
               end
             end
+          else
+            @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{result['errorcode']} - #{result['error']} for #{facility_id}"
+            @debug = true
+            return @debug
           end
-        else
-          @log.api_logger.debug "add_facility_id_to_classrooms, error: did not find room in API room_info for facility_id: #{facility_id}"
         end
       end
     else
-      @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{@result['error']}"
+      @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{result['errorcode']} - #{result['error']} for #{facility_id}"
       @debug = true
       return @debug
+    end
+    # check if database has rooms that are not in API anymore
+    if @rooms_in_db.present?
+      RoomContact.where(rmrecnbr: @rooms_in_db).delete_all
+      RoomCharacteristic.where(rmrecnbr: @rooms_in_db).delete_all
+      if Room.where(rmrecnbr: @rooms_in_db).delete_all
+        @log.api_logger.info "add_facility_id_to_classrooms, delete #{@rooms_in_db} room(s) from the database"
+      else
+        @log.api_logger.debug "add_facility_id_to_classrooms, error: could not delete records with #{@rooms_in_db} rmrecnbr"
+        @debug = true
+        return @debug
+      end
     end
     return @debug
   end
 
 
   def get_classrooms_list
-    url = URI("https://apigw.it.umich.edu/um/aa/ClassroomList/Classrooms?BuildingID=1005046")
+    result = {'success' => false, 'errorcode' => '', 'error' => '', 'data' => {}}
+    url = URI("https://gw.api.it.umich.edu/um/aa/ClassroomList/Classrooms?BuildingID=1005046")
 
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
@@ -65,18 +94,22 @@ class ClassroomApi
 
     response = http.request(request)
     response_json = JSON.parse(response.read_body)
-    if response_json['httpCode'].present?
-      @result['error'] = response_json['httpMessage'] + ". " + response_json['moreInformation']
+    if response_json['errorCode'].present?
+      result['errorcode'] = response_json['errorCode']
+      result['error'] = response_json['errorMessage']
     else
-      @result['success'] = true
-      @result['data'] = response_json['Classrooms']['Classroom']
+      result['success'] = true
+      result['data'] = response_json['Classrooms']['Classroom']
     end
-    return @result
+    return result
     
   end
 
   def get_classroom_info(facility_id)
-    url = URI("https://apigw.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}")
+    result = {'success' => false, 'errorcode' => '', 'error' => '', 'data' => {}}
+    @debug = false
+    
+    url = URI("https://gw.api.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}")
 
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
@@ -89,32 +122,47 @@ class ClassroomApi
 
     response = http.request(request)
     response_json = JSON.parse(response.read_body)
-    if response_json['httpCode'].present?
-      @result['error'] = response_json['httpMessage'] + ". " + response_json['moreInformation']
-    else
-      @result['success'] = true
-      @result['data'] = response_json['Classrooms']['Classroom']
+    if response_json.present?
+      if response_json['errorCode'].present?
+        result['errorcode'] = response_json['errorCode']
+        result['error'] = response_json['errorMessage']
+        result['success'] = false
+      else
+        result['success'] = true
+        result['data'] = response_json['Classrooms']['Classroom']
+      end
     end
-    return @result
-    
+    return result
   end
 
   def update_all_classroom_characteristics
 
     classrooms = Room.where(rmtyp_description: "Classroom").where.not(facility_code_heprod: nil)
     number_of_api_calls_per_minutes = 0
+    redo_loop_number = 1
     classrooms.each do |room|
-      if number_of_api_calls_per_minutes < 190 
+      if number_of_api_calls_per_minutes < 400
         number_of_api_calls_per_minutes += 1
       else
+        @log.api_logger.debug "update_all_classroom_characteristics, the script sleeps after #{number_of_api_calls_per_minutes} calls"
         number_of_api_calls_per_minutes = 1
         sleep(61.seconds)
       end
       facility_id = room.facility_code_heprod
       rmrecnbr = room.rmrecnbr
-
       result = get_classroom_characteristics(ERB::Util.url_encode(facility_id))
-      if result['success']
+      if result['errorcode'] == "ERR429"
+        @log.api_logger.debug "update_all_classroom_characteristics, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls"
+        number_of_api_calls_per_minutes = 0
+        sleep(61.seconds)
+        if redo_loop_number > 9
+          @debug = true
+          @log.api_logger.debug "update_all_classroom_characteristics, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls #{redo_loop_number} times "
+          return @debug
+        end
+        redo_loop_number += 1
+        redo
+      elsif result['success']
         if result['data']['Characteristics'].present?
           characteristics = result['data']['Characteristics']['Characteristic']
           if RoomCharacteristic.where(rmrecnbr: rmrecnbr).present?
@@ -130,7 +178,7 @@ class ClassroomApi
             end
             # delete characteristics that are not in API
             db_chrstc_list.each do |c|
-              RoomCharacteristic.where(rmrecnbr: rmrecnbr).where(chrstc: c).destroy_all
+              RoomCharacteristic.where(rmrecnbr: rmrecnbr).where(chrstc: c).delete_all
             end
           else
             create_classroom_characteristics(characteristics)
@@ -139,7 +187,7 @@ class ClassroomApi
           @log.api_logger.info "update_all_classroom_characteristics, no characteristics for facility_id: #{facility_id}"
         end
       else
-        @log.api_logger.debug "update_all_classroom_characteristics, error: API return: #{@result['error']}"
+        @log.api_logger.debug "update_all_classroom_characteristics, error: API return: #{result['errorcode']} - #{result['error']}"
         @debug = true
         return @debug
       end
@@ -174,7 +222,9 @@ class ClassroomApi
   end
 
   def get_classroom_characteristics(facility_id)
-    url = URI("https://apigw.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}/Characteristics")
+    result = {'success' => false, 'errorcode' => '', 'error' => '', 'data' => {}}
+    @debug = false
+    url = URI("https://gw.api.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}/Characteristics")
 
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
@@ -188,44 +238,59 @@ class ClassroomApi
     response = http.request(request)
     response_json = JSON.parse(response.read_body)
 
-    if response_json['httpCode'].present?
-      @result['error'] = response_json['httpMessage'] + ". " + response_json['moreInformation']
+    if response_json['errorCode'].present?
+      result['errorcode'] = response_json['errorCode']
+      result['error'] = response_json['errorMessage']
     else
-      @result['success'] = true
-      @result['data'] = response_json
+      result['success'] = true
+      result['data'] = response_json
     end
-    return @result
+    return result
 
   end
 
   def update_all_classroom_contacts
+    result = {'success' => false, 'errorcode' => '', 'error' => '', 'data' => {}}
+    @debug = false
     classrooms = Room.where(rmtyp_description: "Classroom").where.not(facility_code_heprod: nil)
     number_of_api_calls_per_minutes = 0
+    redo_loop_number = 1
     classrooms.each do |room|
-      if number_of_api_calls_per_minutes < 190 
+      if number_of_api_calls_per_minutes < 400
         number_of_api_calls_per_minutes += 1
       else
+        @log.api_logger.debug "update_all_classroom_contacts, the script sleeps after #{number_of_api_calls_per_minutes} calls"
         number_of_api_calls_per_minutes = 1
         sleep(61.seconds)
       end
       facility_id = room.facility_code_heprod
       rmrecnbr = room.rmrecnbr
       result = get_classroom_contact(ERB::Util.url_encode(facility_id))
-
-      if result['success']
+      if result['errorcode'] == "ERR429"
+        @log.api_logger.debug "update_all_classroom_contacts, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls"
+        number_of_api_calls_per_minutes = 0
+        sleep(61.seconds)
+        if redo_loop_number > 9
+          @debug = true
+          @log.api_logger.debug "update_all_classroom_contacts, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls #{redo_loop_number} times "
+          return @debug
+        end
+        redo_loop_number += 1
+        redo
+      elsif result['success']
         if result['data']['Classrooms'].present?
           row = result['data']['Classrooms']['Classroom'][0]
           
           if RoomContact.find_by(rmrecnbr: rmrecnbr).present?
-            update_classroom_contact(row)
+            update_classroom_contact(row, rmrecnbr)
           else
-            create_classroom_contact(row)
+            create_classroom_contact(row, rmrecnbr)
           end
         else
           @log.api_logger.info "update_all_classroom_contacts, No contacts for facility_id #{facility_id}"
         end
       else
-        @log.api_logger.debug "update_all_classroom_contacts, error: API returns false for facility_id #{facility_id}: #{@result['error']}"
+        @log.api_logger.debug "update_all_classroom_contacts, error: API returns false for facility_id #{facility_id}: #{result['errorcode']} - #{result['error']}"
         @debug = true
         return @debug
       end
@@ -234,31 +299,32 @@ class ClassroomApi
     return @debug
   end
 
-  def update_classroom_contact(row)
-    contact = RoomContact.find_by(rmrecnbr: row['RmRecNbr'])
+  def update_classroom_contact(row, rmrecnbr)
+    contact = RoomContact.find_by(rmrecnbr: rmrecnbr)
     unless contact.update(rm_schd_cntct_name: row['ContactName'], rm_schd_email: row['Email'], rm_schd_cntct_phone: row['Phone'],
                 rm_det_url: row['ScheduleURL'], rm_usage_guidlns_url: row['UsageGuideLinesURL'], rm_sppt_deptid: row['SpptDeptID'],
                 rm_sppt_cntct_email: row['SpptCntctEmail'], rm_sppt_cntct_phone: row['SpptCntctPhone'], rm_sppt_cntct_url: row['SpptCntctURL'])
       
-      @log.api_logger.debug "update_all_classroom_contacts, error: Could not update #{row['RmRecNbr']} because : #{contact.errors.messages}"
+      @log.api_logger.debug "update_all_classroom_contacts, error: Could not update #{rmrecnbr} because : #{contact.errors.messages}"
       @debug = true
       return @debug
     end
   end
 
-  def create_classroom_contact(row)
-    contact = RoomContact.new(rmrecnbr: row['RmRecNbr'], rm_schd_cntct_name: row['ContactName'], rm_schd_email: row['Email'], rm_schd_cntct_phone: row['Phone'],
+  def create_classroom_contact(row, rmrecnbr)
+    contact = RoomContact.new(rmrecnbr: rmrecnbr, rm_schd_cntct_name: row['ContactName'], rm_schd_email: row['Email'], rm_schd_cntct_phone: row['Phone'],
     rm_det_url: row['ScheduleURL'], rm_usage_guidlns_url: row['UsageGuideLinesURL'], rm_sppt_deptid: row['SpptDeptID'],
     rm_sppt_cntct_email: row['SpptCntctEmail'], rm_sppt_cntct_phone: row['SpptCntctPhone'], rm_sppt_cntct_url: row['SpptCntctURL'])
     unless contact.save
-      @log.api_logger.debug "update_all_classroom_contacts, error: Could not create #{row['RmRecNbr']} because : #{contact.errors.messages}"
+      @log.api_logger.debug "update_all_classroom_contacts, error: Could not create #{rmrecnbr} because : #{contact.errors.messages}"
       @debug = true
       return @debug
     end
   end
 
   def get_classroom_contact(facility_id)
-    url = URI("https://apigw.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}/Contacts")
+    result = {'success' => false, 'errorcode' => '', 'error' => '', 'data' => {}}
+    url = URI("https://gw.api.it.umich.edu/um/aa/ClassroomList/Classrooms/#{facility_id}/Contacts")
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -271,18 +337,19 @@ class ClassroomApi
     response = http.request(request)
     response_json = JSON.parse(response.read_body)
 
-    if response_json['httpCode'].present?
-      @result['error'] = response_json['httpMessage'] + ". " + response_json['moreInformation']
+    if response_json['errorCode'].present?
+      result['errorcode'] = response_json['errorCode']
+      result['error'] = response_json['errorMessage']
     else
-      @result['success'] = true
-      @result['data'] = response_json
+      result['success'] = true
+      result['data'] = response_json
     end
-    return @result
+    return result
 
   end
 
   def get_classroom_meetings(start_date, end_date)
-    url = URI("https://apigw.it.umich.edu/um/aa/ClassroomList/Classrooms/#{@rmrecnbr}/Meetings?startDate=#{start_date}&endDate=#{end_date}")
+    url = URI("https://gw.api.it.umich.edu/um/aa/ClassroomList/Classrooms/#{@rmrecnbr}/Meetings?startDate=#{start_date}&endDate=#{end_date}")
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
