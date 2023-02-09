@@ -18,13 +18,12 @@ class AuthTokenApi
 
       response = http.request(request)
       response_json = JSON.parse(response.read_body)
-      if response_json['errorCode'].present?
-        @returned_data['error'] = response_json['errorCode'] + " - " + response_json['errorMessage']
-      elsif response_json['fault'].present?
-        @returned_data['error'] = response_json['fault']['faultstring']
-      elsif response_json['access_token'].present?
+      
+      if response_json['access_token'].present?
         @returned_data['success'] = true
         @returned_data['access_token'] = response_json['access_token']
+      elsif response_json['fault'].present?
+          @returned_data['error'] = response_json['fault']['faultstring']
       else
         @returned_data['error'] = 'Unknown error'
       end
