@@ -15,8 +15,8 @@ class PagesController < ApplicationController
 
   def room_filters_glossary
     authorize :page
-    @filters = RoomCharacteristic.all.pluck(:chrstc_descr, :chrstc_desc254).uniq.sort
-    characteristics = RoomCharacteristic.all.pluck(:chrstc_descrshort, :chrstc_desc254).uniq.sort
+    @filters = RoomCharacteristic.all.pluck(:chrstc_descr, :chrstc_desc254).uniq.compact.sort
+    characteristics = RoomCharacteristic.all.pluck(:chrstc_descrshort, :chrstc_desc254).uniq.compact.sort
     @filters_hash = {}
     characteristics.each do |key, value|
       @filters_hash[key] = value
@@ -25,7 +25,7 @@ class PagesController < ApplicationController
     @all_characteristics_array.each do |c|
       @category_letters << c[0][0]
     end
-    @category_letters = @category_letters.uniq.sort
+    @category_letters = @category_letters.uniq.compact.sort
   end
 
 end
