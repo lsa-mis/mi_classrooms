@@ -36,7 +36,9 @@ class ApplicationController < ActionController::Base
 
   def set_characteristics_array
     # create array of room cahracteristics to use in filters
-    characteristics_all = RoomCharacteristic.all.pluck(:chrstc_descr, :chrstc_descrshort).uniq.sort
+    characteristics_all = RoomCharacteristic.all.pluck(:chrstc_descr, :chrstc_descrshort).uniq
+    characteristics_all.delete_if {|x| x.include?(nil)}
+    characteristics_all.sort
     @all_characteristics_array = {}
     category_prev = ""
     other = {}

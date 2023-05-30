@@ -20,7 +20,7 @@ include ActionView::RecordIdentifier
 
     @rooms_page_announcement = Announcement.find_by(location: "find_a_room_page")
     @all_rooms_number = Room.classrooms.count
-    @schools = Room.classrooms.pluck(:dept_group_description).uniq.sort
+    @schools = Room.classrooms.pluck(:dept_group_description).uniq.compact.sort
     if params[:inactive_rooms].present?
       @rooms = Room.classrooms_inactive
     else

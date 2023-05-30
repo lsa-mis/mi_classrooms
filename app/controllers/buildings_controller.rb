@@ -6,8 +6,7 @@ class BuildingsController < ApplicationController
   # GET /buildings
   # GET /buildings.json
   def index
-    # @searchable_buildings =  Building.with_classrooms.ann_arbor_campus.uniq.pluck(:name, :abbreviation).collect{ |building| [building[0].titleize, building[1] ] }.sort
-    @schools = Room.classrooms.pluck(:dept_group_description).uniq.sort
+    @schools = Room.classrooms.pluck(:dept_group_description).uniq.compact.sort
 
     buildings_ids = Room.classrooms.pluck(:building_bldrecnbr).uniq
     if params[:inactive_buildings].present?
@@ -32,12 +31,12 @@ class BuildingsController < ApplicationController
   # GET /buildings/1
   # GET /buildings/1.json
   def show
-    @class_floor_names = @building.rooms.where(rmtyp_description: "Classroom").pluck(:floor).uniq.sort
+    @class_floor_names = @building.rooms.where(rmtyp_description: "Classroom").pluck(:floor).uniq.compact.sort
   end
 
   # GET /buildings/1/edit
   def edit
-    @floors = @building.rooms.where(rmtyp_description: "Classroom").pluck(:floor).uniq.sort
+    @floors = @building.rooms.where(rmtyp_description: "Classroom").pluck(:floor).uniq.compact.sort
   end
 
   # PATCH/PUT /buildings/1
