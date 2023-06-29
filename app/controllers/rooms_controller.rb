@@ -16,7 +16,6 @@ class RoomsController < ApplicationController
       @buildings = Building.where(bldrecnbr: buildings_ids, visible: false).order(:name)
     else
       @buildings = Building.where(bldrecnbr: buildings_ids).order(:name)
-      @buildings = Building.all.order(:name)
     end
 
     @rooms_page_announcement = Announcement.find_by(location: "find_a_room_page")
