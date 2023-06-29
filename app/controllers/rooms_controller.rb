@@ -42,7 +42,7 @@ class RoomsController < ApplicationController
     @rooms = @rooms.where("instructional_seating_count <= ?", params[:max_capacity].to_i) if params[:max_capacity].present?
     @rooms = @rooms.where("facility_code_heprod LIKE ? OR UPPER(nickname) LIKE ?", "%#{params[:classroom_name].upcase}%", "%#{params[:classroom_name].upcase}%") if params[:classroom_name].present?
 
-    #authorize @rooms
+    authorize @rooms
 
     @rooms = RoomDecorator.decorate_collection(@rooms)
 
