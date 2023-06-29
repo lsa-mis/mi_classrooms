@@ -151,7 +151,9 @@
           </div>
           <div class="flex-1 mx-2">
             <div class="" id="rooms">
-              <%= render 'listing' %>
+              <% if user_signed_in? %>
+                <%= render 'listing' %>
+              <% end %>
             </div>
           </div>
         </div>
