@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   include Pagy::Backend
-  include Pundit
+  include Pundit::Authorization
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_in_group
   before_action :set_membership
@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
   def set_characteristics_array
     # create array of room cahracteristics to use in filters
     characteristics_all = RoomCharacteristic.all.pluck(:chrstc_descr, :chrstc_descrshort).uniq
-    characteristics_all.delete_if {|x| x.include?(nil)}
+    characteristics_all.delete_if { |x| x.include?(nil) }
     characteristics_all.sort
     @all_characteristics_array = {}
     category_prev = ""
@@ -49,16 +49,16 @@ class ApplicationController < ActionController::Base
       next if item[0]["16mm Film(Movies)"]
       filter_key = item[1]
       if item[0][":"]
-        category = item[0].slice(0, item[0].index(': '))
+        category = item[0].slice(0, item[0].index(": "))
         next if category["Wheelchair"]
         # value = item[0].sub(/.*?:/, '').lstrip
-        value = item[0].partition(': ').last
+        value = item[0].partition(": ").last
         if value.downcase["team"]
           team.merge!(filter_key => value)
-        else 
+        else
           if category == category_prev
             @all_characteristics_array[category].merge!(filter_key => value)
-          else 
+          else
             @all_characteristics_array.merge!(category => { filter_key => value })
           end
           category_prev = category
@@ -69,7 +69,5 @@ class ApplicationController < ActionController::Base
     end
     @all_characteristics_array.merge!("Team Based Learning" => team)
     @all_characteristics_array.merge!("Other" => other)
-
   end
-
 end

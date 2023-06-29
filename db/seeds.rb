@@ -10,7 +10,7 @@
 # Put here to keep records of these updates
 #
 
-locations = ['home_page', 'find_a_room_page', 'about_page']
+locations = ["home_page", "find_a_room_page", "about_page"]
 existing_locations = Announcement.all.pluck(:location)
 
 locations.each do |location|
@@ -92,3 +92,148 @@ end
 # Room.find_by(facility_code_heprod: "MLB1220").update(nickname: 'Lec 1')
 # Room.find_by(facility_code_heprod: "MLB1400").update(nickname: 'Aud 4')
 # Room.find_by(facility_code_heprod: "MLB1420").update(nickname: 'Lec 2')
+
+# db/seeds/buildings.rb
+
+#Building.destroy_all
+
+building_data = [
+  {
+    abbreviation: "NUB",
+    address: "1100 N University Ave",
+    bldrecnbr: 1000188,
+    city: "Ann Arbor",
+    country: "USA",
+    name: "1100 North University Building",
+    nick_name: "NUB",
+    state: "MI",
+    zip: "48109",
+    hours: {
+      "monday" => ["07:00", "22:00"],
+      "tuesday" => ["07:00", "22:00"],
+      "wednesday" => ["07:00", "22:00"],
+      "thursday" => ["07:00", "22:00"],
+      "friday" => ["07:00", "22:00"],
+      "saturday" => ["closed", "closed"],
+      "sunday" => ["closed", "closed"],
+    },
+  },
+  {
+    abbreviation: "DANA",
+    address: "440 Church St",
+    bldrecnbr: 1000189,
+    city: "Ann Arbor",
+    country: "USA",
+    name: "Dana Samuel Trask Building",
+    nick_name: "DANA",
+    state: "MI",
+    zip: "48109",
+    hours: {
+      "monday" => ["07:00", "18:00"],
+      "tuesday" => ["07:00", "18:00"],
+      "wednesday" => ["07:00", "18:00"],
+      "thursday" => ["07:00", "18:00"],
+      "friday" => ["07:00", "18:00"],
+      "saturday" => ["closed", "closed"],
+      "sunday" => ["closed", "closed"],
+    },
+  },
+  {
+    abbreviation: "CCCB",
+    address: "1225 Geddes Ave",
+    bldrecnbr: 1000190,
+    city: "Ann Arbor",
+    country: "USA",
+    name: "Central Campus Classroom Building",
+    nick_name: "CCCB",
+    state: "MI",
+    zip: "48109",
+    hours: {
+      "monday" => ["07:00", "17:00"],
+      "tuesday" => ["07:00", "17:00"],
+      "wednesday" => ["07:00", "17:00"],
+      "thursday" => ["07:00", "17:00"],
+      "friday" => ["07:00", "17:00"],
+      "saturday" => ["closed", "closed"],
+      "sunday" => ["12:00", "17:00"],
+    },
+  },
+  {
+    abbreviation: "WEIS",
+    address: "500 Church St",
+    bldrecnbr: 1000191,
+    city: "Ann Arbor",
+    country: "USA",
+    name: "Weiser Hall",
+    nick_name: "WEIS",
+    state: "MI",
+    zip: "48109",
+    hours: {
+      "monday" => ["07:00", "22:00"],
+      "tuesday" => ["07:00", "22:00"],
+      "wednesday" => ["07:00", "22:00"],
+      "thursday" => ["07:00", "22:00"],
+      "friday" => ["07:00", "22:00"],
+      "saturday" => ["closed", "closed"],
+      "sunday" => ["closed", "closed"],
+    },
+  },
+  {
+    abbreviation: "SKB",
+    address: "830 N University Ave",
+    bldrecnbr: 1000192,
+    city: "Ann Arbor",
+    country: "USA",
+    name: "School Of Kinesiology Building",
+    nick_name: "SKB",
+    state: "MI",
+    zip: "48109",
+    hours: {
+      "monday" => ["07:30", "18:00"],
+      "tuesday" => ["07:30", "18:00"],
+      "wednesday" => ["07:30", "18:00"],
+      "thursday" => ["07:30", "18:00"],
+      "friday" => ["07:30", "18:00"],
+      "saturday" => ["closed", "closed"],
+      "sunday" => ["closed", "closed"],
+    },
+  },
+]
+DAY_TO_NUMBER = {
+  "sunday" => 0,
+  "monday" => 1,
+  "tuesday" => 2,
+  "wednesday" => 3,
+  "thursday" => 4,
+  "friday" => 5,
+  "saturday" => 6,
+}
+
+building_data.each do |data|
+  puts "Processing building #{data[:bldrecnbr]}..."
+  building = Building.find_by(bldrecnbr: data[:bldrecnbr])
+  BuildingHour.where(building_bldrecnbr: building.bldrecnbr).destroy_all
+  # Create the new building hours
+  data[:hours].each do |day, hours|
+    puts "Processing #{day} with hours: #{hours[0]} to #{hours[1]}"
+
+    open_time_seconds = hours[0] == "closed" ? nil : Time.parse(hours[0]).seconds_since_midnight.to_i
+    close_time_seconds = hours[1] == "closed" ? nil : Time.parse(hours[1]).seconds_since_midnight.to_i
+
+    puts "Parsed times: open #{open_time_seconds}, close #{close_time_seconds}"
+
+    building_hour = BuildingHour.new(
+      building_bldrecnbr: building.bldrecnbr,
+      day_of_week: DAY_TO_NUMBER[day],
+      open_time: open_time_seconds,
+      close_time: close_time_seconds,
+    )
+
+    if building_hour.valid?
+      building_hour.save!
+      puts "Created BuildingHour: #{building_hour.inspect}"
+    else
+      puts "Invalid BuildingHour: #{building_hour.errors.full_messages.join(", ")}"
+    end
+  end
+end

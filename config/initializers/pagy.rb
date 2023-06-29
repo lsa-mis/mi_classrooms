@@ -14,12 +14,12 @@
 # Instance variables
 # See https://ddnexus.github.io/pagy/api/pagy#instance-variables
 # Pagy::VARS[:page]   = 1                                  # default
-Pagy::VARS[:items]  = 30                                 # default
+Pagy::DEFAULT[:items]  = 30                                 # default
 # Pagy::VARS[:outset] = 0                                  # default
 
 # Other Variables
 # See https://ddnexus.github.io/pagy/api/pagy#other-variables
-Pagy::VARS[:size]       = [1,2,2,1]                       # default
+Pagy::DEFAULT[:size]       = [1,2,2,1]                       # default
 # Pagy::VARS[:page_param] = :page                           # default
 # Pagy::VARS[:params]     = {}                              # default
 # Pagy::VARS[:fragment]   = '#fragment'                     # example
@@ -119,9 +119,9 @@ require 'pagy/extras/navs'
 
 require 'pagy/extras/items'
 
-Pagy::VARS[:enable_items_extra] = true
-Pagy::VARS[:items_param] = :items
-Pagy::VARS[:max_items]   = 100
+Pagy::DEFAULT[:enable_items_extra] = true
+Pagy::DEFAULT[:items_param] = :items
+Pagy::DEFAULT[:max_items]   = 100
 
 
 # Overflow extra: Allow for easy handling of overflowing pages

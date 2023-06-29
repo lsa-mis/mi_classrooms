@@ -222,6 +222,40 @@ CREATE TABLE public.ar_internal_metadata (
 
 
 --
+-- Name: building_hours; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.building_hours (
+    building_bldrecnbr bigint NOT NULL,
+    day_of_week integer,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    id bigint NOT NULL,
+    open_time integer,
+    close_time integer
+);
+
+
+--
+-- Name: building_hours_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.building_hours_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: building_hours_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.building_hours_id_seq OWNED BY public.building_hours.id;
+
+
+--
 -- Name: buildings; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -692,6 +726,13 @@ ALTER TABLE ONLY public.api_update_logs ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
+-- Name: building_hours id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.building_hours ALTER COLUMN id SET DEFAULT nextval('public.building_hours_id_seq'::regclass);
+
+
+--
 -- Name: buildings bldrecnbr; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -825,6 +866,14 @@ ALTER TABLE ONLY public.ar_internal_metadata
 
 
 --
+-- Name: building_hours building_hours_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.building_hours
+    ADD CONSTRAINT building_hours_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: buildings buildings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -953,6 +1002,13 @@ CREATE UNIQUE INDEX index_active_storage_blobs_on_key ON public.active_storage_b
 --
 
 CREATE UNIQUE INDEX index_active_storage_variant_records_uniqueness ON public.active_storage_variant_records USING btree (blob_id, variation_digest);
+
+
+--
+-- Name: index_building_hours_on_building_bldrecnbr; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_building_hours_on_building_bldrecnbr ON public.building_hours USING btree (building_bldrecnbr);
 
 
 --
@@ -1153,6 +1209,14 @@ ALTER TABLE ONLY public.active_storage_variant_records
 
 
 --
+-- Name: building_hours fk_rails_a265593269; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.building_hours
+    ADD CONSTRAINT fk_rails_a265593269 FOREIGN KEY (building_bldrecnbr) REFERENCES public.buildings(bldrecnbr);
+
+
+--
 -- Name: floors fk_rails_b87e6d71a9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1216,6 +1280,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220328201915'),
 ('20220328220102'),
 ('20220331125213'),
-('20220412123134');
+('20220412123134'),
+('20230616144805'),
+('20230619151849'),
+('20230619154244'),
+('20230619154257');
 
 

@@ -18,8 +18,8 @@ class BuildingsController < ApplicationController
       session[:building_name] = params[:building_name]
       @buildings = @buildings.with_name(params[:building_name])
     end
-      authorize @buildings
-      @pagy, @buildings = pagy(@buildings)
+    authorize @buildings
+    @pagy, @buildings = pagy(@buildings)
 
     if turbo_frame_request?
       render partial: "listing"
@@ -44,10 +44,10 @@ class BuildingsController < ApplicationController
   def update
     respond_to do |format|
       if @building.update(building_params)
-        format.html { redirect_to @building, notice: 'Building was successfully updated.' }
+        format.html { redirect_to @building, notice: "Building was successfully updated." }
         format.json { render :show, status: :ok, location: @building }
       else
-        format.html { redirect_to @building, alert:  @building.errors.full_messages }
+        format.html { redirect_to @building, alert: @building.errors.full_messages }
         format.json { render json: @building.errors, status: :unprocessable_entity }
       end
     end
@@ -55,19 +55,18 @@ class BuildingsController < ApplicationController
 
   private
 
-    def set_redirection_url
-      $baseURL = request.fullpath
-    end
+  def set_redirection_url
+    $baseURL = request.fullpath
+  end
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_building
-      @building = Building.find(params[:id])
-      authorize @building
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_building
+    @building = Building.find(params[:id])
+    authorize @building
+  end
 
-    # Only allow a list of trusted parameters through.
-    def building_params
-      params.require(:building).permit(:bldrecnbr, :latitude, :longitude, :name, :nick_name, :abbreviation, :address, :city, :state, :zip, :country, :building_name, :visible, :inactive_buildings, :building_image)
-    end
-
+  # Only allow a list of trusted parameters through.
+  def building_params
+    params.require(:building).permit(:bldrecnbr, :latitude, :longitude, :name, :nick_name, :abbreviation, :address, :city, :state, :zip, :country, :building_name, :visible, :inactive_buildings, :building_image)
+  end
 end

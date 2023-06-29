@@ -19,39 +19,71 @@
         <div class="text-xs px-2">
           <%= building.address.titleize %>
         </div>
+        <% hours_today = building.hours_today %>
+        <div class="text-xs px-2">
+          <p>
+            <span class="font-bold">Hours:</span>
+            <% if hours_today[:open].nil? && hours_today[:close].nil? %>
+              <span class="text-red-700 font-bold">Closed</span>
+              <% hours_tomorrow = building.hours_tomorrow %>
+              <% if !hours_tomorrow[:open].nil? && !hours_tomorrow[:close].nil? %>
+                <% open_time_tomorrow = Time.parse(hours_tomorrow[:open]) %>
+                <span>⋅ Opens <%= open_time_tomorrow.strftime("%l:%M%p").strip %> tomorrow </span>
+              <% end %>
+            <% else %>
+              <% current_time = Time.zone.now %>
+              <% close_time = Time.parse(hours_today[:close]) %>
+              <% open_time = Time.parse(hours_today[:open]) %>
+              <% time_to_close_in_minutes = ((close_time - current_time) / 60).round %>
+              <% if time_to_close_in_minutes <= 0%>
+                <span class="text-red-700 font-bold">Closed</span>
+                <% hours_tomorrow = building.hours_tomorrow %>
+                <% if !hours_tomorrow[:open].nil? && !hours_tomorrow[:close].nil? %>
+                  <% open_time_tomorrow = Time.parse(hours_tomorrow[:open]) %>
+                  <span>⋅ Opens <%= open_time_tomorrow.strftime("%l:%M%p").strip %> tomorrow </span>
+                <% end %>
+              <% else %>
+                <% if time_to_close_in_minutes <= 60 && time_to_close_in_minutes >0 %>
+                  <span class="text-yellow-700 font-bold">Closing soon</span>
+                <% else %>
+                  <span class="text-green-700 font-bold">Open</span>
+                <% end %>
+                <span>⋅ <%= open_time.strftime("%l:%M%p").strip %>-<%= close_time.strftime("%l:%M%p").strip %></span>
+              <% end %>
+            <% end %>
+          </p>
+        </div>
       <% end %>
     </div>
   <% else %>
     <div class="mt-2 mb-3 px-2 sm:px-0">
-        <% if building.building_image.representable? %>
-          <%=  image_tag(building.building_image.representation(resize_to_fill: [150, 107]), class: 'opacity-50 saturate-0 p-2', alt: "#{building.name}") %>
-        <% else %>
-          <%=  image_tag('building_placeholder_small', height: '107', width: '150', class: 'opacity-50 saturate-0 p-2', alt: "building placeholder") %>
+      <% if building.building_image.representable? %>
+        <%=  image_tag(building.building_image.representation(resize_to_fill: [150, 107]), class: 'opacity-50 saturate-0 p-2', alt: "#{building.name}") %>
+      <% else %>
+        <%=  image_tag('building_placeholder_small', height: '107', width: '150', class: 'opacity-50 saturate-0 p-2', alt: "building placeholder") %>
+      <% end %>
+      <div class="text-xs px-2 font-bold">
+        <%= building.name.titleize %>
+      </div>
+      <div class="text-xs px-2 font-medium">
+        <% if building.nick_name.present? %>
+          (<%= building.nick_name %>)
         <% end %>
-        <div class="text-xs px-2 font-bold">
-          <%= building.name.titleize %>
-        </div>
-        <div class="text-xs px-2 font-medium">
-          <% if building.nick_name.present? %>
-            (<%= building.nick_name %>)
-          <% end %>
-        </div>
-        <div class="text-xs px-2">
-          <%= building.address.titleize %>
-        </div>
-        <div class="text-base text-yellow-750">
-          This building is inactive 
-        </div>
+      </div>
+      <div class="text-xs px-2">
+        <%= building.address.titleize %>
+      </div>
+      <div class="text-base text-yellow-750">
+        This building is inactive 
+      </div>
     </div>
   <% end %>
-
   <% if building.notes.alert.present? %>
     <div class="bg-yellow-550 text-sm px-2 mb-1 flex items-center space-x-2">
       <%= svg('alert') %>
-        <span>Alert</span>
+      <span>Alert</span>
     </div>
   <% end %>
- 
   <div>
     <% if current_user && policy(Building).edit? %>
       <%= link_to building_path(building), data: { "turbo-frame": "_top" } do %>

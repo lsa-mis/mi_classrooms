@@ -1,5 +1,5 @@
 <div class="container px-1 mb-20" data-controller='autosubmit'>
-  <% if @rooms_page_announcement.present? && @rooms_page_announcement.content.present? %>  
+  <% if @rooms_page_announcement.present? && @rooms_page_announcement.content.present? %>
     <div class="relative mb-2">
       <div class="bg-gray-50 shadow borde p-2 w-full flex justify-left mb-2">
         <%= @rooms_page_announcement.content %>
@@ -16,7 +16,6 @@
       </div>
     </div>
   <% end %>
-
   <div class="grid grid-cols-2 pb-2">
     <div>
       <h1>Classrooms</h1>
@@ -49,7 +48,7 @@
       <div class="relative min-h-screen md:flex">
         <div class="sidebar w-64 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out" data-autosubmit-target="sidebar" id="filters">
           <% if user_signed_in? && policy(Room).edit? %>
-          <p class="bg-blue-700 text-white text-sm p-2">Admin panel</p>
+            <p class="bg-blue-700 text-white text-sm p-2">Admin panel</p>
             <div class="bg-blue-700 px-2 pb-2 text-white text-sm checkbox-filter">
               <%= check_box_tag "inactive_buildings", "1", params[:inactive_buildings].try(:include?, "1"), class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
               <label for="inactive_buildings">Show inactive buildings</label>
@@ -61,7 +60,7 @@
           <div class="pl-1 bg-gray-50 shadow border">
             <div class="px-1">
               <label for="school_or_college_name">Select a School/College</label>
-                <%= select_tag "school_or_college_name", options_for_select(@schools, selected: params[:school_or_college_name]), include_blank: "Select ...", class: "block rounded-none rounded-l-md text-xs border-gray-300",
+              <%= select_tag "school_or_college_name", options_for_select(@schools, selected: params[:school_or_college_name]), include_blank: "Select ...", class: "block rounded-none rounded-l-md text-xs border-gray-300",
                           :"data-action" => "change->autosubmit#search" %>
             </div>
             <br>
@@ -72,9 +71,52 @@
             </div>
             <br>
             <hr>
-            <div class="px-1 pb-2">
+            <div class="px-1">
+              <label for="building_availability">Select Building Availability</label>
+              <%= select_tag "building_availability", options_for_select(['Open', 'Closed'], params[:building_availability]), include_blank: "Select ...", class: "block rounded-none rounded-l-md text-xs border-gray-300",
+                          :"data-action" => "change->autosubmit#search" %>
+            </div>
+            <br>
+            <hr>
+            <div class="px-1">
               <label for="classroom_name">Search Classroom Name</label>
               <%= form.text_field :classroom_name, class: 'block rounded-none rounded-l-md sm:text-sm border-gray-300', data: { action: "input->autosubmit#search" }, :placeholder => 'ex. "USB4153"', value: params[:classroom_name] %>
+            </div>
+            <br>
+            <hr>
+            <div class="px-1">
+              <label for="classroom_availability">Select Classroom Availability</label>
+              <%= select_tag "classroom_availability", options_for_select(['Available', 'Unavailable'], params[:classroom_availability]), include_blank: "Select ...", class: "block rounded-none rounded-l-md text-xs border-gray-300",
+                          :"data-action" => "change->autosubmit#search" %>
+            </div>
+            <br>
+            <hr>
+            <div>
+              <label>Proximity</label>
+              <div class="flex mt-2 w-full">
+                <div class="ml-1 w-full">
+                  <button type="button" class="px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400", data-action='click->autosubmit#locateMe' data-autosubmit-target="locateButton">
+                    Use My Current Location
+                  </button>
+                </div>
+              </div>
+              <span class="capacity-error--hide text-red-700 text-sm mt-2 -mb-2" data-autosubmit-target="location_error"></span>
+              <div class="flex mt-2" hidden>
+                <div class="ml-1 w-1/2" hidden>
+                  <label class="block text-sm font-medium text-gray-700" for="latitude">Latitude</label>
+                  <%= number_field_tag 'latitude', nil, min: -180, max: 180, value: params[:latitude], step: 0.00001, :placeholder => 'ex. 42.277', :"data-autosubmit-target" => "latitude", data: { action: "input->autosubmit#locationSubmit"}, class: 'w-full block rounded sm:text-sm border-gray-300' %>
+                </div>
+                <div class="w-1/2 mr-1" hidden>
+                  <label class="block text-sm font-medium text-gray-700" for="longitude">Longitude</label>
+                  <%= number_field_tag 'longitude', nil, min: -180, max: 180, value: params[:longitude], step: 0.00001, :placeholder => 'ex. -83.738', :"data-autosubmit-target" => "longitude", data: { action: "input->autosubmit#locationSubmit" }, class: 'w-full block rounded sm:text-sm border-gray-300' %>
+                </div>
+              </div>
+              <div class="flex mt-2">
+                <div class="ml-2 mr-2 w-1/2">
+                  <label class="block text-sm font-medium text-gray-700" for="range">Range &#40;mi&#41; </label>
+                  <%= number_field_tag 'range', nil, min: 0.1, max: 10, step: 0.1, value: params[:range] || 10, :"data-autosubmit-target" => "range", data: { action: "input->autosubmit#locationSubmit" }, class: 'w-full block rounded sm:text-sm border-gray-300' %>
+                </div>
+              </div>
             </div>
             <br>
             <hr>
@@ -99,23 +141,22 @@
                 </div>
               </div>
               <span class="capacity-error--hide text-red-700 text-sm mt-2 -mb-2" data-autosubmit-target="capacity_error">
-            </div>
-            <br>
-            <hr>
-            <div>
-              <%= render 'checkbox_filters' %>
+              </div>
+              <br>
+              <hr>
+              <div>
+                <%= render 'checkbox_filters' %>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="flex-1 mx-2">
-          <div class="" id="rooms">
-            <% if user_signed_in? %>
+          <div class="flex-1 mx-2">
+            <div class="" id="rooms">
               <%= render 'listing' %>
-            <% end %>
+            </div>
           </div>
         </div>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
   </div>
-</div>
-<%= javascript_include_tag 'mobile_menu', async: true %>
+  <%= javascript_include_tag 'mobile_menu', async: true %>
+  <%= javascript_include_tag 'nearyou', async: true %>

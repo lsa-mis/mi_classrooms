@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.0.1"
+ruby "3.2.2"
 
 gem "annotate", "~> 3.1.1"
 gem "bootsnap", ">= 1.4.3", require: false
@@ -21,9 +21,11 @@ gem "order_as_specified", "~> 1.7"
 gem "pagy"
 gem "pg", ">= 0.18", "< 2.0"
 gem "pg_search"
-gem 'poppler', '~> 3.5', '>= 3.5.1'
+gem 'poppler', '~> 4.1', '>= 4.1.7'
 gem "puma", "4.3.12"
 gem "pundit"
+gem "rufo"
+gem 'htmlbeautifier', '~> 1.3', '>= 1.3.1'
 gem "rails", "~> 6.1.5"
 gem "responders", github: "heartcombo/responders"
 gem "sassc-rails"
