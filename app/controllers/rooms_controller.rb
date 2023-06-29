@@ -57,21 +57,6 @@ class RoomsController < ApplicationController
     end
   end
 
-  def nearyou
-    if params[:latitude].present? && params[:longitude].present?
-      @rooms = Room.all
-      #authorize @rooms
-      @latitude = params[:latitude]
-      @longitude = params[:longitude]
-      @buildings = Building.near([params[:latitude], params[:longitude]], 1.0, units: :mi).order("distance")
-      @buildings = @buildings.select(&:currently_open?)
-    else
-      @rooms = Room.none
-      flash[:alert] = "Please enable location services to use this feature."
-      redirect_to rooms_path
-    end
-  end
-
   # GET /rooms/1
   # GET /rooms/1.json
   def show
