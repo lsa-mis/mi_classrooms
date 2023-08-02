@@ -41,8 +41,5 @@ Rails.application.routes.draw do
   end
 
   get 'application/delete_file_attachment/:id', to: 'application#delete_file_attachment', as: :delete_file
-  
-  # all your other routes
-  match '*unmatched', to: 'application#not_found_method', via: :all
 
 end

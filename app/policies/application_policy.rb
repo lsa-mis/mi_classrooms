@@ -36,10 +36,6 @@ class ApplicationPolicy
     false
   end
 
-  def not_found_method?
-    true
-  end
-
   def scope
     Pundit.policy_scope!(user, record.class)
   end
