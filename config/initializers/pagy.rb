@@ -4,22 +4,20 @@
 # Customize only what you really need and notice that Pagy works also without any of the following lines.
 # Should you just cherry pick part of this file, please maintain the require-order of the extras
 
-
 # Pagy Variables
 # See https://ddnexus.github.io/pagy/api/pagy#variables
 # All the Pagy::VARS are set for all the Pagy instances but can be overridden
 # per instance by just passing them to Pagy.new or the #pagy controller method
 
-
 # Instance variables
 # See https://ddnexus.github.io/pagy/api/pagy#instance-variables
 # Pagy::VARS[:page]   = 1                                  # default
-Pagy::VARS[:items]  = 30                                 # default
+Pagy::DEFAULT[:items] = 30                                 # default
 # Pagy::VARS[:outset] = 0                                  # default
 
 # Other Variables
 # See https://ddnexus.github.io/pagy/api/pagy#other-variables
-Pagy::VARS[:size]       = [1,2,2,1]                       # default
+Pagy::DEFAULT[:size] = [1, 2, 2, 1]                       # default
 # Pagy::VARS[:page_param] = :page                           # default
 # Pagy::VARS[:params]     = {}                              # default
 # Pagy::VARS[:fragment]   = '#fragment'                     # example
@@ -27,10 +25,8 @@ Pagy::VARS[:size]       = [1,2,2,1]                       # default
 # Pagy::VARS[:i18n_key]   = 'pagy.item_name'                # default
 # Pagy::VARS[:cycle]      = true                            # example
 
-
 # Extras
 # See https://ddnexus.github.io/pagy/extras
-
 
 # Backend Extras
 
@@ -58,7 +54,6 @@ Pagy::VARS[:size]       = [1,2,2,1]                       # default
 # uncomment if you are going to use Searchkick.pagy_search
 # Searchkick.extend Pagy::Searchkick
 
-
 # Frontend Extras
 
 # Bootstrap extra: Add nav, nav_js and combo_nav_js helpers and templates for Bootstrap pagination
@@ -77,7 +72,7 @@ Pagy::VARS[:size]       = [1,2,2,1]                       # default
 # See https://ddnexus.github.io/pagy/extras/materialize
 # require 'pagy/extras/materialize'
 
-require 'pagy/extras/navs'
+require "pagy/extras/navs"
 
 # Navs extra: Add nav_js and combo_nav_js javascript helpers
 # Notice: the other frontend extras add their own framework-styled versions,
@@ -96,7 +91,6 @@ require 'pagy/extras/navs'
 # Multi size var used by the *_nav_js helpers
 # See https://ddnexus.github.io/pagy/extras/navs#steps
 # Pagy::VARS[:steps] = { 0 => [2,3,3,2], 540 => [3,5,5,3], 720 => [5,7,7,5] }   # example
-
 
 # Feature Extras
 
@@ -117,12 +111,11 @@ require 'pagy/extras/navs'
 # set to false if you want to make :enable_items_extra an opt-in variable
 # Pagy::VARS[:enable_items_extra] = false    # default true
 
-require 'pagy/extras/items'
+require "pagy/extras/items"
 
-Pagy::VARS[:enable_items_extra] = true
-Pagy::VARS[:items_param] = :items
-Pagy::VARS[:max_items]   = 100
-
+Pagy::DEFAULT[:enable_items_extra] = true
+Pagy::DEFAULT[:items_param] = :items
+Pagy::DEFAULT[:max_items] = 100
 
 # Overflow extra: Allow for easy handling of overflowing pages
 # See https://ddnexus.github.io/pagy/extras/overflow
@@ -144,14 +137,12 @@ Pagy::VARS[:max_items]   = 100
 # set to false if you want to make :enable_trim_extra an opt-in variable
 # Pagy::VARS[:enable_trim_extra] = false # default true
 
-
 # Rails
 
 # Rails: extras assets path required by the helpers that use javascript
 # (pagy*_nav_js, pagy*_combo_nav_js, and pagy_items_selector_js)
 # See https://ddnexus.github.io/pagy/extras#javascript
-Rails.application.config.assets.paths << Pagy.root.join('javascripts')
-
+Rails.application.config.assets.paths << Pagy.root.join("javascripts")
 
 # I18n
 
@@ -181,7 +172,6 @@ Rails.application.config.assets.paths << Pagy.root.join('javascripts')
 #                 {locale: 'xyz',  # not built-in
 #                  filepath: 'path/to/pagy-xyz.yml',
 #                  pluralize: lambda{|count| ... } )
-
 
 # I18n extra: uses the standard i18n gem which is ~18x slower using ~10x more memory
 # than the default pagy internal i18n (see above)
