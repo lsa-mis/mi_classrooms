@@ -41,5 +41,5 @@ Rails.application.routes.draw do
   end
 
   get 'application/delete_file_attachment/:id', to: 'application#delete_file_attachment', as: :delete_file
-  
+
 end
