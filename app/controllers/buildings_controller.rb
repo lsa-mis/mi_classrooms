@@ -55,10 +55,6 @@ class BuildingsController < ApplicationController
 
   private
 
-    def set_redirection_url
-      $baseURL = request.fullpath
-    end
-
     # Use callbacks to share common setup or constraints between actions.
     def set_building
       @building = Building.find(params[:id])

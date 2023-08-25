@@ -34,6 +34,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
     else
       sign_in_and_redirect user, event: :authentication
+      $baseURL = ''
       set_flash_message :notice, :success, kind: kind
     end
   end
