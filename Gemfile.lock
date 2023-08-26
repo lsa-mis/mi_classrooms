@@ -1,6 +1,7 @@
 GIT
   remote: https://github.com/ghiculescu/devise.git
   revision: b9b793c74f85a0730402f75a00bee1f489ab02d7
+  revision: b9b793c74f85a0730402f75a00bee1f489ab02d7
   branch: error-code-422
   specs:
     devise (4.8.1)
@@ -13,7 +14,9 @@ GIT
 GIT
   remote: https://github.com/heartcombo/responders.git
   revision: 956cd874a997083d350951fde4c6cc4944f64e80
+  revision: 956cd874a997083d350951fde4c6cc4944f64e80
   specs:
+    responders (3.1.0)
     responders (3.1.0)
       actionpack (>= 5.2)
       railties (>= 5.2)
