@@ -13,6 +13,12 @@ class ApplicationController < ActionController::Base
     redirect_back(fallback_location: rooms_path)
   end
 
+  def set_redirection_url
+    unless user_signed_in?
+      $baseURL = request.fullpath
+    end
+  end
+
   private
 
   def user_not_authorized

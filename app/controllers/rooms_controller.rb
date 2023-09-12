@@ -94,10 +94,6 @@ include ActionView::RecordIdentifier
 
   private
 
-    def set_redirection_url
-      $baseURL = request.fullpath
-    end
-
     def set_room
       # fresh_when @room
       # @room = Room.includes(:building, :room_characteristics, :room_panorama_attachment, :room_contact).find(params[:id])
