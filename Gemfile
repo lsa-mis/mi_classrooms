@@ -28,7 +28,7 @@ gem "rails", "~> 6.1.5"
 gem "redis", "~> 5.0", ">= 5.0.6"
 gem "responders", github: "heartcombo/responders"
 gem "sassc-rails"
-gem "sidekiq", "~> 7.0.8"
+gem "sidekiq", "~> 7.1.3"
 gem "skylight"
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem "uglifier"
