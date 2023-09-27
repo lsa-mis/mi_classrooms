@@ -28,15 +28,9 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       user.omni_auth_services.create(omni_auth_service_attrs)
     end
 
-    if user_signed_in?
-      flash[:notice] = "Your #{kind} account was connected."
-      redirect_to edit_user_registration_path
-
-    else
-      sign_in_and_redirect user, event: :authentication
-      $baseURL = ''
-      set_flash_message :notice, :success, kind: kind
-    end
+    sign_in_and_redirect user, event: :authentication
+    $baseURL = ''
+    set_flash_message :notice, :success, kind: kind
   end
 
   def user_is_stale?
@@ -68,11 +62,10 @@ def set_user
   elsif User.where(email: auth.info.email).any?
     flash[:alert] = "An account with this email already exists. Please sign in with that account before connecting your #{auth.provider.titleize} account."
     redirect_to new_user_session_path
-
   else
     @user = create_user
-
   end
+  
   puts "UPDATED RECORD!!"
   if @user
     admin = false
