@@ -39,7 +39,10 @@ include ActionView::RecordIdentifier
     @rooms = @rooms.with_all_characteristics(params[:room_characteristics]) if params[:room_characteristics].present?
     @rooms = @rooms.where('instructional_seating_count >= ?', params[:min_capacity].to_i) if params[:max_capacity].present?
     @rooms = @rooms.where('instructional_seating_count <= ?', params[:max_capacity].to_i) if params[:max_capacity].present?
-    @rooms = @rooms.where('facility_code_heprod LIKE ? OR UPPER(nickname) LIKE ?', "%#{params[:classroom_name].upcase}%", "%#{params[:classroom_name].upcase}%") if params[:classroom_name].present?
+    if params[:classroom_name].present?
+      classroom_name = params[:classroom_name].upcase.gsub(/\s+/, '')
+      @rooms = @rooms.where('facility_code_heprod LIKE ? OR UPPER(nickname) LIKE ?', "%#{classroom_name}%", "%#{classroom_name}%")
+    end
 
     authorize @rooms
 
