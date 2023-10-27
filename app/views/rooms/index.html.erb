@@ -47,7 +47,7 @@
         </div>
       </div>
       <div class="relative min-h-screen md:flex">
-        <div class="sidebar w-64 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out" data-autosubmit-target="sidebar" id="filters">
+        <div class="z-50 sidebar w-64 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out" data-autosubmit-target="sidebar" id="filters">
           <% if user_signed_in? && policy(Room).edit? %>
           <p class="bg-blue-700 text-white text-sm p-2">Admin panel</p>
             <div class="bg-blue-700 px-2 pb-2 text-white text-sm checkbox-filter">
