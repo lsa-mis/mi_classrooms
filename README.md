@@ -1,6 +1,9 @@
 # MClassrooms
 
-![](https://img.shields.io/badge/Ruby%20Version-3.0.1-red) ![](https://img.shields.io/badge/Rails%20Version-6.1.5-red)
+![](https://img.shields.io/badge/Ruby%20Version-3.0.1-red) ![](https://img.shields.io/badge/Rails%20Version-6.1.5-red) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
+## Description
+MClassrooms provides an intuitive, accessible interface to find the room you are looking for. Whether you are an instructor searching for a classroom with the technologies to meet your pedagogy, a student trying to find their way to class, or a staff member looking to schedule a room, MClassrooms has your back. The application is specifically for University of Michigan resources and depends heavily of APIs developed at the University of Michigan
 
   ## Authorization
   - Devise:  This application uses Devise for user authorization.
@@ -39,8 +42,6 @@ Check _Getting started_ instruction here https://api.umich.edu/start
     - rails db:seed
 
 ** NOTE: The task create log files in {Rails.root}/log/api_nightly_update_db.log to store errors of warnings.
-
-*** test
 
 # Support / Questions
   Please email the [LSA W&ADS Rails Team](mailto:lsa-was-rails-devs@umich.edu)
