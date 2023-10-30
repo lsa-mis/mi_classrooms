@@ -40,6 +40,7 @@ Check _Getting started_ instruction here https://api.umich.edu/start
 
 ** NOTE: The task create log files in {Rails.root}/log/api_nightly_update_db.log to store errors of warnings.
 
+*** test
 
 # Support / Questions
   Please email the [LSA W&ADS Rails Team](mailto:lsa-was-rails-devs@umich.edu)
