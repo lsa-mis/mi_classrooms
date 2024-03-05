@@ -24,7 +24,7 @@ gem "pg_search"
 # gem "poppler", "~> 4.1", ">= 4.1.8"
 gem "puma", "5.6.8"
 gem "pundit"
-gem "rails", "~> 6.1.5"
+gem "rails", "~> 6.1.7"
 # gem "redis", "~> 5.0", ">= 5.0.6"
 gem 'redis', '~> 4.8', '>= 4.8.1'
 gem "responders", github: "heartcombo/responders"
