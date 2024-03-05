@@ -6,7 +6,7 @@ class DepartmentApi
   end
 
   def get_departments_info(dept_name)
-    url = URI("https://gw.api.it.umich.edu/um/bf/Department/DeptData?deptDescr=#{dept_name}")
+    url = URI("https://gw.api.it.umich.edu/um/bf/Department/v2/DeptData?DeptDescription=#{dept_name}")
 
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
@@ -27,9 +27,6 @@ class DepartmentApi
       if response_json['errorCode'].present?
         @result['errorcode'] = response_json['errorCode']
         @result['error'] = response_json['errorMessage']
-      elsif response_json['ErrorResponse'].present?
-        @result['errorcode'] = response_json['ErrorResponse']['responseCode'].to_s
-        @result['error'] = response_json['ErrorResponse']['responseDescription']
       elsif response_json['DepartmentList'].present?
         @result['success'] = true
         @result['data'] = response_json['DepartmentList']
