@@ -452,6 +452,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-22
+  arm64-darwin-23
   x86_64-linux
 
 DEPENDENCIES
@@ -504,7 +505,7 @@ DEPENDENCIES
   webpacker (~> 6.0.0.rc.5)
 
 RUBY VERSION
-   ruby 3.0.1p64
+   ruby 3.1.0p0
 
 BUNDLED WITH
    2.4.19
