@@ -23,13 +23,11 @@ class DepartmentApi
       if response.code == "200"
         @result['success'] = true
         @result['data'] = response_json['DepartmentList']
-      else
-        if response_json['errorCode'].present?
-          @result['errorcode'] = response_json['errorCode']
-          @result['error'] = response_json['errorMessage']
-        else 
-          @result['errorcode'] = "Unknown error"
-        end
+      elsif response_json['errorCode'].present?
+        @result['errorcode'] = response_json['errorCode']
+        @result['error'] = response_json['errorMessage']
+      else 
+        @result['errorcode'] = "Unknown error"
       end
     rescue StandardError => e
       @result['errorcode'] = "Exception"
@@ -37,5 +35,4 @@ class DepartmentApi
     end
     return @result
   end
-  
 end
