@@ -198,95 +198,98 @@ class BuildingsApi
   # update rooms for every building
 
   def update_rooms
-    @buildings_ids = Building.all.pluck(:bldrecnbr)
-    dept_auth_token = AuthTokenApi.new("department")
-    dept_auth_token_result = dept_auth_token.get_auth_token
-    if dept_auth_token_result['success']
-      dept_access_token = dept_auth_token_result['access_token']
-    else
-      @log.api_logger.debug "update_rooms, error: Could not get access_token for DepartmentApi: #{dept_auth_token_result['error']}"
-      @debug = true
-      return @debug
-    end
-    dept_info_array = {}
-    number_of_api_calls_per_minutes = 0
-    @buildings_ids.each do |bld|
-      @rooms_in_db = Room.where(building_bldrecnbr: bld).where(rmtyp_description: "Classroom").pluck(:rmrecnbr)
-      @campus_id = Building.find_by(bldrecnbr: bld).campus_record_id
-      @building_name = Building.find_by(bldrecnbr: bld).name
-      result = get_building_classroom_data(bld)
-      if result['success']
-        if result['data'].present?
-          data = result['data']
-          if data.present?
-            # check data for buildings that have rooms with RoomTypeDescription == "Classroom"
-            if data.pluck("RoomTypeDescription").uniq.include?("Classroom")
-              data.each do |row|
-                # update only Classrooms not all rooms
-                if row['RoomTypeDescription'] == "Classroom"
-                  # get information about department
-                  dept_name = row['DepartmentName']
-                  if dept_info_array[dept_name].present?
-                    dept_data = dept_info_array[dept_name]
-                  else
-                    # get data from API
-                    if number_of_api_calls_per_minutes < 400
-                      number_of_api_calls_per_minutes += 1
+    begin
+      @buildings_ids = Building.all.pluck(:bldrecnbr)
+      dept_auth_token = AuthTokenApi.new("department")
+      dept_auth_token_result = dept_auth_token.get_auth_token
+      if dept_auth_token_result['success']
+        dept_access_token = dept_auth_token_result['access_token']
+      else
+        @log.api_logger.debug "update_rooms, error: Could not get access_token for DepartmentApi: #{dept_auth_token_result['error']}"
+        @debug = true
+        return @debug
+      end
+      dept_info_array = {}
+      number_of_api_calls_per_minutes = 0
+      @buildings_ids.each do |bld|
+        @rooms_in_db = Room.where(building_bldrecnbr: bld).where(rmtyp_description: "Classroom").pluck(:rmrecnbr)
+        @campus_id = Building.find_by(bldrecnbr: bld).campus_record_id
+        @building_name = Building.find_by(bldrecnbr: bld).name
+        result = get_building_classroom_data(bld)
+        if result['success']
+          if result['data'].present?
+            data = result['data']
+            if data.present?
+              # check data for buildings that have rooms with RoomTypeDescription == "Classroom"
+              if data.pluck("RoomTypeDescription").uniq.include?("Classroom")
+                data.each do |row|
+                  # update only Classrooms not all rooms
+                  if row['RoomTypeDescription'] == "Classroom"
+                    # get information about department
+                    dept_name = row['DepartmentName']
+                    if dept_info_array[dept_name].present?
+                      dept_data = dept_info_array[dept_name]
                     else
-                      number_of_api_calls_per_minutes = 1
-                      sleep(61.seconds)
-                    end
-                    dept_result = DepartmentApi.new(dept_access_token).get_departments_info(dept_name)
-                    if dept_result['success']
-                      if dept_result['data']['DeptData'].present?
-                        dept_data_info = dept_result['data']['DeptData'][0]
-                        dept_info_array[dept_name] = 
-                                                {'DeptId' => dept_data_info['DeptId'], 
-                                                'DeptGroup' => dept_data_info['DeptGroup'], 
-                                                'DeptGroupDescription' => dept_data_info['DeptGroupDescription']
-                                                }
-                        dept_data = dept_info_array[dept_name]
+                      # get data from API
+                      if number_of_api_calls_per_minutes < 400
+                        number_of_api_calls_per_minutes += 1
                       else
+                        number_of_api_calls_per_minutes = 1
+                        sleep(61.seconds)
+                      end
+                      dept_result = DepartmentApi.new(dept_access_token).get_departments_info(dept_name)
+                      if dept_result['success']
+                        if dept_result['data']['DeptData'].present?
+                          dept_data_info = dept_result['data']['DeptData'][0]
+                          dept_info_array[dept_name] = 
+                                                  {'DeptId' => dept_data_info['DeptId'], 
+                                                  'DeptGroup' => dept_data_info['DeptGroup'], 
+                                                  'DeptGroupDescription' => dept_data_info['DeptGroupDescription']
+                                                  }
+                          dept_data = dept_info_array[dept_name]
+                        else
+                          dept_data = nil
+                        end
+                      else
+                        # don't want to interrupt because of Department API errors - just log them 
+                        @log.api_logger.debug "update_rooms, error: DepartmentApi: Error for building #{bld}, room #{row['RoomRecordNumber']}, department #{dept_name} - #{dept_result['errorcode']}: #{dept_result['error']}"
                         dept_data = nil
                       end
-                    else
-                      @log.api_logger.debug "update_rooms, error: DepartmentApi: Error for building #{bld}, room #{row['RoomRecordNumber']}, department #{dept_name} - #{dept_result['errorcode']}: #{dept_result['error']}"
-                      dept_data = nil
-                      # don't want to interrupt because Department API gives this error: 
-                      # Error for building 1005036, room 2108446, department EH&S - 404. Please specify Department Description of more than 3 characters
-                      # @debug = true
-                      # return @debug
                     end
+                    if room_exists?(bld, row['RoomRecordNumber'])
+                      update_room(row, bld, dept_data)
+                    else
+                      create_room(row, bld, dept_data)
+                    end
+                    # if update_room or create_room returns true (@debug)
+                    return @debug if @debug
                   end
-                  if room_exists?(bld, row['RoomRecordNumber'])
-                    update_room(row, bld, dept_data)
-                  else
-                    create_room(row, bld, dept_data)
-                  end
-                  # if update_room or create_room returns true (@debug)
-                  return @debug if @debug
                 end
               end
             end
           end
-        end
-        # check if database has rooms that are not in API anymore
-        if @rooms_in_db.present?
-          RoomContact.where(rmrecnbr: @rooms_in_db).delete_all
-          RoomCharacteristic.where(rmrecnbr: @rooms_in_db).delete_all
-          if Room.where(rmrecnbr: @rooms_in_db).delete_all
-            @log.api_logger.info "update_rooms, delete #{@rooms_in_db} room(s) from the database"
-          else
-            @log.api_logger.debug "update_rooms, error: could not delete records with #{@rooms_in_db} rmrecnbr"
-            @debug = true
-            return @debug
+          # check if database has rooms that are not in API anymore
+          if @rooms_in_db.present?
+            RoomContact.where(rmrecnbr: @rooms_in_db).delete_all
+            RoomCharacteristic.where(rmrecnbr: @rooms_in_db).delete_all
+            if Room.where(rmrecnbr: @rooms_in_db).delete_all
+              @log.api_logger.info "update_rooms, delete #{@rooms_in_db} room(s) from the database"
+            else
+              @log.api_logger.debug "update_rooms, error: could not delete records with #{@rooms_in_db} rmrecnbr"
+              @debug = true
+              return @debug
+            end
           end
+        else
+          @log.api_logger.debug "update_rooms, error: API return: #{result['errorcode']} - #{result['error']}"
+          @debug = true
+          return @debug
         end
-      else
-        @log.api_logger.debug "update_rooms, error: API return: #{result['errorcode']} - #{result['error']}"
-        @debug = true
-        return @debug
       end
+    rescue StandardError => e
+      # example: Errno::ETIMEDOUT: Operation timed out - user specified timeout
+      @log.api_logger.debug "update_rooms, error: API return: #{e.message}"
+      @debug = true
     end
     return @debug
   end

@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.0.1"
+ruby "3.1.0"
 
 gem "annotate", "~> 3.1.1"
 gem "bootsnap", ">= 1.4.3", require: false
@@ -24,7 +24,7 @@ gem "pg_search"
 # gem "poppler", "~> 4.1", ">= 4.1.8"
 gem "puma", "5.6.8"
 gem "pundit"
-gem "rails", "~> 6.1.5"
+gem "rails", "~> 6.1.7"
 # gem "redis", "~> 5.0", ">= 5.0.6"
 gem 'redis', '~> 4.8', '>= 4.8.1'
 gem "responders", github: "heartcombo/responders"
