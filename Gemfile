@@ -58,4 +58,5 @@ group :test do
   gem "faker", "~> 2.19"
   gem "ffaker"
   gem "selenium-webdriver"
+  gem "webmock"
 end

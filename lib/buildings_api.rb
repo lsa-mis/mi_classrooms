@@ -303,7 +303,7 @@ class BuildingsApi
     @logger.debug(message)
     @debug = true
   end
-end
+# end
 
 
   # update rooms for every building
