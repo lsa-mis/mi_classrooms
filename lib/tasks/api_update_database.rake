@@ -34,7 +34,7 @@ task api_update_database: :environment do
   end
 
   # Update process for each API action
-  [['buildings', 'update_campus_list'], ['buildings', 'update_all_buildings'], ['classroom', 'add_facility_id_to_classrooms']].each do |api_type, action|
+  [['buildings', 'update_campus_list'], ['buildings', 'update_all_buildings'], ['buildings', 'update_rooms'], ['classroom', 'add_facility_id_to_classrooms'], ['classroom', 'update_all_classroom_characteristics'], ['classroom', 'update_all_classroom_contacts']].each do |api_type, action|
     success, token_or_error = get_auth_token(api_type)
     unless success
       @debug = true
