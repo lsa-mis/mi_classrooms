@@ -49,8 +49,14 @@ RSpec.describe DepartmentApi do
     end
 
     context 'when an unexpected error occurs' do
+      before do
+        # Simulate a network-related exception, e.g., timeout
+        stub_request(:get, base_url)
+          .with(headers: headers)
+          .to_raise(StandardError.new('Unexpected error'))
+      end
+    
       it 'captures the exception and returns a descriptive error message' do
-        allow(api_instance).to receive(:get_departments_info).and_raise(StandardError, 'Unexpected error')
         expected_response = {
           'success' => false,
           'errorcode' => 'Exception',
