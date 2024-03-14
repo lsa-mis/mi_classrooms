@@ -30,6 +30,18 @@ class BuildingsApi
     @debug
   end
 
+  def update_rooms
+    Building.find_each do |building|
+      result = api_get("https://gw.api.it.umich.edu/um/bf/RoomInfo/#{bldrecnbr}")
+      return log_error(result['error']) unless result['success']
+
+      ActiveRecord::Base.transaction do
+        update_rooms_for_building(result['ListOfRooms']['RoomData'])
+      end
+      @debug
+    end
+  end
+
   private
 
   def api_get(url)
@@ -61,12 +73,11 @@ class BuildingsApi
     end
   end
 
-  # def delete_unused_campuses
-  #   puts "campus_cds: #{@campus_cds}"
-  #   unused_cds = CampusRecord.pluck(:campus_cd) - @campus_cds
-  #   CampusRecord.where(campus_cd: unused_cds).destroy_all
-  #   @logger.info "Deleted unused campuses: #{unused_cds.join(', ')}" if unused_cds.any?
-  # end
+  def delete_unused_campuses
+    unused_cds = CampusRecord.pluck(:campus_cd) - @campus_cds
+    CampusRecord.where(campus_cd: unused_cds).destroy_all
+    @logger.info "Deleted unused campuses: #{unused_cds.join(', ')}" if unused_cds.any?
+  end
 
   def update_or_create_buildings(buildings)
     buildings.each do |building_data|
@@ -107,16 +118,6 @@ class BuildingsApi
     @logger.debug(message)
     @debug = true
   end
-  
-  def update_rooms
-    Building.find_each do |building|
-      update_rooms_for_building(building)
-    end
-    @debug
-  rescue StandardError => e
-    log_error("update_rooms, error: #{e.message}")
-    @debug = true
-  end
 
   def update_rooms_for_building(building)
     dept_auth_token = AuthTokenApi.new("department").get_auth_token
@@ -131,6 +132,16 @@ class BuildingsApi
       process_room_data(room_data, building, dept_access_token)
     end
     cleanup_unused_rooms(building)
+  end
+
+  def get_building_classroom_data(bldrecnbr)
+    result = api_get("https://gw.api.it.umich.edu/um/bf/RoomInfo/#{bldrecnbr}")
+    return log_error(result['error']) unless result['success']
+
+    ActiveRecord::Base.transaction do
+      update_or_create_room(result['ListOfRooms']['RoomData'])
+    end
+    @debug
   end
 
   def process_room_data(room_data, building, dept_access_token)
