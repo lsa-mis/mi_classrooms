@@ -15,7 +15,7 @@ class BuildingsApi
 
     ActiveRecord::Base.transaction do
       update_or_create_campuses(result['Campuses']['Campus'])
-      # delete_unused_campuses
+      delete_unused_campuses(result['Campuses']['Campus'])
     end
     @debug
   end
@@ -32,13 +32,14 @@ class BuildingsApi
 
   def update_rooms
     Building.find_each do |building|
-      result = api_get("https://gw.api.it.umich.edu/um/bf/RoomInfo/#{bldrecnbr}")
-      return log_error(result['error']) unless result['success']
-
-      ActiveRecord::Base.transaction do
-        update_rooms_for_building(result['ListOfRooms']['RoomData'])
-      end
-      @debug
+      result = fetch_room_info(building.bldrecnbr)
+      next if result_room_error?(result, building.bldrecnbr)
+    
+      puts "building: #{building.bldrecnbr} result: #{result['ListOfRooms']['RoomData']}"
+      break
+      # ActiveRecord::Base.transaction do
+      #   update_rooms_for_building(building.bldrecnbr, result['ListOfRooms']['RoomData'])
+      # end
     end
   end
 
@@ -73,10 +74,11 @@ class BuildingsApi
     end
   end
 
-  def delete_unused_campuses
-    unused_cds = CampusRecord.pluck(:campus_cd) - @campus_cds
-    CampusRecord.where(campus_cd: unused_cds).destroy_all
-    @logger.info "Deleted unused campuses: #{unused_cds.join(', ')}" if unused_cds.any?
+  def delete_unused_campuses(campuses)
+    campus_codes = campuses.map { |item| item["CampusCd"] }
+    unused_codes = CampusRecord.pluck(:campus_cd) - campus_codes
+    CampusRecord.where(campus_cd: unused_codes).destroy_all
+    @logger.info "Deleted unused campuses: #{unused_codes.join(', ')}" if unused_codes.any?
   end
 
   def update_or_create_buildings(buildings)
@@ -114,35 +116,45 @@ class BuildingsApi
     "#{data['BuildingStreetNumber']} #{data['BuildingStreetDirection']} #{data['BuildingStreetName']}".strip.gsub(/\s+/, " ")
   end
 
-  def log_error(message)
-    @logger.debug(message)
-    @debug = true
+  def fetch_room_info(bldrecnbr)
+    api_get("https://gw.api.it.umich.edu/um/bf/RoomInfo/#{bldrecnbr}")
   end
 
-  def update_rooms_for_building(building)
+  def result_room_error?(result, bldrecnbr)
+    if !result['success']
+      log_error(result['error'])
+      true
+    elsif result['ListOfRooms'].nil?
+      log_error(bldrecnbr)
+      true
+    else
+      false
+    end
+  end
+
+  def update_rooms_for_building(building,rooms)
     dept_auth_token = AuthTokenApi.new("department").get_auth_token
     return log_error("Could not get access_token for DepartmentApi") unless dept_auth_token['success']
 
     dept_access_token = dept_auth_token['access_token']
-    rooms_data = get_building_classroom_data(building.bldrecnbr)
     return log_error(rooms_data['error']) unless rooms_data['success']
 
-    rooms_data['data'].each do |room_data|
+    rooms.each do |room_data|
       next unless room_data['RoomTypeDescription'] == "Classroom"
       process_room_data(room_data, building, dept_access_token)
     end
     cleanup_unused_rooms(building)
   end
 
-  def get_building_classroom_data(bldrecnbr)
-    result = api_get("https://gw.api.it.umich.edu/um/bf/RoomInfo/#{bldrecnbr}")
-    return log_error(result['error']) unless result['success']
+  # def get_building_classroom_data(bldrecnbr)
+  #   result = api_get("https://gw.api.it.umich.edu/um/bf/RoomInfo/#{bldrecnbr}")
+  #   return log_error(result['error']) unless result['success']
 
-    ActiveRecord::Base.transaction do
-      update_or_create_room(result['ListOfRooms']['RoomData'])
-    end
-    @debug
-  end
+  #   ActiveRecord::Base.transaction do
+  #     update_or_create_room(result['ListOfRooms']['RoomData'])
+  #   end
+  #   @debug
+  # end
 
   def process_room_data(room_data, building, dept_access_token)
     dept_data = get_dept_data(room_data['DepartmentName'], dept_access_token)

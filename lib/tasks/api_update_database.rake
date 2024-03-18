@@ -34,7 +34,9 @@ task api_update_database: :environment do
   end
 
   # Update process for each API action
-  [['buildings', 'update_campus_list'], ['buildings', 'update_all_buildings'], ['buildings', 'update_rooms'], ['classroom', 'add_facility_id_to_classrooms'], ['classroom', 'update_all_classroom_characteristics'], ['classroom', 'update_all_classroom_contacts']].each do |api_type, action|
+  # [['buildings', 'update_campus_list'], ['buildings', 'update_all_buildings'], ['buildings', 'update_rooms'], ['classroom', 'add_facility_id_to_classrooms'], ['classroom', 'update_all_classroom_characteristics'], ['classroom', 'update_all_classroom_contacts']].each do |api_type, action|
+  [['buildings', 'update_rooms']].each do |api_type, action|
+
     success, token_or_error = get_auth_token(api_type)
     unless success
       @debug = true
@@ -44,7 +46,7 @@ task api_update_database: :environment do
     api = "#{api_type.capitalize}Api".constantize.new(token_or_error)
     task_time, @debug = update_api_data(api, action, action.humanize, task_time)
     break if @debug
-    sleep(61.seconds) if action != 'add_facility_id_to_classrooms'
+    # sleep(61.seconds) if action != 'add_facility_id_to_classrooms'
   end
 
   if @debug
