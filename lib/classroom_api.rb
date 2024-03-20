@@ -109,7 +109,7 @@ class ClassroomApi
         response = http.request(request)
         link = response.to_hash["link"].to_s
         if link.include? "rel=next"
-          start_index += 1000
+          start_index += count
         else
           next_page = false
         end
