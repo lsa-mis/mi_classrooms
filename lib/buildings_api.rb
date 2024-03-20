@@ -116,11 +116,8 @@ class BuildingsApi
     begin
       @buildings_ids = Building.all.pluck(:bldrecnbr)
       result = get_buildings_for_current_fiscal_year
-      puts "result buildings"
       if result['success']
         data = result['data']
-        puts data.count
-        fail
         data.each do |row|
           if REMOVE_BLDG.include?(row['BuildingRecordNumber'])
             next
@@ -145,7 +142,7 @@ class BuildingsApi
       end
     rescue StandardError => e
       # example: Errno::ETIMEDOUT: Operation timed out - user specified timeout
-      @log.api_logger.debug "update_all_buildings, error: API return: #{e.message}"
+      @log.api_logger.debug "update_all_buildings, error: #{e.message}"
       @debug = true
     end
     return @debug
@@ -176,7 +173,6 @@ class BuildingsApi
         address: " #{row['BuildingStreetNumber']}  #{row['BuildingStreetDirection']}  #{row['BuildingStreetName']}".strip.gsub(/\s+/, " "), 
         city: row['BuildingCity'], state: row['BuildingState'], zip: row['BuildingPostal'], country: 'USA',
         campus_record_id: CampusRecord.find_by(campus_cd: row['BuildingCampusCode'].to_i).id)
-
     if building.save
       GeocodeBuildingJob.perform_later(building)
     else
@@ -207,21 +203,13 @@ class BuildingsApi
         response = http.request(request)
         response_json = JSON.parse(response.read_body)
         link = response.to_hash["link"].to_s
-        puts "link"
-        puts link
         if link.include? "rel=next"
-          puts "hell"
-          start_index += 1000
+          start_index += count
         else
-          puts "false"
           next_page = false
         end
         if response.code == "200"
           result['success'] = true
-          puts "api"
-          puts start_index
-          puts next_page
-          puts response_json['ListOfBldgs']['Buildings'].count
           buildings += response_json['ListOfBldgs']['Buildings']
         elsif response_json['errorCode'].present?
           @result['errorcode'] = response_json['errorCode']
@@ -331,7 +319,7 @@ class BuildingsApi
       end
     rescue StandardError => e
       # example: Errno::ETIMEDOUT: Operation timed out - user specified timeout
-      @log.api_logger.debug "update_rooms, error: API return: #{e.message}"
+      @log.api_logger.debug "update_rooms, error: #{e.message}"
       @debug = true
     end
     return @debug
@@ -413,12 +401,11 @@ class BuildingsApi
         response = http.request(request)
         link = response.to_hash["link"].to_s
         if link.include? "rel=next"
-          start_index += 1000
+          start_index += count
         else
           next_page = false
         end
         response_json = JSON.parse(response.read_body)
-
         if response.code == "200"
           result['success'] = true
           if response_json['ListOfRooms'].present?
@@ -438,7 +425,5 @@ class BuildingsApi
       @result['error'] = e.message
     end
     return result
-
   end
-  
 end
