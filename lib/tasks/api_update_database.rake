@@ -138,7 +138,6 @@ task api_update_database: :environment do
   end
   status_report << " "
   
-  fail
   ################################################
   # add facility_id to classrooms and update instructional_seating_count
   # 
