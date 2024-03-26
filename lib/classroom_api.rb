@@ -346,7 +346,7 @@ class ClassroomApi
       end
     rescue StandardError => e
       # example: Errno::ETIMEDOUT: Operation timed out - user specified timeout
-      @log.api_logger.debug "update_rooms, error: API return: #{e.message}"
+      @log.api_logger.debug "update_all_classroom_contacts, error: API return: #{e.message}"
       @debug = true
     end
     return @debug
