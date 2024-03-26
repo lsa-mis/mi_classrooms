@@ -199,8 +199,8 @@ class ClassroomApi
           redo_loop_number += 1
           redo
         elsif result['success']
-          if result['data']['Classroom'].present?
-            characteristics = result['data']['Classroom']
+          characteristics = result['data']['Classroom']
+          if characteristics.present?
             if RoomCharacteristic.where(rmrecnbr: rmrecnbr).present?
               db_chrstc_list = RoomCharacteristic.where(rmrecnbr: rmrecnbr).pluck(:chrstc)
               characteristics.each do |c|
@@ -329,7 +329,6 @@ class ClassroomApi
         elsif result['success']
           if result['data']['Classroom'].present?
             row = result['data']['Classroom'][0]
-            
             if RoomContact.find_by(rmrecnbr: rmrecnbr).present?
               update_classroom_contact(row, rmrecnbr)
             else
