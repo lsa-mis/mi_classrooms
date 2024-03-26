@@ -1,5 +1,7 @@
 class ClassroomApi
 
+  ERR429 = "ERR429"
+
   def initialize(access_token)
     @buildings_ids = Building.all.pluck(:bldrecnbr)
     @access_token = access_token
@@ -28,7 +30,7 @@ class ClassroomApi
             facility_id = room['FacilityID'].to_s
             # add facility_id and number of seats
             result = get_classroom_info(ERB::Util.url_encode(facility_id))
-            if result['errorcode'] == "ERR429"
+            if result['errorcode'] == ERR429
               @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls"
               number_of_api_calls_per_minutes = 0
               sleep(61.seconds)
@@ -185,7 +187,7 @@ class ClassroomApi
         facility_id = room.facility_code_heprod
         rmrecnbr = room.rmrecnbr
         result = get_classroom_characteristics(ERB::Util.url_encode(facility_id))
-        if result['errorcode'] == "ERR429"
+        if result['errorcode'] == ERR429
           @log.api_logger.debug "update_all_classroom_characteristics, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls"
           number_of_api_calls_per_minutes = 0
           sleep(61.seconds)
@@ -313,7 +315,7 @@ class ClassroomApi
         facility_id = room.facility_code_heprod
         rmrecnbr = room.rmrecnbr
         result = get_classroom_contact(ERB::Util.url_encode(facility_id))
-        if result['errorcode'] == "ERR429"
+        if result['errorcode'] == ERR429
           @log.api_logger.debug "update_all_classroom_contacts, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls"
           number_of_api_calls_per_minutes = 0
           sleep(61.seconds)
