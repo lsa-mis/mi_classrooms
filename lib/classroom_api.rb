@@ -42,7 +42,7 @@ class ClassroomApi
               redo_loop_number += 1
               redo
             elsif result['success'] 
-              if result['data']['Classroom'].present?
+              if result['data']['Classroom'][0].present?
                 room_info = result['data']['Classroom'][0]
                 rmrecnbr = room_info['RmRecNbr'].to_i
                 room_in_db = Room.find_by(rmrecnbr: rmrecnbr)
