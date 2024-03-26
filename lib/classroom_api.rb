@@ -390,19 +390,20 @@ class ClassroomApi
       response = http.request(request)
       response_json = JSON.parse(response.read_body)
 
-      if response_json['errorCode'].present?
-        result['errorcode'] = response_json['errorCode']
-        result['error'] = response_json['errorMessage']
-      else
+      if response.code == "200"
         result['success'] = true
         result['data'] = response_json['Classrooms']
+      elsif response_json['errorCode'].present?
+        result['errorcode'] = response_json['errorCode']
+        result['error'] = response_json['errorMessage']
+      else 
+        result['errorcode'] = "Unknown error"
       end
     rescue StandardError => e
       result['errorcode'] = "Exception"
       result['error'] = e.message
     end
     return result
-
   end
 
   def get_classroom_meetings(start_date, end_date)
