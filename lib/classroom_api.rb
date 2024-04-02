@@ -1,7 +1,8 @@
 class ClassroomApi
 
-  ERR429 = "ERR429"
+  ERROR_CODE_ERR429 = "ERR429"
   OK_CODE = "200"
+  NUMBER_OF_API_CALLS = 400
 
   def initialize(access_token)
     @buildings_ids = Building.all.pluck(:bldrecnbr)
@@ -21,7 +22,7 @@ class ClassroomApi
         classrooms_list.each do |room|
           # update only rooms for campuses and buildings from the MClassroom database
           if @buildings_ids.include?(room['BuildingID'].to_i)
-            if number_of_api_calls_per_minutes < 400
+            if number_of_api_calls_per_minutes < NUMBER_OF_API_CALLS
               number_of_api_calls_per_minutes += 1
             else
               @log.api_logger.debug "add_facility_id_to_classrooms, the script sleeps after #{number_of_api_calls_per_minutes} calls"
@@ -31,7 +32,7 @@ class ClassroomApi
             facility_id = room['FacilityID'].to_s
             # add facility_id and number of seats
             result = get_classroom_info(ERB::Util.url_encode(facility_id))
-            if result['errorcode'] == ERR429
+            if result['errorcode'] == ERROR_CODE_ERR429
               @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls"
               number_of_api_calls_per_minutes = 0
               sleep(61.seconds)
@@ -178,7 +179,7 @@ class ClassroomApi
       number_of_api_calls_per_minutes = 0
       redo_loop_number = 1
       classrooms.each do |room|
-        if number_of_api_calls_per_minutes < 400
+        if number_of_api_calls_per_minutes < NUMBER_OF_API_CALLS
           number_of_api_calls_per_minutes += 1
         else
           @log.api_logger.debug "update_all_classroom_characteristics, the script sleeps after #{number_of_api_calls_per_minutes} calls"
@@ -188,7 +189,7 @@ class ClassroomApi
         facility_id = room.facility_code_heprod
         rmrecnbr = room.rmrecnbr
         result = get_classroom_characteristics(ERB::Util.url_encode(facility_id))
-        if result['errorcode'] == ERR429
+        if result['errorcode'] == ERROR_CODE_ERR429
           @log.api_logger.debug "update_all_classroom_characteristics, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls"
           number_of_api_calls_per_minutes = 0
           sleep(61.seconds)
@@ -306,7 +307,7 @@ class ClassroomApi
       number_of_api_calls_per_minutes = 0
       redo_loop_number = 1
       classrooms.each do |room|
-        if number_of_api_calls_per_minutes < 400
+        if number_of_api_calls_per_minutes < NUMBER_OF_API_CALLS
           number_of_api_calls_per_minutes += 1
         else
           @log.api_logger.debug "update_all_classroom_contacts, the script sleeps after #{number_of_api_calls_per_minutes} calls"
@@ -316,7 +317,7 @@ class ClassroomApi
         facility_id = room.facility_code_heprod
         rmrecnbr = room.rmrecnbr
         result = get_classroom_contact(ERB::Util.url_encode(facility_id))
-        if result['errorcode'] == ERR429
+        if result['errorcode'] == ERROR_CODE_ERR429
           @log.api_logger.debug "update_all_classroom_contacts, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls"
           number_of_api_calls_per_minutes = 0
           sleep(61.seconds)
