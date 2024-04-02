@@ -2,6 +2,7 @@ class BuildingsApi
 
   REMOVE_BLDG = ["1000890"]
   CAMPUS_CODES = ["100"]
+  OK_CODE = "200"
 
   # include buildings that are not in the campuses described by CAMPUS_CODES
   # "BuildingRecordNumber": 1000440, "BuildingLongDescription": "MOORE EARL V BLDG", 
@@ -94,7 +95,7 @@ class BuildingsApi
 
       response = http.request(request)
       response_json = JSON.parse(response.read_body)
-      if response.code == "200"
+      if response.code == OK_CODE
         result['success'] = true
         result['data'] = response_json['Campuses']
       elsif response_json['errorCode'].present?
@@ -208,7 +209,7 @@ class BuildingsApi
         else
           next_page = false
         end
-        if response.code == "200"
+        if response.code == OK_CODE
           result['success'] = true
           buildings += response_json['ListOfBldgs']['Buildings']
         elsif response_json['errorCode'].present?
@@ -406,7 +407,7 @@ class BuildingsApi
           next_page = false
         end
         response_json = JSON.parse(response.read_body)
-        if response.code == "200"
+        if response.code == OK_CODE
           result['success'] = true
           if response_json['ListOfRooms'].present?
             data = response_json['ListOfRooms']['RoomData']
