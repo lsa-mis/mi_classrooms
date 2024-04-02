@@ -3,6 +3,7 @@ class BuildingsApi
   REMOVE_BLDG = ["1000890"]
   CAMPUS_CODES = ["100"]
   OK_CODE = "200"
+  NUMBER_OF_API_CALLS = 400
 
   # include buildings that are not in the campuses described by CAMPUS_CODES
   # "BuildingRecordNumber": 1000440, "BuildingLongDescription": "MOORE EARL V BLDG", 
@@ -263,7 +264,7 @@ class BuildingsApi
                       dept_data = dept_info_array[dept_name]
                     else
                       # get data from API
-                      if number_of_api_calls_per_minutes < 400
+                      if number_of_api_calls_per_minutes < NUMBER_OF_API_CALLS
                         number_of_api_calls_per_minutes += 1
                       else
                         number_of_api_calls_per_minutes = 1
