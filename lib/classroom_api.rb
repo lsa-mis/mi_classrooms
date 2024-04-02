@@ -1,6 +1,7 @@
 class ClassroomApi
 
   ERR429 = "ERR429"
+  OK_CODE = "200"
 
   def initialize(access_token)
     @buildings_ids = Building.all.pluck(:bldrecnbr)
@@ -116,7 +117,7 @@ class ClassroomApi
           next_page = false
         end
         response_json = JSON.parse(response.read_body)
-        if response.code == "200"
+        if response.code == OK_CODE
           result['success'] = true
           classrooms += response_json['Classrooms']['Classroom']
         elsif response_json['errorCode'].present?
@@ -155,7 +156,7 @@ class ClassroomApi
       response = http.request(request)
       response_json = JSON.parse(response.read_body)
 
-      if response.code == "200"
+      if response.code == OK_CODE
         result['success'] = true
         result['data'] = response_json['Classrooms']
       elsif response_json['errorCode'].present?
@@ -280,7 +281,7 @@ class ClassroomApi
       response = http.request(request)
       response_json = JSON.parse(response.read_body)
 
-      if response.code == "200"
+      if response.code == OK_CODE
         result['success'] = true
         result['data'] = response_json['Classrooms']
       elsif response_json['errorCode'].present?
@@ -391,7 +392,7 @@ class ClassroomApi
       response = http.request(request)
       response_json = JSON.parse(response.read_body)
 
-      if response.code == "200"
+      if response.code == OK_CODE
         result['success'] = true
         result['data'] = response_json['Classrooms']
       elsif response_json['errorCode'].present?
