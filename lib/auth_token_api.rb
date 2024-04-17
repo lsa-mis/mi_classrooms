@@ -1,16 +1,20 @@
 require 'net/http'
 require 'uri'
 require 'json'
+require 'openssl'
 
 class AuthTokenApi
   BASE_URL = "https://gw.api.it.umich.edu/um/oauth2/token"
 
   def initialize(scope)
     @scope = scope
+    @logger = ApiLog.instance.logger
   end
 
   def get_auth_token
     response_json = request_auth_token
+
+    # puts "AuthTokenApi::get_auth_token #{response_json }"
 
     if response_json['access_token']
       success_response(response_json['access_token'])
@@ -18,7 +22,7 @@ class AuthTokenApi
       error_response(response_json['fault']&.fetch('faultstring', 'Unknown error'))
     end
   rescue StandardError => e
-    Rails.logger.error("AuthTokenApi Error: #{e.message}")
+    log_error("AuthTokenApi Error: #{e.message}")
     error_response(e.message)
   end
 
@@ -50,6 +54,11 @@ class AuthTokenApi
 
   def error_response(error)
     {'success' => false, 'error' => error, 'access_token' => nil}
+  end
+
+  def log_error(message)
+    @logger.debug(message)
+    @debug = true
   end
 end
 
