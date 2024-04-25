@@ -1,6 +1,7 @@
-require 'net/http'
 require 'uri'
+require 'net/http'
 require 'json'
+require 'openssl'
 
 class DepartmentApi
   def initialize(access_token)
