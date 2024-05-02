@@ -1,42 +1,42 @@
+# frozen_string_literal: true
+
 require 'uri'
 require 'net/http'
 require 'json'
 require 'openssl'
 
+# Description/Explanation of BuildingsApi class
+# This class is responsible for updating the buildings and rooms data in the database using the external API.
 class BuildingsApi
-  REMOVE_BLDG_IDS = [1000890].freeze
+  REMOVE_BLDG_IDS = [1_000_890].freeze
   MCLASSROOMS_CAMPUS_CODES = [100, 300, 500].freeze
-  BUILDINGS_CODES = [1000440, 1000234, 1000204, 1000333, 1005224, 1005059, 1005347].freeze
+  BUILDINGS_CODES = [1_000_440, 1_000_234, 1_000_204, 1_000_333, 1_005_224, 1_005_059, 1_005_347].freeze
 
   def initialize(access_token)
     @access_token = access_token
     @debug = false
     @logger = ApiLog.instance.logger
-    @buildings_ids = [1005451]# Building.pluck(:bldrecnbr)
+    # @buildings_ids = Building.pluck(:bldrecnbr)
+    # @buildings_ids = [1_005_451] # Building.pluck(:bldrecnbr)
+    @buildings_ids = [1_005_327]
     # @dept_access_token = fetch_dept_access_token
     @dept_info_cache = {}
   end
 
   def update_campus_list
-    # result = api_get("https://gw.api.it.umich.edu/um/bf/Campuses")
-    result = api_get("https://gw.api.it.umich.edu/um/bf/Buildings/v2/Campuses")
+    result = api_get('https://gw.api.it.umich.edu/um/bf/Buildings/v2/Campuses')
     return log_error(result['error']) unless result['success']
-
-    # puts"BuildingsApi::update_campus_list #{result}"
 
     ActiveRecord::Base.transaction do
       update_or_create_campuses(result['Campuses']['Campus'])
-      delete_unused_campuses(result['Campuses']['Campus'])
+      delete_unused_campuses
     end
     @debug
   end
 
   def update_all_buildings
-    # result = api_get("https://gw.api.it.umich.edu/um/bf/BuildingInfo")
-    result = api_get("https://gw.api.it.umich.edu/um/bf/Buildings/v2/BuildingInfo")
+    result = api_get('https://gw.api.it.umich.edu/um/bf/Buildings/v2/BuildingInfo')
     return log_error(result['error']) unless result['success']
-
-    # puts"BuildingsApi::update_all_buildings #{result}"
 
     ActiveRecord::Base.transaction do
       update_or_create_buildings(result['ListOfBldgs']['Buildings'])
@@ -56,13 +56,12 @@ class BuildingsApi
 
   def update_all_rooms
     @buildings_ids.each do |building_id|
-    # result = api_get("https://gw.api.it.umich.edu/um/bf/RoomInfo/#{building_id}")
-    result = api_get("https://gw.api.it.umich.edu/um/bf/Buildings/v2/RoomInfo/#{building_id}")
-    return log_error(result['error']) unless result['success']
+      result = api_get("https://gw.api.it.umich.edu/um/bf/Buildings/v2/RoomInfo/#{building_id}")
+      return log_error(result['error']) unless result['success']
 
-    # puts"BuildingsApi::update_all_rooms #{result['ListOfRooms']['RoomData']}"
       building = Building.find_by(bldrecnbr: building_id)
       ActiveRecord::Base.transaction do
+        puts building
         update_or_create_rooms(result['ListOfRooms']['RoomData'], building)
       end
     end
@@ -74,28 +73,25 @@ class BuildingsApi
   def api_get(uri)
     uri = URI(uri)
     request = Net::HTTP::Get.new(uri)
-    request["x-ibm-client-id"] = Rails.application.credentials.um_api[:buildings_client_id]
-    request["authorization"] = "Bearer #{@access_token}"
-    request["accept"] = 'application/json'
-  
+    request['x-ibm-client-id'] = Rails.application.credentials.um_api[:buildings_client_id]
+    request['authorization'] = "Bearer #{@access_token}"
+    request['accept'] = 'application/json'
+
     response = Net::HTTP.start(uri.host, uri.port, use_ssl: true, verify_mode: OpenSSL::SSL::VERIFY_NONE) do |http|
       http.request(request)
     end
-  
-    # Handle specific error types
+
     raise "HTTP Error: #{response.code}" unless response.is_a?(Net::HTTPSuccess)
-  
+
     json = JSON.parse(response.body)
-    
-    if json['errorCode'].present?
-      return {'success' => false, 'error' => json['errorMessage']}
-    else
-      return {'success' => true}.merge(json)
-    end
+
+    return { 'success' => false, 'error' => json['errorMessage'] } if json['errorCode'].present?
+
+    { 'success' => true }.merge(json)
   rescue JSON::ParserError => e
-    {'success' => false, 'error' => "JSON parsing error: #{e.message}"}
+    { 'success' => false, 'error' => "JSON parsing error: #{e.message}" }
   rescue StandardError => e
-    {'success' => false, 'error' => "Unexpected error: #{e.message}"}
+    { 'success' => false, 'error' => "Unexpected error: #{e.message}" }
   end
 
   # Logs errors to a log file or standard error.
@@ -107,7 +103,6 @@ class BuildingsApi
 
   # def fetch_classroom_data(bldrecnbr)
   #   uri = URI("https://gw.api.it.umich.edu/um/bf/RoomInfo/#{bldrecnbr}")
-
 
   #   http = Net::HTTP.new(uri.host, uri.port)
   #   http.use_ssl = true
@@ -121,22 +116,20 @@ class BuildingsApi
   #   JSON.parse(response.body)
   # end
 
-  
-# ====update_campus_list==========================
+  # ====update_campus_list==========================
   def update_or_create_campuses(campuses)
-    # puts "**** update_or_create_campuses #{campuses}"
     campuses.each do |campus_data|
       campus_cd = campus_data['CampusCd']
-      campus = CampusRecord.find_or_initialize_by(campus_cd: campus_cd)
+      campus = CampusRecord.find_or_initialize_by(campus_cd:)
       unless campus.update(campus_description: campus_data['CampusDescr'])
         log_error("Could not update campus #{campus_cd}: #{campus.errors.full_messages.join(', ')}")
         raise ActiveRecord::Rollback
       end
     end
-    @logger.info "update_or_create_campuses"
+    @logger.info 'update_or_create_campuses'
   end
 
-  def delete_unused_campuses(campuses)
+  def delete_unused_campuses
     campus_codes = MCLASSROOMS_CAMPUS_CODES
     unused_codes = CampusRecord.pluck(:campus_cd) - campus_codes
     CampusRecord.where(campus_cd: unused_codes).destroy_all
@@ -156,7 +149,7 @@ class BuildingsApi
       end
       GeocodeBuildingJob.perform_later(building.id) if building.persisted?
     end
-    @logger.info "update_or_create_buildings"
+    @logger.info 'update_or_create_buildings'
   end
 
   def relevant_building?(building_data)
@@ -177,14 +170,13 @@ class BuildingsApi
   end
 
   def format_address(data)
-    "#{data['BuildingStreetNumber']} #{data['BuildingStreetDirection']} #{data['BuildingStreetName']}".strip.gsub(/\s+/, " ")
+    address = "#{data['BuildingStreetNumber']} #{data['BuildingStreetDirection']} #{data['BuildingStreetName']}"
+    address.strip.gsub(/\s+/, ' ')
   end
 
   def update_or_create_rooms(rooms, building_id)
     rooms.each do |room_data|
-      next unless room_data['RoomTypeDescription'] == "Classroom"
-
-       puts "BuildingsApi::update_or_create_rooms #{room_data}"
+      next unless room_data['RoomTypeDescription'] == 'Classroom'
 
       room = Room.find_or_initialize_by(rmrecnbr: room_data['RoomRecordNumber'])
       unless room.update(room_attributes(room_data, building_id))
@@ -192,7 +184,7 @@ class BuildingsApi
         raise ActiveRecord::Rollback
       end
     end
-    @logger.info "update_or_create_rooms"
+    @logger.info "update_or_create_rooms #{building_id.bldrecnbr}"
   end
 
   def room_attributes(data, building)
@@ -207,23 +199,20 @@ class BuildingsApi
       building_bldrecnbr: building.id,
       campus_record_id: building.campus_record_id,
       visible: true,
-      building_name: building.name,
-
+      building_name: building.name
     }
   end
 
-
-
-
-  def update_rooms_for_building(building,rooms)
-    dept_auth_token = AuthTokenApi.new("department").get_auth_token
-    return log_error("Could not get access_token for DepartmentApi") unless dept_auth_token['success']
+  def update_rooms_for_building(building, rooms)
+    dept_auth_token = AuthTokenApi.new('department').obtain_auth_token
+    return log_error('Could not get access_token for DepartmentApi') unless dept_auth_token['success']
 
     @dept_access_token = dept_auth_token['access_token']
     return log_error(rooms_data['error']) unless rooms_data['success']
 
     rooms.each do |room_data|
-      next unless room_data['RoomTypeDescription'] == "Classroom"
+      next unless room_data['RoomTypeDescription'] == 'Classroom'
+
       process_room_data(room_data, building, @dept_access_token)
     end
     cleanup_unused_rooms(building)
@@ -242,10 +231,10 @@ class BuildingsApi
 
   def update_or_create_room(room, room_data, building, dept_data)
     room.assign_attributes(room_attributes(room_data, building, dept_data))
-    unless room.save
-      log_error("Could not save room #{room.rmrecnbr}: #{room.errors.full_messages.join(', ')}")
-      @debug = true
-    end
+    return if room.save
+
+    log_error("Could not save room #{room.rmrecnbr}: #{room.errors.full_messages.join(', ')}")
+    @debug = true
   end
 
   # def room_attributes(room_data, building, dept_data)
@@ -263,7 +252,7 @@ class BuildingsApi
   # end
 
   # def fetch_dept_access_token
-  #   dept_auth_token = AuthTokenApi.new("department").get_auth_token
+  #   dept_auth_token = AuthTokenApi.new("department").acquire_auth_token
   #   if dept_auth_token['success']
   #     dept_auth_token['access_token']
   #   else
@@ -272,17 +261,18 @@ class BuildingsApi
   #   end
   # end
 
-
-    # ====update_rooms==========================
+  # ====update_rooms==========================
   def update_rooms_in_building(building_id)
     building = Building.find_by(bldrecnbr: building_id)
     return unless building
 
     classroom_data = get_building_classroom_data(building_id)
-    return log_error("API return: #{classroom_data['errorcode']} - #{classroom_data['error']}") unless classroom_data['success']
+    unless classroom_data['success']
+      return log_error("API return: #{classroom_data['errorcode']} - #{classroom_data['error']}")
+    end
 
     classroom_data['data']&.each do |row|
-      next unless row['RoomTypeDescription'] == "Classroom"
+      next unless row['RoomTypeDescription'] == 'Classroom'
 
       dept_data = fetch_or_use_cached_dept_info(row['DepartmentName'])
       room_record_number = row['RoomRecordNumber']
@@ -297,17 +287,20 @@ class BuildingsApi
 
     remove_orphan_rooms(building.rooms.pluck(:rmrecnbr), classroom_data['data'].pluck('RoomRecordNumber'))
   end
-# =====================================
-
+  # =====================================
 
   def get_building_classroom_data(building_id)
     # result = fetch_classroom_data(bldrecnbr)
     result = api_get("https://gw.api.it.umich.edu/um/bf/RoomInfo/#{building_id}")
-    
+
     format_response(result)
-  rescue => e
+  rescue StandardError => e
     log_error("HTTP request failed: #{e.message}")
-    { 'success' => false, 'errorcode' => e.class.to_s, 'error' => e.message, 'data' => {} }
+    {
+      'success' => false,
+      'errorcode' => e.class.to_s,
+      'error' => e.message, 'data' => {}
+    }
   end
 
   # Fetches classroom data from the external API.
@@ -328,19 +321,28 @@ class BuildingsApi
   # Formats the API response into a standardized hash format.
   def format_response(response_json)
     if response_json.key?('errorCode')
-      { 'success' => false, 'errorcode' => response_json['errorCode'], 'error' => response_json['errorMessage'], 'data' => {} }
+      {
+        'success' => false,
+        'errorcode' => response_json['errorCode'],
+        'error' => response_json['errorMessage'],
+        'data' => {}
+      }
     else
-      { 'success' => true, 'data' => normalize_data(response_json['ListOfRooms']['RoomData']) }
+      {
+        'success' => true,
+        'data' => normalize_data(response_json['ListOfRooms']['RoomData'])
+      }
     end
   end
 
   # Normalizes data to ensure it's always returned as an array.
   def normalize_data(data)
     return [] if data.nil?
+
     data.is_a?(Array) ? data : [data]
   end
 
-# Attempts to fetch department information from the cache; if unavailable, fetches from the API.
+  # Attempts to fetch department information from the cache; if unavailable, fetches from the API.
   def fetch_or_use_cached_dept_info(dept_name)
     return @dept_info_cache[dept_name] if @dept_info_cache.key?(dept_name)
 
@@ -356,9 +358,11 @@ class BuildingsApi
     dept_result = DepartmentApi.new(@dept_access_token).get_departments_info(dept_name)
     if dept_result['success'] && dept_result['data']['DeptData'].present?
       dept_data_info = dept_result['data']['DeptData'][0]
-      {'DeptId' => dept_data_info['DeptId'],
-      'DeptGroup' => dept_data_info['DeptGroup'],
-      'DeptGroupDescription' => dept_data_info['DeptGroupDescription']}
+      {
+        'DeptId' => dept_data_info['DeptId'],
+        'DeptGroup' => dept_data_info['DeptGroup'],
+        'DeptGroupDescription' => dept_data_info['DeptGroupDescription']
+      }
     else
       log_error("DepartmentApi: Error for department #{dept_name} - #{dept_result['errorcode']}: #{dept_result['error']}")
       nil
@@ -372,7 +376,7 @@ class BuildingsApi
 
     if @api_calls_counter >= 400
       sleep_time = [61 - (Time.now - @last_api_call_time), 0].max
-      sleep(sleep_time) if sleep_time > 0
+      sleep(sleep_time) if sleep_time.positive?
       @api_calls_counter = 0
     end
 
@@ -387,7 +391,7 @@ class BuildingsApi
   def update_room(row, building, dept_data)
     # Find the room within the given building
     room = building.rooms.find_by(rmrecnbr: row['RoomRecordNumber'])
-    
+
     # Prepare the room attributes for update
     room_attrs = {
       floor: row['FloorNumber'],
@@ -397,22 +401,24 @@ class BuildingsApi
       dept_description: row['DepartmentName'],
       instructional_seating_count: row['RoomStationCount']
     }
-    
+
     # Add department data if available
     if dept_data.present?
-      room_attrs.merge!({
-        dept_id: dept_data['DeptId'],
-        dept_grp: dept_data['DeptGroup'],
-        dept_group_description: dept_data['DeptGroupDescription']
-      })
+      room_attrs.merge!(
+        {
+          dept_id: dept_data['DeptId'],
+          dept_grp: dept_data['DeptGroup'],
+          dept_group_description: dept_data['DeptGroupDescription']
+        }
+      )
     end
-  
+
     # Attempt to update the room with the new attributes
     if room.update(room_attrs)
       true # Successful update
     else
       # Handle the update failure, possibly logging the errors
-      log_error("Could not update room #{room.rmrecnbr}: #{room.errors.full_messages.join(", ")}")
+      log_error("Could not update room #{room.rmrecnbr}: #{room.errors.full_messages.join(', ')}")
       false # Indicate failure
     end
   end
@@ -432,25 +438,25 @@ class BuildingsApi
       building_name: building.name, # Assuming the Building model contains name
       visible: true # Assuming new rooms should be visible by default
     }
-  
+
     # Add department data if available
     if dept_data.present?
       room_attrs.merge!({
-        dept_id: dept_data['DeptId'],
-        dept_grp: dept_data['DeptGroup'],
-        dept_group_description: dept_data['DeptGroupDescription']
-      })
+                          dept_id: dept_data['DeptId'],
+                          dept_grp: dept_data['DeptGroup'],
+                          dept_group_description: dept_data['DeptGroupDescription']
+                        })
     end
-  
+
     # Create the new room within the building's context
     room = building.rooms.build(room_attrs)
-  
+
     # Attempt to save the new room
     if room.save
       true # Indicate success
     else
       # Handle failure to save, possibly logging the errors
-      log_error("Could not create room #{room_attrs[:rmrecnbr]}: #{room.errors.full_messages.join(", ")}")
+      log_error("Could not create room #{room_attrs[:rmrecnbr]}: #{room.errors.full_messages.join(', ')}")
       false # Indicate failure
     end
   end
@@ -458,16 +464,15 @@ class BuildingsApi
   def remove_orphan_rooms(current_room_numbers, updated_room_numbers)
     # Find orphan room numbers by excluding updated room numbers from the current room numbers
     orphan_room_numbers = current_room_numbers - updated_room_numbers
-  
+
     # Guard clause to skip further processing if there are no orphan rooms
     return if orphan_room_numbers.empty?
-  
+
     # Assuming Room model has 'rmrecnbr' as an attribute to identify rooms
     # Remove rooms identified by orphan_room_numbers
     Room.where(rmrecnbr: orphan_room_numbers).destroy_all
-  
+
     # Logging or any additional steps post deletion
     log_error("Removed orphan rooms with numbers: #{orphan_room_numbers.join(', ')}")
   end
-
 end
