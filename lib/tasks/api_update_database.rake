@@ -1,21 +1,24 @@
+# frozen_string_literal: true
+
 # Add crontask to server in order to run this at a specified time
 #   run crontab -e
 #================================
 #   49 3 * * * /bin/bash -l -c 'cd /home/deployer/apps/vodsecurityproduction/current && RAILS_ENV=production /home/deployer/.rbenv/shims/bundle exec rake devicinator >> /home/deployer/apps/vodsecurityproduction/shared/log/cronstuff.log 2>&1'
 #================================
 
-desc "This will update Classrooms database using APIs"
+desc "This will update MClassrooms database using APIs"
 task api_update_database: :environment do
-  log = ApiLog.instance
+  # log = ApiLog.instance.logger
   errors = []
   status_report = []
   task_time = 0
   @debug = false
   task_result = TaskResultLog.new
 
-  def get_auth_token(api_type)
+  def acquire_auth_token(api_type)
     auth_token = AuthTokenApi.new(api_type)
-    result = auth_token.get_auth_token
+    result = auth_token.obtain_auth_token
+    # puts "Rake task auth_token.get_auth_token #{result}"
     if result['success']
       [true, result['access_token']]
     else
@@ -34,10 +37,16 @@ task api_update_database: :environment do
   end
 
   # Update process for each API action
-  # [['buildings', 'update_campus_list'], ['buildings', 'update_all_buildings'], ['buildings', 'update_rooms'], ['classroom', 'add_facility_id_to_classrooms'], ['classroom', 'update_all_classroom_characteristics'], ['classroom', 'update_all_classroom_contacts']].each do |api_type, action|
-  [['buildings', 'update_rooms']].each do |api_type, action|
-
-    success, token_or_error = get_auth_token(api_type)
+  [
+    ['buildings', 'update_campus_list'],
+    ['buildings', 'update_all_buildings'],
+    ['buildings', 'update_all_rooms']
+    # ['classroom', 'add_facility_id_to_classrooms'], 
+    # ['classroom', 'update_all_classroom_characteristics'], 
+    # ['classroom', 'update_all_classroom_contacts']
+  ].each do |api_type, action|
+    puts "Updating #{api_type} action #{action}." if Rails.env.development?
+    success, token_or_error = acquire_auth_token(api_type)
     unless success
       @debug = true
       errors << "No access_token. Error: #{token_or_error}"
