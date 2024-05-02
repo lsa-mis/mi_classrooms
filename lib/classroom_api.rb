@@ -1,10 +1,17 @@
+# frozen_string_literal: true
+
+require 'uri'
+require 'net/http'
+require 'json'
+require 'openssl'
+
 class ClassroomApi
 
   def initialize(access_token)
     @buildings_ids = Building.all.pluck(:bldrecnbr)
     @access_token = access_token
     @debug = false
-    @log = ApiLog.new
+    @log = ApiLog.initialize.logger
   end
 
   def add_facility_id_to_classrooms
