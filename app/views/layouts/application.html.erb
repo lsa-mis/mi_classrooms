@@ -1,11 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="<%= I18n.locale %>">
   <head>
-    <% if Rails.env.staging? %>
-      <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-NE1XRCB19M"></script>
-    <% else %>
-      <script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-211737475-1"></script>
+    <% gtm_id = google_tag_manager_id %>
+    <% if gtm_id %>
+      <script async="async" src="https://www.googletagmanager.com/gtag/js?id=<%= gtm_id %>"></script>
     <% end %>
+    
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>

@@ -1,6 +1,14 @@
 module ApplicationHelper
   include Pagy::Frontend
 
+  def google_tag_manager_id
+    return 'G-NE1XRCB19M' if Rails.env.staging?
+
+    return 'G-8SKGSGWTNY' if Rails.env.production?
+
+    nil
+  end
+
   # Returns the full title on a per-page basis.
   def page_title
     base_title = (t :site_name)
