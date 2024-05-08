@@ -1,6 +1,14 @@
 module ApplicationHelper
   include Pagy::Frontend
 
+  def google_tag_manager_id
+    return 'G-NE1XRCB19M' if Rails.env.staging?
+
+    return 'G-8SKGSGWTNY' if Rails.env.production?
+
+    nil
+  end
+
   # Returns the full title on a per-page basis.
   def page_title
     base_title = (t :site_name)
@@ -60,14 +68,14 @@ module ApplicationHelper
   def api_status
     if ApiUpdateLog.find_by('created_at >= ?', 24.hours.ago).nil?
       return "failed"
-    elsif ApiUpdateLog.find_by('created_at >= ?', 24.hours.ago).status == "error"
+    elsif ApiUpdateLog.where('created_at >= ?', 24.hours.ago).last.status == "error"
       return 'error'
     end
   end
 
   def api_log_text
-    if ApiUpdateLog.find_by('created_at >= ?', 24.hours.ago).result.present?
-      ApiUpdateLog.find_by('created_at >= ?', 24.hours.ago).result
+    if ApiUpdateLog.where('created_at >= ?', 24.hours.ago).last.result.present?
+      ApiUpdateLog.where('created_at >= ?', 24.hours.ago).last.result
     else
       "The log message is empty"
     end
