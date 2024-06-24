@@ -28,12 +28,12 @@ gem "rails", "~> 6.1.7"
 # gem "redis", "~> 5.0", ">= 5.0.6"
 gem 'redis', '~> 4.8', '>= 4.8.1'
 gem "responders", github: "heartcombo/responders"
-gem "sassc-rails"
 gem "sidekiq", "~> 7.1.3"
 gem "skylight"
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem "uglifier"
 gem "webpacker", "~> 6.0.0.rc.5"
+gem 'cssbundling-rails'
 
 group :development, :test do
   gem "bullet"

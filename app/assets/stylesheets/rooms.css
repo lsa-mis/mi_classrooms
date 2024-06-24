@@ -1,0 +1,17 @@
+.room-show-image img {
+  @apply h-48 object-fill;
+}
+
+@media (min-width: 640px) {
+  .room-show-image img {
+    @apply h-96 object-fill;
+  }
+}
+
+#panorama {
+  @apply h-96 bg-green-300 object-fill;
+}
+
+#panorama .pnlm-preview-img {
+  background-size: 360%;
+}

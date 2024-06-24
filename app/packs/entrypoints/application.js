@@ -13,11 +13,6 @@ import "channels"
 import * as ActiveStorage from "@rails/activestorage"
 
 import "../stylesheets/application.sass"
-import '../stylesheets/_header.sass'
-import '../stylesheets/_flash_errors.sass'
-import '../stylesheets/ribbons.sass'
-import '../stylesheets/rooms.sass'
-import '../stylesheets/search.sass'
 import 'lightgallery/css/lightgallery.css'
 
 import gtag from '../src/analytics'
@@ -26,7 +21,7 @@ function importAll(r) {
   r.keys().forEach(r);
 }
 // Add relevant file extensions as needed below.
-importAll(require.context('../images/', true, /\.(svg|jpg|gif|png)$/));
+// importAll(require.context('../images/', true, /\.(svg|jpg|gif|png)$/));
 
 import "controllers"
 

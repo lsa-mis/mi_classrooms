@@ -1,0 +1,87 @@
+.search-by-building-name {
+  @apply shadow-sm h-10 w-full flex flex-row border-gray-300 border-l border-t border-b;
+}
+.search-by-building-name:focus {
+  @apply outline-none ring-2 ring-blue-500 border-transparent;
+}
+.search-by-building-name input {
+  @apply block border-none h-full;
+}
+.search-by-building-name .submit-search {
+  @apply bg-blue-300 rounded-r-md w-24 text-blue-800 text-lg font-medium border border-gray-300 h-10;
+}
+.search-by-building-name {
+  @apply block rounded-none rounded-l-md pl-10 sm:text-sm border-gray-300;
+}
+.search-by-building-name:focus {
+  @apply ring-blue-500 border-blue-500;
+}
+.filters-button-group {
+  @apply text-gray-700 max-w-7xl mx-auto flex;
+}
+.filters-button {
+  @apply mt-3 ml-4 bg-white rounded-md text-gray-700 inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500;
+}
+.characteristics-list {
+  @apply mt-4 space-y-4 mr-6;
+}
+.characteristic-checkbox {
+  @apply -m-2 px-2 py-1 flex items-center rounded text-blue-700 transition ease-in-out duration-150 border border-blue-300 bg-blue-100;
+}
+.characteristic-checkbox svg {
+  @apply text-blue-600;
+}
+.characteristic-checkbox:hover {
+  @apply bg-yellow-100 text-blue-800;
+}
+.characteristic-checkbox:hover svg {
+  @apply text-blue-800;
+}
+.characteristic-icon {
+  @apply flex-shrink-0 h-5 w-5 text-gray-500 fill-current;
+}
+.projection-list {
+  @apply flex justify-items-stretch flex-wrap space-y-2 max-w-full lg:max-w-xl;
+}
+.rounded-checkbox {
+  @apply justify-center align-middle mt-2 mx-1 whitespace-nowrap truncate px-2 py-1 flex items-center rounded-2xl text-sm text-blue-700 transition ease-in-out duration-150 border border-blue-400 bg-blue-100;
+}
+.rounded-checkbox label {
+  @apply flex flex-row;
+}
+.rounded-checkbox label span {
+  @apply ml-1;
+}
+.rounded-checkbox svg {
+  @apply h-3 w-3;
+}
+.rounded-checkbox:hover {
+  @apply bg-blue-200;
+}
+.check-box input[type="checkbox"]:checked + label {
+  @apply bg-blue-500 text-blue-100;
+}
+.check-box input[type="checkbox"]:checked + label svg {
+  @apply text-blue-100;
+}
+.check-box input[type="checkbox"]:checked + label:hover {
+  @apply bg-blue-400;
+}
+.filters-group-heading {
+  @apply text-base font-bold tracking-wide text-gray-900 uppercase border-b border-gray-400 mt-6 pb-1;
+}
+.filters-dropdown {
+  @apply min-w-full transform shadow-lg border-b absolute inset-x-0 transform shadow-lg pb-20 mt-4 bg-gray-50;
+}
+.filters-inner {
+  @apply relative inset-0 flex;
+}
+.view-all-link {
+  @apply bg-green-400 relative bottom-0 right-0;
+}
+.view-all-link a {
+  @apply text-blue-600 p-2;
+}
+.view-all-link a:hover {
+  @apply text-blue-800 bg-blue-100 rounded-lg;
+}

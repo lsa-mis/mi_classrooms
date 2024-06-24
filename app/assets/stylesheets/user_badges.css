@@ -1,0 +1,28 @@
+#user-badge--dropdown {
+  color: white;
+}
+
+.user-badge {
+  font-size: 1.6em;
+  color: white;
+}
+
+.user-badge .user-badge--username {
+  display: inline;
+}
+
+.user-badge .user-badge--username a {
+  color: white;
+}
+
+.user-badge a i {
+  color: white;
+}
+
+.user-badge:hover {
+  /* color: transparentize(white, 0.3); */
+}
+
+.user-badge .dropdown-toggle::after {
+  display: none;
+}
