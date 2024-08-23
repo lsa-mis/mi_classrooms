@@ -12,10 +12,11 @@ import "channels"
 
 import * as ActiveStorage from "@rails/activestorage"
 
-import "../stylesheets/application.sass"
+// import "../stylesheets/application.sass"
 import 'lightgallery/css/lightgallery.css'
 
 import gtag from '../src/analytics'
+import 'trix/dist/trix.css'
 import 'pannellum-rooms/pannellum.css'
 function importAll(r) {
   r.keys().forEach(r);
@@ -23,6 +24,6 @@ function importAll(r) {
 // Add relevant file extensions as needed below.
 // importAll(require.context('../images/', true, /\.(svg|jpg|gif|png)$/));
 
-import "controllers"
+// import "controllers"
 
 ActiveStorage.start()
