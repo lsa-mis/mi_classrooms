@@ -18,8 +18,7 @@ task api_update_database: :environment do
   status_report = []
   task_time = 0
   # @debug is true if there are errors from API calls or database queries
-  @debug = false
-  @errors_count = 0
+  @debug = false  
   task_result = TaskResultLog.new
   
   #################################################
