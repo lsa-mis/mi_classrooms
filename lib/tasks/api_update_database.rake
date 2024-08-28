@@ -19,6 +19,7 @@ task api_update_database: :environment do
   task_time = 0
   # @debug is true if there are errors from API calls or database queries
   @debug = false
+  @errors_count = 0
   task_result = TaskResultLog.new
   
   #################################################
@@ -230,7 +231,6 @@ task api_update_database: :environment do
       status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
       message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update classrooms contacts errors:\r\n" + errors.join("\r\n")
       task_result.update_log(message, @debug)
-
       exit
     end
   end
