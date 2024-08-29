@@ -230,7 +230,6 @@ task api_update_database: :environment do
       status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
       message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update classrooms contacts errors:\r\n" + errors.join("\r\n")
       task_result.update_log(message, @debug)
-
       exit
     end
   end

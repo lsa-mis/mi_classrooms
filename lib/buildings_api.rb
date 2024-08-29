@@ -48,6 +48,7 @@ class BuildingsApi
     else
       @log.api_logger.debug "update_campus_list, error: API return: #{result['errorcode']} - #{result['error']}"
       @debug = true
+      sleep(61.seconds)
       return @debug
     end
     return @debug
@@ -140,6 +141,7 @@ class BuildingsApi
       else
         @log.api_logger.debug "update_all_buildings, error: API return: #{result['errorcode']} - #{result['error']}"
         @debug = true
+        sleep(61.seconds)
         return @debug
       end
     rescue StandardError => e
@@ -286,6 +288,7 @@ class BuildingsApi
                       else
                         # don't want to interrupt because of Department API errors - just log them 
                         @log.api_logger.debug "update_rooms, error: DepartmentApi: Error for building #{bld}, room #{row['RoomRecordNumber']}, department #{dept_name} - #{dept_result['errorcode']}: #{dept_result['error']}"
+                        sleep(61.seconds)
                         dept_data = nil
                       end
                     end
@@ -316,6 +319,7 @@ class BuildingsApi
         else
           @log.api_logger.debug "update_rooms, error: API return: #{result['errorcode']} - #{result['error']}"
           @debug = true
+          sleep(61.seconds)
           return @debug
         end
       end
