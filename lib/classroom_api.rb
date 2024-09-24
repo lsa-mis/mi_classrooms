@@ -39,6 +39,7 @@ class ClassroomApi
               if redo_loop_number > 9
                 @debug = true
                 @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls #{redo_loop_number} times "
+                sleep(61.seconds)
                 return @debug
               end
               redo_loop_number += 1
@@ -61,6 +62,7 @@ class ClassroomApi
             else
               @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{result['errorcode']} - #{result['error']} for #{facility_id}"
               @debug = true
+              sleep(61.seconds)
               return @debug
             end
           end
@@ -68,6 +70,7 @@ class ClassroomApi
       else
         @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{result['errorcode']} - #{result['error']} for #{facility_id}"
         @debug = true
+        sleep(61.seconds)
         return @debug
       end
       # check if database has rooms that are not in API anymore
@@ -86,6 +89,7 @@ class ClassroomApi
       # example: Errno::ETIMEDOUT: Operation timed out - user specified timeout
       @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{e.message}"
       @debug = true
+      sleep(61.seconds)
     end
     return @debug
   end
@@ -196,6 +200,7 @@ class ClassroomApi
           if redo_loop_number > 9
             @debug = true
             @log.api_logger.debug "update_all_classroom_characteristics, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls #{redo_loop_number} times "
+            sleep(61.seconds)
             return @debug
           end
           redo_loop_number += 1
@@ -227,6 +232,7 @@ class ClassroomApi
         else
           @log.api_logger.debug "update_all_classroom_characteristics, error: API return: #{result['errorcode']} - #{result['error']}"
           @debug = true
+          sleep(61.seconds)
           return @debug
         end
         return @debug if @debug
@@ -235,6 +241,7 @@ class ClassroomApi
       # example: Errno::ETIMEDOUT: Operation timed out - user specified timeout
       @log.api_logger.debug "update_all_classroom_characteristics, error: API return: #{e.message}"
       @debug = true
+      sleep(61.seconds)
     end
     return @debug
   end
@@ -324,6 +331,7 @@ class ClassroomApi
           if redo_loop_number > 9
             @debug = true
             @log.api_logger.debug "update_all_classroom_contacts, error: API return: #{result['errorcode']} - #{result['error']} after #{number_of_api_calls_per_minutes} calls #{redo_loop_number} times "
+            sleep(61.seconds)
             return @debug
           end
           redo_loop_number += 1
@@ -342,6 +350,7 @@ class ClassroomApi
         else
           @log.api_logger.debug "update_all_classroom_contacts, error: API returns false for facility_id #{facility_id}: #{result['errorcode']} - #{result['error']}"
           @debug = true
+          sleep(61.seconds)
           return @debug
         end
         return @debug if @debug
@@ -350,6 +359,7 @@ class ClassroomApi
       # example: Errno::ETIMEDOUT: Operation timed out - user specified timeout
       @log.api_logger.debug "update_all_classroom_contacts, error: API return: #{e.message}"
       @debug = true
+      sleep(61.seconds)
     end
     return @debug
   end
