@@ -18,22 +18,25 @@ gem "omniauth-google-oauth2"
 gem "omniauth-saml", "~> 2.1"
 gem "omniauth-rails_csrf_protection"
 gem "order_as_specified", "~> 1.7"
-gem "pagy"
+gem 'pagy', '~> 6.0'
 gem "pg", ">= 0.18", "< 2.0"
 gem "pg_search"
 # gem "poppler", "~> 4.1", ">= 4.1.8"
 gem "puma", "5.6.8"
 gem "pundit"
 gem "rails", "~> 6.1.7"
-# gem "redis", "~> 5.0", ">= 5.0.6"
-gem 'redis', '~> 4.8', '>= 4.8.1'
+gem "redis", "~> 4.8", ">= 4.8.1"
 gem "responders", github: "heartcombo/responders"
 gem "sidekiq", "~> 7.1.3"
 gem "skylight"
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem "uglifier"
-gem "webpacker", "~> 6.0.0.rc.5"
-gem 'cssbundling-rails'
+gem "cssbundling-rails"
+
+gem "turbo-rails"
+
+gem "stimulus-rails"
+gem "importmap-rails", "~> 2.0"
 
 group :development, :test do
   gem "bullet"
@@ -48,8 +51,8 @@ group :development do
   gem "erb2haml"
   gem "letter_opener_web", "~> 2.0"
   gem "pry-rails"
-  gem "spring"
-  gem "spring-watcher-listen"
+  # gem "spring"
+  # gem "spring-watcher-listen"
   gem "web-console", ">= 3.3.0"
 end
 
@@ -61,3 +64,5 @@ group :test do
   gem "selenium-webdriver"
   gem "shoulda-matchers"
 end
+
+gem "tailwindcss-rails", "~> 2.5"
