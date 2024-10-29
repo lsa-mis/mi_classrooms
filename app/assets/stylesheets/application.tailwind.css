@@ -1,12 +1,21 @@
+@import "./header.css";
+@import "./flash_errors.css";
+@import "./pannellum.css";
+@import "./ribbons.css";
+@import "./rooms.css";
+@import "./search.css";
+@import "./user_badges.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@tailwind variants;
 
 /* show/hide information panel */
 .infopanel--display {
   display: block;
 }
+
 
 .infopanel--hide {
   display: none;

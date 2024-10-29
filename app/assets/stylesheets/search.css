@@ -85,3 +85,222 @@
 .view-all-link a:hover {
   @apply text-blue-800 bg-blue-100 rounded-lg;
 }
+.link-to-all-classrooms {
+  @apply absolute bottom-0 right-6 text-blue-600 underline;
+}
+.choices {
+  @apply text-left;
+}
+.choices .choices__inner {
+  @apply bg-blue-100 p-0 rounded min-h-0 h-10 border-none;
+}
+.choices .choices__input {
+  @apply bg-blue-100 text-blue-800 font-semibold ml-1 mt-2 z-50;
+}
+.choices__item {
+  @apply bg-blue-200;
+}
+.choices__input::-webkit-input-placeholder {
+  @apply text-gray-700 opacity-75 font-light text-lg;
+}
+.choices__input:-moz-placeholder {
+  @apply text-gray-700 opacity-75 font-light text-lg;
+}
+.choices__inner {
+  @apply z-50;
+}
+.choices__inner .choices__list .choices__item {
+  @apply bg-blue-700 z-50;
+}
+.choices__inner .choices__list .choices__item:hover {
+  @apply bg-blue-800;
+}
+.choices__inner .choices__list .choices__item @screen xl {
+  @apply mt-0;
+}
+.filter-by-student-capacaity {
+  @apply w-full mx-auto pr-8 h-auto w-auto;
+}
+#slider {
+  @apply h-2 mt-12 z-0;
+}
+#slider @screen xl {
+  @apply ml-2 mr-4;
+}
+#slider .noUi-connect {
+  @apply bg-blue-700 h-2 z-0;
+}
+#slider .noUi-base {
+  @apply bg-blue-400 z-0;
+}
+#slider .noUi-handle {
+  @apply bg-yellow-500 rounded-full h-6 w-6 border-2 border-blue-700 z-0 -mt-1;
+}
+#slider .noUi-handle:before {
+  @apply hidden;
+}
+#slider .noUi-handle:after {
+  @apply hidden;
+}
+#slider .noUi-handle:focus {
+  @apply border-blue-600;
+}
+#slider .noUi-tooltip {
+  @apply bg-blue-100 text-blue-800 text-xs rounded w-10 h-6 mb-2 pb-4;
+}
+#slider .noUi-tooltip:focus {
+  @apply bg-green-400 outline-none;
+}
+.sort-otpions-dropdown {
+  @apply bg-blue-400 absolute;
+}
+.sort-otpions-inner {
+  @apply relative w-screen max-w-xs right-0;
+}
+.h-highlights {
+  @apply grid grid-cols-3 gap-x-1 gap-y-2 px-2;
+}
+.h-highlights @screen md {
+  @apply grid-cols-5;
+}
+.h-highlights @screen lg {
+  @apply grid-cols-4;
+}
+.h-highlights .h-capacity {
+  @apply col-start-1;
+}
+.h-highlights .h-layout {
+  @apply col-start-2;
+}
+.h-highlight-item {
+  @apply inline-flex text-sm text-blue-800 whitespace-nowrap items-center font-semibold sm:mx-2;
+}
+.h-highlight-item svg {
+  @apply h-3 w-3 mr-1;
+}
+.h-highlight-item @screen md {
+  @apply text-base;
+}
+.h-highlight-item @screen md svg {
+  @apply h-5 w-5;
+}
+.h-highlight-item @screen lg {
+  @apply text-sm;
+}
+.h-highlight-item @screen lg svg {
+  @apply h-4 w-4;
+}
+.h-highlight-item @screen xl {
+  @apply mx-1;
+}
+.h-highlight-item @screen xl svg {
+  @apply h-3 w-3 mr-1;
+}
+.h-highlight-item:hover {
+  @apply underline;
+}
+.h-no-highlight-item {
+  @apply inline-flex text-sm text-black whitespace-nowrap items-center font-semibold mx-2;
+}
+.h-no-highlight-item svg {
+  @apply h-3 w-3 mr-1;
+}
+.h-no-highlight-item @screen md {
+  @apply text-base;
+}
+.h-no-highlight-item @screen md svg {
+  @apply h-5 w-5;
+}
+.h-no-highlight-item @screen lg {
+  @apply text-sm;
+}
+.h-no-highlight-item @screen lg svg {
+  @apply h-4 w-4;
+}
+.h-no-highlight-item @screen xl {
+  @apply mx-1;
+}
+.h-no-highlight-item @screen xl svg {
+  @apply h-3 w-3 mr-1;
+}
+.classroom-row-dropdown-toggle {
+  @apply text-sm text-gray-600 font-light inline-flex;
+}
+.classroom-row-dropdown-toggle-button {
+  @apply inline-flex;
+}
+.classroom-row-dropdown-toggle-button span {
+  @apply justify-center align-middle;
+}
+.classroom-row-dropdown-toggle-button svg {
+  @apply ml-1 transform rotate-90 fill-current;
+}
+.classroom-row-dropdown {
+  @apply pt-2 text-black;
+}
+.classroom-row-dropdown-features-section {
+  @apply w-full max-w-2xl;
+}
+.classroom-row-dropdown-features-section @screen lg {
+  /* empty to maintain format consistency */
+}
+.classroom-row-dropdown-features-group hr {
+  @apply flex-1 border-t border-blue-600 mt-1 mx-2;
+}
+.classroom-row-dropdown-features-group @screen md {
+  @apply mr-4;
+}
+.classroom-row-dropdown-top-matter {
+  @apply w-full;
+}
+.classroom-row-dropdown-features {
+  @apply grid grid-cols-4 grid-flow-row mt-2;
+}
+.classroom-row-dropdown-features @screen md {
+  @apply grid-cols-3;
+}
+.classroom-row-dropdown-features li {
+  @apply whitespace-nowrap truncate;
+}
+.classroom-row-dropdown-features svg {
+  @apply h-4 w-4;
+}
+.classroom-row-dropdown-feature {
+  @apply flex items-start truncate mt-1 ml-1 whitespace-nowrap items-center;
+}
+.classroom-row-contact-icon {
+  @apply flex items-center justify-center h-5 w-5 rounded-md;
+}
+.classroom-row-contact-icon svg {
+  @apply h-3 w-3 fill-current text-white;
+}
+.classroom-row-contact-items {
+  @apply truncate text-left w-full mt-4;
+}
+.classroom-row-contact-item {
+  @apply bg-white rounded py-4 pr-6 pl-2 truncate mt-2;
+}
+.classroom-row-contact-item h5 {
+  @apply truncate text-lg leading-tight -mt-1;
+}
+.classroom-row-contact-item ul {
+  @apply leading-tight;
+}
+.classroom-row-contact-item ul li {
+  @apply font-light leading-loose align-middle items-center leading-tight flex;
+}
+.classroom-row-contact-item ul li svg {
+  @apply h-5 w-5 px-1 fill-current flex-shrink-0 align-middle mr-1;
+}
+.classroom-row-contact-item @screen md {
+  @apply mb-1;
+}
+.classroom-row-contact-item @screen md h5 {
+  @apply text-sm;
+}
+.classroom-row-contact-item @screen md ul li {
+  @apply text-sm leading-tight;
+}
+.features-header {
+  @apply flex-shrink-0 pr-4 text-sm tracking-wider font-semibold uppercase pt-2;
+}

@@ -19,7 +19,7 @@
 }
 
 .alert-error {
-  @apply text-yellow-750 border-yellow-500;
+  @apply text-yellow-700 border-yellow-500;
 }
 
 .alert-notice {

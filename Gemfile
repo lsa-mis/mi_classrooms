@@ -22,7 +22,6 @@ gem 'pagy', '~> 6.0'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'pg_search'
 # gem "poppler", "~> 4.1", ">= 4.1.8"
-gem 'cssbundling-rails'
 gem 'puma', '5.6.8'
 gem 'pundit'
 gem 'rails', '~> 6.1.7'
