@@ -1,6 +1,6 @@
-require_relative "boot"
+require_relative 'boot'
 
-require "rails/all"
+require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -8,11 +8,6 @@ Bundler.require(*Rails.groups)
 
 module MiClassrooms
   class Application < Rails::Application
-
-    # remove Turbo from Asset Pipeline precompilation
-    config.after_initialize do
-      config.assets.precompile.delete("turbo")
-    end
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
     config.generators do |g|
@@ -31,8 +26,7 @@ module MiClassrooms
     config.active_record.schema_format = :sql
     config.time_zone = 'Eastern Time (US & Canada)'
   end
-  ActiveStorage::Engine.config.active_storage.content_types_to_serve_as_binary.delete("image/svg+xml")
+  ActiveStorage::Engine.config.active_storage.content_types_to_serve_as_binary.delete('image/svg+xml')
 
-  ActiveStorage::Engine.config.active_storage.content_types_allowed_inline.append("image/svg+xml")
-  Webpacker::Compiler.env["TAILWIND_MODE"] = "build"
+  ActiveStorage::Engine.config.active_storage.content_types_allowed_inline.append('image/svg+xml')
 end
