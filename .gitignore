@@ -42,3 +42,7 @@ uploads/
 /config/credentials/staging.key
 
 /config/skylight.yml
+/app/assets/builds/*
+!/app/assets/builds/.keep
+
+/config/credentials/development.key
