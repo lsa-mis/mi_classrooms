@@ -3,7 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.3.3'
 
-gem 'annotate', '~> 3.1.1'
+gem 'annotate', '~> 3.2.0'
 gem 'bootsnap', '>= 1.4.3', require: false
 gem 'devise', github: 'ghiculescu/devise', branch: 'error-code-422' # https://github.com/heartcombo/devise/pull/5340 not yet merged
 gem 'draper', '~> 4.0'
@@ -24,11 +24,13 @@ gem 'pg_search'
 # gem "poppler", "~> 4.1", ">= 4.1.8"
 gem 'puma', '5.6.8'
 gem 'pundit'
-gem 'rails', '~> 6.1.7'
+gem 'rails', '~> 7.0.0'
+
 gem 'redis', '~> 4.8', '>= 4.8.1'
 gem 'responders', github: 'heartcombo/responders'
 gem 'sidekiq', '~> 7.1.3'
 gem 'skylight'
+gem 'sprockets-rails'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'uglifier'
 
