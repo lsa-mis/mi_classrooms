@@ -5,6 +5,7 @@
 @import "./rooms.css";
 @import "./search.css";
 @import "./user_badges.css";
+@import "./lightgallery-bundle.min.css";
 
 @tailwind base;
 @tailwind components;
