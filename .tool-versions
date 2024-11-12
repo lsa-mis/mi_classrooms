@@ -1,4 +1,4 @@
-ruby 3.3.3
+ruby 3.3.4
 bundler 2.5.9
 nodejs 21.5.0
 yarn 1.22.19
