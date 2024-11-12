@@ -1,6 +1,6 @@
+@import "./actiontext.css";
 @import "./header.css";
 @import "./flash_errors.css";
-@import "./pannellum.css";
 @import "./ribbons.css";
 @import "./rooms.css";
 @import "./search.css";
@@ -238,3 +238,4 @@ ol {
 .skiplink:focus {
   @apply translate-y-2 bg-yellow-500 px-2 z-10;
 }
+@import 'actiontext.css';
