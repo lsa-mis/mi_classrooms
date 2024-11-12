@@ -1,4 +1,4 @@
-class AddTsvectorForBuildings < ActiveRecord::Migration[6.1]
+class AddTsvectorForBuildings < ActiveRecord::Migration[6.0]
 
   def up
     add_column :buildings, :tsv, :tsvector
@@ -11,18 +11,13 @@ class AddTsvectorForBuildings < ActiveRecord::Migration[6.1]
         tsv, 'pg_catalog.english', name, nick_name, abbreviation
       );
     SQL
-
-    now = Time.current.to_s(:db)
-    update("UPDATE buildings SET updated_at = '#{now}'")
   end
 
   def down
-    execute <<-SQL
-      DROP TRIGGER tsvectorupdate
-      ON buildings
-    SQL
-
     remove_index :buildings, :tsv
     remove_column :buildings, :tsv
+    execute <<-SQL
+      DROP TRIGGER IF EXISTS tsvectorupdate ON buildings;
+    SQL
   end
 end
