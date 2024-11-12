@@ -1,10 +1,14 @@
 <div class="room-show-image">
 <% if @room.room_panorama.attached? %>
-  <div id="panorama"
-    data-controller="pannellum"
-    data-pannellum-panoimage=<%= "#{url_for(@room.room_panorama)}" %>
-    data-pannellum-panopreview=<%= "#{url_for(@room.room_panorama.variant(resize: "25%").processed)}" %>
-    aria-hidden="true" focusable="false">
+  <div id="panorama">
+    <script>
+      pannellum.viewer('panorama', {
+        "type": "equirectangular",
+        "panorama": "<%= "#{url_for(@room.room_panorama)}" %>",
+        "preview": "<%= "#{url_for(@room.room_panorama.variant(resize: 0.25).processed)}" %>",
+        "autoLoad": false
+      });
+    </script>
   </div>
 <% else %>
   <%= room_image(@room) %>

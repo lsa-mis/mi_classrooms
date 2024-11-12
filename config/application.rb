@@ -1,6 +1,6 @@
-require_relative "boot"
+require_relative 'boot'
 
-require "rails/all"
+require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -9,7 +9,7 @@ Bundler.require(*Rails.groups)
 module MiClassrooms
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.1
+    config.load_defaults 7.0
     config.generators do |g|
       g.test_framework false
       g.stylesheets false
@@ -25,6 +25,7 @@ module MiClassrooms
     config.active_job.queue_adapter = :sidekiq
     config.active_record.schema_format = :sql
     config.time_zone = 'Eastern Time (US & Canada)'
+    config.add_autoload_paths_to_load_path = false
   end
   ActiveStorage::Engine.config.active_storage.content_types_to_serve_as_binary.delete('image/svg+xml')
 
