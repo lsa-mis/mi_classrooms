@@ -2,18 +2,9 @@
   @apply flex flex-col px-2 pt-2 pb-3 space-y-1 sm:px-3;
 }
 
-/* .header-link {
-  @apply border-transparent text-blue-50 hover:border-blue-300 hover:text-white inline-flex items-center pr-1 pt-1 border-b-2 text-base font-normal;
-
-}
-
-.header-link{
-  @apply text-blue-50 border-transparent text-blue-50 hover:border-blue-300 hover:text-white inline-flex items-center pr-1 pt-1 border-b-2 text-base font-normal;
-} */
-
 .header-link{
   @apply border-transparent text-blue-50 hover:border-blue-300 hover:text-white inline-flex items-center pr-1 pt-1 border-b-2 text-base font-normal;
-}
+} 
 
 .active {
   @apply text-yellow-500 ;
