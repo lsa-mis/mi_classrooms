@@ -1,7 +1,9 @@
 class AuthTokenApi
+  OK_CODE = "200"
+
   def initialize(scope)
     @scope = scope
-    @returned_data = {'success' => false, 'error' => '', 'access_token' => nil}
+    @access_token = false
   end
 
   def get_auth_token
@@ -17,21 +19,28 @@ class AuthTokenApi
       request.body = "grant_type=client_credentials&client_id=#{Rails.application.credentials.um_api[:buildings_client_id]}&client_secret=#{Rails.application.credentials.um_api[:buildings_client_secret]}&scope=#{@scope}"
 
       response = http.request(request)
+      puts response
       response_json = JSON.parse(response.read_body)
-      
-      if response_json['access_token'].present?
-        @returned_data['success'] = true
-        @returned_data['access_token'] = response_json['access_token']
-      elsif response_json['fault'].present?
-          @returned_data['error'] = response_json['fault']['faultstring']
+      puts response_json
+      if response.code == OK_CODE && response_json['access_token'].present?
+        @access_token = response_json['access_token']
       else
-        @returned_data['error'] = 'Unknown error'
+        if response_json['fault'].present?
+          error = response_json['fault']['faultstring']
+        else
+          error = 'Unknown error'
+        end
+        log = ApiLog.new
+        log.api_logger.debug "get access token for #{@scope}, error: No access_token - #{error}"
+        task_result = TaskResultLog.new
+        task_result.update_log_table(message: "get access token for #{@scope}, error: No access_token - #{error}", debug: false)
       end
       rescue => @error
-        @returned_data['error'] = @error.inspect
+        log.api_logger.debug "get access token for #{@scope}, error: No access_token - #{@error.inspect}"
+        task_result.update_log_table(message: "get access token for #{@scope}, error: No access_token - #{@error.inspect}", debug: false)
       return false
     end
-    return @returned_data
+    return @access_token
   end
 end
 
@@ -46,7 +55,7 @@ class TaskResultLog
     @log = ApiLog.new
   end
 
-  def update_log(message, debug)
+  def update_log_table(message:, debug:)
     if debug
       status = "error"
     else
@@ -55,7 +64,16 @@ class TaskResultLog
     record = ApiUpdateLog.new(result: message, status: status)
     unless record.save
       # write it to the log
-      @log.api_logger.debug "api_update_log, error: Could not save: record.errors.full_messages"
+      @log.api_logger.debug "api_update_log_table, error: Could not save: record.errors.full_messages"
     end
   end
+
+  def update_log_table_with_errors(task:, task_time:, status_report:)
+    status_report << "#{task} failed. See the log file #{Rails.root}/log/api_nightly_update_db.log for errors"
+    status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
+    message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
+    @log.api_logger.debug "#{message}"
+    update_log_table(message: message, debug: true)
+  end
+
 end
