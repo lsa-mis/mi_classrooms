@@ -19,12 +19,11 @@ class AuthTokenApi
       request.body = "grant_type=client_credentials&client_id=#{Rails.application.credentials.um_api[:buildings_client_id]}&client_secret=#{Rails.application.credentials.um_api[:buildings_client_secret]}&scope=#{@scope}"
 
       response = http.request(request)
-      puts response
       response_json = JSON.parse(response.read_body)
-      puts response_json
       if response.code == OK_CODE && response_json['access_token'].present?
         @access_token = response_json['access_token']
       else
+        # log errors
         if response_json['fault'].present?
           error = response_json['fault']['faultstring']
         else
