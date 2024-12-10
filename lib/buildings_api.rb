@@ -234,10 +234,8 @@ class BuildingsApi
     begin
       @buildings_ids = Building.all.pluck(:bldrecnbr)
       dept_auth_token = AuthTokenApi.new("department")
-      dept_auth_token_result = dept_auth_token.get_auth_token
-      if dept_auth_token_result['success']
-        dept_access_token = dept_auth_token_result['access_token']
-      else
+      dept_access_token = dept_auth_token.get_auth_token
+      unless dept_access_token
         @log.api_logger.debug "update_rooms, error: Could not get access_token for DepartmentApi: #{dept_auth_token_result['error']}"
         @debug = true
         return @debug
