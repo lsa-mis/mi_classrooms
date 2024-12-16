@@ -100,14 +100,14 @@ class BuildingsApi
         result['success'] = true
         result['data'] = response_json['Campuses']
       elsif response_json['errorCode'].present?
-        @result['errorcode'] = response_json['errorCode']
-        @result['error'] = response_json['errorMessage']
+        result['errorcode'] = response_json['errorCode']
+        result['error'] = response_json['errorMessage']
       else 
-        @result['errorcode'] = "Unknown error"
+        result['errorcode'] = "Unknown error"
       end
     rescue StandardError => e
-      @result['errorcode'] = "Exception"
-      @result['error'] = e.message
+      result['errorcode'] = "Exception"
+      result['error'] = e.message
     end
     return result
   end
@@ -214,16 +214,16 @@ class BuildingsApi
           result['success'] = true
           buildings += response_json['ListOfBldgs']['Buildings']
         elsif response_json['errorCode'].present?
-          @result['errorcode'] = response_json['errorCode']
-          @result['error'] = response_json['errorMessage']
+          result['errorcode'] = response_json['errorCode']
+          result['error'] = response_json['errorMessage']
         else 
-          @result['errorcode'] = "Unknown error"
+          result['errorcode'] = "Unknown error"
         end
       end
       result['data'] = buildings
     rescue StandardError => e
-      @result['errorcode'] = "Exception"
-      @result['error'] = e.message
+      result['errorcode'] = "Exception"
+      result['error'] = e.message
     end
     return result
   end
@@ -413,16 +413,16 @@ class BuildingsApi
             rooms += data
           end
         elsif response_json['errorCode'].present?
-          @result['errorcode'] = response_json['errorCode']
-          @result['error'] = response_json['errorMessage']
+          result['errorcode'] = response_json['errorCode']
+          result['error'] = response_json['errorMessage']
         else 
-          @result['errorcode'] = "Unknown error"
+          result['errorcode'] = "Unknown error"
         end
       end
       result['data'] = rooms
     rescue StandardError => e
-      @result['errorcode'] = "Exception"
-      @result['error'] = e.message
+      result['errorcode'] = "Exception"
+      result['error'] = e.message
     end
     return result
   end
