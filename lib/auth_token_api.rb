@@ -23,7 +23,6 @@ class AuthTokenApi
       if response.code == OK_CODE && response_json['access_token'].present?
         @access_token = response_json['access_token']
       else
-        # log errors
         if response_json['fault'].present?
           error = response_json['fault']['faultstring']
         else
@@ -32,11 +31,11 @@ class AuthTokenApi
         log = ApiLog.new
         log.api_logger.debug "get access token for #{@scope}, error: No access_token - #{error}"
         task_result = TaskResultLog.new
-        task_result.update_log_table(message: "get access token for #{@scope}, error: No access_token - #{error}", debug: false)
+        task_result.update_log_table(message: "get access token for #{@scope}, error: No access_token - #{error}", debug: true)
       end
       rescue => @error
         log.api_logger.debug "get access token for #{@scope}, error: No access_token - #{@error.inspect}"
-        task_result.update_log_table(message: "get access token for #{@scope}, error: No access_token - #{@error.inspect}", debug: false)
+        task_result.update_log_table(message: "get access token for #{@scope}, error: No access_token - #{@error.inspect}", debug: true)
       return false
     end
     return @access_token
@@ -65,6 +64,7 @@ class TaskResultLog
       # write it to the log
       @log.api_logger.debug "api_update_log_table, error: Could not save: record.errors.full_messages"
     end
+    binding.pry
   end
 
   def update_log_table_with_errors(task:, task_time:, status_report:)
