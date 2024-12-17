@@ -5,6 +5,9 @@ RSpec.describe AuthTokenApi, type: :model do
   context "the scope is not correct (hotdogs)" do
     it "returns Invalid Scope error" do
       auth_token_api = AuthTokenApi.new("hotdogs")
+      response = double()
+      allow(response).to receive(:read_body).and_return("{}")
+      allow(auth_token_api).to receive(:http_call).and_return(response)
       auth_token = auth_token_api.get_auth_token
       expect(auth_token).to be false
       expect(ApiUpdateLog.last.status).to eq("error")
