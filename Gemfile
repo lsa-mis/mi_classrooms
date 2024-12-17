@@ -64,6 +64,7 @@ group :test do
   gem 'ffaker'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers'
+  gem "webmock"
 end
 
 gem 'tailwindcss-rails', '~> 2.5'
