@@ -64,7 +64,6 @@ class TaskResultLog
       # write it to the log
       @log.api_logger.debug "api_update_log_table, error: Could not save: record.errors.full_messages"
     end
-    binding.pry
   end
 
   def update_log_table_with_errors(task:, task_time:, status_report:)
