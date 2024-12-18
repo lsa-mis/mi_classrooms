@@ -137,6 +137,7 @@ GEM
       activesupport (>= 5.0)
       request_store (>= 1.0)
       ruby2_keywords
+    drb (2.2.1)
     erb2haml (0.1.5)
       html2haml
     erubi (1.13.0)
@@ -232,6 +233,7 @@ GEM
     msgpack (1.7.3)
     multi_xml (0.7.1)
       bigdecimal (~> 3.1)
+    mutex_m (0.3.0)
     net-http (0.4.1)
       uri
     net-imap (0.5.0)
@@ -475,6 +477,7 @@ DEPENDENCIES
   database_cleaner
   devise!
   draper (~> 4.0)
+  drb
   erb2haml
   factory_bot_rails
   faker (~> 2.19)
@@ -488,6 +491,7 @@ DEPENDENCIES
   ldap_lookup
   letter_opener_web (~> 2.0)
   listen
+  mutex_m
   omniauth-google-oauth2
   omniauth-rails_csrf_protection
   omniauth-saml (~> 2.1)

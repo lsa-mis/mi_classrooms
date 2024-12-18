@@ -22,10 +22,12 @@ gem 'pagy', '~> 6.0'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'pg_search'
 # gem "poppler", "~> 4.1", ">= 4.1.8"
+gem 'mutex_m'
+
+gem 'drb'
 gem 'puma', '5.6.8'
 gem 'pundit'
 gem 'rails', '~> 7.0.0'
-
 gem 'redis', '~> 4.8', '>= 4.8.1'
 gem 'responders', github: 'heartcombo/responders'
 gem 'sidekiq', '~> 7.1.3'
