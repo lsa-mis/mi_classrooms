@@ -118,7 +118,7 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
-    date (3.3.4)
+    date (3.4.1)
     diff-lcs (1.5.0)
     draper (4.0.2)
       actionpack (>= 5.0)
@@ -207,10 +207,11 @@ GEM
     method_source (1.0.0)
     mini_magick (4.12.0)
     mini_mime (1.1.5)
+    mini_portile2 (2.8.8)
     minitest (5.25.1)
     msgpack (1.7.2)
     multi_xml (0.6.0)
-    net-imap (0.4.10)
+    net-imap (0.4.19)
       date
       net-protocol
     net-ldap (0.18.0)
@@ -221,9 +222,10 @@ GEM
     net-smtp (0.4.0.1)
       net-protocol
     nio4r (2.7.3)
-    nokogiri (1.16.8-arm64-darwin)
+    nokogiri (1.18.4)
+      mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    nokogiri (1.16.8-x86_64-linux)
+    nokogiri (1.18.4-arm64-darwin)
       racc (~> 1.4)
     oauth2 (2.0.9)
       faraday (>= 0.17.3, < 3.0)
@@ -273,7 +275,7 @@ GEM
     pundit (2.3.1)
       activesupport (>= 3.0.0)
     racc (1.8.1)
-    rack (2.2.10)
+    rack (2.2.11)
     rack-protection (3.2.0)
       base64 (>= 0.1.0)
       rack (~> 2.2, >= 2.2.4)
@@ -419,7 +421,7 @@ GEM
     temple (0.10.3)
     thor (1.3.1)
     tilt (2.3.0)
-    timeout (0.4.1)
+    timeout (0.4.3)
     turbo-rails (2.0.11)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
@@ -508,4 +510,4 @@ RUBY VERSION
    ruby 3.1.0p0
 
 BUNDLED WITH
-   2.4.19
+   2.5.9
