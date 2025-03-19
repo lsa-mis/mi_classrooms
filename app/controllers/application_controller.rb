@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   include Pagy::Backend
-  include Pundit
+  include Pundit::Authorization
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_in_group
   before_action :set_membership
@@ -61,10 +61,10 @@ class ApplicationController < ActionController::Base
         value = item[0].partition(': ').last
         if value.downcase["team"]
           team.merge!(filter_key => value)
-        else 
+        else
           if category == category_prev
             @all_characteristics_array[category].merge!(filter_key => value)
-          else 
+          else
             @all_characteristics_array.merge!(category => { filter_key => value })
           end
           category_prev = category

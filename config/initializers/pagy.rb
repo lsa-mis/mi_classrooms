@@ -72,7 +72,7 @@ Pagy::DEFAULT[:size] = [1, 2, 2, 1]                       # default
 # See https://ddnexus.github.io/pagy/extras/materialize
 # require 'pagy/extras/materialize'
 
-require "pagy/extras/navs"
+# require "pagy/extras/navs"
 
 # Navs extra: Add nav_js and combo_nav_js javascript helpers
 # Notice: the other frontend extras add their own framework-styled versions,
@@ -111,7 +111,7 @@ require "pagy/extras/navs"
 # set to false if you want to make :enable_items_extra an opt-in variable
 # Pagy::VARS[:enable_items_extra] = false    # default true
 
-require "pagy/extras/items"
+# require "pagy/extras/items"
 
 Pagy::DEFAULT[:enable_items_extra] = true
 Pagy::DEFAULT[:items_param] = :items

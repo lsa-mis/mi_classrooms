@@ -1,12 +1,5 @@
 # frozen_string_literal: true
-Rails.application.reloader.to_prepare do
 
-
-  # ActiveAdmin.setup do |config|
-  #   config.before_action :check_duo_auth
-  # end
-  
-end
 # Assuming you have not yet modified this file, each configuration option below
 # is set to its default value. Note that some are commented out while others
 # are not: uncommented lines are intended to protect your configuration from
@@ -21,56 +14,11 @@ Devise.setup do |config|
   # confirmation, reset password and unlock tokens in the database.
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
-  # config.secret_key = 'ee6f1a2dd8e738a3e7c8480a733ec5d2790f26da1aacec1e9946268face3e5aa500caabdc1deafe04c40bd7964851b711e3fb2f5936a246995a05d6bde1a2424'
+  # config.secret_key = 'ae4175851e06003faf190a992ef83c56017c19683ea46051d3b0841ac5c87967925d776d72b2f18ae806ec5795f94e7d673eb05902c92e1361a81de4f905f49a'
 
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
   # config.parent_controller = 'DeviseController'
-
-  idp_login_url = Rails.application.credentials.staging_idp_sso_target_url
-  idp_logout_url = Rails.application.credentials.staging_idp_slo_target_url
-  idp_fingerprint = Rails.application.credentials.staging_idp_cert_fingerprint
-
-  if Rails.env.production?
-      idp_login_url = Rails.application.credentials.production_idp_sso_target_url
-      idp_logout_url = Rails.application.credentials.production_idp_slo_target_url
-      idp_fingerprint = Rails.application.credentials.production_idp_cert_fingerprint
-  end
-
-  consumer_service_url = Rails.application.credentials.dev_assertion_consumer_service_url
-  entity_id = Rails.application.credentials.dev_entity_id
-
-  if Rails.env.staging?
-      consumer_service_url = Rails.application.credentials.staging_assertion_consumer_service_url
-      entity_id = Rails.application.credentials.staging_entity_id
-  end
-
-  if Rails.env.production?
-      consumer_service_url = Rails.application.credentials.production_assertion_consumer_service_url
-      entity_id = Rails.application.credentials.production_entity_id
-  end
-
-  config.omniauth :saml,
-      :assertion_consumer_service_url     => consumer_service_url,
-      :issuer                             => entity_id,
-      :idp_sso_service_url                 => idp_login_url,
-      :idp_slo_service_url                 => idp_logout_url,
-      :name_identifier_format             => "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
-      :attribute_statements               => {email: ['urn:oid:0.9.2342.19200300.100.1.3'],
-                                              name: ['urn:oid:2.16.840.1.113730.3.1.241'],
-                                              uid: ['urn:oid:0.9.2342.19200300.100.1.1'],
-                                              person_affiliation: ['urn:oid:1.3.6.1.4.1.5923.1.1.1.1'],
-                                              principal_name: ['urn:oid:1.3.6.1.4.1.5923.1.1.1.6']},
-      :request_attributes                 => {},
-      :idp_cert_fingerprint => idp_fingerprint,
-      :idp_cert_fingerprint_algorithm => 'http://www.w3.org/2000/09/xmldsig#sha256',
-      :allowed_clock_drift                => 10,
-      :private_key                        => Rails.application.credentials.service_provider_private_key,
-      :certificate                        => Rails.application.credentials.service_provider_certificate,
-      :security                           => {want_assertions_signed: true, want_assertions_encrypted: true}
-
-  config.omniauth :google_oauth2, Rails.application.credentials.google_client_id,  Rails.application.credentials.google_client_secret, scope: 'userinfo.email, userinfo.profile', prompt: 'select_account', image_aspect_ratio: 'square', image_size: 50, hd: %w(umich.edu lsa.umich.edu hatchbox.io)
-
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
@@ -178,7 +126,7 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 12
 
   # Set up a pepper to generate the hashed password.
-  # config.pepper = '1dd6514636442f8449789d1bb22ecf595768cde18f03c6ee8c5611ed5e00f44275fd40344bc11ac3d8726bd73b94123037869c94d7f70c3da1003dddcc14f54f'
+  # config.pepper = '9dea248d723b4e56c83941c9665b17f816dc3b31b4f108522cf8d13b6356da2da7361b29d4192be85830aefa1385de3c35b0c57b1ce1c38b4f675809db19a51c'
 
   # Send a notification to the original email when the user's email is changed.
   # config.send_email_changed_notification = false
@@ -308,14 +256,14 @@ Devise.setup do |config|
 
   # ==> Navigation configuration
   # Lists the formats that should be treated as navigational. Formats like
-  # :html, should redirect to the sign in page when the user does not have
+  # :html should redirect to the sign in page when the user does not have
   # access, but formats like :xml or :json, should return 401.
   #
   # If you have any extra navigational formats, like :iphone or :mobile, you
   # should add them to the navigational formats lists.
   #
   # The "*/*" below is required to match Internet Explorer requests.
-  # config.navigational_formats = ['*/*', :html]
+  # config.navigational_formats = ['*/*', :html, :turbo_stream]
 
   # The default HTTP method used to sign out a resource. Default is :delete.
   config.sign_out_via = :delete
@@ -348,12 +296,14 @@ Devise.setup do |config|
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = '/my_engine/users/auth'
 
-  # ==> Turbolinks configuration
-  # If your app is using Turbolinks, Turbolinks::Controller needs to be included to make redirection work correctly:
-  #
-  # ActiveSupport.on_load(:devise_failure_app) do
-  #   include Turbolinks::Controller
-  # end
+  # ==> Hotwire/Turbo configuration
+  # When using Devise with Hotwire/Turbo, the http status for error responses
+  # and some redirects must match the following. The default in Devise for existing
+  # apps is `200 OK` and `302 Found` respectively, but new apps are generated with
+  # these new defaults that match Hotwire/Turbo behavior.
+  # Note: These might become the new default in future versions of Devise.
+  config.responder.error_status = :unprocessable_entity
+  config.responder.redirect_status = :see_other
 
   # ==> Configuration for :registerable
 
