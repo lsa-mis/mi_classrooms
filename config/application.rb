@@ -8,6 +8,11 @@ Bundler.require(*Rails.groups)
 
 module MiClassrooms
   class Application < Rails::Application
+    # Add middleware to block CONNECT requests
+    config.middleware.insert_before 0, MiClassrooms::ConnectRequestBlocker
+    
+    # Add middleware directory to autoload paths
+    config.autoload_paths += %W(#{config.root}/app/middleware)
 
     # remove Turbo from Asset Pipeline precompilation
     config.after_initialize do
