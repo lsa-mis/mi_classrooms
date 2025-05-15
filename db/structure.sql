@@ -9,6 +9,13 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: -
+--
+
+-- *not* creating schema, since initdb creates it
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -92,7 +99,7 @@ CREATE TABLE public.active_storage_blobs (
     metadata text,
     service_name character varying NOT NULL,
     byte_size bigint NOT NULL,
-    checksum character varying NOT NULL,
+    checksum character varying,
     created_at timestamp without time zone NOT NULL
 );
 
@@ -1218,6 +1225,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220331125213'),
 ('20220412123134'),
 ('20250206205459'),
-('20250206205460');
+('20250206205460'),
+('20250319192338'),
+('20250319192339'),
+('20250319192340');
 
 
