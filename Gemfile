@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.1.0"
+ruby "3.3.4"
 
 gem "annotate", "~> 3.1.1"
 gem "bootsnap", ">= 1.4.3", require: false
@@ -14,8 +14,9 @@ gem "image_processing"
 gem "jbuilder", "~> 2.7"
 gem "ldap_lookup"
 gem "listen"
+gem "nokogiri", "~> 1.18.8"
 gem "omniauth-google-oauth2"
-gem "omniauth-saml", "~> 2.1"
+gem "omniauth-saml", "~> 2.1.3"
 gem "omniauth-rails_csrf_protection"
 gem "order_as_specified", "~> 1.7"
 gem "pagy"
