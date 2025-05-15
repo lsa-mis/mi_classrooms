@@ -22,14 +22,15 @@ gem "order_as_specified", "~> 1.7"
 gem "pagy"
 gem "pg", ">= 0.18", "< 2.0"
 gem "pg_search"
-# gem "poppler", "~> 4.1", ">= 4.1.8"
 gem "puma", "5.6.9"
 gem "pundit"
 gem "rails", "~> 6.1.7"
-# gem "redis", "~> 5.0", ">= 5.0.6"
 gem 'redis', '~> 4.8', '>= 4.8.1'
 gem "responders", github: "heartcombo/responders"
 gem "sassc-rails"
+gem 'sentry-ruby'
+gem 'sentry-rails'
+gem 'stackprof'
 gem "sidekiq", "~> 7.1.3"
 gem "skylight"
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
