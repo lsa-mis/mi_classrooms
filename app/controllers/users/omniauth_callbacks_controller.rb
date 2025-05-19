@@ -1,8 +1,8 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   skip_before_action :verify_authenticity_token, only: :saml
   before_action :store_user_location!
-  before_action :set_omni_auth_service
-  before_action :set_user
+  before_action :set_omni_auth_service, except: [:failure]
+  before_action :set_user, except: [:failure]
   attr_reader :omni_auth_service, :user, :service
 
   def google_oauth2
@@ -11,6 +11,11 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   def saml
     handle_auth "Saml"
+  end
+
+  def failure
+    message = params[:message] || "Authentication failed."
+    redirect_to root_path, alert: message
   end
 
   def store_user_location!
@@ -45,12 +50,11 @@ def update_user_mcommunity_groups
 end
 
 def auth
-  
   request.env["omniauth.auth"]
-  
 end
 
 def set_omni_auth_service
+  return unless auth.present?
   @omni_auth_service = OmniAuthService.where(provider: auth.provider, uid: auth.uid).first
 end
 
@@ -59,13 +63,16 @@ def set_user
     @user = current_user
   elsif omni_auth_service.present?
     @user = omni_auth_service.user
-  elsif User.where(email: auth.info.email).any?
+  elsif auth.present? && auth.info.present? && auth.info.email.present? && User.where(email: auth.info.email).any?
     flash[:alert] = "An account with this email already exists. Please sign in with that account before connecting your #{auth.provider.titleize} account."
     redirect_to new_user_session_path
-  else
+  elsif auth.present?
     @user = create_user
+  else
+    redirect_to new_user_session_path, alert: "Authentication failed."
+    return
   end
-  
+
   puts "UPDATED RECORD!!"
   if @user
     admin = false
@@ -88,7 +95,7 @@ def set_user
     if Rails.env.development? && membership.include?('mi-classrooms-admin-staging')
       admin = true
     end
-    
+
     session[:user_memberships] = membership
     session[:user_admin] = admin
     session[:user_email] = @user.email
@@ -96,6 +103,8 @@ def set_user
 end
 
 def omni_auth_service_attrs
+  return {} unless auth.present? && auth.credentials.present?
+
   expires_at = auth.credentials.expires_at.present? ? Time.at(auth.credentials.expires_at) : nil
   {
     provider: auth.provider,
@@ -111,6 +120,7 @@ def get_uniqname(email)
 end
 
 def create_user
+  return nil unless auth.present? && auth.info.present? && auth.info.email.present?
 
   @user = User.create(
     email: auth.info.email,
@@ -118,8 +128,7 @@ def create_user
     uid: auth.info.uid,
     principal_name: auth.info.principal_name,
     display_name: auth.info.name,
-    person_affiliation: auth.info.person_affiliation, 
+    person_affiliation: auth.info.person_affiliation,
     password: Devise.friendly_token[0, 20]
   )
-
 end
