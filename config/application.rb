@@ -8,6 +8,8 @@ Bundler.require(*Rails.groups)
 
 module MiClassrooms
   class Application < Rails::Application
+    # Load the ConnectRequestHandler initializer
+    require_relative "initializers/connect_request_handler"
 
     # remove Turbo from Asset Pipeline precompilation
     config.after_initialize do
@@ -30,6 +32,9 @@ module MiClassrooms
     config.active_job.queue_adapter = :sidekiq
     config.active_record.schema_format = :sql
     config.time_zone = 'Eastern Time (US & Canada)'
+
+    # Add the ConnectRequestHandler middleware at the beginning of the stack
+    config.middleware.use MiClassrooms::ConnectRequestHandler
   end
   ActiveStorage::Engine.config.active_storage.content_types_to_serve_as_binary.delete("image/svg+xml")
 
