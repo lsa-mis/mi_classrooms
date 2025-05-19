@@ -9,7 +9,7 @@ Bundler.require(*Rails.groups)
 module MiClassrooms
   class Application < Rails::Application
     # Load the ConnectRequestHandler initializer
-    require_relative "../initializers/connect_request_handler"
+    require_relative "initializers/connect_request_handler"
 
     # remove Turbo from Asset Pipeline precompilation
     config.after_initialize do
