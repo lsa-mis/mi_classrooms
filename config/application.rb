@@ -32,7 +32,7 @@ module MiClassrooms
     config.time_zone = 'Eastern Time (US & Canada)'
 
     # Add the ConnectRequestHandler middleware at the beginning of the stack
-    config.middleware.use ConnectRequestHandler
+    config.middleware.use MiClassrooms::ConnectRequestHandler
   end
   ActiveStorage::Engine.config.active_storage.content_types_to_serve_as_binary.delete("image/svg+xml")
 
