@@ -63,11 +63,15 @@ def set_user
     @user = current_user
   elsif omni_auth_service.present?
     @user = omni_auth_service.user
-  elsif auth.present? && auth.info.present? && auth.info.email.present? && User.where(email: auth.info.email).any?
-    flash[:alert] = "An account with this email already exists. Please sign in with that account before connecting your #{auth.provider.titleize} account."
-    redirect_to new_user_session_path
-  elsif auth.present?
-    @user = create_user
+  elsif auth.present? && auth.info.present() && auth.info.email.present()
+    # Use atomic find-or-create operation
+    @user = User.from_omniauth(auth)
+
+    # If there were validation errors preventing user creation
+    unless @user.persisted?
+      redirect_to new_user_session_path, alert: "We couldn't create an account. Please try again or contact support."
+      return
+    end
   else
     redirect_to new_user_session_path, alert: "Authentication failed."
     return
@@ -117,18 +121,4 @@ end
 
 def get_uniqname(email)
   email.split("@").first
-end
-
-def create_user
-  return nil unless auth.present? && auth.info.present? && auth.info.email.present?
-
-  @user = User.create(
-    email: auth.info.email,
-    uniqname: get_uniqname(auth.info.email),
-    uid: auth.info.uid,
-    principal_name: auth.info.principal_name,
-    display_name: auth.info.name,
-    person_affiliation: auth.info.person_affiliation,
-    password: Devise.friendly_token[0, 20]
-  )
 end
