@@ -18,6 +18,7 @@
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 
+# Represents a user in the system with authentication and authorization capabilities
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -25,17 +26,24 @@ class User < ApplicationRecord
          :rememberable, :omniauthable, omniauth_providers: [:saml]
 
   attr_accessor :membership, :admin
+
   has_many :omni_auth_services, dependent: :destroy
   has_many :notes
 
   def self.from_omniauth(auth)
     where(email: auth.info.email).first_or_create do |user|
-      user.uniqname = auth.info.email.split("@").first
-      user.uid = auth.info.uid
-      user.principal_name = auth.info.principal_name
-      user.display_name = auth.info.name
-      user.person_affiliation = auth.info.person_affiliation
+      user.assign_attributes(user_attributes_from_auth(auth))
       user.password = Devise.friendly_token[0, 20]
     end
+  end
+
+  def self.user_attributes_from_auth(auth)
+    {
+      uniqname: auth.info.email.split("@").first,
+      uid: auth.info.uid,
+      principal_name: auth.info.principal_name,
+      display_name: auth.info.name,
+      person_affiliation: auth.info.person_affiliation
+    }
   end
 end
