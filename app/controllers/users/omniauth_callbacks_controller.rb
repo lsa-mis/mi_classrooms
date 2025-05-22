@@ -77,7 +77,6 @@ def set_user
     return
   end
 
-  puts "UPDATED RECORD!!"
   if @user
     admin = false
     membership = []
