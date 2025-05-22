@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Handles OAuth and SAML authentication callbacks for user sign-in
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   skip_before_action :verify_authenticity_token, only: :saml
   before_action :store_user_location!
