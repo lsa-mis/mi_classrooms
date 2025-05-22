@@ -15,11 +15,12 @@
 #  updated_at          :datetime         not null
 #
 
+# Handles OAuth authentication services for different providers
 class OmniAuthService < ApplicationRecord
   belongs_to :user
 
   %w[saml].each do |provider|
-    scope provider, -> { where(provider: provider) }
+    scope provider, -> { where(provider:) }
   end
 
   def client
@@ -35,27 +36,5 @@ class OmniAuthService < ApplicationRecord
     super
   end
 
-  # def facebook_client
-  #   Koala::Facebook::API.new(access_token)
-  # end
-
-  # def facebook_refresh_token!(token)
-  #   new_token_info = Koala::Facebook::OAuth.new.exchange_access_token_info(token)
-  #   update(access_token: new_token_info["access_token"], expires_at: Time.zone.now + new_token_info["expires_in"])
-  # end
-
-  def twitter_client
-    # Twitter::REST::Client.new do |config|
-    #   config.consumer_key        = Rails.application.secrets.twitter_app_id
-    #   config.consumer_secret     = Rails.application.secrets.twitter_app_secret
-    #   config.access_token        = access_token
-    #   config.access_token_secret = access_token_secret
-    # end
-  end
-
-  def google_oauth2_client
-  end
-
-  def twitter_refresh_token!(token)
-  end
+  def google_oauth2_client; end
 end
