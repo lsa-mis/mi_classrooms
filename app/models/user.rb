@@ -31,15 +31,25 @@ class User < ApplicationRecord
   has_many :notes
 
   def self.from_omniauth(auth)
+    find_or_create_user(auth)
+  end
+
+  def self.find_or_create_user(auth)
     where(email: auth.info.email).first_or_create do |user|
-      user.assign_attributes(user_attributes_from_auth(auth))
-      user.password = Devise.friendly_token[0, 20]
+      assign_auth_attributes(user, auth)
     end
+  end
+
+  def self.assign_auth_attributes(user, auth)
+    attrs = user_attributes_from_auth(auth)
+    user.assign_attributes(attrs)
+    user.password = Devise.friendly_token[0, 20]
   end
 
   def self.user_attributes_from_auth(auth)
     {
-      uniqname: auth.info.email.split("@").first,
+      email: auth.info.email,
+      uniqname: auth.info.email.split('@').first,
       uid: auth.info.uid,
       principal_name: auth.info.principal_name,
       display_name: auth.info.name,
