@@ -29,7 +29,6 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   def handle_auth(kind)
     attrs = omni_auth_service_attrs
-    puts "Creating/updating OmniAuthService with attributes: #{attrs.inspect}"
 
     if omni_auth_service.present?
       omni_auth_service.update(attrs)
@@ -62,7 +61,6 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     return unless auth.present?
 
     @omni_auth_service = OmniAuthService.where(provider: auth.provider, uid: auth.uid).first
-    puts "auth.info #{auth.info.inspect}"
   end
 
   def set_user
