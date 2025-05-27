@@ -41,18 +41,6 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     set_flash_message :notice, :success, kind:
   end
 
-  def user_is_stale?
-    return unless user_signed_in?
-
-    current_user.last_sign_in_at < 15.minutes.ago
-  end
-
-  def update_user_mcommunity_groups
-    return if user_is_stale?
-
-    UpdateUserGroupsJob.perform_later(current_user)
-  end
-
   def auth
     request.env['omniauth.auth']
   end
