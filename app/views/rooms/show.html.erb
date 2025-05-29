@@ -10,7 +10,7 @@
       <% end %>
       <% unless @room.building.visible %>
         <span class="text-base text-yellow-750">
-          This building is inactive 
+          This building is inactive
         </span>
       <% end %>
 
@@ -34,18 +34,18 @@
         <div>
         </div>
         <div data-controller="lightbox" data-lightbox-options-value='{"index": 0, "mode": "lg-fade", "licenseKey": "0000-0000-000-0000"}' class="flex justify-center lg:max-h-28 max-h-16 bg-blue-50 rounded">
-          <%= image_tag @room.room_image, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.room_image.representation(resize_to_limit: [24, 24]) }, alt: "#{@room.facility_code_heprod} - #{@room.room_image.name}" if @room.room_image.representable? %>
-          <%= image_tag @room.gallery_image1, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image1.representation(resize_to_limit: [24, 24]) }, alt: "#{@room.facility_code_heprod} - #{@room.gallery_image1.name}" if @room.gallery_image1.representable? %>
-          <%= image_tag @room.gallery_image2, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image2.representation(resize_to_limit: [24, 24]) }, alt: "#{@room.facility_code_heprod} - #{@room.gallery_image2.name}" if @room.gallery_image2.representable? %>
-          <%= image_tag @room.gallery_image3, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image3.representation(resize_to_limit: [24, 24]) }, alt: "#{@room.facility_code_heprod} - #{@room.gallery_image3.name}" if @room.gallery_image3.representable? %>
-          <%= image_tag @room.gallery_image4, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image4.representation(resize_to_limit: [24, 24]) }, alt: "#{@room.facility_code_heprod} - #{@room.gallery_image4.name}" if @room.gallery_image4.representable? %>
-          <%= image_tag @room.gallery_image5, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image5.representation(resize_to_limit: [24, 24]) }, alt: "#{@room.facility_code_heprod} - #{@room.gallery_image5.name}" if @room.gallery_image5.representable? %>
+          <%= image_tag @room.room_image, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.room_image.representation(resize_to_limit: [24, 24]) }, alt: "room photo of #{@room.facility_code_heprod}" if @room.room_image.representable? %>
+          <%= image_tag @room.gallery_image1, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image1.representation(resize_to_limit: [24, 24]) }, alt: "room photo of #{@room.facility_code_heprod}" if @room.gallery_image1.representable? %>
+          <%= image_tag @room.gallery_image2, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image2.representation(resize_to_limit: [24, 24]) }, alt: "room photo of #{@room.facility_code_heprod}" if @room.gallery_image2.representable? %>
+          <%= image_tag @room.gallery_image3, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image3.representation(resize_to_limit: [24, 24]) }, alt: "room photo of #{@room.facility_code_heprod}" if @room.gallery_image3.representable? %>
+          <%= image_tag @room.gallery_image4, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image4.representation(resize_to_limit: [24, 24]) }, alt: "room photo of #{@room.facility_code_heprod}" if @room.gallery_image4.representable? %>
+          <%= image_tag @room.gallery_image5, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded", data: { src: @room.gallery_image5.representation(resize_to_limit: [24, 24]) }, alt: "room photo of #{@room.facility_code_heprod}" if @room.gallery_image5.representable? %>
         </div>
         <div>
         </div>
       </div>
     </div>
-    
+
     <div class="grid grid-cols-6 gap-2">
       <div class="col-span-2 max-h-24">
         <%= building_image( @room ) %>
@@ -188,11 +188,11 @@
       <% if user_signed_in? && session["user_admin"] %>
         <%= render partial: "notes/form", locals: { note: Note.new, noteable: @room } %>
       <% end %>
-      
+
       <%= turbo_stream_from @room, :notes %>
       <%= tag.div id: "#{dom_id(@room)}_notes" do %>
         <%= render @room.notes.notice %>
       <% end %>
     </div>
- 
+
 </div>
