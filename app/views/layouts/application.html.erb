@@ -5,11 +5,11 @@
     <% if gtm_id %>
       <script async="async" src="https://www.googletagmanager.com/gtag/js?id=<%= gtm_id %>"></script>
     <% end %>
-    
+
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>
-      <%= (t :sitename) %>
+      <%= page_title %>
     </title>
     <%= csrf_meta_tags %>
     <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
@@ -31,4 +31,3 @@
     <%= render 'layouts/footer' %>
   </body>
 </html>
-
