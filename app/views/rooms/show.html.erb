@@ -33,7 +33,7 @@
       <div class="flex justify-center border-b border-blue-50 mb-2 py-2">
         <div>
         </div>
-        <div data-controller="lightbox" data-lightbox-options-value='{"index": 0, "mode": "lg-fade", "licenseKey": "0000-0000-000-0000"}' class="flex justify-center lg:max-h-28 max-h-16 bg-blue-50 rounded" tabindex="0">
+        <div data-controller="lightbox" data-lightbox-options-value='{"index": 0, "mode": "lg-fade", "licenseKey": "0000-0000-000-0000"}' class="flex justify-center lg:max-h-28 max-h-16 bg-blue-50 rounded">
           <% if @room.room_image.representable? %>
             <a href="<%= url_for(@room.room_image) %>" tabindex="0" role="button" aria-label="View main room image">
               <%= image_tag @room.room_image, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded focus:outline focus:outline-2 focus:outline-blue-700", data: { src: @room.room_image.representation(resize_to_limit: [24, 24]) }, alt: "room photo of #{@room.facility_code_heprod}" %>
