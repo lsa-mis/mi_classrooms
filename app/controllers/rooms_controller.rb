@@ -10,6 +10,7 @@ class RoomsController < ApplicationController
   include ApplicationHelper
 
   def index
+    @page_title = "Find a Room"
     @sorted = false
     buildings_ids = Room.classrooms.pluck(:building_bldrecnbr).uniq
     @buildings = if params[:inactive_buildings].present?
@@ -71,6 +72,7 @@ class RoomsController < ApplicationController
   # GET /rooms/1
   # GET /rooms/1.json
   def show
+    @page_title = "Room #{@room.room_number} - #{@room.building.name}"
     unless (@room.visible && @room.building.visible) || session[:user_admin]
       redirect_to rooms_path,
                   notice: 'Room is inactive'
