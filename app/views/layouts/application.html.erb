@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html lang="<%= I18n.locale %>">
   <head>
     <% gtm_id = google_tag_manager_id %>
@@ -16,13 +16,13 @@
     <%= javascript_pack_tag 'application', 'data-turbo-track': 'reload' %>
     <%= Sentry.get_trace_propagation_meta.html_safe %>
   </head>
-  <body data-environment="<%= Rails.env %>">
+  <body data-environment="<%= Rails.env %>" class="min-h-screen flex flex-col">
     <a class="skiplink" href="#maincontent">Skip to main content</a>
     <%= render 'layouts/header' %>
     <% if Rails.env.development? %>
       <%= render 'layouts/tailwindcss_breakpoints' %>
     <% end %>
-    <main class="<%= controller.controller_name %>" id="main">
+    <main class="<%= controller.controller_name %> flex-1" id="main">
       <div class="mx-auto py-6 sm:px-6 lg:px-8 max-w-7xl">
         <%= render 'layouts/flash_messages' %>
         <%= yield %>
