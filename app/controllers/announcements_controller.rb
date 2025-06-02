@@ -3,6 +3,7 @@ class AnnouncementsController < ApplicationController
   before_action :set_announcement, only: [:show, :edit, :update, :cancel]
 
   def index
+    @page_title = "Announcements"
     @announcements = Announcement.all.with_rich_text_content.order(:id)
     authorize @announcements
   end
@@ -17,8 +18,8 @@ class AnnouncementsController < ApplicationController
   def update
     respond_to do |format|
       if @announcement.update(announcement_params)
-        format.turbo_stream { redirect_to session.delete(:return_to), 
-        notice: 'Text was successfully updated.' 
+        format.turbo_stream { redirect_to session.delete(:return_to),
+        notice: 'Text was successfully updated.'
       }
     else
       format.turbo_stream
@@ -29,7 +30,7 @@ class AnnouncementsController < ApplicationController
   def cancel
     redirect_to session.delete(:return_to)
   end
-  
+
   private
 
     def set_announcement
