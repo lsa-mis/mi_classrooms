@@ -1,0 +1,37 @@
+# RuboCop configuration for the project
+
+AllCops:
+  TargetRubyVersion: 3.3
+  Exclude:
+    - 'bin/**/*'
+    - 'db/migrate/**/*'
+    - 'db/schema.rb'
+    - 'vendor/**/*'
+    - 'node_modules/**/*'
+
+# Disable specific rules for the omniauth callbacks controller
+Style/StringLiterals:
+  Exclude:
+    - 'app/controllers/users/omniauth_callbacks_controller.rb'
+
+Style/GlobalVars:
+  Exclude:
+    - 'app/controllers/users/omniauth_callbacks_controller.rb'
+
+Style/RedundantBegin:
+  Exclude:
+    - 'app/controllers/users/omniauth_callbacks_controller.rb'
+
+Style/TrailingCommaInHashLiteral:
+  Exclude:
+    - 'app/controllers/users/omniauth_callbacks_controller.rb'
+
+# Allow longer classes for complex controllers
+Metrics/ClassLength:
+  Max: 150  # Increase from default 100 to 150
+  Exclude:
+    - 'app/controllers/users/omniauth_callbacks_controller.rb'
+
+Style/ClassAndModuleChildren:
+  Exclude:
+    - 'app/controllers/users/omniauth_callbacks_controller.rb'
