@@ -23,12 +23,32 @@
 
 FactoryBot.define do
   factory :room_characteristic do
-    chrstc            { Faker::Number.number(digits: 3) }
-    chrstc_desc254    { Faker::String.random(length: 6..60) }
-    chrstc_descr      { Faker::String.random(length: 6..22) }
-    chrstc_descrshort { Faker::String.random(length: 6..12) }
-    chrstc_eff_status { Faker::Number.number }
-    rmrecnbr          { Faker::Number.number(digits: 7) }
-    
+    association :room
+    rmrecnbr { room&.rmrecnbr || FactoryBot.create(:room).rmrecnbr }
+    chrstc { Faker::Number.between(from: 1, to: 100) }
+    chrstc_descr { ['Projector: Digital', 'WiFi', 'Chalkboard: >25sq ft', 'Team: Tables', 'Document Camera'].sample }
+    chrstc_descrshort { ['ProjDigit', 'WiFi', 'Chkbrd>25', 'TeamTables', 'DocCam'].sample }
+    chrstc_desc254 { chrstc_descr }
+    chrstc_eff_status { 1 }
+
+    trait :projector do
+      chrstc_descr { 'Projector: Digital' }
+      chrstc_descrshort { 'ProjDigit' }
+    end
+
+    trait :wifi do
+      chrstc_descr { 'WiFi' }
+      chrstc_descrshort { 'WiFi' }
+    end
+
+    trait :chalkboard do
+      chrstc_descr { 'Chalkboard: >25sq ft' }
+      chrstc_descrshort { 'Chkbrd>25' }
+    end
+
+    trait :team_tables do
+      chrstc_descr { 'Team: Tables' }
+      chrstc_descrshort { 'TeamTables' }
+    end
   end
 end

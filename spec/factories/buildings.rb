@@ -24,16 +24,25 @@
 
 FactoryBot.define do
   factory :building do
-    abbreviation { Faker::String.random(length: 6..12) }
-    address      { Faker::Address.full_address }
-    bldrecnbr    { Faker::Number.number(digits: 7) }
-    city         { Faker::Address.longitude }
-    country      { Faker::String.random(length: 6..12) }
-    latitude     { Faker::Address.latitude }
-    longitude    { Faker::Address.longitude }
-    name         { Faker::String.random(length: 6..12) }
-    nick_name    { Faker::String.random(length: 6..12) }
-    state        { Faker::Address.state }
-    zip          { Faker::Address.postcode }
+    abbreviation { Faker::Alphanumeric.alpha(number: 4).upcase }
+    address { Faker::Address.street_address }
+    bldrecnbr { Faker::Number.unique.number(digits: 8) }
+    city { "Ann Arbor" }
+    country { "USA" }
+    latitude { Faker::Address.latitude.to_f.round(6) }
+    longitude { Faker::Address.longitude.to_f.round(6) }
+    name { Faker::University.name + " Building" }
+    nick_name { Faker::Lorem.words(number: 2).join(" ").titleize }
+    state { "MI" }
+    zip { ["48103", "48104", "48105", "48109"].sample }
+    visible { true }
+
+    trait :inactive do
+      visible { false }
+    end
+
+    trait :with_campus_record do
+      association :campus_record
+    end
   end
 end

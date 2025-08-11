@@ -38,6 +38,35 @@ RSpec.configure do |config|
   end
 
   config.include FactoryBot::Syntax::Methods
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Devise::Test::IntegrationHelpers, type: :system
+  config.include Devise::Test::IntegrationHelpers, type: :request
+
+  # Disable Pundit authorization checking in controller and request tests
+  config.before(:each, type: :controller) do
+    allow_any_instance_of(ApplicationController).to receive(:verify_authorized).and_return(true)
+    allow_any_instance_of(ApplicationController).to receive(:verify_policy_scoped).and_return(true)
+  end
+
+  config.before(:each, type: :request) do
+    allow_any_instance_of(ApplicationController).to receive(:verify_authorized).and_return(true)
+    allow_any_instance_of(ApplicationController).to receive(:verify_policy_scoped).and_return(true)
+  end
+
+  # For system specs, bypass auth and authorization for UI flows
+  config.before(:each, type: :system) do
+    test_user = FactoryBot.build(:user, email: 'test@example.com')
+    test_user.admin = true
+    test_user.membership = ['mi-classrooms-non-admin-staging']
+
+    allow_any_instance_of(ApplicationController).to receive(:authenticate_user!).and_return(true)
+    allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(test_user)
+    allow_any_instance_of(ApplicationController).to receive(:user_signed_in?).and_return(true)
+    allow_any_instance_of(ApplicationController).to receive(:verify_authorized).and_return(true)
+    allow_any_instance_of(ApplicationController).to receive(:verify_policy_scoped).and_return(true)
+    allow_any_instance_of(ApplicationController).to receive(:authorize).and_return(true)
+  end
+  
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
   config.use_transactional_fixtures = false

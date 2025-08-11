@@ -1,8 +1,9 @@
 class ApplicationController < ActionController::Base
   include Pagy::Backend
-  include Pundit
+  include Pundit::Authorization
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_in_group
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   before_action :set_membership
   after_action :verify_authorized, unless: :devise_controller?
 
@@ -29,6 +30,14 @@ class ApplicationController < ActionController::Base
   def user_not_in_group
     flash[:alert] = "You are not authorized to perform this action."
     redirect_to about_path
+  end
+
+  def record_not_found
+    respond_to do |format|
+      format.html { render file: 'public/404.html', status: :not_found, layout: false }
+      format.json { render json: { error: 'Record not found' }, status: :not_found }
+      format.all { render plain: 'Not Found', status: :not_found }
+    end
   end
 
   def set_membership

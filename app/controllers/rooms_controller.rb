@@ -82,7 +82,7 @@ class RoomsController < ApplicationController
     @building = Building.find_by(bldrecnbr: @room.building_bldrecnbr)
     respond_to do |format|
       format.html
-      format.json { render json: @room, serializer: RoomSerializer }
+      format.json { render :show }
     end
   end
 

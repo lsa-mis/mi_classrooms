@@ -31,18 +31,34 @@
 
 FactoryBot.define do
   factory :room do
-    building_bldrecnbr          { Faker::Number.number(digits: 7) }
-    characteristics             { Faker::String.random(length: 100 .. 1000) }
-    dept_description            { Faker::String.random(length: 6..12) }
-    dept_grp                    { Faker::String.random(length: 6..12) }
-    facility_code_heprod        { Faker::String.random(length: 6..12) }
-    floor                       { Faker::String.random(length: 6..12) }
-    instructional_seating_count { Faker::Number.number }
-    rmrecnbr                    { Faker::Number.number(digits: 7) }
-    rmtyp_description           { Faker::String.random(length: 6..12) }
-    room_number                 { Faker::String.random(length: 6..12) }
-    square_feet                 { Faker::Number.number }
-    visible                     { Faker::Boolean.boolean }
-    dept_id                     { Faker::Number.number }
+    association :building
+    building_bldrecnbr { building&.bldrecnbr || FactoryBot.create(:building).bldrecnbr }
+    characteristics { [] }
+    dept_description { Faker::Educator.subject }
+    dept_grp { Faker::Educator.university }
+    facility_code_heprod { "#{Faker::Alphanumeric.alpha(number: 3).upcase}#{Faker::Number.number(digits: 3)}" }
+    floor { ["B", "1", "2", "3", "4", "5"].sample }
+    instructional_seating_count { Faker::Number.between(from: 10, to: 200) }
+    rmrecnbr { Faker::Number.unique.number(digits: 8) }
+    rmtyp_description { "Classroom" }
+    room_number { Faker::Number.number(digits: 3).to_s }
+    square_feet { Faker::Number.between(from: 200, to: 2000) }
+    visible { true }
+    dept_id { Faker::Number.number(digits: 4) }
+    nickname { Faker::Lorem.words(number: 2).join(" ").titleize }
+
+    trait :classroom do
+      rmtyp_description { "Classroom" }
+      instructional_seating_count { Faker::Number.between(from: 20, to: 100) }
+      visible { true }
+    end
+
+    trait :inactive do
+      visible { false }
+    end
+
+    trait :lab do
+      rmtyp_description { "Class Laboratory" }
+    end
   end
 end
