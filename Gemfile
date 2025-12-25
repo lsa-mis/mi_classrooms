@@ -3,15 +3,15 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.3.4'
 
-# Rails 7.2
-gem 'rails', '~> 7.2.0'
+# Rails 8.0
+gem 'rails', '~> 8.0.0'
 
 # Ruby 3.4 compatibility - these gems are being removed from stdlib
 gem 'mutex_m'
 gem 'drb'
 gem 'observer'
 
-gem 'annotate', '~> 3.2'
+# gem 'annotate', '~> 3.2'  # Commented out - not compatible with Rails 8.0 yet
 gem 'bootsnap', '>= 1.4.3', require: false
 # Devise - PR #5340 merged, using official gem now
 gem 'devise', '~> 4.9'
