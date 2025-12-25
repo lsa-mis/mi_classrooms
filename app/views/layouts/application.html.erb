@@ -12,8 +12,9 @@
       <%= page_title %>
     </title>
     <%= csrf_meta_tags %>
-    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbo-track': 'reload' %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
     <%= Sentry.get_trace_propagation_meta.html_safe %>
   </head>
   <body data-environment="<%= Rails.env %>" class="min-h-screen flex flex-col">

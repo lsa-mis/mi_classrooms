@@ -1,4 +1,4 @@
-#flash-message{:class => "alert #{flash_class(message_type.to_sym)}"}
+#flash-message{:class => "alert #{flash_class(message_type.to_sym)}", data: {controller: "flash", "flash-timeout-value": 3000}}
   .fixed.inset-0.mt-16.flex.px-4.py-6.pointer-events-none.sm:p-6.sm:items-start.z-50{"aria-live" => "assertive"}
     .w-full.flex.flex-col.items-center.space-y-4.sm:items-end
       .max-w-sm.w-full.bg-white.shadow-lg.rounded-lg.pointer-events-auto.ring-1.ring-black.ring-opacity-5.overflow-hidden{data: {controller: "alert"}}
@@ -7,15 +7,14 @@
             .flex-shrink-0
               .flash-icon{class: "#{flash_class(message_type.to_sym)}"}
                 = svg("#{severity_icon(message_type.to_sym)}")
-                
+
             .ml-3.w-0.flex-1{class: "pt-0.5"}
-              %p.alert-message 
+              %p.alert-message
                 = "#{message}"
- 
+
             .ml-4.flex-shrink-0.flex
               %button.bg-white.rounded-md.inline-flex.text-gray-600.hover:text-gray-700.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-indigo-800{data: {action: "alert#close"}}
                 %span.sr-only Close
                 / Heroicon name: solid/x
                 %svg.h-5.w-5{"aria-hidden" => "true", fill: "currentColor", viewbox: "0 0 20 20", xmlns: "http://www.w3.org/2000/svg"}
                   %path{"clip-rule" => "evenodd", d: "M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z", "fill-rule" => "evenodd"}
-  = javascript_include_tag 'flash_timeout', async: true

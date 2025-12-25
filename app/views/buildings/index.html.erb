@@ -1,11 +1,11 @@
-<div class="container px-1 mb-20" data-controller='autosubmit'>
+<div class="container px-1 mb-20" data-controller="autosubmit mobile-menu">
   <div class="grid grid-cols-2 pb-2">
     <div>
       <h1>Buildings with classrooms</h1>
     </div>
     <div class="justify-self-end lg:hidden mr-4">
       <!--  Mobile menu button -->
-      <button class="mobile-menu-button rounded h-10 w-10 bg-blue-900 text-white focus:outline-none focus:bg-blue-800 ">
+      <button class="mobile-menu-button rounded h-10 w-10 bg-blue-900 text-white focus:outline-none focus:bg-blue-800" data-action="click->mobile-menu#toggle">
         <div class="mx-auto h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <%= svg("filter-solid")  %>
         </div>
@@ -16,7 +16,7 @@
     <%= form_with url: buildings_path, method: :get, class: "", data: { autosubmit_target: "form", turbo_frame: "turbo-buildings" } do |form| %>
       <div class="relative min-h-screen md:flex">
         
-        <div class="sidebar w-64 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out" data-autosubmit-target="sidebar">
+        <div class="sidebar w-64 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out" data-autosubmit-target="sidebar" data-mobile-menu-target="sidebar">
           <% if user_signed_in? && policy(Room).edit? %>
             <p class="bg-blue-700 text-white text-sm p-2">Admin panel</p>
             <div class="bg-blue-700 px-2 pb-2 text-white text-sm checkbox-filter">
@@ -51,4 +51,3 @@
     <% end %>
   </div>
 </div>
-<%= javascript_include_tag 'mobile_menu', async: true %>

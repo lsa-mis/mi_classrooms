@@ -36,7 +36,9 @@ gem 'skylight'
 gem 'stackprof'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'uglifier'
-gem 'webpacker', '~> 6.0.0.rc.5'
+gem 'jsbundling-rails'
+gem 'cssbundling-rails'
+# gem 'webpacker', '~> 6.0.0.rc.5' # Removed - replaced by jsbundling-rails
 
 group :development, :test do
   gem 'bullet'

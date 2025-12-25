@@ -1,36 +1,25 @@
+// Tailwind CSS v3.x configuration
+// Migrated from v2.1.1 - removed deprecated options (mode, purge, darkMode)
+
 module.exports = {
-  mode: 'jit',
-  purge: [
-    './app/**/*.*.haml',
-    './app/**/*.*.erb',
+  content: [
+    './app/views/**/*.{haml,erb,html}',
     './app/helpers/**/*.rb',
-    './src/**/*.html',
-    './src/**/*.js',
-    './src/**/*.jsx',
+    './app/javascript/**/*.js',
+    './app/assets/stylesheets/**/*.css',
   ],
-  darkMode: false, // or 'media' or 'class'
   theme: {
     screens: {
       'sm': '1024px',
-      // => @media (min-width: 640px) { ... }
-
       'md': '1024px',
-      // => @media (min-width: 768px) { ... }
-
       'lg': '1024px',
-      // => @media (min-width: 1024px) { ... }
-
       'xl': '1280px',
-      // => @media (min-width: 1280px) { ... }
-
       '2xl': '1536px',
-      // => @media (min-width: 1536px) { ... }
     },
 
     colors: {
-
       transparent: 'transparent',
-
+      current: 'currentColor',
       black: '#000',
       white: '#fff',
 
@@ -92,7 +81,6 @@ module.exports = {
         800: '#276749',
         900: '#22543d',
       },
-
       blue: {
         50: '#ebf5ff',
         100: '#ebf8ff',
@@ -104,17 +92,6 @@ module.exports = {
         700: '#2b6cb0',
         800: '#2c5282',
         900: '#00274c',
-      },
-      orange: {
-        100: '#fffaf0',
-        200: '#feebc8',
-        300: '#fbd38d',
-        400: '#f6ad55',
-        500: '#ed8936',
-        600: '#dd6b20',
-        700: '#c05621',
-        800: '#9c4221',
-        900: '#7b341e',
       },
     },
 
@@ -149,12 +126,8 @@ module.exports = {
       }
     },
   },
-  variants: {
-    extend: {},
-  },
   plugins: [
     require('@tailwindcss/forms'),
-    // require('@tailwindcss/typography'),
     require('@tailwindcss/aspect-ratio'),
   ],
 }
