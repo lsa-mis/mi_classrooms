@@ -3,8 +3,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.3.4'
 
-# Rails 8.0
-gem 'rails', '~> 8.0.0'
+# Rails 8.1
+gem 'rails', '~> 8.1.0'
 
 # Ruby 3.4 compatibility - these gems are being removed from stdlib
 gem 'mutex_m'
