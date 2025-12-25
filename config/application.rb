@@ -16,7 +16,7 @@ module MiClassrooms
       config.assets.precompile.delete("turbo")
     end
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.1
+    config.load_defaults 7.0
     config.generators do |g|
       g.test_framework false
       g.stylesheets false
