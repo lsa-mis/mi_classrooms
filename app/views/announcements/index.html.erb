@@ -15,12 +15,12 @@
         <div>
           <div class="-mt-px flex">
             <div class="w-0 flex-1 flex m-2">
-              <%= link_to 'Edit', edit_announcement_path(announcement), class: "relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm rounded-md shadow-sm bg-gray-100 text-black font-medium border border-transparent rounded-bl-lg hover:text-gray-400 ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+              <%= link_to 'Edit', edit_announcement_path(announcement), class: "relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm rounded-md shadow-sm bg-gray-100 text-black font-medium border border-transparent rounded-bl-lg hover:text-gray-400 ring-1 ring-black/5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
             </div>
             <div class="-ml-px w-0 flex-1 flex m-2">
-              <%= link_to 'Preview', rooms_path, class: "relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm rounded-md shadow-sm bg-gray-100 text-black font-medium border border-transparent rounded-bl-lg hover:text-gray-400 ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" if announcement.location == "find_a_room_page" %>
-              <%= link_to 'Preview', root_path, class: "relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm rounded-md shadow-sm bg-gray-100 text-black font-medium border border-transparent rounded-bl-lg hover:text-gray-400 ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" if announcement.location == "home_page" %>
-              <%= link_to 'Preview', about_path, class: "relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm rounded-md shadow-sm bg-gray-100 text-black font-medium border border-transparent rounded-bl-lg hover:text-gray-400 ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" if announcement.location == "about_page" %>
+              <%= link_to 'Preview', rooms_path, class: "relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm rounded-md shadow-sm bg-gray-100 text-black font-medium border border-transparent rounded-bl-lg hover:text-gray-400 ring-1 ring-black/5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" if announcement.location == "find_a_room_page" %>
+              <%= link_to 'Preview', root_path, class: "relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm rounded-md shadow-sm bg-gray-100 text-black font-medium border border-transparent rounded-bl-lg hover:text-gray-400 ring-1 ring-black/5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" if announcement.location == "home_page" %>
+              <%= link_to 'Preview', about_path, class: "relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm rounded-md shadow-sm bg-gray-100 text-black font-medium border border-transparent rounded-bl-lg hover:text-gray-400 ring-1 ring-black/5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" if announcement.location == "about_page" %>
             </div>
           </div>
         </div>

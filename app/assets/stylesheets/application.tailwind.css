@@ -1,6 +1,126 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/aspect-ratio';
+
+@theme {
+  /* Using Tailwind default breakpoints: sm=640px, md=768px, lg=1024px, xl=1280px, 2xl=1536px */
+
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-black: #000;
+  --color-white: #fff;
+
+  --color-gray-50: #fbfdfe;
+  --color-gray-100: #f7fafc;
+  --color-gray-200: #edf2f7;
+  --color-gray-300: #e2e8f0;
+  --color-gray-400: #cbd5e0;
+  --color-gray-500: #a0aec0;
+  --color-gray-600: #718096;
+  --color-gray-700: #4a5568;
+  --color-gray-800: #2d3748;
+  --color-gray-900: #1a202c;
+
+  --color-red-100: #fff5f5;
+  --color-red-200: #fed7d7;
+  --color-red-300: #feb2b2;
+  --color-red-400: #fc8181;
+  --color-red-500: #f56565;
+  --color-red-600: #e53e3e;
+  --color-red-700: #c53030;
+  --color-red-800: #9b2c2c;
+  --color-red-900: #742a2a;
+
+  --color-orange-100: #fffaf0;
+  --color-orange-200: #feebc8;
+  --color-orange-300: #fbd38d;
+  --color-orange-400: #f6ad55;
+  --color-orange-500: #ed8936;
+  --color-orange-600: #dd6b20;
+  --color-orange-700: #c05621;
+  --color-orange-800: #9c4221;
+  --color-orange-900: #7b341e;
+
+  --color-yellow-100: #fffff0;
+  --color-yellow-200: #fefcbf;
+  --color-yellow-300: #faf089;
+  --color-yellow-400: #f6e05e;
+  --color-yellow-500: #ecc94b;
+  --color-yellow-550: #ffcb05;
+  --color-yellow-600: #d69e2e;
+  --color-yellow-700: #b7791f;
+  --color-yellow-750: #9d691b;
+  --color-yellow-800: #975a16;
+  --color-yellow-900: #744210;
+
+  --color-green-100: #f0fff4;
+  --color-green-200: #c6f6d5;
+  --color-green-300: #9ae6b4;
+  --color-green-400: #68d391;
+  --color-green-500: #48bb78;
+  --color-green-600: #38a169;
+  --color-green-700: #2f855a;
+  --color-green-800: #276749;
+  --color-green-900: #22543d;
+
+  --color-blue-50: #ebf5ff;
+  --color-blue-100: #ebf8ff;
+  --color-blue-200: #bee3f8;
+  --color-blue-300: #90cdf4;
+  --color-blue-400: #63b3ed;
+  --color-blue-500: #4299e1;
+  --color-blue-600: #3182ce;
+  --color-blue-700: #2b6cb0;
+  --color-blue-800: #2c5282;
+  --color-blue-900: #00274c;
+
+  --spacing-1\/2: 50%;
+  --spacing-1\/3: 33.333333%;
+  --spacing-2\/3: 66.666667%;
+  --spacing-1\/4: 25%;
+  --spacing-2\/4: 50%;
+  --spacing-3\/4: 75%;
+  --spacing-1\/5: 20%;
+  --spacing-2\/5: 40%;
+  --spacing-3\/5: 60%;
+  --spacing-4\/5: 80%;
+  --spacing-1\/6: 16.666667%;
+  --spacing-2\/6: 33.333333%;
+  --spacing-3\/6: 50%;
+  --spacing-4\/6: 66.666667%;
+  --spacing-5\/6: 83.333333%;
+  --spacing-1\/12: 8.333333%;
+  --spacing-2\/12: 16.666667%;
+  --spacing-3\/12: 25%;
+  --spacing-4\/12: 33.333333%;
+  --spacing-5\/12: 41.666667%;
+  --spacing-6\/12: 50%;
+  --spacing-7\/12: 58.333333%;
+  --spacing-8\/12: 66.666667%;
+  --spacing-9\/12: 75%;
+  --spacing-10\/12: 83.333333%;
+  --spacing-11\/12: 91.666667%;
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
 
 /* Note: Third-party CSS (trix, nouislider, pannellum, lightgallery)
    should be included separately or via CDN */
@@ -18,7 +138,7 @@ body[data-environment="development"] img:not([alt]) {
 }
 
 .profile-dropdown {
-  @apply absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-blue-50 ring-1 ring-black ring-opacity-5 divide-y divide-blue-300 z-50;
+  @apply absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-blue-50 ring-1 ring-black/5 divide-y divide-blue-300 z-50;
 }
 
 h1 {
@@ -41,7 +161,7 @@ h4 {
   @apply bg-gray-50;
 }
 
-@screen sm {
+@media (width >= theme(--breakpoint-sm)) {
   .row-even {
     @apply bg-blue-50;
   }
@@ -63,7 +183,7 @@ h4 {
   @apply w-5 h-5 fill-current pr-1;
 }
 
-@screen md {
+@media (width >= theme(--breakpoint-md)) {
   .icon svg {
     @apply h-6 w-6;
   }
@@ -238,13 +358,13 @@ ol {
   @apply grid grid-cols-3 gap-x-1 gap-y-2 px-2;
 }
 
-@screen sm {
+@media (width >= theme(--breakpoint-sm)) {
   .h-highlights {
     @apply grid-cols-5;
   }
 }
 
-@screen lg {
+@media (width >= theme(--breakpoint-lg)) {
   .h-highlights {
     @apply grid-cols-4;
   }
@@ -270,7 +390,7 @@ ol {
   @apply underline;
 }
 
-@screen md {
+@media (width >= theme(--breakpoint-md)) {
   .h-highlight-item {
     @apply text-base;
   }
@@ -279,7 +399,7 @@ ol {
   }
 }
 
-@screen lg {
+@media (width >= theme(--breakpoint-lg)) {
   .h-highlight-item {
     @apply text-sm;
   }
@@ -288,7 +408,7 @@ ol {
   }
 }
 
-@screen xl {
+@media (width >= theme(--breakpoint-xl)) {
   .h-highlight-item {
     @apply mx-1;
   }
@@ -305,7 +425,7 @@ ol {
   @apply h-3 w-3 mr-1 flex-shrink-0;
 }
 
-@screen md {
+@media (width >= theme(--breakpoint-md)) {
   .h-no-highlight-item {
     @apply text-base;
   }
@@ -314,7 +434,7 @@ ol {
   }
 }
 
-@screen lg {
+@media (width >= theme(--breakpoint-lg)) {
   .h-no-highlight-item {
     @apply text-sm;
   }
@@ -323,7 +443,7 @@ ol {
   }
 }
 
-@screen xl {
+@media (width >= theme(--breakpoint-xl)) {
   .h-no-highlight-item {
     @apply mx-1;
   }
@@ -345,7 +465,7 @@ ol {
 }
 
 .classroom-row-contact-item {
-  @apply bg-white rounded py-4 pr-6 pl-2 truncate mt-2;
+  @apply bg-white rounded-sm py-4 pr-6 pl-2 truncate mt-2;
 }
 
 .classroom-row-contact-item h5 {
@@ -364,7 +484,7 @@ ol {
   @apply h-5 w-5 px-1 fill-current flex-shrink-0 mr-1;
 }
 
-@screen sm {
+@media (width >= theme(--breakpoint-sm)) {
   .classroom-row-contact-item {
     @apply mb-1;
   }
@@ -404,7 +524,7 @@ ol {
   @apply flex-1 border-t border-blue-600 mt-1 mx-2;
 }
 
-@screen sm {
+@media (width >= theme(--breakpoint-sm)) {
   .classroom-row-dropdown-features-group {
     @apply mr-4;
   }
@@ -418,7 +538,7 @@ ol {
   @apply grid grid-cols-4 mt-2;
 }
 
-@screen sm {
+@media (width >= theme(--breakpoint-sm)) {
   .classroom-row-dropdown-features {
     @apply grid-cols-3;
   }
@@ -458,7 +578,7 @@ ol {
 }
 
 .filters-button:focus {
-  @apply outline-none ring-2 ring-offset-2 ring-blue-500;
+  @apply outline-hidden ring-2 ring-offset-2 ring-blue-500;
 }
 
 .characteristics-list {
@@ -466,7 +586,7 @@ ol {
 }
 
 .characteristic-checkbox {
-  @apply -m-2 px-2 py-1 flex items-center rounded text-blue-700 transition ease-in-out duration-150 border border-blue-300 bg-blue-100;
+  @apply -m-2 px-2 py-1 flex items-center rounded-sm text-blue-700 transition ease-in-out duration-150 border border-blue-300 bg-blue-100;
 }
 
 .characteristic-checkbox svg {
@@ -489,7 +609,7 @@ ol {
   @apply flex flex-wrap space-y-2 max-w-full;
 }
 
-@screen lg {
+@media (width >= theme(--breakpoint-lg)) {
   .projection-list {
     @apply max-w-xl;
   }
@@ -561,7 +681,7 @@ ol {
 }
 
 .choices .choices__inner {
-  @apply bg-blue-100 p-0 rounded min-h-0 h-10 border-none;
+  @apply bg-blue-100 p-0 rounded-sm min-h-0 h-10 border-none;
 }
 
 .choices .choices__inner .choices__input {
@@ -593,7 +713,7 @@ ol {
   @apply h-2 mt-12 z-0;
 }
 
-@screen lg {
+@media (width >= theme(--breakpoint-lg)) {
   #slider {
     @apply ml-2 mr-4;
   }
@@ -621,11 +741,11 @@ ol {
 }
 
 #slider .noUi-tooltip {
-  @apply bg-blue-100 text-blue-800 text-xs rounded w-10 h-6 mb-2 pb-4;
+  @apply bg-blue-100 text-blue-800 text-xs rounded-sm w-10 h-6 mb-2 pb-4;
 }
 
 #slider .noUi-tooltip:focus {
-  @apply bg-green-400 outline-none;
+  @apply bg-green-400 outline-hidden;
 }
 
 .sort-otpions-dropdown {
