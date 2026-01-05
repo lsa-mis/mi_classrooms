@@ -39,7 +39,7 @@ gem 'responders', '~> 3.1'
 gem 'sassc-rails'
 gem 'sentry-rails'
 gem 'sentry-ruby'
-gem 'sidekiq', '~> 7.1.3'
+gem 'sidekiq', '~> 7.3', '>= 7.3.3'
 gem 'skylight'
 gem 'stackprof'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
