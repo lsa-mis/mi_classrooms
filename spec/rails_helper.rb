@@ -31,6 +31,7 @@ RSpec.configure do |config|
 
   config.before(:each) do
     DatabaseCleaner.start
+    ActiveJob::Base.queue_adapter = :test
   end
 
   config.after(:each) do
@@ -39,7 +40,7 @@ RSpec.configure do |config|
 
   config.include FactoryBot::Syntax::Methods
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.fixture_paths = ["#{::Rails.root}/spec/fixtures"]
   config.use_transactional_fixtures = false
   config.infer_spec_type_from_file_location!
   # Filter lines from Rails gems in backtraces.

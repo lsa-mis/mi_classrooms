@@ -27,22 +27,22 @@
 # Foreign Keys
 #
 #  fk_rails_...  (building_bldrecnbr => buildings.bldrecnbr)
-# 
+#
 
 FactoryBot.define do
   factory :room do
-    building_bldrecnbr          { Faker::Number.number(digits: 7) }
-    characteristics             { Faker::String.random(length: 100 .. 1000) }
-    dept_description            { Faker::String.random(length: 6..12) }
-    dept_grp                    { Faker::String.random(length: 6..12) }
-    facility_code_heprod        { Faker::String.random(length: 6..12) }
-    floor                       { Faker::String.random(length: 6..12) }
-    instructional_seating_count { Faker::Number.number }
-    rmrecnbr                    { Faker::Number.number(digits: 7) }
-    rmtyp_description           { Faker::String.random(length: 6..12) }
-    room_number                 { Faker::String.random(length: 6..12) }
-    square_feet                 { Faker::Number.number }
-    visible                     { Faker::Boolean.boolean }
-    dept_id                     { Faker::Number.number }
+    sequence(:rmrecnbr) { |n| 1000000 + n }
+    sequence(:building_bldrecnbr) { |n| 2000000 + n }
+    characteristics             { [] }
+    dept_description            { "Department of #{Faker::Educator.subject}" }
+    dept_grp                    { Faker::Educator.university }
+    facility_code_heprod        { "#{Faker::Alphanumeric.alpha(number: 2).upcase}#{Faker::Number.number(digits: 3)}" }
+    floor                       { Faker::Number.between(from: 1, to: 10).to_s }
+    instructional_seating_count { Faker::Number.between(from: 10, to: 500) }
+    rmtyp_description           { ['Classroom', 'Class Laboratory', 'Office'].sample }
+    room_number                 { Faker::Number.between(from: 100, to: 999).to_s }
+    square_feet                 { Faker::Number.between(from: 200, to: 5000) }
+    visible                     { true }
+    dept_id                     { Faker::Number.between(from: 1, to: 9999) }
   end
 end

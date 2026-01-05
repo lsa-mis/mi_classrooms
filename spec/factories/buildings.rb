@@ -24,16 +24,17 @@
 
 FactoryBot.define do
   factory :building do
-    abbreviation { Faker::String.random(length: 6..12) }
-    address      { Faker::Address.full_address }
-    bldrecnbr    { Faker::Number.number(digits: 7) }
-    city         { Faker::Address.longitude }
-    country      { Faker::String.random(length: 6..12) }
+    sequence(:bldrecnbr) { |n| 3000000 + n }
+    abbreviation { Faker::Alphanumeric.alpha(number: 4).upcase }
+    address      { Faker::Address.street_address }
+    city         { Faker::Address.city }
+    country      { 'United States' }
     latitude     { Faker::Address.latitude }
     longitude    { Faker::Address.longitude }
-    name         { Faker::String.random(length: 6..12) }
-    nick_name    { Faker::String.random(length: 6..12) }
-    state        { Faker::Address.state }
-    zip          { Faker::Address.postcode }
+    name         { Faker::Company.name }
+    nick_name    { Faker::Company.buzzword.titleize }
+    state        { 'MI' }
+    zip          { '48109' }
+    visible      { true }
   end
 end
