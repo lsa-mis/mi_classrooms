@@ -62,7 +62,6 @@ group :development do
   gem 'web-console', '>= 4.1.0'
   gem 'spring'
   gem 'spring-watcher-listen'
-  gem 'web-console', '>= 3.3.0'
 end
 
 group :test do
