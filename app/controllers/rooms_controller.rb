@@ -29,10 +29,10 @@ class RoomsController < ApplicationController
              end
     if params[:direction].present?
       @sorted = true
-      @rooms = @rooms.includes(%i[building
-                                  room_contact]).reorder(instructional_seating_count: params[:direction].to_sym)
+      @rooms = @rooms.includes(:room_contact, :room_image_attachment, :building)
+                     .reorder(instructional_seating_count: params[:direction].to_sym)
     else
-      @rooms = @rooms.includes(%i[building room_contact]).reorder(:building_name)
+      @rooms = @rooms.includes(:room_contact, :room_image_attachment, :building).reorder(:building_name)
       floors = sort_floors(@rooms.pluck(:floor).uniq)
       @rooms = @rooms.order_as_specified(floor: floors).order(room_number: :asc)
     end
