@@ -9,6 +9,7 @@ import ConfirmationController from "controllers/confirmation_controller"
 import FeedbackController from "controllers/feedback_controller"
 import FlashController from "controllers/flash_controller"
 import InfopanelController from "controllers/infopanel_controller"
+import LightboxController from "controllers/lightbox_controller"
 import MobileMenuController from "controllers/mobile_menu_controller"
 import PannellumController from "controllers/pannellum_controller"
 import UpdatebuildingController from "controllers/updatebuilding_controller"
@@ -17,7 +18,6 @@ import VisibilityController from "controllers/visibility_controller"
 
 // Third-party Stimulus components
 import { Alert, Autosave, Dropdown, Modal, Tabs, Popover, Toggle, Slideover } from "tailwindcss-stimulus-components"
-import Lightbox from "stimulus-lightbox"
 
 const application = Application.start()
 
@@ -42,6 +42,6 @@ application.register("tabs", Tabs)
 application.register("popover", Popover)
 application.register("toggle", Toggle)
 application.register("slideover", Slideover)
-application.register("lightbox", Lightbox)
+application.register("lightbox", LightboxController)
 
 export { application }

@@ -13,10 +13,9 @@ pin 'trix'
 
 # Third-party Stimulus components (vendored in vendor/javascript/)
 pin 'tailwindcss-stimulus-components', to: 'tailwindcss-stimulus-components.js'
-pin 'stimulus-lightbox', to: 'stimulus-lightbox.js'
 
 # Third-party libraries
-pin 'lightgallery', to: 'lightgallery.js' # vendored
+pin 'bigger-picture', to: 'bigger-picture.js' # vendored - lightweight lightbox
 pin 'pannellum', to: 'pannellum.js' # vendored
 pin 'pannellum-rooms', to: 'pannellum.js' # alias for pannellum
 
