@@ -43,7 +43,6 @@ gem 'sidekiq', '~> 7.3', '>= 7.3.3'
 gem 'skylight'
 gem 'stackprof'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
-gem 'jsbundling-rails'
 gem 'cssbundling-rails'
 
 group :development, :test do
@@ -72,3 +71,5 @@ group :test do
   gem 'selenium-webdriver'
   gem 'shoulda-matchers'
 end
+
+gem "importmap-rails", "~> 2.2"

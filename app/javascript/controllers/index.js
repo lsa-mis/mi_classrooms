@@ -1,24 +1,23 @@
-// This file uses explicit imports instead of require.context()
-// This is compatible with esbuild and modern JavaScript bundlers
+// Stimulus controllers for importmap
+// pin_all_from makes controllers available as "controllers/controller_name"
 
 import { Application } from "@hotwired/stimulus"
 
 // Custom controllers
-import AutosubmitController from "./autosubmit_controller"
-import CapacitySliderController from "./capacity_slider_controller"
-import ConfirmationController from "./confirmation_controller"
-import FeedbackController from "./feedback_controller"
-import FlashController from "./flash_controller"
-import InfopanelController from "./infopanel_controller"
-import MobileMenuController from "./mobile_menu_controller"
-import PannellumController from "./pannellum_controller"
-import UpdatebuildingController from "./updatebuilding_controller"
-import UpdateroomController from "./updateroom_controller"
-import VisibilityController from "./visibility_controller"
+import AutosubmitController from "controllers/autosubmit_controller"
+import CapacitySliderController from "controllers/capacity_slider_controller"
+import ConfirmationController from "controllers/confirmation_controller"
+import FeedbackController from "controllers/feedback_controller"
+import FlashController from "controllers/flash_controller"
+import InfopanelController from "controllers/infopanel_controller"
+import MobileMenuController from "controllers/mobile_menu_controller"
+import PannellumController from "controllers/pannellum_controller"
+import UpdatebuildingController from "controllers/updatebuilding_controller"
+import UpdateroomController from "controllers/updateroom_controller"
+import VisibilityController from "controllers/visibility_controller"
 
 // Third-party Stimulus components
 import { Alert, Autosave, Dropdown, Modal, Tabs, Popover, Toggle, Slideover } from "tailwindcss-stimulus-components"
-import Flatpickr from "stimulus-flatpickr"
 import Lightbox from "stimulus-lightbox"
 
 const application = Application.start()
@@ -45,7 +44,6 @@ application.register("tabs", Tabs)
 application.register("popover", Popover)
 application.register("toggle", Toggle)
 application.register("slideover", Slideover)
-application.register("flatpickr", Flatpickr)
 application.register("lightbox", Lightbox)
 
 export { application }

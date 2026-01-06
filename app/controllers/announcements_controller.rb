@@ -16,14 +16,10 @@ class AnnouncementsController < ApplicationController
   end
 
   def update
-    respond_to do |format|
-      if @announcement.update(announcement_params)
-        format.turbo_stream { redirect_to session.delete(:return_to),
-        notice: 'Text was successfully updated.'
-      }
+    if @announcement.update(announcement_params)
+      redirect_to session.delete(:return_to) || root_path, notice: 'Text was successfully updated.'
     else
-      format.turbo_stream
-      end
+      render :edit, status: :unprocessable_entity
     end
   end
 

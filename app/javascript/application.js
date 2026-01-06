@@ -1,4 +1,4 @@
-// Entry point for the build script in your package.json
+// Entry point for importmap-rails
 
 // Trix and ActionText
 import "trix"
@@ -8,11 +8,11 @@ import "@rails/actiontext"
 import "@hotwired/turbo-rails"
 
 // ActionCable channels
-import "./channels"
+import "channels"
 
 // Active Storage
 import * as ActiveStorage from "@rails/activestorage"
 ActiveStorage.start()
 
 // Stimulus controllers
-import "./controllers"
+import "controllers"

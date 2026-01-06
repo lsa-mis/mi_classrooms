@@ -2,35 +2,15 @@
   "name": "mi_classrooms-app",
   "private": true,
   "scripts": {
-    "build": "esbuild app/javascript/application.js --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets --external:*.woff --external:*.woff2 --external:*.ttf --external:*.svg --external:*.gif --external:*.png --external:*.css",
     "build:css": "npx @tailwindcss/cli -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify"
   },
   "dependencies": {
-    "@hotwired/stimulus": "^3.2.2",
-    "@hotwired/turbo-rails": "^8.0.12",
-    "@rails/actioncable": "^7.2.201",
-    "@rails/actiontext": "^7.2.201",
-    "@rails/activestorage": "^7.2.201",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/cli": "^4.1.0",
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/postcss": "^4.1.0",
     "@tailwindcss/typography": "^0.5.15",
-    "choices.js": "^9.0.1",
-    "clipboard": "^2.0.11",
-    "esbuild": "^0.24.0",
-    "flatpickr": "^4.6.13",
-    "lightgallery": "^2.7.2",
-    "local-time": "^3.0.2",
-    "nouislider": "^15.8.1",
-    "pannellum-rooms": "^1.0.2",
     "postcss": "^8.4.49",
-    "stimulus-flatpickr": "^1.4.0",
-    "stimulus-lightbox": "^3.0.0",
-    "tailwindcss": "^4.1.18",
-    "tailwindcss-stimulus-components": "^5.1.1",
-    "tippy.js": "^6.3.7",
-    "tributejs": "^5.1.3",
-    "trix": "^2.1.8"
+    "tailwindcss": "^4.1.18"
   }
 }

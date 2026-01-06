@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   end
 
   resources :announcements
-  post 'announcements/:id/cancel', to: "announcements#cancel", as: 'announcements_cancel'
+  get 'announcements/:id/cancel', to: "announcements#cancel", as: 'announcements_cancel'
 
   get "legacy_crdb" => redirect("https://rooms.lsa.umich.edu")
 

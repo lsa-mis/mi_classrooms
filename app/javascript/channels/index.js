@@ -1,4 +1,5 @@
 // Import all channels here
-// Example: import "./chat_channel"
+// For importmap: use "channels/channel_name" format
+// Example: import "channels/chat_channel"
 
-import "./consumer"
+import "channels/consumer"
