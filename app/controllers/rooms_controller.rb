@@ -14,9 +14,9 @@ class RoomsController < ApplicationController
     @sorted = false
     buildings_ids = Room.classrooms.pluck(:building_bldrecnbr).uniq
     @buildings = if params[:inactive_buildings].present?
-                   Building.where(bldrecnbr: buildings_ids, visible: false).order(:name)
+                   Building.includes(:building_image_attachment).where(bldrecnbr: buildings_ids, visible: false).order(:name)
                  else
-                   Building.where(bldrecnbr: buildings_ids).order(:name)
+                   Building.includes(:building_image_attachment).where(bldrecnbr: buildings_ids).order(:name)
                  end
 
     @rooms_page_announcement = Announcement.find_by(location: 'find_a_room_page')
