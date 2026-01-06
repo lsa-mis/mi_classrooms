@@ -16,7 +16,6 @@ pin 'tailwindcss-stimulus-components', to: 'tailwindcss-stimulus-components.js'
 pin 'stimulus-lightbox', to: 'stimulus-lightbox.js'
 
 # Third-party libraries
-pin 'nouislider', to: 'nouislider.js' # vendored
 pin 'lightgallery', to: 'lightgallery.js' # vendored
 pin 'pannellum', to: 'pannellum.js' # vendored
 pin 'pannellum-rooms', to: 'pannellum.js' # alias for pannellum

@@ -5,7 +5,6 @@ import { Application } from "@hotwired/stimulus"
 
 // Custom controllers
 import AutosubmitController from "controllers/autosubmit_controller"
-import CapacitySliderController from "controllers/capacity_slider_controller"
 import ConfirmationController from "controllers/confirmation_controller"
 import FeedbackController from "controllers/feedback_controller"
 import FlashController from "controllers/flash_controller"
@@ -24,7 +23,6 @@ const application = Application.start()
 
 // Register custom controllers
 application.register("autosubmit", AutosubmitController)
-application.register("capacity-slider", CapacitySliderController)
 application.register("confirmation", ConfirmationController)
 application.register("feedback", FeedbackController)
 application.register("flash", FlashController)
