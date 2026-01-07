@@ -22,7 +22,7 @@
     <%= Sentry.get_trace_propagation_meta.html_safe %>
   </head>
   <body data-environment="<%= Rails.env %>" class="min-h-screen flex flex-col">
-    <a class="skiplink" href="#maincontent">Skip to main content</a>
+    <a class="skiplink" href="#main">Skip to main content</a>
     <%= render 'layouts/header' %>
     <% if Rails.env.development? %>
       <%= render 'layouts/tailwindcss_breakpoints' %>
