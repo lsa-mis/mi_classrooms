@@ -34,12 +34,10 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'pg_search'
 gem 'puma', '~> 6.0'
 gem 'pundit', '~> 2.3'
-gem 'redis', '~> 4.8', '>= 4.8.1'
 gem 'responders', '~> 3.1'
 gem 'sassc-rails'
 gem 'sentry-rails'
 gem 'sentry-ruby'
-gem 'sidekiq', '~> 7.3', '>= 7.3.3'
 gem 'skylight'
 gem 'stackprof'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
@@ -71,3 +69,7 @@ group :test do
 end
 
 gem "importmap-rails", "~> 2.2"
+
+gem "solid_queue", "~> 1.2"
+gem "solid_cable", "~> 3.0"
+gem "mission_control-jobs", "~> 1.1"

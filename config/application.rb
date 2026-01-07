@@ -29,7 +29,7 @@ module MiClassrooms
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
     config.generators.system_tests = nil
-    config.active_job.queue_adapter = :sidekiq
+    config.active_job.queue_adapter = :solid_queue
     config.active_record.schema_format = :sql
     config.time_zone = 'Eastern Time (US & Canada)'
 
