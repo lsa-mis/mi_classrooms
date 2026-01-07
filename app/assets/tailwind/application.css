@@ -773,11 +773,11 @@ ol {
 }
 
 #panorama .pnlm-load-button {
-  @apply bg-black/30! text-center!;
+  @apply bg-black/30  text-center! ;
 }
 
 #panorama .pnlm-load-button p {
-  @apply text-center!;
+  @apply text-center!  ;
 }
 
 /* Note: application.css sprockets manifest is not imported here.

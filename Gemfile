@@ -41,7 +41,7 @@ gem 'sentry-ruby'
 gem 'skylight'
 gem 'stackprof'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
-gem 'cssbundling-rails'
+gem 'tailwindcss-rails', '~> 4.0'
 
 group :development, :test do
   gem 'bullet'
