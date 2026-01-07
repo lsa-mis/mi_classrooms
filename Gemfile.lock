@@ -208,9 +208,6 @@ GEM
       railties (>= 5.2)
       rexml
     lint_roller (1.1.0)
-    listen (3.9.0)
-      rb-fsevent (~> 0.10, >= 0.10.3)
-      rb-inotify (~> 0.9, >= 0.9.10)
     logger (1.7.0)
     loofah (2.25.0)
       crass (~> 1.0.2)
@@ -349,9 +346,6 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.3.1)
-    rb-fsevent (0.11.2)
-    rb-inotify (0.11.1)
-      ffi (~> 1.0)
     rdoc (7.0.3)
       erb
       psych (>= 4.0.0)
@@ -450,10 +444,6 @@ GEM
     snaky_hash (2.0.3)
       hashie (>= 0.1.0, < 6)
       version_gem (>= 1.1.8, < 3)
-    spring (4.4.0)
-    spring-watcher-listen (2.1.0)
-      listen (>= 2.7, < 4.0)
-      spring (>= 4)
     sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
       logger
@@ -561,8 +551,6 @@ DEPENDENCIES
   shoulda-matchers
   sidekiq (~> 7.3, >= 7.3.3)
   skylight
-  spring
-  spring-watcher-listen
   stackprof
   standard
   stimulus-rails

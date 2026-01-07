@@ -59,8 +59,6 @@ group :development do
   gem 'letter_opener_web', '~> 2.0'
   gem 'pry-rails'
   gem 'web-console', '>= 4.1.0'
-  gem 'spring'
-  gem 'spring-watcher-listen'
 end
 
 group :test do
