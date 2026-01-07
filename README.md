@@ -1,18 +1,17 @@
 # MClassrooms
 
-![](https://img.shields.io/badge/Ruby%20Version-3.0.1-red) ![](https://img.shields.io/badge/Rails%20Version-6.1.5-red)
+![](https://img.shields.io/badge/Ruby%20Version-3.3.4-red) ![](https://img.shields.io/badge/Rails%20Version-8.1-red)
 
-  ## Authorization
-  - Devise:  This application uses Devise for user authorization.
-  - omniauth-SAML
-  - ldap_lookup used to gather user information (especially group affiliation for authorization)
+## Authorization
+- Devise: This application uses Devise for user authorization.
+- omniauth-SAML
+- ldap_lookup used to gather user information (especially group affiliation for authorization)
 
-  ## Background Jobs
-  - Sidekiq 6.4.x
-  - Redis 4.x
+## Background Jobs
+- SolidQueue (PostgreSQL-backed)
 
-  ## Database
-  - Postgresql 12 (or higher)
+## Database
+- PostgreSQL 12 (or higher)
   ### Database loading data
 
 
