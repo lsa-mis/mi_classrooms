@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-import "pannellum-rooms"
+import "pannellum"
 
 export default class extends Controller {
   static targets = ["panorama"]
@@ -11,7 +11,8 @@ export default class extends Controller {
   }
 
   pano(panoImage, panoPreview) {
-    pannellum.viewer('panorama', {
+    // pannellum sets window.pannellum when loaded
+    window.pannellum.viewer('panorama', {
       "type": "equirectangular",
       "panorama": panoImage,
       "preview": panoPreview

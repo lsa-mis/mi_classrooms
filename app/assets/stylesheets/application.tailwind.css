@@ -759,5 +759,26 @@ ol {
   @apply relative w-screen max-w-xs right-0;
 }
 
+/* Room panorama styles */
+.room-show-image img {
+  @apply h-48 object-fill sm:h-96;
+}
+
+#panorama {
+  @apply h-96 bg-green-300 object-fill;
+}
+
+#panorama .pnlm-preview-img {
+  @apply bg-size-[360%];
+}
+
+#panorama .pnlm-load-button {
+  @apply bg-black/30! text-center!;
+}
+
+#panorama .pnlm-load-button p {
+  @apply text-center!;
+}
+
 /* Note: application.css sprockets manifest is not imported here.
    Tailwind CSS is the source of truth for styling. */

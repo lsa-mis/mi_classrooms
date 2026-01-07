@@ -3,7 +3,7 @@
   <div id="panorama"
     data-controller="pannellum"
     data-pannellum-panoimage=<%= "#{url_for(@room.room_panorama)}" %>
-    data-pannellum-panopreview=<%= "#{url_for(@room.room_panorama.variant(resize: "25%").processed)}" %>
+    data-pannellum-panopreview=<%= "#{url_for(@room.room_panorama.variant(resize_to_limit: [480, 240]).processed)}" %>
     aria-hidden="true" focusable="false">
   </div>
 <% else %>
