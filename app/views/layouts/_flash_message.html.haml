@@ -1,4 +1,4 @@
-#flash-message{:class => "alert #{flash_class(message_type.to_sym)}", data: {controller: "flash", "flash-timeout-value": 3000}}
+#flash-message{:class => "alert #{flash_class(message_type.to_sym)}", data: {controller: "flash"}
   .fixed.inset-0.mt-16.flex.px-4.py-6.pointer-events-none.sm:p-6.sm:items-start.z-50{"aria-live" => "assertive"}
     .w-full.flex.flex-col.items-center.space-y-4.sm:items-end
       %div{class: "max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black/5 overflow-hidden", data: {controller: "alert"}}
