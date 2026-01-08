@@ -1,6 +1,6 @@
 class AnnouncementsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_announcement, only: [:show, :edit, :update, :cancel]
+  before_action :set_announcement, only: [:show, :edit, :update, :destroy]
 
   def index
     @page_title = "Announcements"
@@ -11,20 +11,36 @@ class AnnouncementsController < ApplicationController
   def show
   end
 
+  def new
+    @announcement = Announcement.new(location: params[:location])
+    authorize @announcement
+  end
+
+  def create
+    @announcement = Announcement.new(announcement_params)
+    authorize @announcement
+
+    if @announcement.save
+      redirect_to announcements_path, notice: 'Announcement was successfully created.'
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
   def edit
-    session[:return_to] = request.referer
   end
 
   def update
     if @announcement.update(announcement_params)
-      redirect_to session.delete(:return_to) || root_path, notice: 'Text was successfully updated.'
+      redirect_to announcements_path, notice: 'Announcement was successfully updated.'
     else
       render :edit, status: :unprocessable_entity
     end
   end
 
-  def cancel
-    redirect_to session.delete(:return_to)
+  def destroy
+    @announcement.destroy
+    redirect_to announcements_path, notice: 'Announcement was successfully deleted.'
   end
 
   private
@@ -32,7 +48,6 @@ class AnnouncementsController < ApplicationController
     def set_announcement
       @announcement = Announcement.find(params[:id])
       authorize @announcement
-
     end
 
     def announcement_params

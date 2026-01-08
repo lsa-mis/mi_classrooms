@@ -38,3 +38,4 @@ uploads/
 /config/credentials/staging.key
 
 /config/skylight.yml
+app/assets/builds/tailwind.css

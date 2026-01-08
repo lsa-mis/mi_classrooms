@@ -1,29 +1,60 @@
+<% location_info = {
+  "home_page" => {
+    title: "Home Page",
+    description: "Displayed prominently on the main landing page seen by all visitors.",
+    preview_path: root_path
+  },
+  "find_a_room_page" => {
+    title: "Find a Room Page",
+    description: "Shown on the room search page where users browse available classrooms.",
+    preview_path: rooms_path
+  },
+  "about_page" => {
+    title: "About Page",
+    description: "Appears on the About page with general information about MiClassrooms.",
+    preview_path: about_path
+  }
+} %>
+
 <div class="container px-1 mb-20">
-  <h1>Announcements</h1>
-  <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 m-4">
-    <% @announcements.each do |announcement| %>
-      <li class="col-span-1 bg-white rounded-lg shadow-md divide-y divide-gray-400 px-2">
-        <div class="w-full p-2 text-gray-900 text-lg font-medium">
-          <%= announcement.location.titleize %> announcement
+  <div class="flex justify-between items-center mb-6">
+    <h1>Announcements</h1>
+    <%= link_to 'New Announcement', new_announcement_path, class: "px-4 py-2 rounded-md shadow-sm bg-indigo-600 text-sm text-white font-medium hover:bg-indigo-700 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+  </div>
+
+  <% Announcement::LOCATIONS.each do |location| %>
+    <% info = location_info[location] %>
+    <% announcements_for_location = @announcements.select { |a| a.location == location } %>
+
+    <section class="mb-8">
+      <div class="border-b border-gray-200 pb-2 mb-4">
+        <h2 class="text-xl font-semibold text-gray-900"><%= info[:title] %></h2>
+        <p class="text-sm text-gray-600 mt-1"><%= info[:description] %></p>
+      </div>
+
+      <% if announcements_for_location.any? %>
+        <ul role="list" class="space-y-4">
+          <% announcements_for_location.each do |announcement| %>
+            <li class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+              <div class="p-4">
+                <div class="text-sm text-gray-900">
+                  <%= announcement.content %>
+                </div>
+              </div>
+              <div class="bg-gray-50 px-4 py-3 flex justify-end gap-2">
+                <%= link_to 'Preview', info[:preview_path], target: "_blank", class: "px-3 py-1.5 text-sm rounded-md bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 ring-1 ring-black/5" %>
+                <%= link_to 'Edit', edit_announcement_path(announcement), class: "px-3 py-1.5 text-sm rounded-md bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 ring-1 ring-black/5" %>
+                <%= button_to 'Delete', announcement_path(announcement), method: :delete, data: { turbo_confirm: "Are you sure you want to delete this announcement?" }, class: "px-3 py-1.5 text-sm rounded-md bg-red-100 text-red-700 font-medium hover:bg-red-200 ring-1 ring-red-300/50" %>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <div class="text-center py-6 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+          <p class="text-sm text-gray-500">No announcements for this location.</p>
+          <%= link_to 'Create one', new_announcement_path(location: location), class: "text-sm text-indigo-600 hover:text-indigo-500 font-medium" %>
         </div>
-        <div class="p-2">
-          <div class="mt-1 text-sm">
-            <%= announcement.content %>
-          </div>
-        </div>
-        <div>
-          <div class="-mt-px flex">
-            <div class="w-0 flex-1 flex m-2">
-              <%= link_to 'Edit', edit_announcement_path(announcement), class: "relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm rounded-md shadow-sm bg-gray-100 text-black font-medium border border-transparent rounded-bl-lg hover:text-gray-400 ring-1 ring-black/5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
-            </div>
-            <div class="-ml-px w-0 flex-1 flex m-2">
-              <%= link_to 'Preview', rooms_path, class: "relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm rounded-md shadow-sm bg-gray-100 text-black font-medium border border-transparent rounded-bl-lg hover:text-gray-400 ring-1 ring-black/5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" if announcement.location == "find_a_room_page" %>
-              <%= link_to 'Preview', root_path, class: "relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm rounded-md shadow-sm bg-gray-100 text-black font-medium border border-transparent rounded-bl-lg hover:text-gray-400 ring-1 ring-black/5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" if announcement.location == "home_page" %>
-              <%= link_to 'Preview', about_path, class: "relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm rounded-md shadow-sm bg-gray-100 text-black font-medium border border-transparent rounded-bl-lg hover:text-gray-400 ring-1 ring-black/5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" if announcement.location == "about_page" %>
-            </div>
-          </div>
-        </div>
-      </li>
       <% end %>
-  </ul>
+    </section>
+  <% end %>
 </div>
