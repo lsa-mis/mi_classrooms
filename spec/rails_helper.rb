@@ -31,7 +31,6 @@ RSpec.configure do |config|
 
   config.before(:each) do
     DatabaseCleaner.start
-    ActiveJob::Base.queue_adapter = :test
   end
 
   config.after(:each) do
