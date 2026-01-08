@@ -12,12 +12,17 @@
       <%= page_title %>
     </title>
     <%= csrf_meta_tags %>
-    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbo-track': 'reload' %>
+    <%= csp_meta_tag %>
+    <link rel="stylesheet" href="https://unpkg.com/pannellum@2.5.6/build/pannellum.css">
+    <link rel="stylesheet" href="https://unpkg.com/trix@2.1.8/dist/trix.css">
+    <link rel="stylesheet" href="https://unpkg.com/bigger-picture@1.1.17/dist/bigger-picture.css">
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
     <%= Sentry.get_trace_propagation_meta.html_safe %>
   </head>
   <body data-environment="<%= Rails.env %>" class="min-h-screen flex flex-col">
-    <a class="skiplink" href="#maincontent">Skip to main content</a>
+    <a class="skiplink" href="#main">Skip to main content</a>
     <%= render 'layouts/header' %>
     <% if Rails.env.development? %>
       <%= render 'layouts/tailwindcss_breakpoints' %>

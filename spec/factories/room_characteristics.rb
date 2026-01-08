@@ -23,12 +23,11 @@
 
 FactoryBot.define do
   factory :room_characteristic do
-    chrstc            { Faker::Number.number(digits: 3) }
-    chrstc_desc254    { Faker::String.random(length: 6..60) }
-    chrstc_descr      { Faker::String.random(length: 6..22) }
-    chrstc_descrshort { Faker::String.random(length: 6..12) }
-    chrstc_eff_status { Faker::Number.number }
-    rmrecnbr          { Faker::Number.number(digits: 7) }
-    
+    sequence(:chrstc) { |n| n }
+    chrstc_desc254    { Faker::Lorem.sentence }
+    chrstc_descr      { Faker::Lorem.words(number: 3).join(' ') }
+    chrstc_descrshort { %w[ProjDigit Whtbrd Chkbrd DocCam BluRay InstrComp TeamBoard LectureCap VideoConf].sample }
+    chrstc_eff_status { 1 }
+    sequence(:rmrecnbr) { |n| 1000000 + n }
   end
 end

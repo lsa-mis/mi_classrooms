@@ -1,4 +1,3 @@
-<div id="maincontent"></div>
 <%= turbo_frame_tag "building" do  %>
   <div class="container px-1 mb-20">
     <div class="">
@@ -68,8 +67,8 @@
                   <%= f.file_field :building_image, class: "shadow- focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-sm" %>
                 </div>
                 <div class="actions">
-                  <%= f.submit 'Save', class: "my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
-                  <%= link_to 'Remove', delete_file_path(@building.building_image.id), data: { confirm: "Are sure you?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400 ring-opacity-30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @building.building_image.attached? %>
+                  <%= f.submit 'Save', class: "my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black/5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
+                  <%= link_to 'Remove', delete_file_path(@building.building_image.id), data: { turbo_confirm: "Are you sure?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400/30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @building.building_image.attached? %>
                 </div>
               <% end %>
               <hr>
@@ -83,7 +82,7 @@
                   focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500" %>
                 </div>
                 <div class="actions">
-                  <%= f.submit 'Save', class: "my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
+                  <%= f.submit 'Save', class: "my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black/5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
                 </div>
               <% end %>
               <div>

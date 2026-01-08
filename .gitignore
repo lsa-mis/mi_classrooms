@@ -29,12 +29,8 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 
-/public/packs
-/public/packs-test
-/node_modules
-/yarn-error.log
-yarn-debug.log*
-.yarn-integrity
+/app/assets/builds/*
+!/app/assets/builds/.keep
 working_files/
 
 uploads/
@@ -42,3 +38,4 @@ uploads/
 /config/credentials/staging.key
 
 /config/skylight.yml
+app/assets/builds/tailwind.css

@@ -18,13 +18,13 @@
               <div class="text-sm">
                 <%= room.address %>
               </div>
-              <% unless Building.find_by(bldrecnbr: room.building_bldrecnbr).visible %>
+              <% unless room.building.visible %>
                 <div class="text-base text-yellow-750">
                 Building is inactive
                 </div>
               <% end %>
               <div class="flex w-full bg-yellow-550 text-sm">
-                <% if Building.find_by(bldrecnbr: room.building_bldrecnbr).notes.alert.present? %>
+                <% if room.building.notes.alert.present? %>
                   <div class="px-2 flex items-center space-x-1">
                     <%= svg('alert') %>
                     <span>Building</span>
@@ -120,7 +120,7 @@
                 <%= room.address %>
               </div>
               <div class="text-base text-yellow-750">
-                <% unless Building.find_by(bldrecnbr: room.building_bldrecnbr).visible %>
+                <% unless room.building.visible %>
                   <span>Building</span>
                   <% unless room.visible %>
                     <span> & </span>
@@ -132,7 +132,7 @@
                 <span> - inactive</span>
               </div>
               <div class="flex w-full bg-yellow-550 text-sm">
-                <% if Building.find_by(bldrecnbr: room.building_bldrecnbr).notes.alert.present? %>
+                <% if room.building.notes.alert.present? %>
                   <div class="px-2 flex items-center space-x-1">
                     <%= svg('alert') %>
                     <span>Building</span>

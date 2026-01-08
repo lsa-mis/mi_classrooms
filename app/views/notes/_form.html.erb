@@ -14,6 +14,6 @@
   <%= form.rich_text_area :body %>
   <%= form.label :alert, "Check if alert", class: "text-xs" %>
   <%= form.check_box :alert %>
-  <%= form.submit class: "m-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
-  <%= link_to "Cancel", note, class: "m-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black ring-opacity-5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" if form.object.persisted? %>
+  <%= form.submit class: "m-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black/5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
+  <%= link_to "Cancel", note, class: "m-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black/5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" if form.object.persisted? %>
 <% end %>

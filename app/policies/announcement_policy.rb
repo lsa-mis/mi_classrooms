@@ -6,14 +6,18 @@ class AnnouncementPolicy < ApplicationPolicy
 
   def show?
     user.admin
-  end  
+  end
+
+  def create?
+    user.admin
+  end
 
   def update?
     user.admin
   end
 
-  def cancel?
-    edit?
+  def destroy?
+    user.admin
   end
 
 end

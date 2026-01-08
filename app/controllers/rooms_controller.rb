@@ -14,9 +14,9 @@ class RoomsController < ApplicationController
     @sorted = false
     buildings_ids = Room.classrooms.pluck(:building_bldrecnbr).uniq
     @buildings = if params[:inactive_buildings].present?
-                   Building.where(bldrecnbr: buildings_ids, visible: false).order(:name)
+                   Building.includes(:building_image_attachment).where(bldrecnbr: buildings_ids, visible: false).order(:name)
                  else
-                   Building.where(bldrecnbr: buildings_ids).order(:name)
+                   Building.includes(:building_image_attachment).where(bldrecnbr: buildings_ids).order(:name)
                  end
 
     @rooms_page_announcement = Announcement.find_by(location: 'find_a_room_page')
@@ -29,10 +29,10 @@ class RoomsController < ApplicationController
              end
     if params[:direction].present?
       @sorted = true
-      @rooms = @rooms.includes(%i[building
-                                  room_contact]).reorder(instructional_seating_count: params[:direction].to_sym)
+      @rooms = @rooms.includes(:room_contact, :room_image_attachment, :building)
+                     .reorder(instructional_seating_count: params[:direction].to_sym)
     else
-      @rooms = @rooms.includes(%i[building room_contact]).reorder(:building_name)
+      @rooms = @rooms.includes(:room_contact, :room_image_attachment, :building).reorder(:building_name)
       floors = sort_floors(@rooms.pluck(:floor).uniq)
       @rooms = @rooms.order_as_specified(floor: floors).order(room_number: :asc)
     end

@@ -16,7 +16,7 @@ module MiClassrooms
       config.assets.precompile.delete("turbo")
     end
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.1
+    config.load_defaults 8.1
     config.generators do |g|
       g.test_framework false
       g.stylesheets false
@@ -29,7 +29,7 @@ module MiClassrooms
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
     config.generators.system_tests = nil
-    config.active_job.queue_adapter = :sidekiq
+    config.active_job.queue_adapter = :solid_queue
     config.active_record.schema_format = :sql
     config.time_zone = 'Eastern Time (US & Canada)'
 
@@ -39,5 +39,4 @@ module MiClassrooms
   ActiveStorage::Engine.config.active_storage.content_types_to_serve_as_binary.delete("image/svg+xml")
 
   ActiveStorage::Engine.config.active_storage.content_types_allowed_inline.append("image/svg+xml")
-  Webpacker::Compiler.env["TAILWIND_MODE"] = "build"
 end

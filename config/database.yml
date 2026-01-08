@@ -5,21 +5,65 @@ default: &default
 
 
 development:
-  <<: *default
-  database: mi_classrooms_development
+  primary:
+    <<: *default
+    database: mi_classrooms_development
+  queue:
+    <<: *default
+    database: mi_classrooms_queue_development
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *default
+    database: mi_classrooms_cable_development
+    migrations_paths: db/cable_migrate
 
 test:
-  <<: *default
-  database: mi_classrooms_test
+  primary:
+    <<: *default
+    database: mi_classrooms_test
+  queue:
+    <<: *default
+    database: mi_classrooms_queue_test
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *default
+    database: mi_classrooms_cable_test
+    migrations_paths: db/cable_migrate
 
 staging:
-  <<: *default
-  database: mi_classrooms_staging
-  username: <%= Rails.application.credentials.STAGING_DB_USERNAME %>
-  password: <%= Rails.application.credentials.STAGING_DB_PASSWORD %>
+  primary:
+    <<: *default
+    database: mi_classrooms_staging
+    username: <%= Rails.application.credentials.STAGING_DB_USERNAME %>
+    password: <%= Rails.application.credentials.STAGING_DB_PASSWORD %>
+  queue:
+    <<: *default
+    database: mi_classrooms_queue_staging
+    username: <%= Rails.application.credentials.STAGING_DB_USERNAME %>
+    password: <%= Rails.application.credentials.STAGING_DB_PASSWORD %>
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *default
+    database: mi_classrooms_cable_staging
+    username: <%= Rails.application.credentials.STAGING_DB_USERNAME %>
+    password: <%= Rails.application.credentials.STAGING_DB_PASSWORD %>
+    migrations_paths: db/cable_migrate
 
 production:
-  <<: *default
-  database: mi_classrooms_production
-  username: <%= Rails.application.credentials.PRODUCTION_DB_USERNAME %>
-  password: <%= Rails.application.credentials.PRODUCTION_DB_PASSWORD %>
+  primary:
+    <<: *default
+    database: mi_classrooms_production
+    username: <%= Rails.application.credentials.PRODUCTION_DB_USERNAME %>
+    password: <%= Rails.application.credentials.PRODUCTION_DB_PASSWORD %>
+  queue:
+    <<: *default
+    database: mi_classrooms_queue_production
+    username: <%= Rails.application.credentials.PRODUCTION_DB_USERNAME %>
+    password: <%= Rails.application.credentials.PRODUCTION_DB_PASSWORD %>
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *default
+    database: mi_classrooms_cable_production
+    username: <%= Rails.application.credentials.PRODUCTION_DB_USERNAME %>
+    password: <%= Rails.application.credentials.PRODUCTION_DB_PASSWORD %>
+    migrations_paths: db/cable_migrate

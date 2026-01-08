@@ -1,0 +1,784 @@
+@import 'tailwindcss';
+
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/aspect-ratio';
+
+/* Scan vendor/javascript for Tailwind classes used in vendored JS */
+@source '../../vendor/javascript';
+
+@theme {
+  /* Using Tailwind default breakpoints: sm=640px, md=768px, lg=1024px, xl=1280px, 2xl=1536px */
+
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-black: #000;
+  --color-white: #fff;
+
+  --color-gray-50: #fbfdfe;
+  --color-gray-100: #f7fafc;
+  --color-gray-200: #edf2f7;
+  --color-gray-300: #e2e8f0;
+  --color-gray-400: #cbd5e0;
+  --color-gray-500: #a0aec0;
+  --color-gray-600: #718096;
+  --color-gray-700: #4a5568;
+  --color-gray-800: #2d3748;
+  --color-gray-900: #1a202c;
+
+  --color-red-100: #fff5f5;
+  --color-red-200: #fed7d7;
+  --color-red-300: #feb2b2;
+  --color-red-400: #fc8181;
+  --color-red-500: #f56565;
+  --color-red-600: #e53e3e;
+  --color-red-700: #c53030;
+  --color-red-800: #9b2c2c;
+  --color-red-900: #742a2a;
+
+  --color-orange-100: #fffaf0;
+  --color-orange-200: #feebc8;
+  --color-orange-300: #fbd38d;
+  --color-orange-400: #f6ad55;
+  --color-orange-500: #ed8936;
+  --color-orange-600: #dd6b20;
+  --color-orange-700: #c05621;
+  --color-orange-800: #9c4221;
+  --color-orange-900: #7b341e;
+
+  --color-yellow-100: #fffff0;
+  --color-yellow-200: #fefcbf;
+  --color-yellow-300: #faf089;
+  --color-yellow-400: #f6e05e;
+  --color-yellow-500: #ecc94b;
+  --color-yellow-550: #ffcb05;
+  --color-yellow-600: #d69e2e;
+  --color-yellow-700: #b7791f;
+  --color-yellow-750: #9d691b;
+  --color-yellow-800: #975a16;
+  --color-yellow-900: #744210;
+
+  --color-green-100: #f0fff4;
+  --color-green-200: #c6f6d5;
+  --color-green-300: #9ae6b4;
+  --color-green-400: #68d391;
+  --color-green-500: #48bb78;
+  --color-green-600: #38a169;
+  --color-green-700: #2f855a;
+  --color-green-800: #276749;
+  --color-green-900: #22543d;
+
+  --color-blue-50: #ebf5ff;
+  --color-blue-100: #ebf8ff;
+  --color-blue-200: #bee3f8;
+  --color-blue-300: #90cdf4;
+  --color-blue-400: #63b3ed;
+  --color-blue-500: #4299e1;
+  --color-blue-600: #3182ce;
+  --color-blue-700: #2b6cb0;
+  --color-blue-800: #2c5282;
+  --color-blue-900: #00274c;
+
+  --spacing-1\/2: 50%;
+  --spacing-1\/3: 33.333333%;
+  --spacing-2\/3: 66.666667%;
+  --spacing-1\/4: 25%;
+  --spacing-2\/4: 50%;
+  --spacing-3\/4: 75%;
+  --spacing-1\/5: 20%;
+  --spacing-2\/5: 40%;
+  --spacing-3\/5: 60%;
+  --spacing-4\/5: 80%;
+  --spacing-1\/6: 16.666667%;
+  --spacing-2\/6: 33.333333%;
+  --spacing-3\/6: 50%;
+  --spacing-4\/6: 66.666667%;
+  --spacing-5\/6: 83.333333%;
+  --spacing-1\/12: 8.333333%;
+  --spacing-2\/12: 16.666667%;
+  --spacing-3\/12: 25%;
+  --spacing-4\/12: 33.333333%;
+  --spacing-5\/12: 41.666667%;
+  --spacing-6\/12: 50%;
+  --spacing-7\/12: 58.333333%;
+  --spacing-8\/12: 66.666667%;
+  --spacing-9\/12: 75%;
+  --spacing-10\/12: 83.333333%;
+  --spacing-11\/12: 91.666667%;
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+/* Note: Third-party CSS (trix, nouislider, pannellum, lightgallery)
+   should be included separately or via CDN */
+
+/* Custom styles migrated from app/packs/stylesheets/application.sass */
+
+.modal-backdrop {
+  z-index: -1 !important;
+}
+
+/* Development: highlight images missing alt text */
+body[data-environment="development"] img[alt=""],
+body[data-environment="development"] img:not([alt]) {
+  @apply border-4 border-red-700 border-dotted p-2;
+}
+
+.profile-dropdown {
+  @apply absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-blue-50 ring-1 ring-black/5 divide-y divide-blue-300 z-50;
+}
+
+h1 {
+  @apply text-3xl mb-2;
+}
+
+h2 {
+  @apply text-2xl mb-2 ml-2;
+}
+
+h3 {
+  @apply text-xl mb-2 ml-2;
+}
+
+h4 {
+  @apply text-xl mb-2 ml-2;
+}
+
+.row-even {
+  @apply bg-gray-50;
+}
+
+@media (width >= theme(--breakpoint-sm)) {
+  .row-even {
+    @apply bg-blue-50;
+  }
+}
+
+.row-odd {
+  @apply bg-gray-50;
+}
+
+.svg {
+  @apply h-4 w-4;
+}
+
+.icon {
+  @apply inline-block;
+}
+
+.icon svg {
+  @apply w-5 h-5 fill-current pr-1;
+}
+
+@media (width >= theme(--breakpoint-md)) {
+  .icon svg {
+    @apply h-6 w-6;
+  }
+}
+
+.debug_dump {
+  @apply bg-blue-100 border-4 border-red-800 rounded-lg p-4 text-sm font-mono text-blue-900 mx-auto my-4 max-w-2xl w-auto;
+}
+
+/* Trix editor styles */
+trix-editor.form-control {
+  height: auto;
+}
+
+.trix-button-group--file-tools {
+  display: none !important;
+}
+
+.trix-content ol {
+  list-style: auto;
+}
+
+.trix-content ul {
+  list-style: disc;
+}
+
+.trix-content a {
+  @apply text-blue-800 underline;
+}
+
+.static-page-text {
+  @apply p-10;
+}
+
+.capacity-error--display {
+  @apply block;
+}
+
+.capacity-error--hide {
+  @apply hidden;
+}
+
+.page {
+  @apply p-2;
+}
+
+.current {
+  @apply px-4;
+}
+
+ol {
+  list-style: none;
+}
+
+/* Switch toggle styles */
+.switches [type="checkbox"] {
+  position: absolute;
+  left: -9999px;
+  max-width: 150px;
+  width: 95%;
+  margin: 20px auto 0;
+  border-radius: 5px;
+  color: white;
+  background: RoyalBlue;
+}
+
+.switches li {
+  position: relative;
+  counter-increment: switchCounter;
+}
+
+.switches li:not(:last-child) {
+  border-bottom: 1px solid gray;
+}
+
+.switches .label-text {
+  padding-right: 2px;
+}
+
+.switches label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px 8px 10px;
+}
+
+.switches span:last-child {
+  position: relative;
+  width: 50px;
+  height: 22px;
+  border-radius: 15px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.4);
+  background: gray;
+  transition: all 0.3s;
+}
+
+.switches span:last-child::before,
+.switches span:last-child::after {
+  content: "";
+  position: absolute;
+}
+
+.switches span:last-child::before {
+  left: 1px;
+  top: 1px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  z-index: 1;
+  transition: transform 0.3s;
+}
+
+.switches span:last-child::after {
+  top: 50%;
+  right: 8px;
+  width: 12px;
+  height: 12px;
+  transform: translateY(-50%);
+  background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/162656/uncheck-switcher.svg);
+  background-size: 12px 12px;
+}
+
+.switches [type="checkbox"]:checked + label span:last-child {
+  background: green;
+}
+
+.switches [type="checkbox"]:checked + label span:last-child::before {
+  transform: translateX(24px);
+}
+
+.switches [type="checkbox"]:checked + label span:last-child::after {
+  width: 14px;
+  height: 14px;
+  left: 8px;
+  background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/162656/checkmark-switcher.svg);
+  background-size: 14px 14px;
+}
+
+@media screen and (max-width: 600px) {
+  .switches li::before {
+    display: none;
+  }
+}
+
+.checkbox-filter [type="checkbox"],
+.checkbox-filter label {
+  cursor: pointer;
+}
+
+.skiplink {
+  @apply absolute top-0 left-24 -translate-y-full;
+}
+
+.skiplink:focus {
+  @apply translate-y-2 bg-yellow-500 px-2 z-10;
+}
+
+/* Infopanel styles */
+.infopanel--display {
+  @apply block;
+}
+
+.infopanel--hide {
+  @apply hidden;
+}
+
+/* Styles migrated from app/packs/stylesheets/search.sass */
+
+.h-highlights {
+  @apply grid grid-cols-3 gap-x-1 gap-y-2 px-2;
+}
+
+@media (width >= theme(--breakpoint-sm)) {
+  .h-highlights {
+    @apply grid-cols-5;
+  }
+}
+
+@media (width >= theme(--breakpoint-lg)) {
+  .h-highlights {
+    @apply grid-cols-4;
+  }
+}
+
+.h-highlights .h-capacity {
+  @apply col-start-1;
+}
+
+.h-highlights .h-layout {
+  @apply col-start-2;
+}
+
+.h-highlight-item {
+  @apply inline-flex text-sm text-blue-800 whitespace-nowrap items-center font-semibold;
+}
+
+.h-highlight-item svg {
+  @apply h-3 w-3 mr-1 flex-shrink-0;
+}
+
+.h-highlight-item:hover {
+  @apply underline;
+}
+
+@media (width >= theme(--breakpoint-md)) {
+  .h-highlight-item {
+    @apply text-base;
+  }
+  .h-highlight-item svg {
+    @apply h-5 w-5;
+  }
+}
+
+@media (width >= theme(--breakpoint-lg)) {
+  .h-highlight-item {
+    @apply text-sm;
+  }
+  .h-highlight-item svg {
+    @apply h-4 w-4;
+  }
+}
+
+@media (width >= theme(--breakpoint-xl)) {
+  .h-highlight-item {
+    @apply mx-1;
+  }
+  .h-highlight-item svg {
+    @apply h-3 w-3 mr-1;
+  }
+}
+
+.h-no-highlight-item {
+  @apply inline-flex text-sm text-black whitespace-nowrap items-center font-semibold mx-2;
+}
+
+.h-no-highlight-item svg {
+  @apply h-3 w-3 mr-1 flex-shrink-0;
+}
+
+@media (width >= theme(--breakpoint-md)) {
+  .h-no-highlight-item {
+    @apply text-base;
+  }
+  .h-no-highlight-item svg {
+    @apply h-5 w-5;
+  }
+}
+
+@media (width >= theme(--breakpoint-lg)) {
+  .h-no-highlight-item {
+    @apply text-sm;
+  }
+  .h-no-highlight-item svg {
+    @apply h-4 w-4;
+  }
+}
+
+@media (width >= theme(--breakpoint-xl)) {
+  .h-no-highlight-item {
+    @apply mx-1;
+  }
+  .h-no-highlight-item svg {
+    @apply h-3 w-3 mr-1;
+  }
+}
+
+.classroom-row-contact-icon {
+  @apply flex items-center justify-center h-5 w-5 rounded-md flex-shrink-0;
+}
+
+.classroom-row-contact-icon svg {
+  @apply h-3 w-3 fill-current text-white flex-shrink-0;
+}
+
+.classroom-row-contact-items {
+  @apply truncate text-left w-full mt-4;
+}
+
+.classroom-row-contact-item {
+  @apply bg-white rounded-sm py-4 pr-6 pl-2 truncate mt-2;
+}
+
+.classroom-row-contact-item h5 {
+  @apply truncate text-lg leading-tight -mt-1;
+}
+
+.classroom-row-contact-item ul {
+  @apply leading-tight;
+}
+
+.classroom-row-contact-item ul li {
+  @apply font-light leading-loose items-center flex;
+}
+
+.classroom-row-contact-item ul li svg {
+  @apply h-5 w-5 px-1 fill-current flex-shrink-0 mr-1;
+}
+
+@media (width >= theme(--breakpoint-sm)) {
+  .classroom-row-contact-item {
+    @apply mb-1;
+  }
+  .classroom-row-contact-item h5 {
+    @apply text-sm;
+  }
+  .classroom-row-contact-item ul li {
+    @apply text-sm leading-tight;
+  }
+}
+
+.classroom-row-dropdown-toggle {
+  @apply text-sm text-gray-600 font-light inline-flex;
+}
+
+.classroom-row-dropdown-toggle-button {
+  @apply inline-flex;
+}
+
+.classroom-row-dropdown-toggle-button span {
+  @apply justify-center;
+}
+
+.classroom-row-dropdown-toggle-button svg {
+  @apply ml-1 transform rotate-90 fill-current;
+}
+
+.classroom-row-dropdown {
+  @apply pt-2 text-black;
+}
+
+.classroom-row-dropdown-features-section {
+  @apply w-full max-w-2xl;
+}
+
+.classroom-row-dropdown-features-group hr {
+  @apply flex-1 border-t border-blue-600 mt-1 mx-2;
+}
+
+@media (width >= theme(--breakpoint-sm)) {
+  .classroom-row-dropdown-features-group {
+    @apply mr-4;
+  }
+}
+
+.classroom-row-dropdown-top-matter {
+  @apply w-full;
+}
+
+.classroom-row-dropdown-features {
+  @apply grid grid-cols-4 mt-2;
+}
+
+@media (width >= theme(--breakpoint-sm)) {
+  .classroom-row-dropdown-features {
+    @apply grid-cols-3;
+  }
+}
+
+.classroom-row-dropdown-features li {
+  @apply whitespace-nowrap truncate;
+}
+
+.classroom-row-dropdown-features svg {
+  @apply h-4 w-4;
+}
+
+.classroom-row-dropdown-feature {
+  @apply flex items-center truncate mt-1 ml-1 whitespace-nowrap;
+}
+
+.features-header {
+  @apply flex-shrink-0 pr-4 text-sm tracking-wider font-semibold uppercase pt-2;
+}
+
+/* Search form styles */
+.search-by-building-name {
+  @apply block rounded-none rounded-l-md pl-10 text-sm border-gray-300;
+}
+
+.search-by-building-name:focus {
+  @apply ring-blue-500 border-blue-500;
+}
+
+.filters-button {
+  @apply mt-3 ml-4 bg-white rounded-md text-gray-700 inline-flex items-center text-base font-medium;
+}
+
+.filters-button:hover {
+  @apply text-gray-900;
+}
+
+.filters-button:focus {
+  @apply outline-hidden ring-2 ring-offset-2 ring-blue-500;
+}
+
+.characteristics-list {
+  @apply mt-4 space-y-4 mr-6;
+}
+
+.characteristic-checkbox {
+  @apply -m-2 px-2 py-1 flex items-center rounded-sm text-blue-700 transition ease-in-out duration-150 border border-blue-300 bg-blue-100;
+}
+
+.characteristic-checkbox svg {
+  @apply text-blue-600;
+}
+
+.characteristic-checkbox:hover {
+  @apply bg-yellow-100 text-blue-800;
+}
+
+.characteristic-checkbox:hover svg {
+  @apply text-blue-800;
+}
+
+.characteristic-icon {
+  @apply flex-shrink-0 h-5 w-5 text-gray-500 fill-current;
+}
+
+.projection-list {
+  @apply flex flex-wrap space-y-2 max-w-full;
+}
+
+@media (width >= theme(--breakpoint-lg)) {
+  .projection-list {
+    @apply max-w-xl;
+  }
+}
+
+.rounded-checkbox {
+  @apply justify-center mt-2 mx-1 whitespace-nowrap truncate px-2 py-1 flex items-center rounded-2xl text-sm text-blue-700 transition ease-in-out duration-150 border border-blue-400 bg-blue-100;
+}
+
+.rounded-checkbox label {
+  @apply flex flex-row;
+}
+
+.rounded-checkbox label span {
+  @apply ml-1;
+}
+
+.rounded-checkbox svg {
+  @apply h-3 w-3;
+}
+
+.rounded-checkbox:hover {
+  @apply bg-blue-200;
+}
+
+.check-box input[type="checkbox"]:checked + label {
+  @apply bg-blue-500 text-blue-100;
+}
+
+.check-box input[type="checkbox"]:checked + label svg {
+  @apply text-blue-100;
+}
+
+.check-box input[type="checkbox"]:checked + label:hover {
+  @apply bg-blue-400;
+}
+
+.filters-group-heading {
+  @apply text-base font-bold tracking-wide text-gray-900 uppercase border-b border-gray-400 mt-6 pb-1;
+}
+
+.filters-dropdown {
+  @apply min-w-full transform shadow-lg border-b absolute inset-x-0 pb-20 mt-4 bg-gray-50;
+}
+
+.filters-inner {
+  @apply relative inset-0 flex;
+}
+
+.view-all-link {
+  @apply bg-green-400 relative;
+}
+
+.view-all-link a {
+  @apply text-blue-600 p-2;
+}
+
+.view-all-link a:hover {
+  @apply text-blue-800 bg-blue-100 rounded-lg;
+}
+
+.link-to-all-classrooms {
+  @apply absolute bottom-0 right-6 text-blue-600 underline;
+}
+
+/* Choices.js dropdown styles */
+.choices {
+  @apply text-left;
+}
+
+.choices .choices__inner {
+  @apply bg-blue-100 p-0 rounded-sm min-h-0 h-10 border-none;
+}
+
+.choices .choices__inner .choices__input {
+  @apply bg-blue-100 text-blue-800 font-semibold ml-1 mt-2 z-50;
+}
+
+.choices__item {
+  @apply bg-blue-200;
+}
+
+.choices__inner {
+  @apply z-50;
+}
+
+.choices__inner .choices__list .choices__item {
+  @apply bg-blue-700 z-50;
+}
+
+.choices__inner .choices__list .choices__item:hover {
+  @apply bg-blue-800;
+}
+
+/* NoUiSlider styles */
+.filter-by-student-capacaity {
+  @apply w-full mx-auto pr-8 h-auto;
+}
+
+#slider {
+  @apply h-2 mt-12 z-0;
+}
+
+@media (width >= theme(--breakpoint-lg)) {
+  #slider {
+    @apply ml-2 mr-4;
+  }
+}
+
+#slider .noUi-connect {
+  @apply bg-blue-700 h-2 z-0;
+}
+
+#slider .noUi-base {
+  @apply bg-blue-400 z-0;
+}
+
+#slider .noUi-handle {
+  @apply bg-yellow-500 rounded-full h-6 w-6 border-2 border-blue-700 z-0 -mt-1;
+}
+
+#slider .noUi-handle:before,
+#slider .noUi-handle:after {
+  @apply hidden;
+}
+
+#slider .noUi-handle:focus {
+  @apply border-blue-600;
+}
+
+#slider .noUi-tooltip {
+  @apply bg-blue-100 text-blue-800 text-xs rounded-sm w-10 h-6 mb-2 pb-4;
+}
+
+#slider .noUi-tooltip:focus {
+  @apply bg-green-400 outline-hidden;
+}
+
+.sort-otpions-dropdown {
+  @apply bg-blue-400 absolute;
+}
+
+.sort-otpions-inner {
+  @apply relative w-screen max-w-xs right-0;
+}
+
+/* Room panorama styles */
+.room-show-image img {
+  @apply h-48 object-fill sm:h-96;
+}
+
+#panorama {
+  @apply h-96 bg-green-300 object-fill;
+}
+
+#panorama .pnlm-preview-img {
+  @apply bg-size-[360%];
+}
+
+#panorama .pnlm-load-button {
+  @apply bg-black/30  text-center! ;
+}
+
+#panorama .pnlm-load-button p {
+  @apply text-center!  ;
+}
+
+/* Note: application.css sprockets manifest is not imported here.
+   Tailwind CSS is the source of truth for styling. */

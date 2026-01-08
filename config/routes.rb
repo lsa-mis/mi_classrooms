@@ -1,5 +1,3 @@
-require 'sidekiq/web'
-
 Rails.application.routes.draw do
 
   devise_for :users, controllers: {omniauth_callbacks: "users/omniauth_callbacks", sessions: "users/sessions"} do
@@ -26,12 +24,11 @@ Rails.application.routes.draw do
   end
 
   resources :announcements
-  post 'announcements/:id/cancel', to: "announcements#cancel", as: 'announcements_cancel'
 
   get "legacy_crdb" => redirect("https://rooms.lsa.umich.edu")
 
   authenticate :user, lambda { |u| u.email == "dschmura@umich.edu" } do
-    mount Sidekiq::Web => "/sidekiq"
+    mount MissionControl::Jobs::Engine, at: "/jobs"
   end
 
   resources :classrooms, only: [:index, :show]

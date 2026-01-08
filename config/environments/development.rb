@@ -33,7 +33,8 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
   config.active_job.queue_name_prefix = "mi_classrooms_#{Rails.env}"
-  config.active_job.queue_adapter = :sidekiq
+  config.active_job.queue_adapter = :solid_queue
+  config.solid_queue.connects_to = { database: { writing: :queue } }
 
   # letter_opener
   config.action_mailer.delivery_method = :letter_opener_web
