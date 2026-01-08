@@ -2,10 +2,10 @@
 <% if @room.room_panorama.attached? %>
   <div id="panorama"
     data-controller="pannellum"
-    data-pannellum-panoimage=<%= "#{url_for(@room.room_panorama)}" %>
-    data-pannellum-panopreview=<%= "#{url_for(@room.room_panorama.variant(resize_to_limit: [480, 240]).processed)}" %>
+    data-pannellum-panoimage="<%= url_for(@room.room_panorama) %>"
+    data-pannellum-panopreview="<%= url_for(@room.room_panorama.variant(resize_to_limit: [480, 240]).processed) %>"
     role="application"
-    aria-label="360-degree panoramic view of <%= @room.display_name %>. Use arrow keys to pan, plus and minus keys to zoom."
+    aria-label="360-degree panoramic view of <%= h(@room.display_name) %>. Use arrow keys to pan, plus and minus keys to zoom."
     tabindex="0">
   </div>
 <% else %>
