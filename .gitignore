@@ -43,3 +43,6 @@ uploads/
 /config/skylight.yml
 app/assets/builds/tailwind.css
 node_modules
+
+# keep cursor configs out of repo
+.cursor/
