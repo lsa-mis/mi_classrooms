@@ -33,37 +33,25 @@ test:
 staging:
   primary:
     <<: *default
-    database: mi_classrooms_staging
-    username: <%= Rails.application.credentials.STAGING_DB_USERNAME %>
-    password: <%= Rails.application.credentials.STAGING_DB_PASSWORD %>
+    url: <%= ENV["DATABASE_URL"] %>
   queue:
     <<: *default
-    database: mi_classrooms_queue_staging
-    username: <%= Rails.application.credentials.STAGING_DB_USERNAME %>
-    password: <%= Rails.application.credentials.STAGING_DB_PASSWORD %>
+    url: <%= ENV["DATABASE_QUEUE_URL"].presence || ENV["DATABASE_URL"] %>
     migrations_paths: db/queue_migrate
   cable:
     <<: *default
-    database: mi_classrooms_cable_staging
-    username: <%= Rails.application.credentials.STAGING_DB_USERNAME %>
-    password: <%= Rails.application.credentials.STAGING_DB_PASSWORD %>
+    url: <%= ENV["DATABASE_CABLE_URL"].presence || ENV["DATABASE_URL"] %>
     migrations_paths: db/cable_migrate
 
 production:
   primary:
     <<: *default
-    database: mi_classrooms_production
-    username: <%= Rails.application.credentials.PRODUCTION_DB_USERNAME %>
-    password: <%= Rails.application.credentials.PRODUCTION_DB_PASSWORD %>
+    url: <%= ENV["DATABASE_URL"] %>
   queue:
     <<: *default
-    database: mi_classrooms_queue_production
-    username: <%= Rails.application.credentials.PRODUCTION_DB_USERNAME %>
-    password: <%= Rails.application.credentials.PRODUCTION_DB_PASSWORD %>
+    url: <%= ENV["DATABASE_QUEUE_URL"].presence || ENV["DATABASE_URL"] %>
     migrations_paths: db/queue_migrate
   cable:
     <<: *default
-    database: mi_classrooms_cable_production
-    username: <%= Rails.application.credentials.PRODUCTION_DB_USERNAME %>
-    password: <%= Rails.application.credentials.PRODUCTION_DB_PASSWORD %>
+    url: <%= ENV["DATABASE_CABLE_URL"].presence || ENV["DATABASE_URL"] %>
     migrations_paths: db/cable_migrate
