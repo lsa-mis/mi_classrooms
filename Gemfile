@@ -11,6 +11,7 @@ gem 'mutex_m'
 gem 'drb'
 gem 'observer'
 gem 'ostruct'  # Required by net-ldap (ldap_lookup)
+gem 'benchmark'  # Required by lib/tasks/api_update_database.rake
 
 # gem 'annotate', '~> 3.2'  # Commented out - not compatible with Rails 8.0 yet
 gem 'bootsnap', '>= 1.4.3', require: false
