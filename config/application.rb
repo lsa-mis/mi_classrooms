@@ -11,10 +11,6 @@ module MiClassrooms
     # Load the ConnectRequestHandler initializer
     require_relative "initializers/connect_request_handler"
 
-    # remove Turbo from Asset Pipeline precompilation
-    config.after_initialize do
-      config.assets.precompile.delete("turbo")
-    end
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.1
     config.generators do |g|
