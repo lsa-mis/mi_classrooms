@@ -1,7 +1,7 @@
 # RuboCop configuration for the project
 
 AllCops:
-  TargetRubyVersion: 3.3
+  TargetRubyVersion: 4.0
   Exclude:
     - 'bin/**/*'
     - 'db/migrate/**/*'

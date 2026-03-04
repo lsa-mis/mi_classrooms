@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.3.4'
+ruby '4.0.1'
 
 # Rails 8.1
 gem 'rails', '~> 8.1.0'
 
-# Ruby 3.4 compatibility - these gems are being removed from stdlib
+# Ruby 4.0 compatibility - these gems were removed from stdlib
 gem 'mutex_m'
 gem 'drb'
 gem 'observer'
