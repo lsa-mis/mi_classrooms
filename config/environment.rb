@@ -1,6 +1,7 @@
 # Load the Rails application.
 require_relative "application"
 
+require "./lib/um_api"
 require "./lib/auth_token_api"
 require "./lib/buildings_api"
 require "./lib/classroom_api"

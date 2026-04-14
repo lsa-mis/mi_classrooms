@@ -1,12 +1,12 @@
 class ClassroomApi
+  BASE_URL = "https://gw.api.it.umich.edu/um/aa/ClassroomList/v2".freeze
 
   ERROR_CODE_ERR429 = "ERR429"
-  OK_CODE = "200"
   NUMBER_OF_API_CALLS = 400
 
-  def initialize(access_token)
+  def initialize(access_token = nil)
     @buildings_ids = Building.all.pluck(:bldrecnbr)
-    @access_token = access_token
+    @client = UmApi::Connection.new(access_token: access_token, scope: "classrooms")
     @debug = false
     @log = ApiLog.new
   end
@@ -68,7 +68,7 @@ class ClassroomApi
           end
         end
       else
-        @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{result['errorcode']} - #{result['error']} for #{facility_id}"
+        @log.api_logger.debug "add_facility_id_to_classrooms, error: API return: #{result['errorcode']} - #{result['error']}"
         @debug = true
         sleep(61.seconds)
         return @debug
@@ -96,85 +96,20 @@ class ClassroomApi
 
 
   def get_classrooms_list
-    begin
-      result = {'success' => false, 'errorcode' => '', 'error' => '', 'data' => {}}
-      classrooms = []
-      start_index = 0
-      count = 1000
-      next_page = true
-      while next_page do
-        url = URI("https://gw.api.it.umich.edu/um/aa/ClassroomList/v2/Classrooms?$start_index=#{start_index}&$count=#{count}")
-
-        http = Net::HTTP.new(url.host, url.port)
-        http.use_ssl = true
-        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-        request = Net::HTTP::Get.new(url)
-        request["x-ibm-client-id"] = "#{Rails.application.credentials.um_api[:buildings_client_id]}"
-        request["authorization"] = "Bearer #{@access_token}"
-        request["accept"] = 'application/json'
-
-        response = http.request(request)
-        link = response.to_hash["link"].to_s
-        if link.include? "rel=next"
-          start_index += count
-        else
-          next_page = false
-        end
-        response_json = JSON.parse(response.read_body)
-        if response.code == OK_CODE
-          result['success'] = true
-          classrooms += response_json['Classrooms']['Classroom']
-        elsif response_json['errorCode'].present?
-          result['errorcode'] = response_json['errorCode']
-          result['error'] = response_json['errorMessage']
-          next_page = false
-        else 
-          result['errorcode'] = "Unknown error"
-          next_page = false
-        end
-      end
-      result['data'] = classrooms
-    rescue StandardError => e
-      result['errorcode'] = "Exception"
-      result['error'] = e.message
-    end
-    return result
+    strip_headers(
+      @client.paginated_get(
+        "#{BASE_URL}/Classrooms",
+        collection_path: %w[Classrooms Classroom]
+      )
+    )
   end
 
   def get_classroom_info(facility_id)
-    begin
-      result = {'success' => false, 'errorcode' => '', 'error' => '', 'data' => {}}
-      @debug = false
-      
-      url = URI("https://gw.api.it.umich.edu/um/aa/ClassroomList/v2/Classrooms/#{facility_id}")
+    @debug = false
+    response = @client.get_json("#{BASE_URL}/Classrooms/#{facility_id}")
+    return strip_headers(response) unless response["success"]
 
-      http = Net::HTTP.new(url.host, url.port)
-      http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-      request = Net::HTTP::Get.new(url)
-      request["x-ibm-client-id"] = "#{Rails.application.credentials.um_api[:buildings_client_id]}"
-      request["authorization"] = "Bearer #{@access_token}"
-      request["accept"] = 'application/json'
-
-      response = http.request(request)
-      response_json = JSON.parse(response.read_body)
-
-      if response.code == OK_CODE
-        result['success'] = true
-        result['data'] = response_json['Classrooms']
-      elsif response_json['errorCode'].present?
-        result['errorcode'] = response_json['errorCode']
-        result['error'] = response_json['errorMessage']
-      else 
-        result['errorcode'] = "Unknown error"
-      end
-    rescue StandardError => e
-      result['errorcode'] = "Exception"
-      result['error'] = e.message
-    end
-    return result
+    success_result(response["data"]["Classrooms"])
   end
 
   def update_all_classroom_characteristics
@@ -272,38 +207,11 @@ class ClassroomApi
   end
 
   def get_classroom_characteristics(facility_id)
-    begin
-      result = {'success' => false, 'errorcode' => '', 'error' => '', 'data' => {}}
-      @debug = false
-      url = URI("https://gw.api.it.umich.edu/um/aa/ClassroomList/v2/Classrooms/#{facility_id}/Characteristics")
+    @debug = false
+    response = @client.get_json("#{BASE_URL}/Classrooms/#{facility_id}/Characteristics")
+    return strip_headers(response) unless response["success"]
 
-      http = Net::HTTP.new(url.host, url.port)
-      http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-      request = Net::HTTP::Get.new(url)
-      request["x-ibm-client-id"] = "#{Rails.application.credentials.um_api[:buildings_client_id]}"
-      request["authorization"] = "Bearer #{@access_token}"
-      request["accept"] = 'application/json'
-
-      response = http.request(request)
-      response_json = JSON.parse(response.read_body)
-
-      if response.code == OK_CODE
-        result['success'] = true
-        result['data'] = response_json['Classrooms']
-      elsif response_json['errorCode'].present?
-        result['errorcode'] = response_json['errorCode']
-        result['error'] = response_json['errorMessage']
-      else 
-        result['errorcode'] = "Unknown error"
-      end
-    rescue StandardError => e
-      result['errorcode'] = "Exception"
-      result['error'] = e.message
-    end
-    return result
-
+    success_result(response["data"]["Classrooms"])
   end
 
   def update_all_classroom_contacts
@@ -388,51 +296,28 @@ class ClassroomApi
   end
 
   def get_classroom_contact(facility_id)
-    begin
-      result = {'success' => false, 'errorcode' => '', 'error' => '', 'data' => {}}
-      url = URI("https://gw.api.it.umich.edu/um/aa/ClassroomList/v2/Classrooms/#{facility_id}/Contacts")
-      http = Net::HTTP.new(url.host, url.port)
-      http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    response = @client.get_json("#{BASE_URL}/Classrooms/#{facility_id}/Contacts")
+    return strip_headers(response) unless response["success"]
 
-      request = Net::HTTP::Get.new(url)
-      request["x-ibm-client-id"] = "#{Rails.application.credentials.um_api[:buildings_client_id]}"
-      request["authorization"] = "Bearer #{@access_token}"
-      request["accept"] = 'application/json'
-
-      response = http.request(request)
-      response_json = JSON.parse(response.read_body)
-
-      if response.code == OK_CODE
-        result['success'] = true
-        result['data'] = response_json['Classrooms']
-      elsif response_json['errorCode'].present?
-        result['errorcode'] = response_json['errorCode']
-        result['error'] = response_json['errorMessage']
-      else 
-        result['errorcode'] = "Unknown error"
-      end
-    rescue StandardError => e
-      result['errorcode'] = "Exception"
-      result['error'] = e.message
-    end
-    return result
+    success_result(response["data"]["Classrooms"])
   end
 
   def get_classroom_meetings(start_date, end_date)
-    url = URI("https://gw.api.it.umich.edu/um/aa/ClassroomList/v2/Classrooms/#{@rmrecnbr}/Meetings?startDate=#{start_date}&endDate=#{end_date}")
-    http = Net::HTTP.new(url.host, url.port)
-    http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    response = @client.get_json(
+      "#{BASE_URL}/Classrooms/#{@rmrecnbr}/Meetings",
+      query: { startDate: start_date, endDate: end_date }
+    )
+    response["data"]
+  end
 
-    request = Net::HTTP::Get.new(url)
-    request["x-ibm-client-id"] = "#{Rails.application.credentials.um_api[:buildings_client_id]}"
-    request["authorization"] = "Bearer #{@access_token}"
-    request["accept"] = 'application/json'
+  private
 
-    response = http.request(request)
-    return JSON.parse(response.read_body)
+  def success_result(data)
+    { "success" => true, "errorcode" => "", "error" => "", "data" => data }
+  end
 
+  def strip_headers(result)
+    result.except("headers")
   end
 
 end

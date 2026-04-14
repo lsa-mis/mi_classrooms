@@ -13,7 +13,6 @@ require 'benchmark'
 
 desc "This will update Classrooms database using APIs"
 task api_update_database: :environment do
-  
   log = ApiLog.new
   errors = []
   status_report = []
@@ -21,237 +20,119 @@ task api_update_database: :environment do
   # @debug is true if there are errors from API calls or database queries
   @debug = false
   task_result = TaskResultLog.new
-  
+
+  write_result = lambda do |extra_message = nil|
+    status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
+    message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
+    message += extra_message if extra_message.present?
+    task_result.update_log(message, @debug)
+  end
+
+  ensure_token = lambda do |scope, action_name, error_heading|
+    result = AuthTokenApi.new(scope).get_auth_token
+    return true if result["success"]
+
+    @debug = true
+    log.api_logger.debug "get access token for #{action_name}, error: No access_token - #{result['error']}"
+    errors << "No access_token. Error: #{result['error']}"
+    write_result.call("#{error_heading} errors:\r\n" + errors.join("\r\n"))
+    false
+  end
+
+  run_phase = lambda do |time_label:, failure_label:, log_file:, api:, method_name:, after_success: nil|
+    time = Benchmark.measure do
+      @debug = api.public_send(method_name)
+      after_success.call unless @debug || after_success.nil?
+    end
+
+    puts "#{time_label} Time: #{time.real.round(2)} seconds"
+    task_time += (time.real / 60) % 60
+    status_report << "#{time_label} Time: #{time.real.round(2)} seconds"
+    if @debug
+      status_report << "#{failure_label} See the log file #{log_file} for errors"
+      write_result.call
+      false
+    else
+      status_report << " "
+      true
+    end
+  end
+
   #################################################
   # update campus list
   # if campus is in the app db, but not in the API, a warning will be added to the log file
-  # 
-  auth_token = AuthTokenApi.new("buildings")
-  # auth_token "expires_in":3600 seconds
-  result = auth_token.get_auth_token
-  if result['success']
-    access_token = result['access_token']
-    total_time = 0
-    api = BuildingsApi.new(access_token)
-  else
-    @debug = true
-    log.api_logger.debug "get access token for update_campus_list, error: No access_token - #{result['error']}"
-    errors << "No access_token. Error: " + result['error']
-    status_report << "Total time: #{task_time.round(2)} minutes"
-    message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update Campuses errors:\r\n" + errors.join("\r\n")
-    task_result.update_log(message, @debug)
+  unless ensure_token.call("buildings", "update_campus_list", "Update Campuses")
     exit
   end
-  
-  time = Benchmark.measure {
-    @debug = api.update_campus_list
-  }
-  puts "Update campus list Time: #{time.real.round(2)} seconds"
-  task_time += (time.real / 60) % 60
-  status_report << "Update campus list Time: #{time.real.round(2)} seconds"
-  if @debug
-    status_report << "Campus updates failed. See the log file #{Rails.root}/log/api_nightly_update_db.log for errors"
-    status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
-    message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
-    task_result.update_log(message, @debug)
-    exit
-  end
-  status_report << " "
+
+  buildings_api = BuildingsApi.new
+  exit unless run_phase.call(
+    time_label: "Update campus list",
+    failure_label: "Campus updates failed.",
+    log_file: "#{Rails.root}/log/api_nightly_update_db.log",
+    api: buildings_api,
+    method_name: :update_campus_list
+  )
 
   #################################################
   # update buildings
   # if building is in the app db, but not in the API, a warning will be added to the log file
-  # 
-  total_time += time.real.to_i
-  # check auth_token expiration time
-  if total_time > 3600
-    auth_token = AuthTokenApi.new("buildings")
-    result = auth_token.get_auth_token
-    if result['success']
-      total_time = 0
-      access_token = result['access_token']
-      api = BuildingsApi.new(access_token)
-    else
-      @debug = true
-      log.api_logger.debug "get access token for update_all_buildings, error: No access_token - #{result['error']}"
-      errors << "No access_token. Error: " + result['error']
-      status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
-      message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update buildings errors:\r\n" + errors.join("\r\n")
-      task_result.update_log(message, @debug)
-      exit
-    end
-  end
-  
-  api = BuildingsApi.new(access_token)
-  time = Benchmark.measure {
-    @debug = api.update_all_buildings
-  }
-
-  puts "Update buildings Time: #{time.real.round(2)} seconds"
-  task_time += (time.real / 60) % 60
-  status_report << "Update buildings Time: #{time.real.round(2)} seconds"
-  if @debug
-    status_report << "Buildings updates failed. See the log file #{Rails.root}/log/api_nightly_update_db.log for errors"
-    status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
-    message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
-    task_result.update_log(message, @debug)
-    exit
-  end
-  status_report << " "
+  exit unless run_phase.call(
+    time_label: "Update buildings",
+    failure_label: "Buildings updates failed.",
+    log_file: "#{Rails.root}/log/api_nightly_update_db.log",
+    api: buildings_api,
+    method_name: :update_all_buildings
+  )
   sleep(61.seconds)
 
   #################################################
   # update rooms
-  # 
-  total_time += time.real.to_i
-  if total_time > 3600
-    auth_token = AuthTokenApi.new("buildings")
-    result = auth_token.get_auth_token
-    if result['success']
-      puts "token success"
-      total_time = 0
-      access_token = result['access_token']
-      api = BuildingsApi.new(access_token)
-    else
-      @debug = true
-      log.api_logger.debug "get access token for update_rooms, error: No access_token - #{result['error']}"
-      errors << "No access_token. Error: " + result['error']
-      status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
-      message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update rooms errors:\r\n" + errors.join("\r\n")
-      task_result.update_log(message, @debug)
-      exit
-    end
-  end
+  exit unless run_phase.call(
+    time_label: "Update Rooms",
+    failure_label: "Rooms updates failed.",
+    log_file: "#{Rails.root}/log/#{Date.today}_room_api.log",
+    api: buildings_api,
+    method_name: :update_rooms
+  )
 
-  time = Benchmark.measure {
-    # puts "lets update rooms"
-    @debug = api.update_rooms
-  }
-  puts "Update Rooms Time: #{time.real.round(2)} seconds"
-  task_time += (time.real / 60) % 60
-  status_report << "Update Rooms Time: #{time.real.round(2)} seconds"
-  if @debug
-    status_report << "Rooms updates failed. See the log file #{Rails.root}/log/#{Date.today}_room_api.log for errors"
-    status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
-    message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
-    task_result.update_log(message, @debug)
-    exit
-  end
-  status_report << " "
-  
   ################################################
   # add facility_id to classrooms and update instructional_seating_count
-  # 
-  auth_token = AuthTokenApi.new("classrooms")
-  result = auth_token.get_auth_token
-  if result['success']
-    total_time = 0
-    access_token = result['access_token']
-    api = ClassroomApi.new(access_token)
-  else
-    @debug = true
-    log.api_logger.debug "get access token for add_facility_id_to_classrooms, error: No access_token - #{result['error']}"
-    errors << "No access_token. Error: " + result['error']
-    status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
-    message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Add facility_id to Classrooms errors:\r\n" + errors.join("\r\n")
-    task_result.update_log(message, @debug)
+  unless ensure_token.call("classrooms", "add_facility_id_to_classrooms", "Add facility_id to Classrooms")
     exit
   end
 
-  time = Benchmark.measure {
-    @debug = api.add_facility_id_to_classrooms
-  }
-  puts "Add FacilityID to Classrooms Time: #{time.real.round(2)} seconds"
-  task_time += (time.real / 60) % 60
-  status_report << "Add FacilityID for classroom Time: #{time.real.round(2)} seconds"
-  if @debug
-    status_report << "Add FacilityID to Classroom updates failed. See the log file #{Rails.root}/log/api_nightly_update_db.log for errors"
-    status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
-    message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
-    task_result.update_log(message, @debug)
-    exit
-  end
-  status_report << " "
+  classroom_api = ClassroomApi.new
+  exit unless run_phase.call(
+    time_label: "Add FacilityID to Classrooms",
+    failure_label: "Add FacilityID to Classroom updates failed.",
+    log_file: "#{Rails.root}/log/api_nightly_update_db.log",
+    api: classroom_api,
+    method_name: :add_facility_id_to_classrooms
+  )
   sleep(61.seconds)
 
   #################################################
   # update classrooms characteristics
-  # 
-  total_time += time.real.to_i
-  if total_time > 3600
-    auth_token = AuthTokenApi.new("classrooms")
-    result = auth_token.get_auth_token
-    if result['success']
-      total_time = 0
-      access_token = result['access_token']
-      api = ClassroomApi.new(access_token)
-    else
-      @debug = true
-      log.api_logger.debug "get access token for update_all_classroom_characteristics, error: No access_token - #{result['error']}"
-      errors << "No access_token. Error: " + result['error']
-      status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
-      message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update Classroom Characteristics errors:\r\n" + errors.join("\r\n")
-      task_result.update_log(message, @debug)
-      exit
-    end
-  end
-
-  time = Benchmark.measure {
-    @debug = api.update_all_classroom_characteristics
-    UpdateRoomCharacteristicsArrayJob.perform_now unless @debug
-  }
-  puts "Update classroom characteristics Time: #{time.real.round(2)} seconds"
-  task_time += (time.real / 60) % 60
-  status_report << "Update classroom characteristics Time: #{time.real.round(2)} seconds"
-  if @debug
-    status_report << "Classroom Characteristics updates failed. See the log file #{Rails.root}/log/api_nightly_update_db.log for errors"
-    status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
-    message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
-    task_result.update_log(message, @debug)
-    exit
-  end
-  status_report << " "
+  exit unless run_phase.call(
+    time_label: "Update classroom characteristics",
+    failure_label: "Classroom Characteristics updates failed.",
+    log_file: "#{Rails.root}/log/api_nightly_update_db.log",
+    api: classroom_api,
+    method_name: :update_all_classroom_characteristics,
+    after_success: -> { UpdateRoomCharacteristicsArrayJob.perform_now }
+  )
   sleep(61.seconds)
-  
+
   #################################################
   # update classrooms contacts
-  # 
-  total_time += time.real.to_i
-  if total_time > 3600
-    auth_token = AuthTokenApi.new("classrooms")
-    result = auth_token.get_auth_token
-    if result['success']
-      total_time = 0
-      access_token = result['access_token']
-      api = ClassroomApi.new(access_token)
-    else
-      @debug = true
-      log.api_logger.debug "get access token for update_all_classroom_contacts, error: No access_token - #{result['error']}"
-      errors << "No access_token. Error: " + result['error']
-      status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
-      message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n" + "Update classrooms contacts errors:\r\n" + errors.join("\r\n")
-      task_result.update_log(message, @debug)
-      exit
-    end
-  end
+  exit unless run_phase.call(
+    time_label: "Update classroom contacts",
+    failure_label: "Classroom Contacts updates failed.",
+    log_file: "#{Rails.root}/log/api_nightly_update_db.log",
+    api: classroom_api,
+    method_name: :update_all_classroom_contacts
+  )
 
-  time = Benchmark.measure {
-    @debug = api.update_all_classroom_contacts
-  }
-  puts "Update classroom contacts Time: #{time.real.round(2)} seconds"
-  task_time += (time.real / 60) % 60
-  status_report << "Update classroom contacts Time: #{time.real.round(2)} seconds"
-  if @debug
-    status_report << "Classroom Contacts updates failed. See the log file #{Rails.root}/log/api_nightly_update_db.log for errors"
-    status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
-    message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
-    task_result.update_log(message, @debug)
-    exit
-  end
-  status_report << " "
-
-  status_report << "\r\n\r\nTotal time: #{task_time.round(2)} minutes"
-  message = "Time report:\r\n" + status_report.join("\r\n") + "\r\n\r\n"
-  task_result.update_log(message, @debug)
-  
+  write_result.call
 end

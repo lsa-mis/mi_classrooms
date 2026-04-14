@@ -1,38 +1,24 @@
 class DepartmentApi
+  BASE_URL = "https://gw.api.it.umich.edu/um/bf/Department/v2".freeze
 
-  def initialize(access_token)
-    @result = {'success' => false, 'errorcode' => '', 'error' => '', 'data' => {}}
-    @access_token = access_token
+  def initialize(access_token = nil)
+    @client = UmApi::Connection.new(access_token: access_token, scope: "department")
   end
 
   def get_departments_info(dept_name)
-    begin 
-      url = URI("https://gw.api.it.umich.edu/um/bf/Department/v2/DeptData?DeptDescription=#{dept_name}")
+    response = @client.get_json("#{BASE_URL}/DeptData", query: { DeptDescription: dept_name })
+    return response unless response["success"]
 
-      http = Net::HTTP.new(url.host, url.port)
-      http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    success_result(response["data"]["DepartmentList"])
+  end
 
-      request = Net::HTTP::Get.new(url)
-      request["x-ibm-client-id"] = "#{Rails.application.credentials.um_api[:buildings_client_id]}"
-      request["authorization"] = "Bearer #{@access_token}"
-      request["accept"] = 'application/json'
+  def get_all_departments_info
+    @client.paginated_get("#{BASE_URL}/DeptData", collection_path: %w[DepartmentList DeptData])
+  end
 
-      response = http.request(request)
-      response_json = JSON.parse(response.read_body)
-      if response.code == "200"
-        @result['success'] = true
-        @result['data'] = response_json['DepartmentList']
-      elsif response_json['errorCode'].present?
-        @result['errorcode'] = response_json['errorCode']
-        @result['error'] = response_json['errorMessage']
-      else 
-        @result['errorcode'] = "Unknown error"
-      end
-    rescue StandardError => e
-      @result['errorcode'] = "Exception"
-      @result['error'] = e.message
-    end
-    return @result
+  private
+
+  def success_result(data)
+    { "success" => true, "errorcode" => "", "error" => "", "data" => data }
   end
 end
