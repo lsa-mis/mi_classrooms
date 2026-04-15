@@ -33,25 +33,25 @@ test:
 staging:
   primary:
     <<: *default
-    url: <%= ENV["DATABASE_URL"] %>
+    url: <%= ENV.fetch("DATABASE_URL") %>
   queue:
     <<: *default
-    url: <%= ENV["DATABASE_QUEUE_URL"].presence || ENV["DATABASE_URL"] %>
+    url: <%= ENV.fetch("DATABASE_QUEUE_URL", ENV.fetch("DATABASE_URL")) %>
     migrations_paths: db/queue_migrate
   cable:
     <<: *default
-    url: <%= ENV["DATABASE_CABLE_URL"].presence || ENV["DATABASE_URL"] %>
+    url: <%= ENV.fetch("DATABASE_CABLE_URL", ENV.fetch("DATABASE_URL")) %>
     migrations_paths: db/cable_migrate
 
 production:
   primary:
     <<: *default
-    url: <%= ENV["DATABASE_URL"] %>
+    url: <%= ENV.fetch("DATABASE_URL") %>
   queue:
     <<: *default
-    url: <%= ENV["DATABASE_QUEUE_URL"].presence || ENV["DATABASE_URL"] %>
+    url: <%= ENV.fetch("DATABASE_QUEUE_URL", ENV.fetch("DATABASE_URL")) %>
     migrations_paths: db/queue_migrate
   cable:
     <<: *default
-    url: <%= ENV["DATABASE_CABLE_URL"].presence || ENV["DATABASE_URL"] %>
+    url: <%= ENV.fetch("DATABASE_CABLE_URL", ENV.fetch("DATABASE_URL")) %>
     migrations_paths: db/cable_migrate
