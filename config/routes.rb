@@ -3,6 +3,10 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {omniauth_callbacks: "users/omniauth_callbacks", sessions: "users/sessions"} do
     delete 'sign_out', :to => 'users/sessions#destroy', :as => :destroy_user_session
   end
+  # Non-production test login endpoint for local/staging validation without IdP callback changes.
+  unless Rails.env.production?
+    get 'test_login', to: 'users/test_sessions#show', as: :test_login
+  end
   resources :rooms do
     resources :notes, module: :rooms
   end

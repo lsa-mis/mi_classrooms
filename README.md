@@ -8,6 +8,28 @@
 - omniauth-SAML
 - ldap_lookup used to gather user information (especially group affiliation for authorization)
 
+### Non-production test login
+
+When SAML/IdP callback targets are controlled externally (for example, University auth callbacks pointing to another server), you can enable a temporary test login in non-production environments:
+
+```sh
+ENABLE_TEST_LOGIN=true \
+TEST_LOGIN_TOKEN=<choose-a-secret-token> \
+TEST_LOGIN_EMAIL=<your-umich-email> \
+bin/rails server
+```
+
+Then visit:
+
+```text
+/test_login?token=<choose-a-secret-token>
+```
+
+Optional:
+
+- `TEST_LOGIN_GROUPS=mi-classrooms-admin-staging,mi-classrooms-non-admin-staging` to control role/group behavior.
+- If `TEST_LOGIN_GROUPS` is omitted, the login defaults to admin for the current non-production environment.
+
 ## Background Jobs
 
 - SolidQueue (PostgreSQL-backed)
