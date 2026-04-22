@@ -1,7 +1,7 @@
 class UpdateRoomCharacteristicsArrayJob < ApplicationJob
   queue_as :default
 
-  def perform(*args)
+  def perform(*)
     # Do something later
     update_room_characteristics_array
 
@@ -11,6 +11,8 @@ class UpdateRoomCharacteristicsArrayJob < ApplicationJob
     rmrecnbrs = RoomCharacteristic.pluck(:rmrecnbr).uniq
     rmrecnbrs.each do |rmrecnbr|
       room = Room.find_by(rmrecnbr: rmrecnbr)
+      next unless room
+
       chars = RoomCharacteristic.where(rmrecnbr: rmrecnbr).pluck(:chrstc_descrshort).uniq.compact.sort
 
       room.characteristics = chars
