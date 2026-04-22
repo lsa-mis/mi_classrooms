@@ -14,9 +14,11 @@ class ApplicationController < ActionController::Base
   end
 
   def set_redirection_url
-    unless user_signed_in?
-      $baseURL = request.fullpath
-    end
+    return if user_signed_in?
+    return unless request.get?
+    return unless request.format.html?
+
+    store_location_for(:user, request.fullpath)
   end
 
   private
@@ -41,11 +43,19 @@ class ApplicationController < ActionController::Base
   end
 
   def set_characteristics_array
-    # create array of room cahracteristics to use in filters
+    max_updated = RoomCharacteristic.maximum(:updated_at)
+    cache_key = ["v1", "room_characteristics_filter_hash", max_updated]
+    @all_characteristics_array = Rails.cache.fetch(cache_key, expires_in: 12.hours) do
+      build_room_characteristics_filter_hash
+    end
+  end
+
+  def build_room_characteristics_filter_hash
+    # create array of room characteristics to use in filters
     characteristics_all = RoomCharacteristic.all.pluck(:chrstc_descr, :chrstc_descrshort).uniq
-    characteristics_all.delete_if {|x| x.include?(nil)}
+    characteristics_all.delete_if { |x| x.include?(nil) }
     characteristics_all = characteristics_all.sort
-    @all_characteristics_array = {}
+    grouped = {}
     category_prev = ""
     other = {}
     team = {}
@@ -55,17 +65,16 @@ class ApplicationController < ActionController::Base
       next if item[0]["16mm Film(Movies)"]
       filter_key = item[1]
       if item[0][":"]
-        category = item[0].slice(0, item[0].index(': '))
+        category = item[0].slice(0, item[0].index(": "))
         next if category["Wheelchair"]
-        # value = item[0].sub(/.*?:/, '').lstrip
-        value = item[0].partition(': ').last
+        value = item[0].partition(": ").last
         if value.downcase["team"]
           team.merge!(filter_key => value)
-        else 
+        else
           if category == category_prev
-            @all_characteristics_array[category].merge!(filter_key => value)
-          else 
-            @all_characteristics_array.merge!(category => { filter_key => value })
+            grouped[category][filter_key] = value
+          else
+            grouped[category] = {filter_key => value}
           end
           category_prev = category
         end
@@ -73,9 +82,8 @@ class ApplicationController < ActionController::Base
         other.merge!(filter_key => item[0])
       end
     end
-    @all_characteristics_array.merge!("Team Based Learning" => team)
-    @all_characteristics_array.merge!("Other" => other)
-
+    grouped["Team Based Learning"] = team
+    grouped["Other"] = other
+    grouped
   end
-
 end

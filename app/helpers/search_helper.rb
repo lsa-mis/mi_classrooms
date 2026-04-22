@@ -1,5 +1,4 @@
 module SearchHelper
-
   ROOM_CHARACTERISTIC_ICONS = {
     "AssistLis" => "assistive-listening-systems",
     "AudSeat" => "chair",
@@ -55,40 +54,29 @@ module SearchHelper
   def is_checked?(values)
     if params[:room_characteristics]
       values.each do |value|
-        params[:room_characteristics].each_value { |k| k }.flatten(2).include?  (value)
+        params[:room_characteristics].each_value { |k| k }.flatten(2).include?(value)
       end
     end
   end
-
 
   def capacity_slider_minimum
     if params[:min_capacity]
-      if params[:min_capacity]
-        params[:min_capacity]
-      else
-        1
-      end
-      else
+      params[:min_capacity] || 1
+    else
       1
     end
   end
+
   def capacity_slider_maximum
     if params[:building_name]
-      if params[:max_capacity]
-        params[:max_capacity]
-      else
-        600
-      end
+      params[:max_capacity] || 600
     else
       600
     end
   end
 
   def room_characteristic_icon(room_characteristic)
-    if ROOM_CHARACTERISTIC_ICONS[room_characteristic.chrstc_descrshort]
-      "#{ROOM_CHARACTERISTIC_ICONS[room_characteristic.chrstc_descrshort]}"
-    else
-      "#{ROOM_CHARACTERISTIC_ICONS['Default']}"
-    end
+    ROOM_CHARACTERISTIC_ICONS[room_characteristic.chrstc_descrshort] ||
+      ROOM_CHARACTERISTIC_ICONS["Default"]
   end
 end

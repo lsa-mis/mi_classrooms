@@ -30,7 +30,8 @@
 #
 class Room < ApplicationRecord
   include PgSearch::Model
-  self.primary_key = 'rmrecnbr'
+
+  self.primary_key = "rmrecnbr"
   extend OrderAsSpecified
 
   belongs_to :building, foreign_key: :building_bldrecnbr
@@ -57,13 +58,13 @@ class Room < ApplicationRecord
   pg_search_scope(
     :with_building_name,
     associated_against: {
-      building: { name: 'A',
-                  nick_name: 'B',
-                  abbreviation: 'C' }
+      building: {name: "A",
+                 nick_name: "B",
+                 abbreviation: "C"}
     },
     using: {
       tsearch: {
-        dictionary: 'simple',
+        dictionary: "simple",
         prefix: true,
         any_word: false
 
@@ -76,7 +77,7 @@ class Room < ApplicationRecord
     against: [:characteristics],
     using: {
       tsearch: {
-        dictionary: 'simple',
+        dictionary: "simple",
         prefix: false,
         any_word: false
       }
@@ -88,7 +89,7 @@ class Room < ApplicationRecord
     against: [:dept_group_description],
     using: {
       tsearch: {
-        dictionary: 'english',
+        dictionary: "english",
         prefix: true,
         any_word: false
       }
@@ -96,19 +97,19 @@ class Room < ApplicationRecord
   )
 
   scope :classrooms, lambda {
-    where(rmtyp_description: ['Classroom']).where.not(facility_code_heprod: nil).where('instructional_seating_count > ?', 1)
+    where(rmtyp_description: ["Classroom"]).where.not(facility_code_heprod: nil).where("instructional_seating_count > ?", 1)
   }
 
   scope :classrooms_inactive, lambda {
-    where(rmtyp_description: ['Classroom'], visible: false).where.not(facility_code_heprod: nil).where('instructional_seating_count > ?', 1)
+    where(rmtyp_description: ["Classroom"], visible: false).where.not(facility_code_heprod: nil).where("instructional_seating_count > ?", 1)
   }
 
   scope :classroom_labs, lambda {
-    where(rmtyp_description: ['Class Laboratory'])
+    where(rmtyp_description: ["Class Laboratory"])
   }
 
   scope :classrooms_including_labs, lambda {
-    where(rmtyp_description: ['Classroom', 'Class Laboratory'])
+    where(rmtyp_description: ["Classroom", "Class Laboratory"])
   }
 
   after_commit :generate_thumbnails, on: %i[create update], if: :room_image_attached?
@@ -117,7 +118,7 @@ class Room < ApplicationRecord
     if nickname.present?
       "#{facility_code_heprod} - #{nickname}"
     else
-      "#{facility_code_heprod}"
+      facility_code_heprod.to_s
     end
   end
 
@@ -127,13 +128,13 @@ class Room < ApplicationRecord
     end
 
     [room_panorama, room_image, room_layout, gallery_image1, gallery_image2, gallery_image3, gallery_image4,
-     gallery_image5].compact.each do |image|
+      gallery_image5].compact.each do |image|
       next unless image.attached?
 
-      errors.add(image.name, 'is too big') unless image.blob.byte_size <= 10.megabyte
+      errors.add(image.name, "is too big") unless image.blob.byte_size <= 10.megabyte
 
-      acceptable_types = ['image/png', 'image/jpeg', 'image/webp', 'application/pdf']
-      errors.add(image.name, 'incorrect file type') unless acceptable_types.include?(image.content_type)
+      acceptable_types = ["image/png", "image/jpeg", "image/webp", "application/pdf"]
+      errors.add(image.name, "incorrect file type") unless acceptable_types.include?(image.content_type)
     end
   end
 

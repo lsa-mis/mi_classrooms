@@ -44,7 +44,19 @@ export default class extends Controller {
   }
 
   clearFilters() {
-    var url = window.location.pathname
-    Turbo.visit(url)
+    const url = window.location.pathname
+    const focusFirstControl = () => {
+      requestAnimationFrame(() => {
+        const first = this.formTarget.querySelector("select:not([disabled]), input:not([type=\"hidden\"])")
+        first?.focus({ preventScroll: true })
+      })
+    }
+
+    const visit = Turbo.visit(url)
+    if (visit && typeof visit.then === "function") {
+      visit.then(focusFirstControl)
+    } else {
+      focusFirstControl()
+    }
   }
 }

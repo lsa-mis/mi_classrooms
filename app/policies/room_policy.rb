@@ -1,5 +1,4 @@
 class RoomPolicy < ApplicationPolicy
-
   def index?
     user_in_non_admin_group?
   end
@@ -16,4 +15,7 @@ class RoomPolicy < ApplicationPolicy
     user.admin
   end
 
+  def toggle_visible?
+    user.admin
+  end
 end

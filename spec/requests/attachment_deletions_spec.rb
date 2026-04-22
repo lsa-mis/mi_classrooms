@@ -40,7 +40,7 @@ RSpec.describe "Attachment deletions", type: :request do
     end
 
     it "rejects attachment deletion" do
-      get delete_file_path(attachment.id)
+      delete delete_file_path(attachment.id)
 
       expect(response).to redirect_to(about_path)
       expect(flash[:alert]).to eq("You are not authorized to perform this action.")
@@ -59,7 +59,7 @@ RSpec.describe "Attachment deletions", type: :request do
     end
 
     it "purges the attachment" do
-      get delete_file_path(attachment.id)
+      delete delete_file_path(attachment.id)
 
       expect(response).to redirect_to(rooms_path)
       expect(room.reload.room_image).not_to be_attached

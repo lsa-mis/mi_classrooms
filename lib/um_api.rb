@@ -36,7 +36,7 @@ module UmApi
       return token_result(cached_token[:access_token]) if token_valid?(cached_token)
 
       refresh(scope_key)
-    rescue StandardError => e
+    rescue => e
       failure_result(e.inspect)
     end
 
@@ -87,7 +87,7 @@ module UmApi
     end
 
     def token_result(access_token)
-      { "success" => true, "error" => "", "access_token" => access_token }
+      {"success" => true, "error" => "", "access_token" => access_token}
     end
 
     def failure_result(error)
@@ -133,7 +133,7 @@ module UmApi
       )
     end
 
-    def paginated_get(url, query: {}, collection_path:)
+    def paginated_get(url, collection_path:, query: {})
       normalized_query = normalize_query(query)
       page_size = normalized_query.delete("$count").to_i
       page_size = DEFAULT_PAGE_SIZE if page_size <= 0
@@ -184,7 +184,7 @@ module UmApi
           response.to_hash
         )
       end
-    rescue StandardError => e
+    rescue => e
       failure_result("Exception", e.message)
     end
 
@@ -205,8 +205,11 @@ module UmApi
 
     def http_for(uri)
       http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = uri.scheme == "https"
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      if uri.scheme == "https"
+        http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+        http.min_version = OpenSSL::SSL::TLS1_2_VERSION if defined?(OpenSSL::SSL::TLS1_2_VERSION)
+      end
       http
     end
 

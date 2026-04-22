@@ -64,13 +64,57 @@ RSpec.describe "Rooms", type: :request do
     end
 
     it "filters rooms by classroom name for an authenticated viewer" do
-      get rooms_path, params: { classroom_name: "USB 101" }
+      get rooms_path, params: {classroom_name: "USB 101"}
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("1 Room")
       expect(response.body).to include("USB101")
       expect(response.body).to include("Classroom: *USB 101*")
       expect(response.body).not_to include("USB202")
+    end
+
+    it "filters rooms by minimum instructional seating" do
+      get rooms_path, params: {min_capacity: "50"}
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("USB202")
+      expect(response.body).not_to include("USB101")
+    end
+  end
+
+  describe "POST /rooms/:id/toggle_visible" do
+    it "rejects viewers" do
+      post toggle_visible_room_path(matching_room)
+
+      expect(response).to redirect_to(about_path)
+      expect(matching_room.reload.visible).to be(true)
+    end
+
+    context "when signed in as an admin" do
+      before do
+        matching_room.update!(visible: true)
+        allow_any_instance_of(ApplicationController).to receive(:set_membership) do |controller|
+          next unless controller.current_user
+
+          controller.current_user.membership = ["mi-classrooms-admin-staging"]
+          controller.current_user.admin = true
+        end
+      end
+
+      it "toggles room visibility" do
+        post toggle_visible_room_path(matching_room)
+
+        expect(response).to redirect_to(room_path(matching_room))
+        expect(flash[:notice]).to eq("Room is now inactive.")
+        expect(matching_room.reload.visible).to be(false)
+      end
+
+      it "supports the legacy toggle_visibile URL" do
+        post toggle_visibile_path(matching_room)
+
+        expect(response).to redirect_to(room_path(matching_room))
+        expect(matching_room.reload.visible).to be(false)
+      end
     end
   end
 

@@ -1,25 +1,26 @@
 Rails.application.routes.draw do
-
   devise_for :users, controllers: {omniauth_callbacks: "users/omniauth_callbacks", sessions: "users/sessions"} do
-    delete 'sign_out', :to => 'users/sessions#destroy', :as => :destroy_user_session
+    delete "sign_out", to: "users/sessions#destroy", as: :destroy_user_session
   end
   # Non-production test login endpoint for local/staging validation without IdP callback changes.
   unless Rails.env.production?
-    get 'test_login', to: 'users/test_sessions#show', as: :test_login
+    get "test_login", to: "users/test_sessions#show", as: :test_login
   end
   resources :rooms do
+    post :toggle_visible, on: :member
     resources :notes, module: :rooms
   end
-  get 'rooms/:id/floor_plan', to: 'rooms#floor_plan'
+  get "rooms/:id/floor_plan", to: "rooms#floor_plan"
   resources :notes
-  
-  match "toggle_visibile/:id" => "rooms#toggle_visibile", :via => [:get, :post], :as => :toggle_visibile
-  
-  get '/about', to: 'pages#about'
-  get '/room_filters_glossary', to: 'pages#room_filters_glossary'
-  root to: 'pages#index'
-  get 'pages/index'
-  
+
+  # Legacy URL (typo in path); forwards to RoomsController#toggle_visible
+  match "toggle_visibile/:id", to: "rooms#toggle_visible", via: [:get, :post], as: :toggle_visibile
+
+  get "/about", to: "pages#about"
+  get "/room_filters_glossary", to: "pages#room_filters_glossary"
+  root to: "pages#index"
+  get "pages/index"
+
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
   resources :buildings do
@@ -31,7 +32,12 @@ Rails.application.routes.draw do
 
   get "legacy_crdb" => redirect("https://rooms.lsa.umich.edu")
 
-  authenticate :user, lambda { |u| u.email == "dschmura@umich.edu" } do
+  mission_control_allowed_emails = ENV.fetch("MISSION_CONTROL_ALLOWED_EMAILS", "dschmura@umich.edu")
+    .split(",")
+    .map(&:strip)
+    .reject(&:empty?)
+    .freeze
+  authenticate :user, ->(u) { mission_control_allowed_emails.include?(u.email) } do
     mount MissionControl::Jobs::Engine, at: "/jobs"
   end
 
@@ -41,6 +47,5 @@ Rails.application.routes.draw do
     mount LetterOpenerWeb::Engine, at: "/letter_opener"
   end
 
-  get 'application/delete_file_attachment/:id', to: 'application#delete_file_attachment', as: :delete_file
-
+  delete "application/delete_file_attachment/:id", to: "application#delete_file_attachment", as: :delete_file
 end

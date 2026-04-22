@@ -14,18 +14,17 @@ class Note < ApplicationRecord
   scope :notice, -> { where(alert: false).order(updated_at: :desc) }
 
   after_create_commit do
-    if self.alert
+    if alert
       broadcast_prepend_to [noteable, :alerts], target: "#{dom_id(noteable)}_alerts"
     else
       broadcast_prepend_to [noteable, :notes], target: "#{dom_id(noteable)}_notes"
     end
   end
   after_update_commit do
-    if self.alert
-      broadcast_remove_to self
+    broadcast_remove_to self
+    if alert
       broadcast_prepend_to [noteable, :alerts], target: "#{dom_id(noteable)}_alerts"
     else
-      broadcast_remove_to self
       broadcast_prepend_to [noteable, :notes], target: "#{dom_id(noteable)}_notes"
     end
   end

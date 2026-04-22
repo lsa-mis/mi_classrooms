@@ -1,5 +1,5 @@
 # Add crontask to server in order to run this at a specified time
-require 'benchmark'
+require "benchmark"
 #   run crontab -e
 #================================
 #   49 3 * * * /bin/bash -l -c 'cd /home/deployer/apps/vodsecurityproduction/current && RAILS_ENV=production /home/deployer/.rbenv/shims/bundle exec rake devicinator >> /home/deployer/apps/vodsecurityproduction/shared/log/cronstuff.log 2>&1'
@@ -13,6 +13,7 @@ require 'benchmark'
 
 desc "This will update Classrooms database using APIs"
 task api_update_database: :environment do
+  Rails.logger.info({event: "api_update_database.start", environment: Rails.env}.to_json)
   log = ApiLog.new
   errors = []
   status_report = []
@@ -33,8 +34,8 @@ task api_update_database: :environment do
     return true if result["success"]
 
     @debug = true
-    log.api_logger.debug "get access token for #{action_name}, error: No access_token - #{result['error']}"
-    errors << "No access_token. Error: #{result['error']}"
+    log.api_logger.debug "get access token for #{action_name}, error: No access_token - #{result["error"]}"
+    errors << "No access_token. Error: #{result["error"]}"
     write_result.call("#{error_heading} errors:\r\n" + errors.join("\r\n"))
     false
   end
@@ -45,9 +46,11 @@ task api_update_database: :environment do
       after_success.call unless @debug || after_success.nil?
     end
 
-    puts "#{time_label} Time: #{time.real.round(2)} seconds"
+    seconds = time.real.round(2)
+    puts "#{time_label} Time: #{seconds} seconds"
+    Rails.logger.info({event: "api_update_database.phase", phase: time_label, seconds: seconds, success: !@debug}.to_json)
     task_time += (time.real / 60) % 60
-    status_report << "#{time_label} Time: #{time.real.round(2)} seconds"
+    status_report << "#{time_label} Time: #{seconds} seconds"
     if @debug
       status_report << "#{failure_label} See the log file #{log_file} for errors"
       write_result.call
@@ -135,4 +138,5 @@ task api_update_database: :environment do
   )
 
   write_result.call
+  Rails.logger.info({event: "api_update_database.complete", total_minutes: task_time.round(2)}.to_json)
 end

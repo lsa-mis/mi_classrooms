@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 # Handles OAuth and SAML authentication callbacks for user sign-in
-# standard:disable Style/StringLiterals, Style/GlobalVars, Style/RedundantBegin
-# standard:disableStyle/TrailingCommaInHashLiteral
+# standard:disable Style/StringLiterals, Style/RedundantBegin
+# standard:disable Style/TrailingCommaInHashLiteral
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   skip_before_action :verify_authenticity_token, only: :saml
-  before_action :store_user_location!
   before_action :set_omni_auth_service, except: [:failure]
   before_action :set_user, except: [:failure]
   attr_reader :omni_auth_service, :user, :service
@@ -25,10 +24,6 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   private
 
-  def store_user_location!
-    store_location_for(:user, $baseURL)
-  end
-
   def handle_auth(kind)
     attrs = omni_auth_service_attrs
 
@@ -39,7 +34,6 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     end
 
     sign_in_and_redirect user, event: :authentication
-    $baseURL = ''
     set_flash_message :notice, :success, kind:
   end
 

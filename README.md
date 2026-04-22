@@ -1,6 +1,6 @@
 # MClassrooms
 
-![Ruby Version](https://img.shields.io/badge/Ruby%20Version-3.3.4-red) ![Rails Version](https://img.shields.io/badge/Rails%20Version-8.1-red)
+![Ruby Version](https://img.shields.io/badge/Ruby%20Version-4.0.1-red) ![Rails Version](https://img.shields.io/badge/Rails%20Version-8.1-red)
 
 ## Authorization
 
@@ -30,6 +30,14 @@ Optional:
 - `TEST_LOGIN_GROUPS=mi-classrooms-admin-staging,mi-classrooms-non-admin-staging` to control role/group behavior.
 - If `TEST_LOGIN_GROUPS` is omitted, the login defaults to admin for the current non-production environment.
 
+## Configuration (production / staging)
+
+Optional environment variables:
+
+- **Mail**: `SMTP_ADDRESS`, `SMTP_PORT`, `SMTP_DOMAIN`, `SMTP_USER_NAME`, `SMTP_PASSWORD`, `SMTP_AUTHENTICATION` (default `login`), `SMTP_ENABLE_STARTTLS_AUTO` (default `true`), `MAILER_FROM`
+- **Active Storage**: `ACTIVE_STORAGE_SERVICE` (default `local`; set to `amazon` when S3 is configured) and `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `AWS_S3_BUCKET`
+- **Mission Control / Solid Queue dashboard**: comma-separated `MISSION_CONTROL_ALLOWED_EMAILS` (defaults to the previous single-operator allowlist if unset)
+
 ## Background Jobs
 
 - SolidQueue (PostgreSQL-backed)
@@ -37,6 +45,10 @@ Optional:
 ## Database
 
 - PostgreSQL 12 (or higher)
+
+### U-M API HTTPS
+
+`lib/um_api.rb` uses normal TLS verification (`VERIFY_PEER`, minimum TLS 1.2). If token or API calls fail in an environment with a custom CA bundle, set `SSL_CERT_FILE` (or your platform’s equivalent) so OpenSSL can validate `gw.api.it.umich.edu`.
 
 ### Database loading data
 

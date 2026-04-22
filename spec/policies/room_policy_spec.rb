@@ -22,6 +22,7 @@ RSpec.describe RoomPolicy do
 
     it "denies updates" do
       expect(policy.update?).to be(false)
+      expect(policy.toggle_visible?).to be(false)
     end
   end
 
@@ -50,6 +51,7 @@ RSpec.describe RoomPolicy do
 
     it "allows updates" do
       expect(policy.update?).to be(true)
+      expect(policy.toggle_visible?).to be(true)
     end
   end
 end

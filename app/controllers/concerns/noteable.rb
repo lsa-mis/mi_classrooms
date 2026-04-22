@@ -15,17 +15,15 @@ module Noteable
       if @note.save
         note = Note.new
         format.turbo_stream {
-          render turbo_stream: turbo_stream.replace(dom_id_for_records(@noteable, note), partial: "notes/form", locals: { note: note, noteable: @noteable })
+          render turbo_stream: turbo_stream.replace(dom_id_for_records(@noteable, note), partial: "notes/form", locals: {note: note, noteable: @noteable})
         }
-        format.html { redirect_to @noteable }
       else
         format.turbo_stream {
-          render turbo_stream: turbo_stream.replace(dom_id_for_records(@noteable, @note), partial: "notes/form", locals: { note: @note, noteable: @noteable })
+          render turbo_stream: turbo_stream.replace(dom_id_for_records(@noteable, @note), partial: "notes/form", locals: {note: @note, noteable: @noteable})
         }
-        format.html { redirect_to @noteable }
       end
+      format.html { redirect_to @noteable }
     end
-
   end
 
   private

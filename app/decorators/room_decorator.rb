@@ -7,41 +7,41 @@ class RoomDecorator < Draper::Decorator
   decorates_association :room_characteristics
 
   DEPARTMENTS = {
-    '' => 'All Units',
-    'ACAD_&_BDGT_AFFAIRS' => 'Academic and Budget Affairs',
-    'COLLEGE_ENGINEERING' => 'College of Engineering',
-    'COLLEGE_OF_LSA' => 'College of LSA',
-    'COLLEGE_PHARMACY' => 'College of Pharmacy',
-    'COLL_ARCH_URN_PLN' => 'College of Architecture and Urban Planning',
-    'DBN_CHANCELLOR' => 'Dearborn Chancellor',
-    'DBN_COL_ARTS_SCI_LTR' => 'Dearborn College of Arts, Science and Literature',
-    'DBN_COL_BUSINESS' => 'Dearborn College of Business',
-    'DBN_COL_EDU_HLT_HS' => 'Dearborn College of Education, Health, & Human Services',
-    'DBN_COL_ENGINEERING' => 'Dearborn College of Engineering & Computer Science',
-    'DBN_LIBRY_MEDIA_SRVS' => 'Dearborn Library Media Services',
-    'DSA_HOUSING_SERVICES' => 'Dearborn Housing Services',
-    'FLINT_CAS' => 'Flint College of Arts & Sciences',
-    'FLINT_HLTH_PROF_STUD' => 'Flint College of Health Sciences',
-    'FLINT_MGMT_DEAN' => 'Flint School of Management',
-    'FLINT_PROVOST' => 'Flint Office of the Provost',
-    'FLINT_SCHEDU_HMN_SVS' => 'Flint School of Education & Human Services',
-    'FLINT_VC_ENROLLMENT' => 'Flint Enrollment Management',
-    'INST_SOC_RESEARCH' => 'Institute for Social Research',
-    'INTERCOLLEG_ATHLETIC' => 'Intercollegiate Athletics',
-    'LAW_SCHOOL' => 'Law School',
-    'MEDICAL_SCHOOL' => 'Medical School',
-    'SCHOOL_BUS_ADMIN' => 'Ross School of Business',
-    'SCHOOL_DENTISTRY' => 'School of Dentistry',
-    'SCHOOL_EDUCATION' => 'School of Education',
-    'SCHOOL_INFORMATION' => 'School of Information',
-    'SCHOOL_KINESIOLOGY' => 'School of Kinesiology',
-    'SCHOOL_MUSIC' => 'School of Music, Theatre and Dance',
-    'SCHOOL_NAT_RES_ENVIR' => 'School for Environment and Sustainability',
-    'SCHOOL_NURSING' => 'School of Nursing',
-    'SCHOOL_PUB_HEALTH' => 'School of Public Health',
-    'SCHOOL_PUB_POLICY' => 'School of Public Policy',
-    'SCHOOL_SOCIAL_WORK' => 'School of Social Work',
-    'VP_ACAD_GRAD_STUDY' => 'Museum of Art'
+    "" => "All Units",
+    "ACAD_&_BDGT_AFFAIRS" => "Academic and Budget Affairs",
+    "COLLEGE_ENGINEERING" => "College of Engineering",
+    "COLLEGE_OF_LSA" => "College of LSA",
+    "COLLEGE_PHARMACY" => "College of Pharmacy",
+    "COLL_ARCH_URN_PLN" => "College of Architecture and Urban Planning",
+    "DBN_CHANCELLOR" => "Dearborn Chancellor",
+    "DBN_COL_ARTS_SCI_LTR" => "Dearborn College of Arts, Science and Literature",
+    "DBN_COL_BUSINESS" => "Dearborn College of Business",
+    "DBN_COL_EDU_HLT_HS" => "Dearborn College of Education, Health, & Human Services",
+    "DBN_COL_ENGINEERING" => "Dearborn College of Engineering & Computer Science",
+    "DBN_LIBRY_MEDIA_SRVS" => "Dearborn Library Media Services",
+    "DSA_HOUSING_SERVICES" => "Dearborn Housing Services",
+    "FLINT_CAS" => "Flint College of Arts & Sciences",
+    "FLINT_HLTH_PROF_STUD" => "Flint College of Health Sciences",
+    "FLINT_MGMT_DEAN" => "Flint School of Management",
+    "FLINT_PROVOST" => "Flint Office of the Provost",
+    "FLINT_SCHEDU_HMN_SVS" => "Flint School of Education & Human Services",
+    "FLINT_VC_ENROLLMENT" => "Flint Enrollment Management",
+    "INST_SOC_RESEARCH" => "Institute for Social Research",
+    "INTERCOLLEG_ATHLETIC" => "Intercollegiate Athletics",
+    "LAW_SCHOOL" => "Law School",
+    "MEDICAL_SCHOOL" => "Medical School",
+    "SCHOOL_BUS_ADMIN" => "Ross School of Business",
+    "SCHOOL_DENTISTRY" => "School of Dentistry",
+    "SCHOOL_EDUCATION" => "School of Education",
+    "SCHOOL_INFORMATION" => "School of Information",
+    "SCHOOL_KINESIOLOGY" => "School of Kinesiology",
+    "SCHOOL_MUSIC" => "School of Music, Theatre and Dance",
+    "SCHOOL_NAT_RES_ENVIR" => "School for Environment and Sustainability",
+    "SCHOOL_NURSING" => "School of Nursing",
+    "SCHOOL_PUB_HEALTH" => "School of Public Health",
+    "SCHOOL_PUB_POLICY" => "School of Public Policy",
+    "SCHOOL_SOCIAL_WORK" => "School of Social Work",
+    "VP_ACAD_GRAD_STUDY" => "Museum of Art"
   }
 
   # Define presentation-specific methods here. Helpers are accessed through
@@ -54,7 +54,7 @@ class RoomDecorator < Draper::Decorator
   def building_name
     return if room.building.name.nil?
 
-    "#{room.building.name.titleize}"
+    room.building.name.titleize
   end
 
   def address
@@ -64,8 +64,8 @@ class RoomDecorator < Draper::Decorator
   end
 
   def created_at
-    helpers.content_tag :span, class: 'time' do
-      object.created_at.strftime('%a %m/%d/%y')
+    helpers.content_tag :span, class: "time" do
+      object.created_at.strftime("%a %m/%d/%y")
     end
   end
 
@@ -79,7 +79,7 @@ class RoomDecorator < Draper::Decorator
   end
 
   def student_capacity
-    helpers.pluralize(room.instructional_seating_count, 'Student')
+    helpers.pluralize(room.instructional_seating_count, "Student")
   end
 
   def student_ada_capacity
@@ -90,25 +90,25 @@ class RoomDecorator < Draper::Decorator
 
   def room_schedule_contact
     if room.room_contact&.rm_schd_cntct_name
-      "#{room.room_contact.rm_schd_cntct_name.titleize}"
+      room.room_contact.rm_schd_cntct_name.titleize
     else
-      'Contact Not Available'
+      "Contact Not Available"
     end
   end
 
   def room_schedule_email
     if room.room_contact&.rm_schd_email
-      "#{room.room_contact.rm_schd_email.downcase}"
+      room.room_contact.rm_schd_email.downcase
     else
-      'Not Available'
+      "Not Available"
     end
   end
 
   def room_schedule_phone
     if room.room_contact&.rm_schd_cntct_phone
-      "#{room.room_contact.rm_schd_cntct_phone}"
+      room.room_contact.rm_schd_cntct_phone
     else
-      'Not Available'
+      "Not Available"
     end
   end
 
@@ -117,34 +117,34 @@ class RoomDecorator < Draper::Decorator
     if room.room_contact&.rm_sppt_cntct_url
       "#{room.room_contact.rm_sppt_cntct_url} \n #{room.room_contact.rm_schd_email}".titleize
     else
-      'Not Available'
+      "Not Available"
     end
   end
 
   def room_support_email
     #  rm_sppt_cntct_url    :string
-    if room.room_contact&.rm_sppt_cntct_email && room.room_contact.rm_sppt_cntct_email != ' '
-      "#{room.room_contact.rm_sppt_cntct_email}"
+    if room.room_contact&.rm_sppt_cntct_email && room.room_contact.rm_sppt_cntct_email != " "
+      room.room_contact.rm_sppt_cntct_email
     else
-      'Not Available'
+      "Not Available"
     end
   end
 
   def room_support_phone
     #  rm_sppt_cntct_url    :string
-    if room.room_contact&.rm_sppt_cntct_phone && room.room_contact.rm_sppt_cntct_phone != ' '
-      "#{room.room_contact.rm_sppt_cntct_phone}"
+    if room.room_contact&.rm_sppt_cntct_phone && room.room_contact.rm_sppt_cntct_phone != " "
+      room.room_contact.rm_sppt_cntct_phone
     else
-      'Not Available'
+      "Not Available"
     end
   end
 
   def room_support_url
     #  rm_sppt_cntct_url    :string
-    if room.room_contact&.rm_sppt_cntct_url && room.room_contact.rm_sppt_cntct_url != ' '
-      "#{room.room_contact.rm_sppt_cntct_url}"
+    if room.room_contact&.rm_sppt_cntct_url && room.room_contact.rm_sppt_cntct_url != " "
+      room.room_contact.rm_sppt_cntct_url
     else
-      'Not Available'
+      "Not Available"
     end
   end
 
