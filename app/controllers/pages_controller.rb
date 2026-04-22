@@ -17,7 +17,7 @@ class PagesController < ApplicationController
   def room_filters_glossary
     authorize :page
     characteristics = RoomCharacteristic.all.pluck(:chrstc_descrshort, :chrstc_desc254).uniq
-    characteristics.delete_if {|x| x.include?(nil)}
+    characteristics.delete_if { |x| x.include?(nil) }
     characteristics.sort
     @filters_hash = {}
     characteristics.each do |key, value|
@@ -29,5 +29,4 @@ class PagesController < ApplicationController
     end
     @category_letters = @category_letters.uniq.sort
   end
-
 end

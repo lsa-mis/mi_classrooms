@@ -12,10 +12,10 @@ class ClassroomsController < ApplicationController
     authorize :classroom
 
     uri_substring = URI.split(request.url)[5]
-    room_from_url = uri_substring.split('/')[2]
-    if converted_room = Room.find_by(facility_code_heprod: room_from_url)
+    room_from_url = uri_substring.split("/")[2]
+    if Room.find_by(facility_code_heprod: room_from_url)
       redirect_to room_path(Room.find_by(facility_code_heprod: room_from_url)), alert: "You arrived here from an outdated link"
-    else 
+    else
       redirect_to rooms_path, alert: "You arrived here from an outdated link"
     end
   end

@@ -1,5 +1,4 @@
 class FloorPolicy < ApplicationPolicy
-
   def create?
     user.admin
   end
@@ -15,5 +14,4 @@ class FloorPolicy < ApplicationPolicy
   def destroy?
     user.admin
   end
-
 end

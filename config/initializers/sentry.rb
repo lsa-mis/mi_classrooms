@@ -8,7 +8,7 @@ Sentry.init do |config|
   config.enabled_environments = %w[production staging]
 
   # Logging configuration
-  config.breadcrumbs_logger = [ :active_support_logger, :http_logger ]
+  config.breadcrumbs_logger = [:active_support_logger, :http_logger]
 
   # Add user context data (PII)
   config.send_default_pii = true
@@ -24,7 +24,7 @@ Sentry.init do |config|
   # Custom sampling logic if needed
   config.traces_sampler = lambda do |context|
     # Don't sample health check endpoints
-    if context[:transaction_context][:name]&.include?('health_check')
+    if context[:transaction_context][:name]&.include?("health_check")
       0.0
     else
       # Sample based on environment

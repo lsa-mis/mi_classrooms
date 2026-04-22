@@ -6,8 +6,8 @@ FactoryBot.define do
     after(:build) do |floor|
       floor.floor_plan.attach(
         io: StringIO.new("fake image content"),
-        filename: 'floor_plan.png',
-        content_type: 'image/png'
+        filename: "floor_plan.png",
+        content_type: "image/png"
       )
     end
   end

@@ -36,5 +36,6 @@ class OmniAuthService < ApplicationRecord
     super
   end
 
-  def google_oauth2_client; end
+  def google_oauth2_client
+  end
 end

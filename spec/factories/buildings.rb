@@ -26,15 +26,15 @@ FactoryBot.define do
   factory :building do
     sequence(:bldrecnbr) { |n| 3000000 + n }
     abbreviation { Faker::Alphanumeric.alpha(number: 4).upcase }
-    address      { Faker::Address.street_address }
-    city         { Faker::Address.city }
-    country      { 'United States' }
-    latitude     { Faker::Address.latitude }
-    longitude    { Faker::Address.longitude }
-    name         { Faker::Company.name }
-    nick_name    { Faker::Company.buzzword.titleize }
-    state        { 'MI' }
-    zip          { '48109' }
-    visible      { true }
+    address { Faker::Address.street_address }
+    city { Faker::Address.city }
+    country { "United States" }
+    latitude { Faker::Address.latitude }
+    longitude { Faker::Address.longitude }
+    name { Faker::Company.name }
+    nick_name { Faker::Company.buzzword.titleize }
+    state { "MI" }
+    zip { "48109" }
+    visible { true }
   end
 end

@@ -5,7 +5,7 @@ class Rooms::NotesController < ApplicationController
 
   private
 
-    def set_noteable
-      @noteable = Room.find_by(rmrecnbr: params[:room_id])
-    end
+  def set_noteable
+    @noteable = Room.find_by(rmrecnbr: params[:room_id])
+  end
 end

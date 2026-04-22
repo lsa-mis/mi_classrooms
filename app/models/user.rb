@@ -23,7 +23,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable,
-         :rememberable, :omniauthable, omniauth_providers: [:saml]
+    :rememberable, :omniauthable, omniauth_providers: [:saml]
 
   attr_accessor :membership, :admin
 
@@ -49,7 +49,7 @@ class User < ApplicationRecord
   def self.user_attributes_from_auth(auth)
     {
       email: auth.info.email,
-      uniqname: auth.info.email.split('@').first,
+      uniqname: auth.info.email.split("@").first,
       uid: auth.info.uid,
       principal_name: auth.info.principal_name,
       display_name: auth.info.name,

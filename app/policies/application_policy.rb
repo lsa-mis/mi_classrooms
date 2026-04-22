@@ -13,7 +13,7 @@ class ApplicationPolicy
   end
 
   def show?
-    scope.where(:id => record.id).exists?
+    scope.where(id: record.id).exists?
   end
 
   def create?
@@ -44,7 +44,7 @@ class ApplicationPolicy
     if Rails.env.production?
       true
     else
-      @non_admin_group = ['mi-classrooms-admin-staging', 'mi-classrooms-non-admin-staging']
+      @non_admin_group = ["mi-classrooms-admin-staging", "mi-classrooms-non-admin-staging"]
       user.membership && (user.membership & @non_admin_group).any?
     end
   end
@@ -61,5 +61,4 @@ class ApplicationPolicy
       scope
     end
   end
-  
 end

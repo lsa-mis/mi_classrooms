@@ -5,7 +5,7 @@ class Buildings::NotesController < ApplicationController
 
   private
 
-    def set_noteable
-      @noteable = Building.find_by(bldrecnbr: params[:building_id])
-    end
+  def set_noteable
+    @noteable = Building.find_by(bldrecnbr: params[:building_id])
+  end
 end

@@ -29,7 +29,7 @@ end
 # Get filename from command line argument
 filename = ARGV[0]
 if filename.nil?
-  puts 'Please provide a filename as an argument'
+  puts "Please provide a filename as an argument"
   puts "Usage: rails runner lib/tasks/image_details.rb 'filename.jpg'"
   exit
 end

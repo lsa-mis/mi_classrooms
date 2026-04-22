@@ -20,10 +20,10 @@ class TaskResultLog
   end
 
   def update_log(message, debug)
-    if debug
-      status = "error"
+    status = if debug
+      "error"
     else
-      status = "success"
+      "success"
     end
     record = ApiUpdateLog.new(result: message, status: status)
     unless record.save

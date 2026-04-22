@@ -1,5 +1,4 @@
 class NotePolicy < ApplicationPolicy
-  
   def index?
     user_in_non_admin_group?
   end
@@ -19,5 +18,4 @@ class NotePolicy < ApplicationPolicy
   def destroy?
     user.admin
   end
-
 end

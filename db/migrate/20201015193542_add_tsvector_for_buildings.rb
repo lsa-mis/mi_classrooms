@@ -1,5 +1,4 @@
 class AddTsvectorForBuildings < ActiveRecord::Migration[6.1]
-
   def up
     add_column :buildings, :tsv, :tsvector
     add_index :buildings, :tsv, using: "gin"

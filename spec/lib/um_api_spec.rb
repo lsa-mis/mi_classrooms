@@ -42,10 +42,10 @@ RSpec.describe UmApi::Connection do
         "error" => "",
         "data" => {
           "ListOfBldgs" => {
-            "Buildings" => [{ "BuildingRecordNumber" => "1001" }]
+            "Buildings" => [{"BuildingRecordNumber" => "1001"}]
           }
         },
-        "headers" => { "link" => ["<https://example.test>; rel=next"] }
+        "headers" => {"link" => ["<https://example.test>; rel=next"]}
       }
       second_page = {
         "success" => true,
@@ -53,7 +53,7 @@ RSpec.describe UmApi::Connection do
         "error" => "",
         "data" => {
           "ListOfBldgs" => {
-            "Buildings" => [{ "BuildingRecordNumber" => "1002" }]
+            "Buildings" => [{"BuildingRecordNumber" => "1002"}]
           }
         },
         "headers" => {}
@@ -69,15 +69,15 @@ RSpec.describe UmApi::Connection do
       expect(result["success"]).to be(true)
       expect(result["data"]).to eq(
         [
-          { "BuildingRecordNumber" => "1001" },
-          { "BuildingRecordNumber" => "1002" }
+          {"BuildingRecordNumber" => "1001"},
+          {"BuildingRecordNumber" => "1002"}
         ]
       )
       expect(connection).to have_received(:get_json)
-        .with("https://example.test/buildings", query: { "$start_index" => 0, "$count" => 1000 })
+        .with("https://example.test/buildings", query: {"$start_index" => 0, "$count" => 1000})
         .ordered
       expect(connection).to have_received(:get_json)
-        .with("https://example.test/buildings", query: { "$start_index" => 1000, "$count" => 1000 })
+        .with("https://example.test/buildings", query: {"$start_index" => 1000, "$count" => 1000})
         .ordered
     end
   end
@@ -87,7 +87,7 @@ RSpec.describe AuthTokenApi do
   describe "#get_auth_token" do
     it "delegates token lookup to the shared token store" do
       token_store = instance_double(UmApi::TokenStore)
-      result = { "success" => true, "error" => "", "access_token" => "cached-token" }
+      result = {"success" => true, "error" => "", "access_token" => "cached-token"}
 
       allow(UmApi).to receive(:token_store).and_return(token_store)
       allow(token_store).to receive(:fetch).with("buildings").and_return(result)

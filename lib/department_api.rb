@@ -6,7 +6,7 @@ class DepartmentApi
   end
 
   def get_departments_info(dept_name)
-    response = @client.get_json("#{BASE_URL}/DeptData", query: { DeptDescription: dept_name })
+    response = @client.get_json("#{BASE_URL}/DeptData", query: {DeptDescription: dept_name})
     return response unless response["success"]
 
     success_result(response["data"]["DepartmentList"])
@@ -19,6 +19,6 @@ class DepartmentApi
   private
 
   def success_result(data)
-    { "success" => true, "errorcode" => "", "error" => "", "data" => data }
+    {"success" => true, "errorcode" => "", "error" => "", "data" => data}
   end
 end

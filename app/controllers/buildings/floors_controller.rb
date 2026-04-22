@@ -1,8 +1,7 @@
 class Buildings::FloorsController < ApplicationController
-
   before_action :set_building
 
-  def show 
+  def show
     @floors = @building.floors
     @floor = @building.floors.find(params[:id])
     @building_rooms_list = Room.where(building_bldrecnbr: @building, rmtyp_description: "Classroom").where.not(facility_code_heprod: nil)
@@ -11,7 +10,6 @@ class Buildings::FloorsController < ApplicationController
   end
 
   def new
-
   end
 
   def create
@@ -20,14 +18,16 @@ class Buildings::FloorsController < ApplicationController
     authorize @floor
 
     respond_to do |format|
-      if @floor.save 
-        format.turbo_stream { redirect_to @building, 
-                              notice: "The floor plan was added" 
-                            }
+      if @floor.save
+        format.turbo_stream {
+          redirect_to @building,
+            notice: "The floor plan was added"
+        }
       else
         error = @floor.errors.full_messages
-        format.turbo_stream { redirect_to @building, 
-          alert: error
+        format.turbo_stream {
+          redirect_to @building,
+            alert: error
         }
       end
     end
@@ -36,7 +36,6 @@ class Buildings::FloorsController < ApplicationController
   def edit
     @floors = @buildings.floors
     authorize @floors
-
   end
 
   def update
@@ -44,35 +43,35 @@ class Buildings::FloorsController < ApplicationController
     authorize @floor
     respond_to do |format|
       if @floor.update(floor_params)
-        format.turbo_stream { redirect_to @building, 
-        notice: "The floor plan was updated" 
-      }
+        format.turbo_stream {
+          redirect_to @building,
+            notice: "The floor plan was updated"
+        }
       else
         error = @floor.errors.full_messages
-        format.turbo_stream { redirect_to @building, 
-        alert: error
+        format.turbo_stream {
+          redirect_to @building,
+            alert: error
         }
       end
     end
-
   end
 
   def destroy
     @floor = Floor.find(params[:id])
     authorize @floor
     @floor.destroy
-    redirect_back(fallback_location: request.referer, 
-                  notice: "Floor map was deleted")
+    redirect_back(fallback_location: request.referer,
+      notice: "Floor map was deleted")
   end
 
   private
-  
-    def floor_params
-      params.require(:floor).permit(:floor, :floor_plan)
-    end
 
-    def set_building
-      @building = Building.find_by(bldrecnbr: params[:building_id])
-    end
+  def floor_params
+    params.require(:floor).permit(:floor, :floor_plan)
+  end
 
+  def set_building
+    @building = Building.find_by(bldrecnbr: params[:building_id])
+  end
 end

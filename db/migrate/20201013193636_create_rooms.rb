@@ -19,7 +19,6 @@ class CreateRooms < ActiveRecord::Migration[6.1]
     end
 
     rename_column :rooms, :building_bldrecnbr_id, :building_bldrecnbr
-    add_foreign_key :rooms, :buildings, column: 'building_bldrecnbr', primary_key: 'bldrecnbr'
-
+    add_foreign_key :rooms, :buildings, column: "building_bldrecnbr", primary_key: "bldrecnbr"
   end
 end

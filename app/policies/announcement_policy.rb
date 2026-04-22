@@ -1,5 +1,4 @@
 class AnnouncementPolicy < ApplicationPolicy
-
   def index?
     user.admin
   end
@@ -19,5 +18,4 @@ class AnnouncementPolicy < ApplicationPolicy
   def destroy?
     user.admin
   end
-
 end

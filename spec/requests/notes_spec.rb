@@ -33,7 +33,7 @@ RSpec.describe "Notes", type: :request do
 
     it "rejects room note creation" do
       expect do
-        post room_notes_path(room), params: { note: { body: "Viewer note", alert: false } }
+        post room_notes_path(room), params: {note: {body: "Viewer note", alert: false}}
       end.not_to change(Note, :count)
 
       expect(response).to redirect_to(about_path)
@@ -42,7 +42,7 @@ RSpec.describe "Notes", type: :request do
 
     it "rejects building note creation" do
       expect do
-        post building_notes_path(building), params: { note: { body: "Viewer building note", alert: false } }
+        post building_notes_path(building), params: {note: {body: "Viewer building note", alert: false}}
       end.not_to change(Note, :count)
 
       expect(response).to redirect_to(about_path)
@@ -73,7 +73,7 @@ RSpec.describe "Notes", type: :request do
 
     it "creates a room note" do
       expect do
-        post room_notes_path(room), params: { note: { body: "Admin room note", alert: false } }
+        post room_notes_path(room), params: {note: {body: "Admin room note", alert: false}}
       end.to change(Note, :count).by(1)
 
       expect(response).to redirect_to(room_path(room))
@@ -82,7 +82,7 @@ RSpec.describe "Notes", type: :request do
 
     it "creates a building note" do
       expect do
-        post building_notes_path(building), params: { note: { body: "Admin building note", alert: true } }
+        post building_notes_path(building), params: {note: {body: "Admin building note", alert: true}}
       end.to change(Note, :count).by(1)
 
       expect(response).to redirect_to(building_path(building))

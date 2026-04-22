@@ -3,5 +3,5 @@ class Announcement < ApplicationRecord
 
   has_rich_text :content
 
-  validates :location, presence: true, inclusion: { in: LOCATIONS }
+  validates :location, presence: true, inclusion: {in: LOCATIONS}
 end

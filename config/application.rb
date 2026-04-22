@@ -27,7 +27,7 @@ module MiClassrooms
     config.generators.system_tests = nil
     config.active_job.queue_adapter = :solid_queue
     config.active_record.schema_format = :sql
-    config.time_zone = 'Eastern Time (US & Canada)'
+    config.time_zone = "Eastern Time (US & Canada)"
 
     # Add the ConnectRequestHandler middleware at the beginning of the stack
     config.middleware.use MiClassrooms::ConnectRequestHandler

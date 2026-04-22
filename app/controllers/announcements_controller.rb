@@ -21,7 +21,7 @@ class AnnouncementsController < ApplicationController
     authorize @announcement
 
     if @announcement.save
-      redirect_to announcements_path, notice: 'Announcement was successfully created.'
+      redirect_to announcements_path, notice: "Announcement was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -32,7 +32,7 @@ class AnnouncementsController < ApplicationController
 
   def update
     if @announcement.update(announcement_params)
-      redirect_to announcements_path, notice: 'Announcement was successfully updated.'
+      redirect_to announcements_path, notice: "Announcement was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -40,18 +40,17 @@ class AnnouncementsController < ApplicationController
 
   def destroy
     @announcement.destroy
-    redirect_to announcements_path, notice: 'Announcement was successfully deleted.'
+    redirect_to announcements_path, notice: "Announcement was successfully deleted."
   end
 
   private
 
-    def set_announcement
-      @announcement = Announcement.find(params[:id])
-      authorize @announcement
-    end
+  def set_announcement
+    @announcement = Announcement.find(params[:id])
+    authorize @announcement
+  end
 
-    def announcement_params
-      params.require(:announcement).permit(:location, :content)
-    end
-
+  def announcement_params
+    params.require(:announcement).permit(:location, :content)
+  end
 end

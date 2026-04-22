@@ -4,7 +4,6 @@ class UpdateRoomCharacteristicsArrayJob < ApplicationJob
   def perform(*)
     # Do something later
     update_room_characteristics_array
-
   end
 
   def update_room_characteristics_array
@@ -19,5 +18,4 @@ class UpdateRoomCharacteristicsArrayJob < ApplicationJob
       room.save
     end
   end
-
 end

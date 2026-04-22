@@ -1,5 +1,4 @@
 class BuildingPolicy < ApplicationPolicy
-
   def index?
     user.admin
   end

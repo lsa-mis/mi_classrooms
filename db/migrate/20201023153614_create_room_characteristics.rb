@@ -11,7 +11,6 @@ class CreateRoomCharacteristics < ActiveRecord::Migration[6.1]
       t.timestamps
     end
     rename_column :room_characteristics, :rmrecnbr_id, :rmrecnbr
-    add_foreign_key :room_characteristics, :rooms, column: 'rmrecnbr', primary_key: 'rmrecnbr'
-
+    add_foreign_key :room_characteristics, :rooms, column: "rmrecnbr", primary_key: "rmrecnbr"
   end
 end

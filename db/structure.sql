@@ -9,13 +9,6 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
---
--- Name: public; Type: SCHEMA; Schema: -; Owner: -
---
-
--- *not* creating schema, since initdb creates it
-
-
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -99,7 +92,7 @@ CREATE TABLE public.active_storage_blobs (
     metadata text,
     service_name character varying NOT NULL,
     byte_size bigint NOT NULL,
-    checksum character varying,
+    checksum character varying NOT NULL,
     created_at timestamp without time zone NOT NULL
 );
 
@@ -1092,7 +1085,7 @@ CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON public.buildings FOR EA
 -- Name: rooms tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON public.rooms FOR EACH ROW EXECUTE FUNCTION tsvector_update_trigger('tsv', 'pg_catalog.english', 'room_number', 'facility_code_heprod');
+CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON public.rooms FOR EACH ROW EXECUTE FUNCTION tsvector_update_trigger('tsv', 'pg_catalog.english', 'room_number', 'facility_code_heprod', 'nickname');
 
 
 --
@@ -1190,9 +1183,7 @@ ALTER TABLE ONLY public.room_characteristics
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
-('20250319192340'),
-('20250319192339'),
-('20250319192338'),
+('20260422120000'),
 ('20250206205460'),
 ('20250206205459'),
 ('20220412123134'),

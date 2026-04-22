@@ -43,7 +43,7 @@ class BuildingsApi
         end
       end
     else
-      @log.api_logger.debug "update_campus_list, error: API return: #{result['errorcode']} - #{result['error']}"
+      @log.api_logger.debug "update_campus_list, error: API return: #{result["errorcode"]} - #{result["error"]}"
       @debug = true
       sleep(61.seconds)
       return @debug
@@ -106,12 +106,12 @@ class BuildingsApi
           @log.api_logger.info "update_all_buildings: Building(s) not in the API database: #{@buildings_ids}"
         end
       else
-        @log.api_logger.debug "update_all_buildings, error: API return: #{result['errorcode']} - #{result['error']}"
+        @log.api_logger.debug "update_all_buildings, error: API return: #{result["errorcode"]} - #{result["error"]}"
         @debug = true
         sleep(61.seconds)
         return @debug
       end
-    rescue StandardError => e
+    rescue => e
       @log.api_logger.debug "update_all_buildings, error: #{e.message}"
       @debug = true
     end
@@ -130,7 +130,7 @@ class BuildingsApi
       bldrecnbr: bldrecnbr,
       name: row["BuildingLongDescription"],
       abbreviation: row["BuildingShortDescription"],
-      address: " #{row['BuildingStreetNumber']}  #{row['BuildingStreetDirection']}  #{row['BuildingStreetName']}".strip.gsub(/\s+/, " "),
+      address: " #{row["BuildingStreetNumber"]}  #{row["BuildingStreetDirection"]}  #{row["BuildingStreetName"]}".strip.gsub(/\s+/, " "),
       city: row["BuildingCity"],
       state: row["BuildingState"],
       zip: row["BuildingPostal"],
@@ -150,7 +150,7 @@ class BuildingsApi
       bldrecnbr: bldrecnbr,
       name: row["BuildingLongDescription"],
       abbreviation: row["BuildingShortDescription"],
-      address: " #{row['BuildingStreetNumber']}  #{row['BuildingStreetDirection']}  #{row['BuildingStreetName']}".strip.gsub(/\s+/, " "),
+      address: " #{row["BuildingStreetNumber"]}  #{row["BuildingStreetDirection"]}  #{row["BuildingStreetName"]}".strip.gsub(/\s+/, " "),
       city: row["BuildingCity"],
       state: row["BuildingState"],
       zip: row["BuildingPostal"],
@@ -227,13 +227,13 @@ class BuildingsApi
             end
           end
         else
-          @log.api_logger.debug "update_rooms, error: API return: #{result['errorcode']} - #{result['error']}"
+          @log.api_logger.debug "update_rooms, error: API return: #{result["errorcode"]} - #{result["error"]}"
           @debug = true
           sleep(61.seconds)
           return @debug
         end
       end
-    rescue StandardError => e
+    rescue => e
       @log.api_logger.debug "update_rooms, error: #{e.message}"
       @debug = true
     end
@@ -299,11 +299,13 @@ class BuildingsApi
       building_name: @building_name,
       visible: true
     }
-    room_attributes.merge!(
-      dept_id: dept_data["DeptId"],
-      dept_grp: dept_data["DeptGroup"],
-      dept_group_description: dept_data["DeptGroupDescription"]
-    ) if dept_data.present?
+    if dept_data.present?
+      room_attributes.merge!(
+        dept_id: dept_data["DeptId"],
+        dept_grp: dept_data["DeptGroup"],
+        dept_group_description: dept_data["DeptGroupDescription"]
+      )
+    end
 
     room = Room.new(room_attributes)
     unless room.save
@@ -327,7 +329,7 @@ class BuildingsApi
     result = department_api.get_all_departments_info
     return [build_department_index(result["data"]), false] if result["success"]
 
-    @log.api_logger.debug "update_rooms, error: could not preload departments - #{result['errorcode']}: #{result['error']}. Falling back to per-department lookups."
+    @log.api_logger.debug "update_rooms, error: could not preload departments - #{result["errorcode"]}: #{result["error"]}. Falling back to per-department lookups."
     [{}, true]
   end
 
@@ -356,7 +358,7 @@ class BuildingsApi
       dept_info = dept_result.dig("data", "DeptData", 0)
       dept_info_array[dept_name] = dept_info.present? ? department_summary(dept_info) : nil
     else
-      @log.api_logger.debug "update_rooms, error: DepartmentApi: Error for building #{bld}, room #{room_record_number}, department #{dept_name} - #{dept_result['errorcode']}: #{dept_result['error']}"
+      @log.api_logger.debug "update_rooms, error: DepartmentApi: Error for building #{bld}, room #{room_record_number}, department #{dept_name} - #{dept_result["errorcode"]}: #{dept_result["error"]}"
       sleep(61.seconds)
       dept_info_array[dept_name] = nil
     end
@@ -373,7 +375,7 @@ class BuildingsApi
   end
 
   def success_result(data)
-    { "success" => true, "errorcode" => "", "error" => "", "data" => data }
+    {"success" => true, "errorcode" => "", "error" => "", "data" => data}
   end
 
   def strip_headers(result)

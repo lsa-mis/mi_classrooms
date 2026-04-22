@@ -25,7 +25,7 @@ class RoomCharacteristic < ApplicationRecord
 
   validates_presence_of :rmrecnbr
 
-  validates_uniqueness_of :chrstc, :scope => :rmrecnbr, :message => '- combination of chrstc and rmrecnbr should be unique'
+  validates_uniqueness_of :chrstc, scope: :rmrecnbr, message: "- combination of chrstc and rmrecnbr should be unique"
 
   scope :matches_params, ->(params) {
     where(chrstc_descrshort: params).pluck(:rmrecnbr)
@@ -41,12 +41,12 @@ class RoomCharacteristic < ApplicationRecord
   end
 
   def self.has_any_characteristics(params)
-    rmrecnbrs = matches_params(params)
+    matches_params(params)
   end
 
   scope :bluray, -> {
-                       where(chrstc_descrshort: ["BluRay", "BluRay/DVD"])
-                     }
+    where(chrstc_descrshort: ["BluRay", "BluRay/DVD"])
+  }
   scope :chalkboard, -> {
                        where(chrstc_descrshort: ["Chkbrd>25", "Chkbrd"])
                      }

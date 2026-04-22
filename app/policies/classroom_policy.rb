@@ -8,5 +8,4 @@ class ClassroomPolicy < ApplicationPolicy
   def show?
     true
   end
-
 end

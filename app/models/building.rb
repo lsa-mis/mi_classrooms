@@ -23,12 +23,13 @@
 #
 class Building < ApplicationRecord
   include PgSearch::Model
-  self.primary_key = 'bldrecnbr'
+
+  self.primary_key = "bldrecnbr"
   belongs_to :campus_record, optional: true
-  has_many :rooms, primary_key: 'bldrecnbr', foreign_key: 'building_bldrecnbr'
+  has_many :rooms, primary_key: "bldrecnbr", foreign_key: "building_bldrecnbr"
   geocoded_by :address # can also be an IP address
   has_one_attached :building_image
-  has_many :floors, primary_key: 'bldrecnbr', foreign_key: 'building_bldrecnbr'
+  has_many :floors, primary_key: "bldrecnbr", foreign_key: "building_bldrecnbr"
   has_many :notes, as: :noteable
 
   validate :acceptable_image
@@ -40,15 +41,16 @@ class Building < ApplicationRecord
 
   pg_search_scope(
     :with_name,
-    against: { 
-      nick_name: 'A',
-      abbreviation: 'B',
-      name: 'C'},
+    against: {
+      nick_name: "A",
+      abbreviation: "B",
+      name: "C"
+    },
     using: {
       tsearch: {
         dictionary: "english",
         prefix: true,
-        any_word: false,
+        any_word: false
 
       }
     }
@@ -72,7 +74,6 @@ class Building < ApplicationRecord
     return unless building_image.attached?
 
     [building_image].compact.each do |image|
-
       if image.attached?
         unless image.blob.byte_size <= 10.megabyte
           errors.add(image.name, "is too big")

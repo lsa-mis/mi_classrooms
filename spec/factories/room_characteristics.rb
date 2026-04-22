@@ -24,8 +24,8 @@
 FactoryBot.define do
   factory :room_characteristic do
     sequence(:chrstc) { |n| n }
-    chrstc_desc254    { Faker::Lorem.sentence }
-    chrstc_descr      { Faker::Lorem.words(number: 3).join(' ') }
+    chrstc_desc254 { Faker::Lorem.sentence }
+    chrstc_descr { Faker::Lorem.words(number: 3).join(" ") }
     chrstc_descrshort { %w[ProjDigit Whtbrd Chkbrd DocCam BluRay InstrComp TeamBoard LectureCap VideoConf].sample }
     chrstc_eff_status { 1 }
     sequence(:rmrecnbr) { |n| 1000000 + n }
