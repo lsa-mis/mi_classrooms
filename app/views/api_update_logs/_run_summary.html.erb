@@ -1,0 +1,35 @@
+<% report = api_update_log.structured_report %>
+
+<% if report.present? %>
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+    <div class="rounded-lg bg-white border border-gray-200 p-4 shadow-sm">
+      <p class="text-xs uppercase tracking-wide text-gray-500">Status</p>
+      <p class="mt-1 text-lg font-semibold <%= report["status"] == "success" ? "text-green-700" : "text-red-700" %>">
+        <%= report["status"].to_s.titleize %>
+      </p>
+    </div>
+    <div class="rounded-lg bg-white border border-gray-200 p-4 shadow-sm">
+      <p class="text-xs uppercase tracking-wide text-gray-500">Started</p>
+      <p class="mt-1 text-sm text-gray-900"><%= format_api_update_time(report["started_at"]) %></p>
+    </div>
+    <div class="rounded-lg bg-white border border-gray-200 p-4 shadow-sm">
+      <p class="text-xs uppercase tracking-wide text-gray-500">Finished</p>
+      <p class="mt-1 text-sm text-gray-900"><%= format_api_update_time(report["finished_at"]) %></p>
+    </div>
+    <div class="rounded-lg bg-white border border-gray-200 p-4 shadow-sm">
+      <p class="text-xs uppercase tracking-wide text-gray-500">Wall Time</p>
+      <p class="mt-1 text-lg font-semibold text-gray-900"><%= ((report["duration_seconds"].to_f) / 60).round(2) %> minutes</p>
+    </div>
+  </div>
+
+  <div class="space-y-4">
+    <% report.fetch("phases", []).each do |phase| %>
+      <%= render "phase", phase: phase %>
+    <% end %>
+  </div>
+<% else %>
+  <div class="rounded-lg bg-white border border-gray-200 p-4 shadow-sm">
+    <h2 class="text-lg font-semibold text-gray-900">Legacy Report</h2>
+    <pre class="mt-3 whitespace-pre-wrap text-sm text-gray-700"><%= api_update_log.summary_text %></pre>
+  </div>
+<% end %>

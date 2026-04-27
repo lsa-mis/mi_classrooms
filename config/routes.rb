@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   end
 
   resources :announcements
+  resources :api_update_logs, only: [:index, :show]
 
   get "legacy_crdb" => redirect("https://rooms.lsa.umich.edu")
 

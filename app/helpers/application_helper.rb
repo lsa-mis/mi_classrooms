@@ -31,7 +31,7 @@ module ApplicationHelper
       image_tag room.building.building_image.representation(resize_to_limit: [150, 150]), class: "m-2",
         alt: room.building.name
     else
-      image_tag "building_placeholder", class: "max-h-20 p-2", alt: "building placeholder"
+      image_tag "svgs/building.svg", class: "max-h-20 p-2", alt: "building placeholder"
     end
   end
 
@@ -40,7 +40,7 @@ module ApplicationHelper
       image_tag room.room_image.representation(resize_to_limit: [1000, 800]), class: "h-96  p-2",
         alt: "#{room.room_number} --  #{room.building.name}"
     else
-      image_tag "room_placeholder.png", class: "max-h-24 p-2", alt: "The image for this room is not available"
+      image_tag "svgs/photo-video.svg", class: "max-h-24 p-2", alt: "The image for this room is not available"
     end
   end
 
@@ -59,12 +59,12 @@ module ApplicationHelper
           loading: "lazy")
       rescue => e
         Rails.logger.error "!#!#!#!#!#!Failed to generate thumbnail: #{e.message}"
-        image_tag "room_placeholder.png",
+        image_tag "svgs/photo-video.svg",
           class: "max-h-24 p-2",
           alt: "Error generating thumbnail"
       end
     else
-      image_tag "room_placeholder.png",
+      image_tag "svgs/photo-video.svg",
         class: "max-h-24 p-2",
         alt: "room placeholder"
     end

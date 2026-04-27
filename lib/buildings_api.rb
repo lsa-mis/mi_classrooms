@@ -13,15 +13,21 @@ class BuildingsApi
   # "BuildingRecordNumber": 1005059, "BuildingLongDescription": "WALGREEN CHARLES R JR DRAMA CENTER",
   BUILDINGS_CODES = ["1000440", "1000234", "1000204", "1000333", "1005224", "1005059", "1005347"].freeze
 
-  def initialize(access_token = nil)
+  attr_reader :last_result
+
+  def initialize(access_token = nil, delete_dry_run: false)
     @client = UmApi::Connection.new(access_token: access_token, scope: "buildings")
     @debug = false
     @log = ApiLog.new
+    @delete_dry_run = delete_dry_run
+    @last_result = nil
   end
 
   def update_campus_list
+    start_result("Update campus list")
     @campus_cds = CampusRecord.all.pluck(:campus_cd)
     result = get_campuses
+    increment(:api_calls)
     if result["success"]
       data = result["data"]["Campus"]
       data.each do |row|
@@ -30,26 +36,27 @@ class BuildingsApi
         else
           create_campus(row)
         end
-        return @debug if @debug
+        return finish_result if @debug
       end
 
       if @campus_cds.present?
+        deleted_count = @campus_cds.count
         if CampusRecord.where(campus_cd: @campus_cds).destroy_all
+          increment(:deleted, deleted_count)
           @log.api_logger.info "update_campus_list, delete #{@campus_cds} campus(es) from the database"
         else
-          @log.api_logger.debug "update_campus_list, error: could not delete records with #{@campus_cds} ids"
-          @debug = true
-          return @debug
+          add_error("update_campus_list, error: could not delete records with #{@campus_cds} ids")
+          return finish_result
         end
       end
     else
-      @log.api_logger.debug "update_campus_list, error: API return: #{result["errorcode"]} - #{result["error"]}"
-      @debug = true
+      add_error("update_campus_list, error: API return: #{result["errorcode"]} - #{result["error"]}")
       sleep(61.seconds)
-      return @debug
+      increment(:rate_limit_sleeps)
+      return finish_result
     end
 
-    @debug
+    finish_result
   end
 
   def campus_exists?(campus_cd)
@@ -61,10 +68,10 @@ class BuildingsApi
     campus = CampusRecord.find_by(campus_cd: campus_cd)
 
     if campus.update(campus_description: row["CampusDescr"])
+      increment(:updated)
       @campus_cds.delete(campus_cd)
     else
-      @log.api_logger.debug "update_campus_list, error: Could not update #{campus_cd} because #{campus.errors.messages}"
-      @debug = true
+      add_error("update_campus_list, error: Could not update #{campus_cd} because #{campus.errors.messages}")
     end
   end
 
@@ -72,9 +79,10 @@ class BuildingsApi
     campus_cd = row["CampusCd"].to_i
     campus = CampusRecord.new(campus_cd: campus_cd, campus_description: row["CampusDescr"])
 
-    unless campus.save
-      @log.api_logger.debug "update_campus_list, error: Could not create #{campus_cd} because #{campus.errors.messages}"
-      @debug = true
+    if campus.save
+      increment(:created)
+    else
+      add_error("update_campus_list, error: Could not create #{campus_cd} because #{campus.errors.messages}")
     end
   end
 
@@ -86,37 +94,45 @@ class BuildingsApi
   end
 
   def update_all_buildings
+    start_result("Update buildings")
     begin
       @buildings_ids = Building.all.pluck(:bldrecnbr)
       result = get_buildings_for_current_fiscal_year
+      increment(:api_calls)
       if result["success"]
         result["data"].each do |row|
-          next if REMOVE_BLDG.include?(row["BuildingRecordNumber"])
-          next unless CAMPUS_CODES.include?(row["BuildingCampusCode"]) || BUILDINGS_CODES.include?(row["BuildingRecordNumber"])
+          if REMOVE_BLDG.include?(row["BuildingRecordNumber"])
+            increment(:skipped)
+            next
+          end
+          unless CAMPUS_CODES.include?(row["BuildingCampusCode"]) || BUILDINGS_CODES.include?(row["BuildingRecordNumber"])
+            increment(:skipped)
+            next
+          end
 
           if building_exists?(row["BuildingRecordNumber"])
             update_building(row)
           else
             create_building(row)
           end
-          return @debug if @debug
+          return finish_result if @debug
         end
 
         if @buildings_ids.present?
+          add_warning("update_all_buildings: Building(s) not in the API database: #{@buildings_ids}")
           @log.api_logger.info "update_all_buildings: Building(s) not in the API database: #{@buildings_ids}"
         end
       else
-        @log.api_logger.debug "update_all_buildings, error: API return: #{result["errorcode"]} - #{result["error"]}"
-        @debug = true
+        add_error("update_all_buildings, error: API return: #{result["errorcode"]} - #{result["error"]}")
         sleep(61.seconds)
-        return @debug
+        increment(:rate_limit_sleeps)
+        return finish_result
       end
     rescue => e
-      @log.api_logger.debug "update_all_buildings, error: #{e.message}"
-      @debug = true
+      add_error("update_all_buildings, error: #{e.message}")
     end
 
-    @debug
+    finish_result
   end
 
   def building_exists?(bldrecnbr)
@@ -134,13 +150,13 @@ class BuildingsApi
       city: row["BuildingCity"],
       state: row["BuildingState"],
       zip: row["BuildingPostal"],
-      country: "usa again",
+      country: "USA",
       campus_record_id: CampusRecord.find_by(campus_cd: row["BuildingCampusCode"].to_i).id
     )
       @buildings_ids.delete(bldrecnbr)
+      increment(:updated)
     else
-      @log.api_logger.debug "update_all_buildings, error: Could not update #{bldrecnbr} because : #{building.errors.messages}"
-      @debug = true
+      add_error("update_all_buildings, error: Could not update #{bldrecnbr} because : #{building.errors.messages}")
     end
   end
 
@@ -159,10 +175,10 @@ class BuildingsApi
     )
 
     if building.save
+      increment(:created)
       GeocodeBuildingJob.perform_later(building)
     else
-      @log.api_logger.debug "update_all_buildings, error: Could not create #{bldrecnbr} because : #{building.errors.messages}"
-      @debug = true
+      add_error("update_all_buildings, error: Could not create #{bldrecnbr} because : #{building.errors.messages}")
     end
   end
 
@@ -176,6 +192,7 @@ class BuildingsApi
   end
 
   def update_rooms
+    start_result("Update Rooms")
     begin
       @buildings_ids = Building.all.pluck(:bldrecnbr)
       department_api = DepartmentApi.new
@@ -190,6 +207,7 @@ class BuildingsApi
         @campus_id = building.campus_record_id
         @building_name = building.name
         result = get_building_classroom_data(bld)
+        increment(:api_calls)
         if result["success"]
           data = result["data"]
           if data.present? && data.pluck("RoomTypeDescription").uniq.include?("Classroom")
@@ -211,34 +229,37 @@ class BuildingsApi
               else
                 create_room(row, bld, dept_data)
               end
-              return @debug if @debug
+              return finish_result if @debug
             end
           end
 
           if @rooms_in_db.present?
-            RoomContact.where(rmrecnbr: @rooms_in_db).delete_all
-            RoomCharacteristic.where(rmrecnbr: @rooms_in_db).delete_all
-            if Room.where(rmrecnbr: @rooms_in_db).delete_all
-              @log.api_logger.info "update_rooms, delete #{@rooms_in_db} room(s) from the database"
+            if @delete_dry_run
+              increment(:would_delete, @rooms_in_db.count)
+              add_warning("update_rooms, dry run: would delete #{@rooms_in_db} room(s) from the database")
             else
-              @log.api_logger.debug "update_rooms, error: could not delete records with #{@rooms_in_db} rmrecnbr"
-              @debug = true
-              return @debug
+              deleted_count = delete_stale_rooms("update_rooms")
+              if deleted_count
+                increment(:deleted, deleted_count)
+                @log.api_logger.info "update_rooms, delete #{@rooms_in_db} room(s) from the database"
+              else
+                add_error("update_rooms, error: could not delete records with #{@rooms_in_db} rmrecnbr")
+                return finish_result
+              end
             end
           end
         else
-          @log.api_logger.debug "update_rooms, error: API return: #{result["errorcode"]} - #{result["error"]}"
-          @debug = true
+          add_error("update_rooms, error: API return: #{result["errorcode"]} - #{result["error"]}")
           sleep(61.seconds)
-          return @debug
+          increment(:rate_limit_sleeps)
+          return finish_result
         end
       end
     rescue => e
-      @log.api_logger.debug "update_rooms, error: #{e.message}"
-      @debug = true
+      add_error("update_rooms, error: #{e.message}")
     end
 
-    @debug
+    finish_result
   end
 
   def room_exists?(bldrecnbr, rmrecnbr)
@@ -260,9 +281,9 @@ class BuildingsApi
         building_name: @building_name
       )
         @rooms_in_db.delete(rmrecnbr)
+        increment(:updated)
       else
-        @log.api_logger.debug "update_rooms, error: Could not update #{rmrecnbr} because : #{room.errors.messages}"
-        @debug = true
+        add_error("update_rooms, error: Could not update #{rmrecnbr} because : #{room.errors.messages}")
       end
     elsif room.update(
       floor: row["FloorNumber"],
@@ -278,9 +299,9 @@ class BuildingsApi
       building_name: @building_name
     )
       @rooms_in_db.delete(rmrecnbr)
+      increment(:updated)
     else
-      @log.api_logger.debug "update_rooms, error: Could not update #{rmrecnbr} because : #{room.errors.messages}"
-      @debug = true
+      add_error("update_rooms, error: Could not update #{rmrecnbr} because : #{room.errors.messages}")
     end
   end
 
@@ -308,9 +329,10 @@ class BuildingsApi
     end
 
     room = Room.new(room_attributes)
-    unless room.save
-      @log.api_logger.debug "update_rooms, error: Could not create #{rmrecnbr} because : #{room.errors.messages}"
-      @debug = true
+    if room.save
+      increment(:created)
+    else
+      add_error("update_rooms, error: Could not create #{rmrecnbr} because : #{room.errors.messages}")
     end
   end
 
@@ -329,7 +351,7 @@ class BuildingsApi
     result = department_api.get_all_departments_info
     return [build_department_index(result["data"]), false] if result["success"]
 
-    @log.api_logger.debug "update_rooms, error: could not preload departments - #{result["errorcode"]}: #{result["error"]}. Falling back to per-department lookups."
+    add_warning("update_rooms, error: could not preload departments - #{result["errorcode"]}: #{result["error"]}. Falling back to per-department lookups.")
     [{}, true]
   end
 
@@ -351,15 +373,18 @@ class BuildingsApi
     else
       number_of_api_calls_per_minutes = 1
       sleep(61.seconds)
+      increment(:rate_limit_sleeps)
     end
+    increment(:api_calls)
 
     dept_result = department_api.get_departments_info(dept_name)
     if dept_result["success"]
       dept_info = dept_result.dig("data", "DeptData", 0)
       dept_info_array[dept_name] = dept_info.present? ? department_summary(dept_info) : nil
     else
-      @log.api_logger.debug "update_rooms, error: DepartmentApi: Error for building #{bld}, room #{room_record_number}, department #{dept_name} - #{dept_result["errorcode"]}: #{dept_result["error"]}"
+      add_warning("update_rooms, error: DepartmentApi: Error for building #{bld}, room #{room_record_number}, department #{dept_name} - #{dept_result["errorcode"]}: #{dept_result["error"]}")
       sleep(61.seconds)
+      increment(:rate_limit_sleeps)
       dept_info_array[dept_name] = nil
     end
 
@@ -380,5 +405,49 @@ class BuildingsApi
 
   def strip_headers(result)
     result.except("headers")
+  end
+
+  def delete_stale_rooms(context)
+    room_ids = @rooms_in_db.uniq
+    expected_count = room_ids.count
+    deleted_count = 0
+
+    ActiveRecord::Base.transaction do
+      RoomContact.where(rmrecnbr: room_ids).delete_all
+      RoomCharacteristic.where(rmrecnbr: room_ids).delete_all
+      deleted_count = Room.where(rmrecnbr: room_ids).delete_all
+
+      if deleted_count != expected_count
+        @log.api_logger.debug "#{context}, error: expected to delete #{expected_count} room(s), deleted #{deleted_count}"
+        raise ActiveRecord::Rollback
+      end
+    end
+
+    (deleted_count == expected_count) ? deleted_count : false
+  end
+
+  def start_result(phase)
+    @debug = false
+    @last_result = ApiUpdateDatabase::PhaseResult.new(phase)
+  end
+
+  def finish_result
+    @last_result.finish
+    @debug
+  end
+
+  def increment(counter, by = 1)
+    @last_result&.increment(counter, by)
+  end
+
+  def add_warning(message)
+    @last_result&.add_warning(message)
+    @log.api_logger.info message
+  end
+
+  def add_error(message)
+    @last_result&.add_error(message)
+    @log.api_logger.debug message
+    @debug = true
   end
 end

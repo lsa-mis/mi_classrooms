@@ -21,6 +21,9 @@
           <% if user_signed_in? && policy(Announcement).edit? %>
             <div class="border-transparent text-blue-50 hover:border-blue-300 hover:text-white inline-flex items-center pr-1 pt-1 border-b-2 text-base font-normal"><%= link_to "Announcements", announcements_path, class: "#{class_names(active: current_page?(announcements_path))}"%></div>
           <% end %>
+          <% if user_signed_in? && policy(ApiUpdateLog).index? %>
+            <div class="border-transparent text-blue-50 hover:border-blue-300 hover:text-white inline-flex items-center pr-1 pt-1 border-b-2 text-base font-normal"><%= link_to "API Updates", api_update_logs_path, class: "#{class_names(active: current_page?(api_update_logs_path))}"%></div>
+          <% end %>
           <% if user_signed_in? && policy(Announcement).edit? %>
             <div class="border-transparent text-blue-50 hover:border-blue-300 hover:text-white inline-flex items-center pr-1 pt-1 border-b-2 text-base font-normal"><%= link_to "AdminDoc", "https://docs.google.com/document/d/1wg_MvJRzeZwl8x1292AYp3JoS4AHd1xSgw7THpqflCU/edit?usp=sharing", target: "_blank"%></div>
           <% end %>

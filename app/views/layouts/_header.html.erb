@@ -3,6 +3,7 @@
   <% if api_status == 'failed' %>
     <div class="flex flex-row bg-red-800 text-red-100 text-sm place-content-center py-1">
       The Classrooms Update Script failed to run today.
+      <%= link_to "View Summary", api_update_logs_path, class: "hover:underline px-1" %>
       <a id="myCustomTrigger" class="hover:underline px-1" href="#" data-email="<%= session[:user_email]%>">Report an Issue</a>
     </div>
   <% elsif api_status == "error" %>
@@ -11,6 +12,7 @@
         <button data-action="visibility#toggleTargets" class="hover:underline">
           The Classrooms Update Script ended up with errors.
         </button>
+        <%= link_to "View Summary", api_update_logs_path, class: "px-1 hover:underline" %>
         <a id="myCustomTrigger" class="px-1 hover:underline" href="#" data-email="<%= session[:user_email]%>">Report an Issue</a>
       </div>
       <div data-visibility-target="hideable" hidden>

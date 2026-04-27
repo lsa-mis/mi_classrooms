@@ -1,6 +1,6 @@
 # MClassrooms
 
-![Ruby Version](https://img.shields.io/badge/Ruby%20Version-4.0.1-red) ![Rails Version](https://img.shields.io/badge/Rails%20Version-8.1-red)
+![Ruby Version](https://img.shields.io/badge/Ruby%20Version-3.4.7-red) ![Rails Version](https://img.shields.io/badge/Rails%20Version-8.1-red)
 
 ## Authorization
 
