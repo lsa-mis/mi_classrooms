@@ -26,10 +26,27 @@ RSpec.describe UpdateRoomCharacteristicsArrayJob, type: :job do
     end
 
     it "ignores missing rooms without raising an error" do
-      allow(RoomCharacteristic).to receive(:pluck).with(:rmrecnbr).and_return([9_999_999])
+      distinct_characteristics = instance_double(ActiveRecord::Relation, pluck: [9_999_999])
+      allow(RoomCharacteristic).to receive(:distinct).and_return(distinct_characteristics)
       allow(Room).to receive(:find_by).with(rmrecnbr: 9_999_999).and_return(nil)
 
       expect { described_class.perform_now }.not_to raise_error
+    end
+
+    it "clears stale room characteristics arrays when all characteristic rows are removed" do
+      room = create(
+        :room,
+        building_bldrecnbr: building.bldrecnbr,
+        rmrecnbr: 1_300_102,
+        characteristics: %w[DocCam ProjDigit],
+        rmtyp_description: "Classroom",
+        facility_code_heprod: "CHAR102",
+        instructional_seating_count: 30
+      )
+
+      described_class.perform_now
+
+      expect(room.reload.characteristics).to eq([])
     end
   end
 end

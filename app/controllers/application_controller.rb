@@ -43,8 +43,14 @@ class ApplicationController < ActionController::Base
   end
 
   def set_characteristics_array
-    max_updated = RoomCharacteristic.maximum(:updated_at)
-    cache_key = ["v1", "room_characteristics_filter_hash", max_updated]
+    cache_key = [
+      "v2",
+      "room_characteristics_filter_hash",
+      RoomCharacteristic.maximum(:updated_at),
+      RoomCharacteristic.count,
+      Room.maximum(:updated_at),
+      Room.count
+    ]
     @all_characteristics_array = Rails.cache.fetch(cache_key, expires_in: 12.hours) do
       build_room_characteristics_filter_hash
     end

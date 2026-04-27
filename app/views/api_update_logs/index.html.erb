@@ -1,0 +1,59 @@
+<div class="container px-1 mb-20">
+  <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-2 mb-6">
+    <div>
+      <h1>API Update Summary</h1>
+      <p class="text-sm text-gray-600">Morning classroom data sync status, phase counts, warnings, and errors.</p>
+    </div>
+  </div>
+
+  <% if @latest_log.present? %>
+    <section class="mb-10">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-semibold text-gray-900">Latest Run</h2>
+        <%= link_to "View raw report", api_update_log_path(@latest_log), class: "text-sm text-indigo-600 hover:text-indigo-500 font-medium" %>
+      </div>
+      <%= render "run_summary", api_update_log: @latest_log %>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">Recent Runs</h2>
+      <div class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500">Run</th>
+              <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500">Status</th>
+              <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500">Wall Time</th>
+              <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <% @api_update_logs.each do |log| %>
+              <% report = log.structured_report %>
+              <tr>
+                <td class="px-4 py-3 text-sm text-gray-900"><%= log.created_at.strftime("%b %-d, %Y %-l:%M %p") %></td>
+                <td class="px-4 py-3 text-sm">
+                  <span class="inline-flex rounded-full px-3 py-1 text-xs font-medium <%= log.status == "success" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800" %>">
+                    <%= log.status.titleize %>
+                  </span>
+                </td>
+                <td class="px-4 py-3 text-sm text-gray-700">
+                  <% if report.present? %>
+                    <%= (report["duration_seconds"].to_f / 60).round(2) %> minutes
+                  <% else %>
+                    Legacy report
+                  <% end %>
+                </td>
+                <td class="px-4 py-3 text-sm"><%= link_to "Details", api_update_log_path(log), class: "text-indigo-600 hover:text-indigo-500 font-medium" %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  <% else %>
+    <div class="text-center py-10 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+      <p class="text-sm text-gray-500">No API update runs have been recorded yet.</p>
+    </div>
+  <% end %>
+</div>
