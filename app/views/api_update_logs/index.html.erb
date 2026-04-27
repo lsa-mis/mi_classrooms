@@ -29,7 +29,7 @@
           </thead>
           <tbody class="divide-y divide-gray-200">
             <% @api_update_logs.each do |log| %>
-              <% report = log.structured_report %>
+              <% report = log.report_for_display %>
               <tr>
                 <td class="px-4 py-3 text-sm text-gray-900"><%= format_api_update_time(log.created_at.iso8601) %></td>
                 <td class="px-4 py-3 text-sm">
@@ -38,8 +38,10 @@
                   </span>
                 </td>
                 <td class="px-4 py-3 text-sm text-gray-700">
-                  <% if report.present? %>
+                  <% if report.present? && report["duration_seconds"].present? %>
                     <%= (report["duration_seconds"].to_f / 60).round(2) %> minutes
+                  <% elsif report.present? %>
+                    —
                   <% else %>
                     Legacy report
                   <% end %>

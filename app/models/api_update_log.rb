@@ -1,5 +1,6 @@
 class ApiUpdateLog < ApplicationRecord
   STRUCTURED_REPORT_MARKER = "Structured report:".freeze
+  TOTAL_WALL_TIME_PATTERN = /\ATotal wall time:\s*(?<minutes>[\d.]+)\s*minutes\z/i.freeze
   PHASE_TIME_PATTERN = /\A(?<phase>.+) Time: (?<seconds>[\d.]+) seconds\z/.freeze
   COUNTS_PATTERN = /\ACounts: (?<counts>.+)\z/.freeze
   WARNING_PATTERN = /\AWarning: (?<warning>.+)\z/.freeze
@@ -10,7 +11,15 @@ class ApiUpdateLog < ApplicationRecord
   end
 
   def report_for_display
-    structured_report || legacy_report
+    raw = structured_report || legacy_report
+    return nil if raw.blank?
+
+    report = raw.dup
+    if report["duration_seconds"].blank?
+      derived = derive_duration_seconds(report)
+      report["duration_seconds"] = derived if derived.present?
+    end
+    report
   end
 
   def structured_report
@@ -31,6 +40,34 @@ class ApiUpdateLog < ApplicationRecord
   end
 
   private
+
+  def derive_duration_seconds(report)
+    if report["started_at"].present? && report["finished_at"].present?
+      begin
+        started = Time.iso8601(report["started_at"].to_s)
+        finished = Time.iso8601(report["finished_at"].to_s)
+        span = (finished - started).round(2)
+        return span if span.positive?
+      rescue ArgumentError
+        # ignore invalid timestamps
+      end
+    end
+
+    minutes = total_wall_time_minutes_from_summary
+    return (minutes * 60).round(2) if minutes&.positive?
+
+    phases = report["phases"] || []
+    sum_sec = phases.sum { |p| p["duration_seconds"].to_f }
+    sum_sec.positive? ? sum_sec.round(2) : nil
+  end
+
+  def total_wall_time_minutes_from_summary
+    summary_text.each_line do |line|
+      match = line.strip.match(TOTAL_WALL_TIME_PATTERN)
+      return match[:minutes].to_f if match
+    end
+    nil
+  end
 
   def parse_structured_fragment(json)
     return nil if json.blank?

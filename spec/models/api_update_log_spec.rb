@@ -94,6 +94,50 @@ RSpec.describe ApiUpdateLog, type: :model do
       expect(report["phases"].first["phase"]).to eq("Update Rooms")
       expect(report["phases"].first["counters"]).to eq({"updated" => 12, "deactivated" => 3})
       expect(report["phases"].first["warnings"]).to eq(["update_rooms, deactivated stale rooms"])
+      expect(report["duration_seconds"]).to eq(12.34)
+    end
+
+    it "derives wall time from Total wall time line when phase sum would differ" do
+      log = described_class.create!(
+        status: "success",
+        result: <<~TEXT
+          Time report:
+          Update campus list Time: 0.5 seconds
+          Update buildings Time: 1.0 seconds
+
+          Total wall time: 2.00 minutes
+
+          Structured report:
+          {
+            "status": "success",
+            "started_at": "2026-04-27T09:23:00Z",
+            "finished_at": "2026-04-27T09:23:00Z",
+            "phases": []
+          }
+        TEXT
+      )
+
+      report = log.report_for_display
+      expect(report["duration_seconds"]).to eq(120.0)
+    end
+
+    it "derives wall time from started_at and finished_at when duration_seconds is omitted" do
+      log = described_class.create!(
+        status: "success",
+        result: <<~TEXT
+          Time report:
+
+          Structured report:
+          {
+            "status": "success",
+            "started_at": "2026-04-27T09:23:00Z",
+            "finished_at": "2026-04-27T09:25:30Z",
+            "phases": []
+          }
+        TEXT
+      )
+
+      expect(log.report_for_display["duration_seconds"]).to eq(150.0)
     end
   end
 end
