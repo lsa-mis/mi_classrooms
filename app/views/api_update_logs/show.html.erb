@@ -2,7 +2,7 @@
   <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-2 mb-6">
     <div>
       <h1>API Update Run</h1>
-      <p class="text-sm text-gray-600"><%= @api_update_log.created_at.strftime("%b %-d, %Y %-l:%M %p") %></p>
+      <p class="text-sm text-gray-600"><%= format_api_update_time(@api_update_log.created_at.iso8601) %></p>
     </div>
     <%= link_to "Back to summary", api_update_logs_path, class: "text-sm text-indigo-600 hover:text-indigo-500 font-medium" %>
   </div>

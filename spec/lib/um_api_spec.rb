@@ -7,6 +7,10 @@ RSpec.describe UmApi::TokenStore do
       connection = instance_double(UmApi::Connection)
 
       allow(UmApi::Connection).to receive(:new).and_return(connection)
+      allow(token_store).to receive(:credentials).and_return(
+        buildings_client_id: "client-id",
+        buildings_client_secret: "client-secret"
+      )
       allow(connection).to receive(:post_form).and_return(
         {
           "success" => true,

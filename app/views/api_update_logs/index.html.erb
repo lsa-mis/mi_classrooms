@@ -31,7 +31,7 @@
             <% @api_update_logs.each do |log| %>
               <% report = log.structured_report %>
               <tr>
-                <td class="px-4 py-3 text-sm text-gray-900"><%= log.created_at.strftime("%b %-d, %Y %-l:%M %p") %></td>
+                <td class="px-4 py-3 text-sm text-gray-900"><%= format_api_update_time(log.created_at.iso8601) %></td>
                 <td class="px-4 py-3 text-sm">
                   <span class="inline-flex rounded-full px-3 py-1 text-xs font-medium <%= log.status == "success" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800" %>">
                     <%= log.status.titleize %>

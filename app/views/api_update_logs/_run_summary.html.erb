@@ -10,11 +10,11 @@
     </div>
     <div class="rounded-lg bg-white border border-gray-200 p-4 shadow-sm">
       <p class="text-xs uppercase tracking-wide text-gray-500">Started</p>
-      <p class="mt-1 text-sm text-gray-900"><%= Time.zone.parse(report["started_at"]).strftime("%b %-d, %Y %-l:%M %p") if report["started_at"].present? %></p>
+      <p class="mt-1 text-sm text-gray-900"><%= format_api_update_time(report["started_at"]) %></p>
     </div>
     <div class="rounded-lg bg-white border border-gray-200 p-4 shadow-sm">
       <p class="text-xs uppercase tracking-wide text-gray-500">Finished</p>
-      <p class="mt-1 text-sm text-gray-900"><%= Time.zone.parse(report["finished_at"]).strftime("%b %-d, %Y %-l:%M %p") if report["finished_at"].present? %></p>
+      <p class="mt-1 text-sm text-gray-900"><%= format_api_update_time(report["finished_at"]) %></p>
     </div>
     <div class="rounded-lg bg-white border border-gray-200 p-4 shadow-sm">
       <p class="text-xs uppercase tracking-wide text-gray-500">Wall Time</p>
