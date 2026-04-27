@@ -1,6 +1,7 @@
 <% counters = phase.fetch("counters", {}).select { |_name, value| value.to_i.positive? } %>
 <% warnings = phase.fetch("warnings", []) %>
 <% errors = phase.fetch("errors", []) %>
+<% deactivated_count = phase.fetch("counters", {}).fetch("deactivated", 0).to_i %>
 
 <section class="bg-white rounded-lg shadow-md border border-gray-200 p-4">
   <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-2">
@@ -10,9 +11,16 @@
         <%= phase["duration_seconds"] || "0.0" %> seconds
       </p>
     </div>
-    <span class="inline-flex w-fit rounded-full px-3 py-1 text-sm font-medium <%= phase["status"] == "success" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800" %>">
-      <%= phase["status"].to_s.titleize %>
-    </span>
+    <div class="flex items-center gap-2">
+      <% if deactivated_count.positive? %>
+        <span class="inline-flex w-fit rounded-full px-3 py-1 text-sm font-medium bg-amber-100 text-amber-800">
+          Deactivated: <%= deactivated_count %>
+        </span>
+      <% end %>
+      <span class="inline-flex w-fit rounded-full px-3 py-1 text-sm font-medium <%= phase["status"] == "success" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800" %>">
+        <%= phase["status"].to_s.titleize %>
+      </span>
+    </div>
   </div>
 
   <% if counters.present? %>

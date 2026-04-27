@@ -236,14 +236,14 @@ class BuildingsApi
           if @rooms_in_db.present?
             if @delete_dry_run
               increment(:would_delete, @rooms_in_db.count)
-              add_warning("update_rooms, dry run: would delete #{@rooms_in_db} room(s) from the database")
+              add_warning("update_rooms, dry run: would deactivate #{@rooms_in_db} stale room(s)")
             else
-              deleted_count = delete_stale_rooms("update_rooms")
-              if deleted_count
-                increment(:deleted, deleted_count)
-                @log.api_logger.info "update_rooms, delete #{@rooms_in_db} room(s) from the database"
+              deactivated_count = deactivate_stale_rooms("update_rooms")
+              if deactivated_count
+                increment(:deactivated, deactivated_count)
+                @log.api_logger.info "update_rooms, deactivated #{@rooms_in_db} stale room(s)"
               else
-                add_error("update_rooms, error: could not delete records with #{@rooms_in_db} rmrecnbr")
+                add_error("update_rooms, error: could not deactivate records with #{@rooms_in_db} rmrecnbr")
                 return finish_result
               end
             end
@@ -278,7 +278,8 @@ class BuildingsApi
         dept_description: row["DepartmentName"],
         instructional_seating_count: row["RoomStationCount"],
         campus_record_id: @campus_id,
-        building_name: @building_name
+        building_name: @building_name,
+        visible: true
       )
         @rooms_in_db.delete(rmrecnbr)
         increment(:updated)
@@ -296,7 +297,8 @@ class BuildingsApi
       dept_grp: dept_data["DeptGroup"],
       dept_group_description: dept_data["DeptGroupDescription"],
       campus_record_id: @campus_id,
-      building_name: @building_name
+      building_name: @building_name,
+      visible: true
     )
       @rooms_in_db.delete(rmrecnbr)
       increment(:updated)
@@ -407,23 +409,21 @@ class BuildingsApi
     result.except("headers")
   end
 
-  def delete_stale_rooms(context)
+  def deactivate_stale_rooms(context)
     room_ids = @rooms_in_db.uniq
     expected_count = room_ids.count
-    deleted_count = 0
+    deactivated_count = 0
 
     ActiveRecord::Base.transaction do
-      RoomContact.where(rmrecnbr: room_ids).delete_all
-      RoomCharacteristic.where(rmrecnbr: room_ids).delete_all
-      deleted_count = Room.where(rmrecnbr: room_ids).delete_all
+      deactivated_count = Room.where(rmrecnbr: room_ids).where.not(visible: false).update_all(visible: false)
 
-      if deleted_count != expected_count
-        @log.api_logger.debug "#{context}, error: expected to delete #{expected_count} room(s), deleted #{deleted_count}"
+      if deactivated_count != expected_count
+        @log.api_logger.debug "#{context}, error: expected to deactivate #{expected_count} room(s), deactivated #{deactivated_count}"
         raise ActiveRecord::Rollback
       end
     end
 
-    (deleted_count == expected_count) ? deleted_count : false
+    (deactivated_count == expected_count) ? deactivated_count : false
   end
 
   def start_result(phase)

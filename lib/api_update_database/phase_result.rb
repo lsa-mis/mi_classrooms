@@ -5,6 +5,7 @@ module ApiUpdateDatabase
       created
       updated
       deleted
+      deactivated
       skipped
       retries
       rate_limit_sleeps

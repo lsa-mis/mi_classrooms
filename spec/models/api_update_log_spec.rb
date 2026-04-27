@@ -55,5 +55,45 @@ RSpec.describe ApiUpdateLog, type: :model do
       expect(log.structured_report).to be_nil
       expect(log.summary_text).to eq("Time report only")
     end
+
+    it "extracts JSON from a structured report with trailing text" do
+      log = described_class.create!(
+        status: "success",
+        result: <<~TEXT
+          Time report:
+          Update Rooms Time: 1.0 seconds
+
+          Structured report:
+          {
+            "status": "success",
+            "phases": []
+          }
+          trailing non-json text
+        TEXT
+      )
+
+      expect(log.structured_report).to eq({"status" => "success", "phases" => []})
+    end
+  end
+
+  describe "#report_for_display" do
+    it "parses phase counters and warnings from a legacy report" do
+      log = described_class.create!(
+        status: "success",
+        result: <<~TEXT
+          Time report:
+          Update Rooms Time: 12.34 seconds
+            Counts: updated=12, deactivated=3
+            Warning: update_rooms, deactivated stale rooms
+        TEXT
+      )
+
+      report = log.report_for_display
+
+      expect(report["phases"].size).to eq(1)
+      expect(report["phases"].first["phase"]).to eq("Update Rooms")
+      expect(report["phases"].first["counters"]).to eq({"updated" => 12, "deactivated" => 3})
+      expect(report["phases"].first["warnings"]).to eq(["update_rooms, deactivated stale rooms"])
+    end
   end
 end
