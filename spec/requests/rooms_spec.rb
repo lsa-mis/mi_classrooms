@@ -45,6 +45,7 @@ RSpec.describe "Rooms", type: :request do
 
     allow_any_instance_of(ActionView::Base).to receive(:stylesheet_link_tag).and_return("")
     allow_any_instance_of(Importmap::ImportmapTagsHelper).to receive(:javascript_importmap_tags).and_return("")
+    allow_any_instance_of(ActionView::Base).to receive(:image_tag).and_return("")
     allow_any_instance_of(ApplicationHelper).to receive(:svg).and_return("")
     allow_any_instance_of(ApplicationHelper).to receive(:room_thumbnail_image).and_return("")
     allow_any_instance_of(ActionView::Base).to receive(:render).and_wrap_original do |method, *args, **kwargs, &block|
@@ -160,8 +161,17 @@ RSpec.describe "Rooms", type: :request do
   end
 
   def expect_successful_response
-    raise response.body if response.server_error?
+    raise server_error_summary if response.server_error?
 
     expect(response).to have_http_status(:ok)
+  end
+
+  def server_error_summary
+    response.body
+      .gsub(/<script.*?<\/script>/m, "")
+      .gsub(/<style.*?<\/style>/m, "")
+      .gsub(/<[^>]+>/, " ")
+      .squish
+      .first(2_000)
   end
 end
