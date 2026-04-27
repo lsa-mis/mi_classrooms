@@ -16,7 +16,7 @@ gem "benchmark"  # Required by lib/tasks/api_update_database.rake
 # gem 'annotate', '~> 3.2'  # Commented out - not compatible with Rails 8.0 yet
 gem "bootsnap", ">= 1.4.3", require: false
 # Devise - PR #5340 merged, using official gem now
-gem "devise", "~> 4.9"
+gem "devise", "~> 5.0"
 gem "draper", "~> 4.0"
 gem "geocoder"
 gem "haml-rails"
@@ -26,7 +26,7 @@ gem "stimulus-rails"
 gem "image_processing"
 gem "jbuilder", "~> 2.11"
 gem "ldap_lookup"
-gem "nokogiri", "~> 1.18.9"
+gem "nokogiri", "~> 1.19.1"
 gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection"
 gem "omniauth-saml", "~> 2.1.3"
