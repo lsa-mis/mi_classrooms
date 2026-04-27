@@ -130,7 +130,7 @@ RSpec.describe "Rooms", type: :request do
     it "allows an authenticated viewer to see an active room" do
       get room_path(matching_room)
 
-      expect(response).to have_http_status(:ok)
+      expect_successful_response
       expect(response.body).to include("USB101")
       expect(response.body).to include("Instructional seating count:")
       expect(response.body).not_to include(edit_room_path(matching_room))
