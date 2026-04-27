@@ -38,6 +38,12 @@ RSpec.describe "API update logs", type: :request do
   before do
     allow_any_instance_of(ActionView::Base).to receive(:stylesheet_link_tag).and_return("")
     allow_any_instance_of(Importmap::ImportmapTagsHelper).to receive(:javascript_importmap_tags).and_return("")
+    allow_any_instance_of(ActionView::Base).to receive(:render).and_wrap_original do |method, *args, **kwargs, &block|
+      partial = args.first
+      next "" if partial == "layouts/header" || partial == "layouts/footer"
+
+      method.call(*args, **kwargs, &block)
+    end
   end
 
   describe "GET /api_update_logs" do
@@ -47,7 +53,7 @@ RSpec.describe "API update logs", type: :request do
 
       get api_update_logs_path
 
-      expect(response).to have_http_status(:ok)
+      expect_successful_response
       expect(response.body).to include("API Update Summary")
       expect(response.body).to include("Update campus list")
       expect(response.body).to include("Updated")
@@ -70,7 +76,7 @@ RSpec.describe "API update logs", type: :request do
 
       get api_update_log_path(api_update_log)
 
-      expect(response).to have_http_status(:ok)
+      expect_successful_response
       expect(response.body).to include("Raw Saved Report")
       expect(response.body).to include("Structured report")
     end
@@ -85,5 +91,11 @@ RSpec.describe "API update logs", type: :request do
       controller.current_user.membership = [admin ? "mi-classrooms-admin-staging" : "mi-classrooms-non-admin-staging"]
       controller.current_user.admin = admin
     end
+  end
+
+  def expect_successful_response
+    raise response.body if response.server_error?
+
+    expect(response).to have_http_status(:ok)
   end
 end
