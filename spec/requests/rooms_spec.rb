@@ -161,17 +161,12 @@ RSpec.describe "Rooms", type: :request do
   end
 
   def expect_successful_response
-    raise server_error_summary if response.server_error?
+    raise server_error_message if response.server_error?
 
     expect(response).to have_http_status(:ok)
   end
 
-  def server_error_summary
-    response.body
-      .gsub(/<script.*?<\/script>/m, "")
-      .gsub(/<style.*?<\/style>/m, "")
-      .gsub(/<[^>]+>/, " ")
-      .squish
-      .first(2_000)
+  def server_error_message
+    "Expected a successful response, got #{response.status}. See log/test.log for the rendered exception details."
   end
 end
