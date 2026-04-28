@@ -344,6 +344,17 @@ This means the new flow should preserve the old rate-limit behavior while reduci
 
 There are three useful outputs during a run:
 
+```mermaid
+flowchart LR
+run[api_update_database run] --> stdout[Task stdout]
+run --> logRow[ApiUpdateLog]
+run --> fileLog[log/api_nightly_update_db.log]
+
+stdout --> stdoutUse[Use case:<br/>Live phase progress + timing]
+logRow --> logUse[Use case:<br/>Canonical run status and summary<br/>Best for post-run verification/UI]
+fileLog --> fileUse[Use case:<br/>Detailed adapter-level warnings/errors<br/>Best for troubleshooting]
+```
+
 ### 1. Task stdout
 
 The task prints timing lines to stdout for each phase. This is the quickest way to see live progress.
@@ -375,6 +386,77 @@ Important note:
 - the room-phase failure message in the rake task still references a dated room log path
 - the actual logger still writes to `log/api_nightly_update_db.log`
 - when in doubt, trust `ApiUpdateLog` and `api_nightly_update_db.log`
+
+## How The Admin Summary UI Is Built
+
+The admin-facing pages:
+
+- `/api_update_logs` (summary + recent runs)
+- `/api_update_logs/:id` (single run details + raw saved report)
+
+consume the persisted `ApiUpdateLog` row and then normalize the payload for display.
+
+```mermaid
+flowchart TD
+runner[ApiUpdateDatabase::Runner] --> finish[finish(started_at)]
+finish --> taskResult[TaskResultLog.update_log]
+taskResult --> row[(ApiUpdateLog row)]
+row --> index[ApiUpdateLogsController#index]
+row --> show[ApiUpdateLogsController#show]
+index --> parser[ApiUpdateLog#report_for_display]
+show --> parser
+parser --> cards[Run summary cards]
+parser --> phases[Phase cards]
+row --> raw[Raw Saved Report pre block]
+```
+
+### What `report_for_display` does
+
+`ApiUpdateLog#report_for_display` uses a layered fallback so old and new payload formats can render in the same UI.
+
+```mermaid
+flowchart TD
+start[report_for_display] --> structured{Structured report JSON present?}
+structured -- yes --> parsed[Parse JSON section]
+structured -- no --> legacy[Parse legacy text summary]
+parsed --> duration{duration_seconds present?}
+legacy --> duration
+duration -- yes --> output[Return report hash]
+duration -- no --> derive[derive_duration_seconds]
+derive --> ts{started_at + finished_at valid?}
+ts -- yes --> fromTs[Use finished - started]
+ts -- no --> wall{Total wall time line present?}
+wall -- yes --> fromWall[Convert minutes to seconds]
+wall -- no --> sum[Sum phase durations]
+fromTs --> output
+fromWall --> output
+sum --> output
+```
+
+Key implementation details:
+
+- prefers structured JSON after `Structured report:`
+- falls back to parsed legacy lines (`<Phase> Time`, `Counts:`, `Warning:`, `Error:`)
+- derives `duration_seconds` when missing
+- supports mixed data history without breaking the UI
+
+### How index page values are computed
+
+- **Latest Run** = `ApiUpdateLog.latest`
+- **Recent Runs** = latest 14 rows, newest first
+- **Active buildings** = `Building.where(visible: true).count`
+- **Active rooms** = `Room.where(visible: true).count`
+- **Wall time display** = `duration_seconds / 60` when available, otherwise fallback text (`—` or `Legacy report`)
+
+Important interpretation note:
+
+- active building/room counts reflect **current database visibility**, not a point-in-time snapshot from that run
+
+### More detailed UI walkthrough
+
+For a section-by-section explanation of each card, table column, and phase block in the admin UI, see:
+
+- `docs/api-update-summary-view.md`
 
 ## Staging Prerequisites
 
