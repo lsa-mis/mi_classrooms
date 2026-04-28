@@ -45,7 +45,7 @@
     </div>
   <% end %>
 
-  <% if building.notes.alert.present? %>
+  <% if building.notes.any?(&:alert?) %>
     <div class="bg-yellow-550 text-sm px-2 mb-1 flex items-center space-x-2">
       <%= svg('alert') %>
         <span>Alert</span>

@@ -105,6 +105,19 @@ RSpec.describe "Rooms", type: :request do
       expect_successful_response
       expect(blob_queries.count).to be <= 3
     end
+
+    it "avoids per-row alert note lookups in room listings" do
+      create(:note, :alert, noteable: matching_room)
+      create(:note, :alert, noteable: other_room)
+      create(:note, :alert, noteable: building)
+
+      note_queries = capture_alert_note_queries do
+        get rooms_path, params: {classroom_name: "USB"}
+      end
+
+      expect_successful_response
+      expect(note_queries).to be_empty
+    end
   end
 
   describe "POST /rooms/:id/toggle_visible" do
@@ -174,6 +187,19 @@ RSpec.describe "Rooms", type: :request do
       expect(json["rmtyp_description"]).to eq("Classroom")
       expect(json["url"]).to eq(room_url(matching_room, format: :json))
     end
+
+    it "avoids repeated alert note lookups on the room show page" do
+      create(:note, :alert, noteable: matching_room)
+      create(:note, :notice, noteable: matching_room)
+      create(:note, :alert, noteable: building)
+
+      note_queries = capture_alert_note_queries do
+        get room_path(matching_room)
+      end
+
+      expect_successful_response
+      expect(note_queries).to be_empty
+    end
   end
 
   def expect_successful_response
@@ -200,6 +226,20 @@ RSpec.describe "Rooms", type: :request do
     callback = lambda { |_, _, _, _, payload|
       sql = payload[:sql].to_s
       queries << sql if sql.include?("FROM \"active_storage_blobs\"")
+    }
+
+    ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
+      ActiveRecord::Base.uncached { yield }
+    end
+
+    queries
+  end
+
+  def capture_alert_note_queries
+    queries = []
+    callback = lambda { |_, _, _, _, payload|
+      sql = payload[:sql].to_s
+      queries << sql if sql.include?("FROM \"notes\"") && sql.include?("\"alert\" =")
     }
 
     ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do

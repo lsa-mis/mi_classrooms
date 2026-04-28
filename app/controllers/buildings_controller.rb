@@ -9,10 +9,10 @@ class BuildingsController < ApplicationController
     @schools = Room.classrooms.pluck(:dept_group_description).uniq.compact.sort
 
     buildings_ids = Room.classrooms.pluck(:building_bldrecnbr).uniq
-    @buildings = if params[:inactive_buildings].present?
-      Building.where(bldrecnbr: buildings_ids, visible: false).order(:name)
+    if params[:inactive_buildings].present?
+      @buildings = Building.where(bldrecnbr: buildings_ids, visible: false).order(:name)
     else
-      Building.where(bldrecnbr: buildings_ids).order(:name)
+      @buildings = Building.where(bldrecnbr: buildings_ids).order(:name)
     end
     if params[:building_name].present?
       session[:building_name] = params[:building_name]
@@ -57,7 +57,7 @@ class BuildingsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_building
-    @building = Building.find(params[:id])
+    @building = Building.includes(:notes).find(params[:id])
     authorize @building
   end
 

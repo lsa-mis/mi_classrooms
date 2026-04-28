@@ -1,3 +1,6 @@
+<% building_alert_notes = @building.notes.select(&:alert?).sort_by(&:updated_at).reverse %>
+<% room_alert_notes = @room.notes.select(&:alert?).sort_by(&:updated_at).reverse %>
+<% room_notice_notes = @room.notes.reject(&:alert?).sort_by(&:updated_at).reverse %>
 <%= turbo_frame_tag "room" do  %>
   <div class="container rounded-lg shadow-lg px-auto">
     <div class="flex-col w-full px-2">
@@ -15,15 +18,15 @@
 
       <%= turbo_stream_from @building, :alerts %>
       <%= tag.div id: "#{dom_id(@building)}_alerts", class: "bg-yellow-550 px-2 rounded" do %>
-          <% if @building.notes.alert.present? %>
-            <%= render @building.notes.alert %>
+          <% if building_alert_notes.present? %>
+            <%= render building_alert_notes %>
           <% end %>
       <% end %>
 
       <%= turbo_stream_from @room, :alerts %>
       <%= tag.div id: "#{dom_id(@room)}_alerts", class: "bg-yellow-550 px-2 rounded" do %>
-          <% if @room.notes.alert.present? %>
-            <%= render @room.notes.alert %>
+          <% if room_alert_notes.present? %>
+            <%= render room_alert_notes %>
           <% end %>
       <% end %>
       <div class='px-2 mb-2'>
@@ -214,7 +217,7 @@
 
       <%= turbo_stream_from @room, :notes %>
       <%= tag.div id: "#{dom_id(@room)}_notes" do %>
-        <%= render @room.notes.notice %>
+        <%= render room_notice_notes %>
       <% end %>
     </div>
 

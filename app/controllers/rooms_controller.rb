@@ -16,9 +16,9 @@ class RoomsController < ApplicationController
     @sorted = false
     buildings_ids = Room.classrooms.pluck(:building_bldrecnbr).uniq
     if params[:inactive_buildings].present?
-      @buildings = Building.includes(building_image_attachment: {blob: :variant_records}).where(bldrecnbr: buildings_ids, visible: false).order(:name)
+      @buildings = Building.includes(:notes, building_image_attachment: {blob: :variant_records}).where(bldrecnbr: buildings_ids, visible: false).order(:name)
     else
-      @buildings = Building.includes(building_image_attachment: {blob: :variant_records}).where(bldrecnbr: buildings_ids).order(:name)
+      @buildings = Building.includes(:notes, building_image_attachment: {blob: :variant_records}).where(bldrecnbr: buildings_ids).order(:name)
     end
 
     @rooms_page_announcement = Announcement.find_by(location: "find_a_room_page")
@@ -31,11 +31,11 @@ class RoomsController < ApplicationController
     end
     if params[:direction].present?
       @sorted = true
-      @rooms = @rooms.includes(:room_contact, {building: {building_image_attachment: {blob: :variant_records}}},
+      @rooms = @rooms.includes(:notes, :room_contact, {building: [:notes, {building_image_attachment: {blob: :variant_records}}]},
         room_image_attachment: {blob: :variant_records})
         .reorder(instructional_seating_count: params[:direction].to_sym)
     else
-      @rooms = @rooms.includes(:room_contact, {building: {building_image_attachment: {blob: :variant_records}}},
+      @rooms = @rooms.includes(:notes, :room_contact, {building: [:notes, {building_image_attachment: {blob: :variant_records}}]},
         room_image_attachment: {blob: :variant_records}).reorder(:building_name)
       floors = sort_floors(@rooms.pluck(:floor).uniq)
       @rooms = @rooms.order_as_specified(floor: floors).order(room_number: :asc)
@@ -91,7 +91,7 @@ class RoomsController < ApplicationController
     end
     @room_chars = @room.room_characteristics.select { |c| c }
     @room_chars_short = @room.characteristics
-    @building = Building.find_by(bldrecnbr: @room.building_bldrecnbr)
+    @building = @room.building
     respond_to do |format|
       format.html
       format.json
@@ -147,7 +147,7 @@ class RoomsController < ApplicationController
   def set_room
     # fresh_when @room
     # @room = Room.includes(:building, :room_characteristics, :room_panorama_attachment, :room_contact).find(params[:id])
-    @room = Room.find(params[:id])
+    @room = Room.includes(:notes, {building: :notes}).find(params[:id])
     fresh_when last_modified: @room.updated_at
     @room = @room.decorate
     authorize @room
