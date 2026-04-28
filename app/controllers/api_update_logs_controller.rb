@@ -6,6 +6,8 @@ class ApiUpdateLogsController < ApplicationController
     @page_title = "API Update Summary"
     @latest_log = ApiUpdateLog.latest
     @api_update_logs = ApiUpdateLog.order(created_at: :desc).limit(14)
+    @active_buildings_count = Building.where(visible: true).count
+    @active_rooms_count = Room.where(visible: true).count
     authorize ApiUpdateLog
   end
 

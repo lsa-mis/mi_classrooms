@@ -8,8 +8,15 @@
 
   <% if @latest_log.present? %>
     <section class="mb-10">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="text-xl font-semibold text-gray-900">Latest Run</h2>
+      <div class="flex items-start justify-between mb-4 gap-3">
+        <div>
+          <h2 class="text-xl font-semibold text-gray-900">Latest Run</h2>
+          <p class="text-sm text-gray-600">
+            Active buildings: <span class="font-medium text-gray-900"><%= number_with_delimiter(@active_buildings_count) %></span>
+            |
+            Active rooms: <span class="font-medium text-gray-900"><%= number_with_delimiter(@active_rooms_count) %></span>
+          </p>
+        </div>
         <%= link_to "View raw report", api_update_log_path(@latest_log), class: "text-sm text-indigo-600 hover:text-indigo-500 font-medium" %>
       </div>
       <%= render "run_summary", api_update_log: @latest_log %>
