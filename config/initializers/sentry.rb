@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 Sentry.init do |config|
-  # Use credentials instead of ENV or hardcoded value
-  config.dsn = Rails.application.credentials.dig(:sentry, :dsn)
+  # Prefer ENV for deployment overrides, then fallback to credentials.
+  config.dsn = ENV["SENTRY_DSN"].presence || Rails.application.credentials.dig(:sentry, :dsn)
+  config.environment = ENV.fetch("SENTRY_ENVIRONMENT", Rails.env)
+  config.release = ENV["SENTRY_RELEASE"].presence || ENV["SOURCE_VERSION"].presence
 
   # Only enable in production and staging environments
   config.enabled_environments = %w[production staging]
@@ -17,6 +19,7 @@ Sentry.init do |config|
   # In production, you might want to lower this to something like 0.1 (10%)
   # depending on your traffic volume
   config.traces_sample_rate = Rails.env.production? ? 0.1 : 1.0
+  config.enable_tracing = true
 
   # Profile sampling - adjust based on your needs
   config.profiles_sample_rate = Rails.env.production? ? 0.1 : 1.0
@@ -33,7 +36,7 @@ Sentry.init do |config|
   end
 
   # Add additional context to errors
-  config.before_send = lambda do |event, hint|
+  config.before_send = lambda do |event, _hint|
     # You can add custom data here
     if defined?(Current) && Current.user
       event.user = {

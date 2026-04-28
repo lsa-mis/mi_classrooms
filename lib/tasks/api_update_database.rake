@@ -12,8 +12,27 @@
 
 desc "This will update Classrooms database using APIs"
 task api_update_database: :environment do
+  started_at = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+  task_attrs = {task: "api_update_database"}
+  SentryMetrics.count("rake.started", value: 1, attributes: task_attrs)
+
   result = ApiUpdateDatabase::Runner.new(
     delete_dry_run: ActiveModel::Type::Boolean.new.cast(ENV["API_UPDATE_DELETE_DRY_RUN"])
   ).run
+
+  if result.success?
+    SentryMetrics.count("rake.succeeded", value: 1, attributes: task_attrs)
+  else
+    SentryMetrics.count("rake.failed", value: 1, attributes: task_attrs.merge(failure_type: "unsuccessful_result"))
+  end
+
   exit(result.success?)
+rescue StandardError => error
+  SentryMetrics.count("rake.failed", value: 1, attributes: task_attrs.merge(error_class: error.class.name))
+  raise
+ensure
+  if defined?(started_at) && started_at
+    elapsed_ms = (Process.clock_gettime(Process::CLOCK_MONOTONIC) - started_at) * 1000
+    SentryMetrics.distribution("rake.duration", elapsed_ms, unit: "millisecond", attributes: task_attrs || {task: "api_update_database"})
+  end
 end
