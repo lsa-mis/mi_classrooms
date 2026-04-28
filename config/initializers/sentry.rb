@@ -57,7 +57,7 @@ Sentry.init do |config|
     end
 
     # Drop healthcheck noise if it reaches error reporting.
-    transaction = event&.to_hash&.dig(:transaction).to_s
+    transaction = event.respond_to?(:transaction) ? event.transaction.to_s : ""
     if transaction.include?("health_check") || transaction.include?("/up")
       nil
     else
