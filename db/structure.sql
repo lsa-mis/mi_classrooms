@@ -1961,6 +1961,7 @@ ALTER TABLE ONLY public.room_characteristics
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260428192000'),
 ('20260422120000'),
 ('20250319192340'),
 ('20250319192339'),
