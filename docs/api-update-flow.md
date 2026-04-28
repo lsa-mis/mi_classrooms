@@ -687,6 +687,7 @@ That is acceptable in this repo.
 
 - `queue` falls back to `DATABASE_URL`
 - do not assume a separate queue database exists unless Hatchbox is configured for it
+- set `SENTRY_JOB_ARG_TYPES_ENABLED=false` in Hatchbox env vars to disable job argument type metadata in Sentry events
 
 ### Avoid destructive queue schema loads on the primary database
 

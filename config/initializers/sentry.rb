@@ -20,6 +20,9 @@ Sentry.init do |config|
   # Keep PII disabled by default; opt-in per environment with SENTRY_SEND_DEFAULT_PII=true
   config.send_default_pii = ENV["SENTRY_SEND_DEFAULT_PII"] == "true"
 
+  # For shorter-lived worker processes, fewer background threads reduce drop risk on shutdown.
+  config.background_worker_threads = Rails.env.production? ? 3 : 0
+
   # Profile sampling is relative to traced requests.
   # In production this results in ~2% profiled requests (0.2 * 0.1).
   config.profiles_sample_rate = Rails.env.production? ? 0.2 : 0.0
