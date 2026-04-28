@@ -398,16 +398,16 @@ consume the persisted `ApiUpdateLog` row and then normalize the payload for disp
 
 ```mermaid
 flowchart TD
-runner[ApiUpdateDatabase::Runner] --> finish[finish(started_at)]
-finish --> taskResult[TaskResultLog.update_log]
-taskResult --> row[(ApiUpdateLog row)]
-row --> index[ApiUpdateLogsController#index]
-row --> show[ApiUpdateLogsController#show]
-index --> parser[ApiUpdateLog#report_for_display]
+runner["ApiUpdateDatabase::Runner"] --> finish["finish(started_at)"]
+finish --> taskResult["TaskResultLog.update_log"]
+taskResult --> row[("ApiUpdateLog row")]
+row --> index["ApiUpdateLogsController#index"]
+row --> show["ApiUpdateLogsController#show"]
+index --> parser["ApiUpdateLog#report_for_display"]
 show --> parser
-parser --> cards[Run summary cards]
-parser --> phases[Phase cards]
-row --> raw[Raw Saved Report pre block]
+parser --> cards["Run summary cards"]
+parser --> phases["Phase cards"]
+row --> raw["Raw Saved Report pre block"]
 ```
 
 ### What `report_for_display` does
