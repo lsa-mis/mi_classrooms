@@ -147,7 +147,18 @@ class RoomsController < ApplicationController
   def set_room
     # fresh_when @room
     # @room = Room.includes(:building, :room_characteristics, :room_panorama_attachment, :room_contact).find(params[:id])
-    @room = Room.includes(:notes, {building: :notes}).find(params[:id])
+    @room = Room.includes(
+      :notes,
+      {building: :notes},
+      {room_panorama_attachment: :blob},
+      {room_image_attachment: :blob},
+      {room_layout_attachment: :blob},
+      {gallery_image1_attachment: :blob},
+      {gallery_image2_attachment: :blob},
+      {gallery_image3_attachment: :blob},
+      {gallery_image4_attachment: :blob},
+      {gallery_image5_attachment: :blob}
+    ).find(params[:id])
     fresh_when last_modified: @room.updated_at
     @room = @room.decorate
     authorize @room
