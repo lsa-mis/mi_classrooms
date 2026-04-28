@@ -1,18 +1,19 @@
 <div class="container px-1 mb-20">
   <div class="relative overflow-hidden -mx-10 -mt-6">
     <!-- Decorative background image and gradient -->
-    <div aria-hidden="true" class="absolute inset-0">
+    <div aria-hidden="true" class="absolute inset-x-0 top-0 h-44 sm:h-52 lg:h-56">
       <div class="absolute inset-0 max-w-7xl mx-auto overflow-hidden xl:px-8">
-        <div class="w-full h-full object-center object-cover">
-          <%= link_to image_tag('cube.jpg', class: "h-5/6", alt: "#{(t :sitename)} Logo, link to home page.", id: "hero-image"), root_path, tabindex: '-1' %>
+        <div class="w-full h-full">
+          <%= link_to image_tag('cube.jpg', class: "block w-full h-5/6 object-cover object-top", alt: "#{(t :sitename)} Logo, link to home page.", id: "hero-image"), root_path, class: "block w-full h-full", tabindex: '-1' %>
         </div>
       </div>
-      <div class="absolute inset-0 bg-white bg-opacity-25"></div>
-      <div class="absolute inset-0 bg-gradient-to-t from-white via-white"></div>
+      <div class="absolute inset-0 bg-white/25"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-white via-white/70 to-transparent"></div>
+      <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-b from-transparent via-white/70 to-white"></div>
     </div>
     <section aria-labelledby="sale-heading" class="relative max-w-7xl mx-auto px-20 pt-32 px-4 flex flex-col items-center text-center sm:px-6 lg:px-8">
       <div class="max-w-2xl mx-auto lg:max-w-none">
-        <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl" id="sale-heading">
+        <h1 class="leading-none font-extrabold tracking-tight text-gray-900" id="sale-heading" style="font-size: 4rem;">
           Makes finding the right room easy!
         </h1>
         <p class="mt-4 max-w-xl md:max-w-3xl mx-auto text-xl text-gray-700">
