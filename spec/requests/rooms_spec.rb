@@ -43,6 +43,7 @@ RSpec.describe "Rooms", type: :request do
   before do
     sign_in viewer, scope: :user
 
+    allow(ProcessThumbnailJob).to receive(:perform_later)
     allow_any_instance_of(ActionView::Base).to receive(:stylesheet_link_tag).and_return("")
     allow_any_instance_of(Importmap::ImportmapTagsHelper).to receive(:javascript_importmap_tags).and_return("")
     allow_any_instance_of(ActionView::Base).to receive(:image_tag).and_return("")
@@ -88,6 +89,21 @@ RSpec.describe "Rooms", type: :request do
       expect_successful_response
       expect(response.body).to include("USB202")
       expect(response.body).not_to include("USB101")
+    end
+
+    it "avoids per-room active storage blob queries for filtered listings" do
+      attach_test_image(matching_room, :room_image)
+      attach_test_image(other_room, :room_image)
+      attach_test_image(building, :building_image)
+
+      allow_any_instance_of(ApplicationHelper).to receive(:room_thumbnail_image).and_call_original
+
+      blob_queries = capture_blob_queries do
+        get rooms_path, params: {classroom_name: "USB"}
+      end
+
+      expect_successful_response
+      expect(blob_queries.count).to be <= 3
     end
   end
 
@@ -168,5 +184,28 @@ RSpec.describe "Rooms", type: :request do
 
   def server_error_message
     "Expected a successful response, got #{response.status}. See log/test.log for the rendered exception details."
+  end
+
+  def attach_test_image(record, attachment_name)
+    path = Rails.root.join("spec/fixtures/files/test_image.jpg")
+    record.public_send(attachment_name).attach(
+      io: StringIO.new(File.binread(path)),
+      filename: "test_image.jpg",
+      content_type: "image/jpeg"
+    )
+  end
+
+  def capture_blob_queries
+    queries = []
+    callback = lambda { |_, _, _, _, payload|
+      sql = payload[:sql].to_s
+      queries << sql if sql.include?("FROM \"active_storage_blobs\"")
+    }
+
+    ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
+      ActiveRecord::Base.uncached { yield }
+    end
+
+    queries
   end
 end

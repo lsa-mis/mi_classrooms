@@ -15,26 +15,28 @@ class RoomsController < ApplicationController
     @page_title = "Find a Room"
     @sorted = false
     buildings_ids = Room.classrooms.pluck(:building_bldrecnbr).uniq
-    @buildings = if params[:inactive_buildings].present?
-      Building.includes(:building_image_attachment).where(bldrecnbr: buildings_ids, visible: false).order(:name)
+    if params[:inactive_buildings].present?
+      @buildings = Building.includes(building_image_attachment: {blob: :variant_records}).where(bldrecnbr: buildings_ids, visible: false).order(:name)
     else
-      Building.includes(:building_image_attachment).where(bldrecnbr: buildings_ids).order(:name)
+      @buildings = Building.includes(building_image_attachment: {blob: :variant_records}).where(bldrecnbr: buildings_ids).order(:name)
     end
 
     @rooms_page_announcement = Announcement.find_by(location: "find_a_room_page")
     @all_rooms_number = Room.classrooms.count
     @schools = Room.classrooms.pluck(:dept_group_description).uniq.compact.sort
-    @rooms = if params[:inactive_rooms].present?
-      Room.classrooms_inactive
+    if params[:inactive_rooms].present?
+      @rooms = Room.classrooms_inactive
     else
-      Room.classrooms
+      @rooms = Room.classrooms
     end
     if params[:direction].present?
       @sorted = true
-      @rooms = @rooms.includes(:room_contact, :room_image_attachment, :building)
+      @rooms = @rooms.includes(:room_contact, {building: {building_image_attachment: {blob: :variant_records}}},
+        room_image_attachment: {blob: :variant_records})
         .reorder(instructional_seating_count: params[:direction].to_sym)
     else
-      @rooms = @rooms.includes(:room_contact, :room_image_attachment, :building).reorder(:building_name)
+      @rooms = @rooms.includes(:room_contact, {building: {building_image_attachment: {blob: :variant_records}}},
+        room_image_attachment: {blob: :variant_records}).reorder(:building_name)
       floors = sort_floors(@rooms.pluck(:floor).uniq)
       @rooms = @rooms.order_as_specified(floor: floors).order(room_number: :asc)
     end
