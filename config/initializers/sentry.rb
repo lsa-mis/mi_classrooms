@@ -19,7 +19,6 @@ Sentry.init do |config|
   # In production, you might want to lower this to something like 0.1 (10%)
   # depending on your traffic volume
   config.traces_sample_rate = Rails.env.production? ? 0.1 : 1.0
-  config.enable_tracing = true
 
   # Profile sampling - adjust based on your needs
   config.profiles_sample_rate = Rails.env.production? ? 0.1 : 1.0
