@@ -57,7 +57,7 @@ class BuildingsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_building
-    @building = Building.includes(:notes).find(params[:id])
+    @building = Building.with_attached_building_image.includes(:notes).find(params[:id])
     authorize @building
   end
 
