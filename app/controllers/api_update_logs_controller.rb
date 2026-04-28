@@ -8,7 +8,9 @@ class ApiUpdateLogsController < ApplicationController
     @latest_log = ApiUpdateLog.latest
     @api_update_logs = ApiUpdateLog.order(created_at: :desc).limit(14)
     @active_buildings_count = Building.where(visible: true).count
+    @classroom_buildings_count = Room.classrooms.distinct.count(:building_bldrecnbr)
     @active_rooms_count = Room.where(visible: true).count
+    @classroom_listings_count = Room.classrooms.count
     authorize ApiUpdateLog
 
     SentryMetrics.count("api_update_logs.index.load_count", value: 1, attributes: {controller: self.class.name})

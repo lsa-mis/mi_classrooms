@@ -12,9 +12,19 @@
         <div>
           <h2 class="text-xl font-semibold text-gray-900">Latest Run</h2>
           <p class="text-sm text-gray-600">
-            Active buildings: <span class="font-medium text-gray-900"><%= number_with_delimiter(@active_buildings_count) %></span>
+            Visible buildings: <span class="font-medium text-gray-900"><%= number_with_delimiter(@active_buildings_count) %></span>
             |
-            Active rooms: <span class="font-medium text-gray-900"><%= number_with_delimiter(@active_rooms_count) %></span>
+            Buildings with classroom listings: <span class="font-medium text-gray-900"><%= number_with_delimiter(@classroom_buildings_count) %></span>
+            |
+            Active rooms (visible=true): <span class="font-medium text-gray-900"><%= number_with_delimiter(@active_rooms_count) %></span>
+            |
+            Rooms in default listings: <span class="font-medium text-gray-900"><%= number_with_delimiter(@classroom_listings_count) %></span>
+            <span class="text-xs text-gray-500">
+              (rmtyp_description = "Classroom", facility_code_heprod present, instructional_seating_count &gt; 1)
+            </span>
+          </p>
+          <p class="text-xs text-gray-500 mt-1">
+            “Active rooms” uses the visibility flag only. “Rooms in default listings” matches what appears on <code>/rooms</code> by default.
           </p>
         </div>
         <%= link_to "View raw report", api_update_log_path(@latest_log), class: "text-sm text-indigo-600 hover:text-indigo-500 font-medium" %>
