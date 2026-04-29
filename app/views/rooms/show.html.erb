@@ -1,6 +1,8 @@
 <% building_alert_notes = @building.notes.select(&:alert?).sort_by(&:updated_at).reverse %>
 <% room_alert_notes = @room.notes.select(&:alert?).sort_by(&:updated_at).reverse %>
 <% room_notice_notes = @room.notes.reject(&:alert?).sort_by(&:updated_at).reverse %>
+<%# Notes broadcast to the undecorated Room; turbo_stream_from must use the same record or Action Cable streams never match. %>
+<% room_for_turbo_streams = @room.respond_to?(:object) ? @room.object : @room %>
 <%= turbo_frame_tag "room" do  %>
   <div class="container rounded-lg shadow-lg px-auto">
     <div class="flex-col w-full px-2">
@@ -23,8 +25,8 @@
           <% end %>
       <% end %>
 
-      <%= turbo_stream_from @room, :alerts %>
-      <%= tag.div id: "#{dom_id(@room)}_alerts", class: "bg-yellow-550 px-2 rounded" do %>
+      <%= turbo_stream_from room_for_turbo_streams, :alerts %>
+      <%= tag.div id: "#{dom_id(room_for_turbo_streams)}_alerts", class: "bg-yellow-550 px-2 rounded" do %>
           <% if room_alert_notes.present? %>
             <%= render room_alert_notes %>
           <% end %>
@@ -215,8 +217,8 @@
         <%= render partial: "notes/form", locals: { note: Note.new, noteable: @room } %>
       <% end %>
 
-      <%= turbo_stream_from @room, :notes %>
-      <%= tag.div id: "#{dom_id(@room)}_notes" do %>
+      <%= turbo_stream_from room_for_turbo_streams, :notes %>
+      <%= tag.div id: "#{dom_id(room_for_turbo_streams)}_notes" do %>
         <%= render room_notice_notes %>
       <% end %>
     </div>
