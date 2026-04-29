@@ -65,6 +65,19 @@ RSpec.describe Floor, type: :model do
     end
   end
 
+  describe "file size validation" do
+    it "rejects a floor_plan over 10 MB" do
+      floor = Floor.new(building_bldrecnbr: building.bldrecnbr, floor: "9")
+      floor.floor_plan.attach(
+        io: StringIO.new("x" * (10.megabyte + 1)),
+        filename: "large.pdf",
+        content_type: "application/pdf"
+      )
+      expect(floor).not_to be_valid
+      expect(floor.errors[:floor_plan]).to include("is too big")
+    end
+  end
+
   describe "image validation" do
     it "accepts PNG images" do
       floor = Floor.new(building_bldrecnbr: building.bldrecnbr, floor: "1")

@@ -179,6 +179,30 @@ RSpec.describe Room, type: :model do
     end
   end
 
+  describe "attachment size validation" do
+    let(:room) do
+      create(
+        :room,
+        building_bldrecnbr: building.bldrecnbr,
+        rmrecnbr: 8_000_001,
+        rmtyp_description: "Classroom",
+        facility_code_heprod: "SZ101",
+        instructional_seating_count: 25,
+        visible: true
+      )
+    end
+
+    it "rejects a room_layout PDF over 10 MB" do
+      room.room_layout.attach(
+        io: StringIO.new("x" * (10.megabyte + 1)),
+        filename: "large.pdf",
+        content_type: "application/pdf"
+      )
+      expect(room).not_to be_valid
+      expect(room.errors[:room_layout]).to include("must be 10 MB or smaller")
+    end
+  end
+
   describe "storing equipment characteristics" do
     it "persists an array of characteristic codes" do
       room = create(:room,
