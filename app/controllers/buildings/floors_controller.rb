@@ -19,16 +19,12 @@ class Buildings::FloorsController < ApplicationController
 
     respond_to do |format|
       if @floor.save
-        format.turbo_stream {
-          redirect_to @building,
-            notice: "The floor plan was added"
-        }
+        format.html { redirect_to @building, notice: "The floor plan was added" }
+        format.turbo_stream { redirect_to @building, notice: "The floor plan was added" }
       else
-        error = @floor.errors.full_messages
-        format.turbo_stream {
-          redirect_to @building,
-            alert: error
-        }
+        alert_message = @floor.errors.full_messages.to_sentence
+        format.html { redirect_to @building, alert: alert_message }
+        format.turbo_stream { redirect_to @building, alert: alert_message }
       end
     end
   end
@@ -43,16 +39,12 @@ class Buildings::FloorsController < ApplicationController
     authorize @floor
     respond_to do |format|
       if @floor.update(floor_params)
-        format.turbo_stream {
-          redirect_to @building,
-            notice: "The floor plan was updated"
-        }
+        format.html { redirect_to @building, notice: "The floor plan was updated" }
+        format.turbo_stream { redirect_to @building, notice: "The floor plan was updated" }
       else
-        error = @floor.errors.full_messages
-        format.turbo_stream {
-          redirect_to @building,
-            alert: error
-        }
+        alert_message = @floor.errors.full_messages.to_sentence
+        format.html { redirect_to @building, alert: alert_message }
+        format.turbo_stream { redirect_to @building, alert: alert_message }
       end
     end
   end

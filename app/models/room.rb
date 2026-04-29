@@ -131,7 +131,7 @@ class Room < ApplicationRecord
       gallery_image5].compact.each do |image|
       next unless image.attached?
 
-      errors.add(image.name, "is too big") unless image.blob.byte_size <= 10.megabyte
+      errors.add(image.name, "must be 10 MB or smaller") unless image.blob.byte_size <= 10.megabyte
 
       acceptable_types = ["image/png", "image/jpeg", "image/webp", "application/pdf"]
       errors.add(image.name, "incorrect file type") unless acceptable_types.include?(image.content_type)

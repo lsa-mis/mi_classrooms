@@ -117,7 +117,9 @@ class RoomsController < ApplicationController
           format.json { render json: {error: "Image processing failed"}, status: :unprocessable_entity }
         end
       else
-        format.html { render :edit }
+        flash.now[:alert] = @room.errors.full_messages.to_sentence
+        format.html { render :edit, status: :unprocessable_entity }
+        format.turbo_stream { render :edit, status: :unprocessable_entity, formats: [:html] }
         format.json { render json: @room.errors, status: :unprocessable_entity }
       end
     end
