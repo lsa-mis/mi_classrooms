@@ -136,7 +136,8 @@ class BuildingsApi
   end
 
   def building_exists?(bldrecnbr)
-    @buildings_ids.include?(bldrecnbr.to_i)
+    # @buildings_ids shrinks as rows match the API (for “not in feed” warnings); do not use it here or duplicate API rows trigger INSERT + buildings_pkey violations.
+    Building.exists?(bldrecnbr: bldrecnbr.to_i)
   end
 
   def update_building(row)

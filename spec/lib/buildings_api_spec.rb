@@ -1,6 +1,34 @@
 require "rails_helper"
 
 RSpec.describe BuildingsApi do
+  describe "#update_all_buildings" do
+    it "does not error when the API returns the same building twice" do
+      campus = CampusRecord.create!(campus_cd: 100, campus_description: "Ann Arbor")
+      building = create(:building, bldrecnbr: 5_000_401, zip: "48109", campus_record: campus)
+      row = {
+        "BuildingRecordNumber" => building.bldrecnbr.to_s,
+        "BuildingLongDescription" => "Updated Name",
+        "BuildingShortDescription" => "UN",
+        "BuildingStreetNumber" => "1",
+        "BuildingStreetDirection" => "",
+        "BuildingStreetName" => "Main St",
+        "BuildingCity" => "Ann Arbor",
+        "BuildingState" => "MI",
+        "BuildingPostal" => "48109",
+        "BuildingCampusCode" => campus.campus_cd.to_s
+      }
+      api = described_class.new
+      allow(api).to receive(:get_buildings_for_current_fiscal_year).and_return(
+        {"success" => true, "data" => [row, row]}
+      )
+
+      api.update_all_buildings
+
+      expect(api.last_result.success?).to be(true)
+      expect(building.reload.name).to eq("Updated Name")
+    end
+  end
+
   describe "#update_building" do
     it "uses the same country value as newly created buildings" do
       campus = CampusRecord.create!(campus_cd: 100, campus_description: "Ann Arbor")
