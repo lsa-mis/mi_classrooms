@@ -65,7 +65,7 @@ jobs:
         run: bundle exec standardrb
 
       - name: RSpec
-        run: bundle exec rspec ./spec/requests/rooms_spec.rb --format documentation --backtrace
+        run: bundle exec rspec --format documentation --backtrace
 
       - name: Show test log on failure
         if: failure()
