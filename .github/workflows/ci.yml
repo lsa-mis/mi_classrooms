@@ -30,6 +30,9 @@ jobs:
       PGHOST: localhost
       PGUSER: postgres
       PGPASSWORD: postgres
+      ENABLE_TEST_LOGIN: "true"
+      TEST_LOGIN_TOKEN: "secret-token"
+      TEST_LOGIN_EMAIL: "test.login@umich.edu"
 
     steps:
       - uses: actions/checkout@v4
