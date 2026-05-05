@@ -78,3 +78,7 @@ jobs:
         with:
           name: test-log
           path: log/test.log
+
+      - name: Show test login env
+        run: |
+          bundle exec rails runner 'puts "ENABLE_TEST_LOGIN=#{ENV["ENABLE_TEST_LOGIN"].inspect}"; puts "TEST_LOGIN_TOKEN present? #{ENV["TEST_LOGIN_TOKEN"].present?}"'
