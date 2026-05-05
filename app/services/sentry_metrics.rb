@@ -2,7 +2,7 @@ class SentryMetrics
   class << self
     def count(name, value: 1, attributes: {})
       Sentry::Metrics.count(name, value: value, attributes: base_attributes.merge(attributes))
-    rescue StandardError => error
+    rescue => error
       Rails.logger.debug("Sentry metric count failed for #{name}: #{error.class} #{error.message}")
     end
 
@@ -10,7 +10,7 @@ class SentryMetrics
       args = {attributes: base_attributes.merge(attributes)}
       args[:unit] = unit if unit.present?
       Sentry::Metrics.gauge(name, value.to_f, **args)
-    rescue StandardError => error
+    rescue => error
       Rails.logger.debug("Sentry metric gauge failed for #{name}: #{error.class} #{error.message}")
     end
 
@@ -18,7 +18,7 @@ class SentryMetrics
       args = {attributes: base_attributes.merge(attributes)}
       args[:unit] = unit if unit.present?
       Sentry::Metrics.distribution(name, value.to_f, **args)
-    rescue StandardError => error
+    rescue => error
       Rails.logger.debug("Sentry metric distribution failed for #{name}: #{error.class} #{error.message}")
     end
 
