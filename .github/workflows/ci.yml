@@ -52,11 +52,22 @@ jobs:
         run: |
           bundle exec rails runner 'puts ActiveRecord::Base.connection.columns(:rooms).map { |c| [c.name, c.sql_type].join(": ") }'
 
+      - name: Show versions
+        run: |
+          ruby -v
+          bundle -v
+          bundle exec rails -v
+          psql --version
+
+      - name: Prepare databases
+        run: |
+          bundle exec rails db:drop db:create db:schema:load
+
       - name: RSpec
-        run: bundle exec rspec
+        run: bundle exec rspec --format documentation --backtrace
 
       - name: Upload test log
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-log
