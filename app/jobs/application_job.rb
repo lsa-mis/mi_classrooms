@@ -29,7 +29,7 @@ class ApplicationJob < ActiveJob::Base
       begin
         block.call
         SentryMetrics.count("jobs.succeeded", value: 1, attributes: attrs)
-      rescue StandardError => error
+      rescue => error
         SentryMetrics.count("jobs.failed", value: 1, attributes: attrs.merge(error_class: error.class.name))
         raise
       ensure

@@ -9,11 +9,9 @@ class BuildingsController < ApplicationController
     @schools = Room.classrooms.pluck(:dept_group_description).uniq.compact.sort
 
     buildings_ids = Room.classrooms.pluck(:building_bldrecnbr).uniq
-    if params[:inactive_buildings].present?
-      @buildings = Building.where(bldrecnbr: buildings_ids, visible: false).order(:name)
-    else
-      @buildings = Building.where(bldrecnbr: buildings_ids).order(:name)
-    end
+    @buildings = params[:inactive_buildings].present? ?
+      Building.where(bldrecnbr: buildings_ids, visible: false).order(:name) :
+      Building.where(bldrecnbr: buildings_ids).order(:name)
     if params[:building_name].present?
       session[:building_name] = params[:building_name]
       @buildings = @buildings.with_name(params[:building_name])

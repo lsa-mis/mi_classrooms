@@ -1,10 +1,10 @@
 class ApiUpdateLog < ApplicationRecord
-  STRUCTURED_REPORT_MARKER = "Structured report:".freeze
-  TOTAL_WALL_TIME_PATTERN = /\ATotal wall time:\s*(?<minutes>[\d.]+)\s*minutes\z/i.freeze
-  PHASE_TIME_PATTERN = /\A(?<phase>.+) Time: (?<seconds>[\d.]+) seconds\z/.freeze
-  COUNTS_PATTERN = /\ACounts: (?<counts>.+)\z/.freeze
-  WARNING_PATTERN = /\AWarning: (?<warning>.+)\z/.freeze
-  ERROR_PATTERN = /\AError: (?<error>.+)\z/.freeze
+  STRUCTURED_REPORT_MARKER = "Structured report:"
+  TOTAL_WALL_TIME_PATTERN = /\ATotal wall time:\s*(?<minutes>[\d.]+)\s*minutes\z/i
+  PHASE_TIME_PATTERN = /\A(?<phase>.+) Time: (?<seconds>[\d.]+) seconds\z/
+  COUNTS_PATTERN = /\ACounts: (?<counts>.+)\z/
+  WARNING_PATTERN = /\AWarning: (?<warning>.+)\z/
+  ERROR_PATTERN = /\AError: (?<error>.+)\z/
 
   def self.latest
     order(created_at: :desc).first

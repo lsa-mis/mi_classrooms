@@ -15,20 +15,14 @@ class RoomsController < ApplicationController
     @page_title = "Find a Room"
     @sorted = false
     buildings_ids = Room.classrooms.pluck(:building_bldrecnbr).uniq
-    if params[:inactive_buildings].present?
-      @buildings = Building.includes(:notes, building_image_attachment: {blob: :variant_records}).where(bldrecnbr: buildings_ids, visible: false).order(:name)
-    else
-      @buildings = Building.includes(:notes, building_image_attachment: {blob: :variant_records}).where(bldrecnbr: buildings_ids).order(:name)
-    end
+    @buildings = params[:inactive_buildings].present? ?
+      Building.includes(:notes, building_image_attachment: {blob: :variant_records}).where(bldrecnbr: buildings_ids, visible: false).order(:name) :
+      Building.includes(:notes, building_image_attachment: {blob: :variant_records}).where(bldrecnbr: buildings_ids).order(:name)
 
     @rooms_page_announcement = Announcement.find_by(location: "find_a_room_page")
     @all_rooms_number = Room.classrooms.count
     @schools = Room.classrooms.pluck(:dept_group_description).uniq.compact.sort
-    if params[:inactive_rooms].present?
-      @rooms = Room.classrooms_inactive
-    else
-      @rooms = Room.classrooms
-    end
+    @rooms = params[:inactive_rooms].present? ? Room.classrooms_inactive : Room.classrooms
     if params[:direction].present?
       @sorted = true
       @rooms = @rooms.includes(:notes, :room_contact, {building: [:notes, {building_image_attachment: {blob: :variant_records}}]},

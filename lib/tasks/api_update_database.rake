@@ -27,7 +27,7 @@ task api_update_database: :environment do
   end
 
   exit(result.success?)
-rescue StandardError => error
+rescue => error
   SentryMetrics.count("rake.failed", value: 1, attributes: task_attrs.merge(error_class: error.class.name))
   raise
 ensure
