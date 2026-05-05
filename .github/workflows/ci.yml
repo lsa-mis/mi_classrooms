@@ -48,5 +48,16 @@ jobs:
       - name: Standard Ruby
         run: bundle exec standardrb
 
+      - name: Show test schema details
+        run: |
+          bundle exec rails runner 'puts ActiveRecord::Base.connection.columns(:rooms).map { |c| [c.name, c.sql_type].join(": ") }'
+
       - name: RSpec
         run: bundle exec rspec
+
+      - name: Upload test log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-log
+          path: log/test.log
