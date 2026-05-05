@@ -50,16 +50,7 @@ jobs:
           psql --version
 
       - name: Prepare databases
-        run: |
-          bundle exec rails db:drop db:create db:schema:load
-
-      - name: Show test login env
-        run: |
-          bundle exec rails runner 'puts "ENABLE_TEST_LOGIN=#{ENV["ENABLE_TEST_LOGIN"].inspect}"; puts "TEST_LOGIN_TOKEN present? #{ENV["TEST_LOGIN_TOKEN"].present?}"'
-
-      - name: Show test schema details
-        run: |
-          bundle exec rails runner 'puts ActiveRecord::Base.connection.columns(:rooms).map { |c| [c.name, c.sql_type].join(": ") }'
+        run: bundle exec rails db:drop db:create db:schema:load
 
       - name: Brakeman
         run: bundle exec brakeman -q -w2 --no-pager
