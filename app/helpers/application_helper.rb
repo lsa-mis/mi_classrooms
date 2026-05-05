@@ -46,28 +46,26 @@ module ApplicationHelper
 
   def room_thumbnail_image(room)
     if room.room_image.representable?
-      begin
-        variant = room.room_image.variant(
-          resize_to_fill: [150, 150],
-          format: :webp
-        ).processed
+      variant = room.room_image.variant(
+        resize_to_fill: [150, 150],
+        format: :webp
+      ).processed
 
-        # Use url_for helper to generate the URL
-        image_tag(url_for(variant),
-          class: "max-h-24 p-2",
-          alt: "#{room.room_number} --  #{room.building.name}",
-          loading: "lazy")
-      rescue => e
-        Rails.logger.error "!#!#!#!#!#!Failed to generate thumbnail: #{e.message}"
-        image_tag "room_placeholder.png",
-          class: "max-h-24 p-2",
-          alt: "Error generating thumbnail"
-      end
+      # Use url_for helper to generate the URL
+      image_tag(url_for(variant),
+        class: "max-h-24 p-2",
+        alt: "#{room.room_number} --  #{room.building.name}",
+        loading: "lazy")
     else
       image_tag "room_placeholder.png",
         class: "max-h-24 p-2",
         alt: "room placeholder"
     end
+  rescue => e
+    Rails.logger.error "!#!#!#!#!#!Failed to generate thumbnail: #{e.message}"
+    image_tag "room_placeholder.png",
+      class: "max-h-24 p-2",
+      alt: "Error generating thumbnail"
   end
 
   def room_layout(room)
