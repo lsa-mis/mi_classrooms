@@ -206,10 +206,17 @@ RSpec.describe "Rooms", type: :request do
 
   def expect_successful_response
     if response.server_error?
+      body = response.body.to_s
+
+      useful_lines = body.lines.grep(
+        /Error|Exception|Trace|NoMethod|NameError|ArgumentError|LoadError|ActiveStorage|MiniMagick|Vips|ImageProcessing|PG::|ActionView/
+      )
+
       raise <<~ERROR
         Expected a successful response, got #{response.status}.
-        Response body:
-        #{response.body}
+
+        Useful response body lines:
+        #{useful_lines.first(80).join}
       ERROR
     end
 
