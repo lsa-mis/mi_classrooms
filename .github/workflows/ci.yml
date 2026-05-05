@@ -66,8 +66,14 @@ jobs:
       - name: RSpec
         run: bundle exec rspec --format documentation --backtrace
 
+      - name: Show test log on failure
+        if: failure()
+        run: |
+          echo "===== log/test.log ====="
+          tail -n 300 log/test.log
+
       - name: Upload test log
-        if: always()
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: test-log
