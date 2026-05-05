@@ -49,6 +49,11 @@ jobs:
           bundle exec rails -v
           psql --version
 
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libvips
+
       - name: Prepare databases
         run: bundle exec rails db:drop db:create db:schema:load
 
