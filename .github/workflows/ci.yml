@@ -39,9 +39,6 @@ jobs:
           ruby-version: "3.4.7"
           bundler-cache: true
 
-      - name: Prepare databases
-        run: bundle exec rails db:prepare
-
       - name: Brakeman
         run: bundle exec brakeman -q -w2 --no-pager
 
@@ -70,10 +67,10 @@ jobs:
         if: failure()
         run: |
           echo "===== log/test.log ====="
-          tail -n 300 log/test.log
+          tail -n 300 log/test.log || true
 
       - name: Upload test log
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-log
