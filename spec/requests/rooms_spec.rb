@@ -205,9 +205,15 @@ RSpec.describe "Rooms", type: :request do
   end
 
   def expect_successful_response
-    raise server_error_message if response.server_error?
+    if response.server_error?
+      raise <<~ERROR
+        Expected a successful response, got #{response.status}.
+        Response body:
+        #{response.body}
+      ERROR
+    end
 
-    expect(response).to have_http_status(:ok)
+    expect(response).to be_successful
   end
 
   def server_error_message
