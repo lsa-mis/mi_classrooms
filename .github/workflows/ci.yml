@@ -30,6 +30,9 @@ jobs:
       PGHOST: localhost
       PGUSER: postgres
       PGPASSWORD: postgres
+      ENABLE_TEST_LOGIN: "true"
+      TEST_LOGIN_TOKEN: "secret-token"
+      TEST_LOGIN_EMAIL: "test.login@umich.edu"
 
     steps:
       - uses: actions/checkout@v4
@@ -39,8 +42,21 @@ jobs:
           ruby-version: "3.4.7"
           bundler-cache: true
 
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libvips libvips-tools
+
+      - name: Show versions
+        run: |
+          ruby -v
+          bundle -v
+          bundle exec rails -v
+          psql --version
+          vips --version
+
       - name: Prepare databases
-        run: bundle exec rails db:prepare
+        run: bundle exec rails db:drop db:create db:schema:load
 
       - name: Brakeman
         run: bundle exec brakeman -q -w2 --no-pager
@@ -49,4 +65,17 @@ jobs:
         run: bundle exec standardrb
 
       - name: RSpec
-        run: bundle exec rspec
+        run: bundle exec rspec --format documentation --backtrace
+
+      - name: Show test log on failure
+        if: failure()
+        run: |
+          echo "===== log/test.log ====="
+          tail -n 300 log/test.log || true
+
+      - name: Upload test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-log
+          path: log/test.log
