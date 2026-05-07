@@ -89,7 +89,7 @@ RSpec.describe "Announcements", type: :request do
         }
       }.not_to change(Announcement, :count)
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
 
     it "updates an announcement" do
@@ -112,7 +112,7 @@ RSpec.describe "Announcements", type: :request do
         }
       }
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
       expect(announcement.reload.location).to eq("home_page")
     end
 

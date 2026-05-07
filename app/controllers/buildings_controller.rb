@@ -46,7 +46,7 @@ class BuildingsController < ApplicationController
         format.json { render :show, status: :ok, location: @building }
       else
         format.html { redirect_to @building, alert: @building.errors.full_messages }
-        format.json { render json: @building.errors, status: :unprocessable_entity }
+        format.json { render json: @building.errors, status: :unprocessable_content }
       end
     end
   end

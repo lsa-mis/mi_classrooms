@@ -108,13 +108,13 @@ class RoomsController < ApplicationController
         rescue ActiveStorage::FileNotFoundError => e
           Rails.logger.error "Failed to process image: #{e.message}"
           format.html { redirect_to @room, notice: "Room was updated but image processing failed." }
-          format.json { render json: {error: "Image processing failed"}, status: :unprocessable_entity }
+          format.json { render json: {error: "Image processing failed"}, status: :unprocessable_content }
         end
       else
         flash.now[:alert] = @room.errors.full_messages.to_sentence
-        format.html { render :edit, status: :unprocessable_entity }
-        format.turbo_stream { render :edit, status: :unprocessable_entity, formats: [:html] }
-        format.json { render json: @room.errors, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
+        format.turbo_stream { render :edit, status: :unprocessable_content, formats: [:html] }
+        format.json { render json: @room.errors, status: :unprocessable_content }
       end
     end
   end

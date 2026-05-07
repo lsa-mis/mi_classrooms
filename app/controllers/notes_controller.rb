@@ -6,7 +6,7 @@ class NotesController < ApplicationController
     if @note.update(note_params) && @note.update(user: current_user)
       redirect_to @note
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
