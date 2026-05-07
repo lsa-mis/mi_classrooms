@@ -18,10 +18,10 @@ RSpec.describe "Users::OmniauthCallbacks", type: :request do
   def stub_group_membership(admin:)
     allow(LdapLookup).to receive(:is_member_of_group?) do |uniqname, group|
       expect(uniqname).to eq("callbackuser")
-      if admin
-        group == "mi-classrooms-admin-staging"
+      group == if admin
+        "mi-classrooms-admin-staging"
       else
-        group == "mi-classrooms-non-admin-staging"
+        "mi-classrooms-non-admin-staging"
       end
     end
   end
