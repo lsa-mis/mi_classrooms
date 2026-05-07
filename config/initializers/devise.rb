@@ -349,7 +349,7 @@ Devise.setup do |config|
   # Devise 4.9+ requires this for proper Turbo integration.
   # When using Devise with Hotwire/Turbo, the following needs to be set to handle
   # form errors appropriately with the 422 Unprocessable Entity status code.
-  config.responder.error_status = :unprocessable_entity
+  config.responder.error_status = :unprocessable_content
   config.responder.redirect_status = :see_other
 
   # ==> Configuration for :registerable

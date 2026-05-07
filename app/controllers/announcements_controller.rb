@@ -23,7 +23,7 @@ class AnnouncementsController < ApplicationController
     if @announcement.save
       redirect_to announcements_path, notice: "Announcement was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -34,7 +34,7 @@ class AnnouncementsController < ApplicationController
     if @announcement.update(announcement_params)
       redirect_to announcements_path, notice: "Announcement was successfully updated."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
