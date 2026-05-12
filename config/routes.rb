@@ -2,7 +2,8 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {omniauth_callbacks: "users/omniauth_callbacks", sessions: "users/sessions"} do
     delete "sign_out", to: "users/sessions#destroy", as: :destroy_user_session
   end
-  # Non-production test login endpoint for local/staging validation without IdP callback changes.
+  # Non-production only: token URL for SAML bypass (local/staging), e.g. Siteimprove on staging.
+  # Not registered in production under any configuration.
   unless Rails.env.production?
     get "test_login", to: "users/test_sessions#show", as: :test_login
   end

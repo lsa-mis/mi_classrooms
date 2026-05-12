@@ -1,1 +1,9 @@
-# See https://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
+# https://www.robotstxt.org/robotstxt.html
+# Siteimprove crawler tokens:
+# https://help.siteimprove.com/support/solutions/articles/80001162737-the-siteimprove-crawler-bot-information
+
+User-agent: SiteimproveBot-Crawler
+Allow: /
+
+User-agent: SiteimproveBot
+Allow: /
