@@ -8,9 +8,11 @@
 - omniauth-SAML
 - ldap_lookup used to gather user information (especially group affiliation for authorization)
 
-### Non-production test login
+### Non-production test login (not available in production)
 
-When SAML/IdP callback targets are controlled externally (for example, University auth callbacks pointing to another server), you can enable a temporary test login in non-production environments:
+When SAML/IdP callback targets are controlled externally (for example, University auth callbacks pointing to another server), you can enable a **secret URL** on **development, test, or staging** only. The `/test_login` route is not registered when `Rails.env.production?` is true, and the controller rejects those requests, so a true production deploy never exposes this feature. (Use a dedicated environment such as `staging` for Siteimprove; a server that runs `RAILS_ENV=production` against a staging hostname is still treated as production.)
+
+Use a long random `TEST_LOGIN_TOKEN`, store it in a vault, rotate if it leaks, and set `ENABLE_TEST_LOGIN` only when needed.
 
 ```sh
 ENABLE_TEST_LOGIN=true \
@@ -28,7 +30,11 @@ Then visit:
 Optional:
 
 - `TEST_LOGIN_GROUPS=mi-classrooms-admin-staging,mi-classrooms-non-admin-staging` to control role/group behavior.
-- If `TEST_LOGIN_GROUPS` is omitted, the login defaults to admin for the current non-production environment.
+- If `TEST_LOGIN_GROUPS` is omitted, the login defaults to admin for the current non-production environment (`mi-classrooms-admin-staging` in staging).
+
+#### Siteimprove on staging
+
+[Siteimprove](https://help.siteimprove.com/support/solutions/articles/80001162737-the-siteimprove-crawler-bot-information) cannot complete your interactive SSO. Point the crawl at **staging** only: set `ENABLE_TEST_LOGIN` and related variables on the **staging** host, then use a **start URL** such as `https://<staging-host>/test_login?token=<your-secret-token>` so the crawler receives a session cookie after the redirect. Crawler identity and IPs: [What IP addresses and user agents are used by Siteimprove?](https://help.siteimprove.com/support/solutions/articles/80000448553-what-ip-addresses-and-user-agents-are-used-by-siteimprove-). Ensure `robots.txt` does not disallow paths you need crawled; you can allow `SiteimproveBot-Crawler` if you add restrictive rules for other bots.
 
 ## Configuration (production / staging)
 
@@ -48,7 +54,7 @@ Optional environment variables:
 
 ### U-M API HTTPS
 
-`lib/um_api.rb` uses normal TLS verification (`VERIFY_PEER`, minimum TLS 1.2). If token or API calls fail in an environment with a custom CA bundle, set `SSL_CERT_FILE` (or your platform’s equivalent) so OpenSSL can validate `gw.api.it.umich.edu`.
+`lib/um_api.rb` uses normal TLS verification (`VERIFY_PEER`, minimum TLS 1.2). If token or API calls fail in an environment with a custom CA bundle, set `SSL_CERT_FILE` (or your platform's equivalent) so OpenSSL can validate `gw.api.it.umich.edu`.
 
 ### Database loading data
 
