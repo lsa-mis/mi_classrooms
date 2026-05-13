@@ -21,8 +21,9 @@
         </p>
        
           <% if current_user %>
-              <%= button_to rooms_path, class: "mt-10", method: :get do %>
-                <div class="focus:ring focus:ring-offset-2 focus:ring-blue-400 inline-block w-full bg-gray-900 border border-transparent rounded-md py-3 px-8 font-medium text-white hover:bg-gray-800 sm:w-auto mb-10 sm:mb-0">Find A Room!</div>
+              <%# Siteimprove and similar crawlers follow <a href>, not GET forms from button_to. %>
+              <%= link_to rooms_path, class: "mt-10 focus:ring focus:ring-offset-2 focus:ring-blue-400 inline-block w-full bg-gray-900 border border-transparent rounded-md py-3 px-8 font-medium text-white hover:bg-gray-800 sm:w-auto mb-10 sm:mb-0 text-center", data: {turbo: false} do %>
+                Find A Room!
               <% end %>
           <% else %>
             <%= button_to user_saml_omniauth_authorize_path, class: "mt-10", data: {turbo: "false"} do %>
