@@ -68,6 +68,18 @@ module ApplicationHelper
       alt: "Error generating thumbnail"
   end
 
+  def lightbox_image_data(image, alt:)
+    metadata = image.blob.metadata
+
+    {
+      img: url_for(image),
+      thumb: url_for(image.representation(resize_to_limit: [240, 240])),
+      alt: alt,
+      width: metadata["width"],
+      height: metadata["height"]
+    }.compact
+  end
+
   def room_layout(room)
     if room.room_layout.representable?
       room.room_layout
