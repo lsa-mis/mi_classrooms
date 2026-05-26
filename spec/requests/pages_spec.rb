@@ -3,20 +3,6 @@ require "rails_helper"
 RSpec.describe "Pages", type: :request do
   include Devise::Test::IntegrationHelpers
 
-  def stub_layout_dependencies
-    allow_any_instance_of(ActionView::Base).to receive(:stylesheet_link_tag).and_return("")
-    allow_any_instance_of(Importmap::ImportmapTagsHelper).to receive(:javascript_importmap_tags).and_return("")
-    allow_any_instance_of(ActionView::Base).to receive(:image_tag).and_return("")
-    allow_any_instance_of(ApplicationHelper).to receive(:svg).and_return("")
-    allow_any_instance_of(ApplicationHelper).to receive(:room_thumbnail_image).and_return("")
-    allow_any_instance_of(ActionView::Base).to receive(:render).and_wrap_original do |method, *args, **kwargs, &block|
-      partial = args.first
-      next "" if partial == "layouts/header" || partial == "layouts/footer"
-
-      method.call(*args, **kwargs, &block)
-    end
-  end
-
   def force_membership(admin:)
     allow_any_instance_of(ApplicationController).to receive(:set_membership) do |controller|
       next unless controller.current_user
@@ -29,7 +15,7 @@ RSpec.describe "Pages", type: :request do
   let(:user) { create(:user) }
 
   before do
-    stub_layout_dependencies
+    stub_request_layout_partials
   end
 
   describe "GET /" do
