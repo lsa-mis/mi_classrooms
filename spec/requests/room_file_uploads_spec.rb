@@ -73,11 +73,6 @@ RSpec.describe "Room file uploads", type: :request do
   end
 
   describe "PATCH /rooms/:id with room_layout (HTML redirect)" do
-    before do
-      allow_any_instance_of(ActionView::Base).to receive(:stylesheet_link_tag).and_return("")
-      allow_any_instance_of(Importmap::ImportmapTagsHelper).to receive(:javascript_importmap_tags).and_return("")
-    end
-
     it "accepts a small PDF under the limit" do
       patch room_path(room),
         params: {

@@ -16,6 +16,8 @@ end
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
+Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
+
 RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)

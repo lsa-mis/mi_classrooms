@@ -5,7 +5,7 @@
     <% if gtm_id %>
       <script async="async" src="https://www.googletagmanager.com/gtag/js?id=<%= gtm_id %>"></script>
     <% end %>
-
+    <%= lsa_tdx_feedback_css %>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>
@@ -34,5 +34,7 @@
       </div>
     </main>
     <%= render 'layouts/footer' %>
+    <%= lsa_tdx_feedback_modal %>
+    <%= lsa_tdx_feedback_js %>
   </body>
 </html>
