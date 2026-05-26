@@ -34,7 +34,7 @@ Optional:
 
 #### Siteimprove on staging
 
-[Siteimprove](https://help.siteimprove.com/support/solutions/articles/80001162737-the-siteimprove-crawler-bot-information) cannot complete your interactive SSO. Point the crawl at **staging** only: set `ENABLE_TEST_LOGIN` and related variables on the **staging** host, then use a **start URL** such as `https://<staging-host>/test_login?token=<your-secret-token>` so the crawler receives a session cookie after the redirect. Crawler identity and IPs: [What IP addresses and user agents are used by Siteimprove?](https://help.siteimprove.com/support/solutions/articles/80000448553-what-ip-addresses-and-user-agents-are-used-by-siteimprove-). Ensure `robots.txt` does not disallow paths you need crawled; you can allow `SiteimproveBot-Crawler` if you add restrictive rules for other bots.
+[Siteimprove](https://help.siteimprove.com/support/solutions/articles/80001162737-the-siteimprove-crawler-bot-information) cannot complete your interactive SSO. Point the crawl at **staging** only: set `ENABLE_TEST_LOGIN` and related variables on the **staging** host, then use a **start URL** such as `https://<staging-host>/test_login?token=<your-secret-token>` so the crawler receives session and remember-me cookies after the redirect. Crawler identity and IPs: [What IP addresses and user agents are used by Siteimprove?](https://help.siteimprove.com/support/solutions/articles/80000448553-what-ip-addresses-and-user-agents-are-used-by-siteimprove-). Ensure `robots.txt` does not disallow paths you need crawled; you can allow `SiteimproveBot-Crawler` if you add restrictive rules for other bots.
 
 ## Configuration (production / staging)
 

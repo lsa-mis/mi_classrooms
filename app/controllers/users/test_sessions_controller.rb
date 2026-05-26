@@ -9,6 +9,7 @@ class Users::TestSessionsController < ApplicationController
       user.save!
     end
 
+    user.remember_me = true
     sign_in(:user, user)
     set_test_memberships!
     redirect_to root_path, notice: "Signed in with test login for #{user.email}."

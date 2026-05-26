@@ -11,40 +11,33 @@ export default class extends Controller {
       target: document.body
     })
 
-    // Find all anchor links with images inside the controller element
-    const anchors = this.element.querySelectorAll('a[href]')
+    this.anchors = this.element.querySelectorAll('a[href]')
+    this.boundOpen = this.openFromEvent.bind(this)
 
-    // Convert anchors to items array for bigger-picture
-    this.items = Array.from(anchors).map(anchor => {
-      const img = anchor.querySelector('img')
-      return {
-        img: anchor.href,
-        thumb: img ? img.src : anchor.href,
-        alt: img ? img.alt : '',
-        width: 1920,
-        height: 1080
-      }
-    })
-
-    // Add click handlers to each anchor
-    anchors.forEach((anchor, index) => {
-      anchor.addEventListener('click', (e) => {
-        e.preventDefault()
-        this.open(index)
-      })
+    this.anchors.forEach((anchor) => {
+      anchor.addEventListener('click', this.boundOpen)
     })
   }
 
-  open(position = 0) {
+  openFromEvent(event) {
+    event.preventDefault()
+
+    // BiggerPicture reads each anchor's data-width/data-height to preserve aspect ratio.
     this.bp.open({
-      items: this.items,
-      position: position,
+      items: this.anchors,
+      el: event.currentTarget,
       scale: this.optionsValue.scale || 0.99,
       ...this.optionsValue
     })
   }
 
   disconnect() {
+    if (this.anchors && this.boundOpen) {
+      this.anchors.forEach((anchor) => {
+        anchor.removeEventListener('click', this.boundOpen)
+      })
+    }
+
     if (this.bp) {
       this.bp.close()
     }

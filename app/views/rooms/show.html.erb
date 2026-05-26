@@ -37,36 +37,37 @@
       <div class="flex justify-center border-b border-blue-50 mb-2 py-2">
         <div>
         </div>
+        <% room_photo_alt = "room photo of #{@room.facility_code_heprod}" %>
         <div data-controller="lightbox" class="flex justify-center lg:max-h-28 max-h-16 bg-blue-50 rounded">
           <% if @room.room_image.representable? %>
-            <a href="<%= url_for(@room.room_image) %>" tabindex="0" role="button" aria-label="View main room image">
-              <%= image_tag @room.room_image, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded focus:outline focus:outline-2 focus:outline-blue-700", data: { src: @room.room_image.representation(resize_to_limit: [24, 24]) }, alt: "room photo of #{@room.facility_code_heprod}" %>
-            </a>
+            <%= link_to url_for(@room.room_image), tabindex: "0", role: "button", aria: { label: "View main room image" }, data: lightbox_image_data(@room.room_image, alt: room_photo_alt) do %>
+              <%= image_tag @room.room_image, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded focus:outline focus:outline-2 focus:outline-blue-700", alt: room_photo_alt %>
+            <% end %>
           <% end %>
           <% if @room.gallery_image1.representable? %>
-            <a href="<%= url_for(@room.gallery_image1) %>" tabindex="0" role="button" aria-label="View gallery image 1">
-              <%= image_tag @room.gallery_image1, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded focus:outline focus:outline-2 focus:outline-blue-700", data: { src: @room.gallery_image1.representation(resize_to_limit: [24, 24]) }, alt: "room photo of #{@room.facility_code_heprod}" %>
-            </a>
+            <%= link_to url_for(@room.gallery_image1), tabindex: "0", role: "button", aria: { label: "View gallery image 1" }, data: lightbox_image_data(@room.gallery_image1, alt: room_photo_alt) do %>
+              <%= image_tag @room.gallery_image1, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded focus:outline focus:outline-2 focus:outline-blue-700", alt: room_photo_alt %>
+            <% end %>
           <% end %>
           <% if @room.gallery_image2.representable? %>
-            <a href="<%= url_for(@room.gallery_image2) %>" tabindex="0" role="button" aria-label="View gallery image 2">
-              <%= image_tag @room.gallery_image2, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded focus:outline focus:outline-2 focus:outline-blue-700", data: { src: @room.gallery_image2.representation(resize_to_limit: [24, 24]) }, alt: "room photo of #{@room.facility_code_heprod}" %>
-            </a>
+            <%= link_to url_for(@room.gallery_image2), tabindex: "0", role: "button", aria: { label: "View gallery image 2" }, data: lightbox_image_data(@room.gallery_image2, alt: room_photo_alt) do %>
+              <%= image_tag @room.gallery_image2, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded focus:outline focus:outline-2 focus:outline-blue-700", alt: room_photo_alt %>
+            <% end %>
           <% end %>
           <% if @room.gallery_image3.representable? %>
-            <a href="<%= url_for(@room.gallery_image3) %>" tabindex="0" role="button" aria-label="View gallery image 3">
-              <%= image_tag @room.gallery_image3, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded focus:outline focus:outline-2 focus:outline-blue-700", data: { src: @room.gallery_image3.representation(resize_to_limit: [24, 24]) }, alt: "room photo of #{@room.facility_code_heprod}" %>
-            </a>
+            <%= link_to url_for(@room.gallery_image3), tabindex: "0", role: "button", aria: { label: "View gallery image 3" }, data: lightbox_image_data(@room.gallery_image3, alt: room_photo_alt) do %>
+              <%= image_tag @room.gallery_image3, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded focus:outline focus:outline-2 focus:outline-blue-700", alt: room_photo_alt %>
+            <% end %>
           <% end %>
           <% if @room.gallery_image4.representable? %>
-            <a href="<%= url_for(@room.gallery_image4) %>" tabindex="0" role="button" aria-label="View gallery image 4">
-              <%= image_tag @room.gallery_image4, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded focus:outline focus:outline-2 focus:outline-blue-700", data: { src: @room.gallery_image4.representation(resize_to_limit: [24, 24]) }, alt: "room photo of #{@room.facility_code_heprod}" %>
-            </a>
+            <%= link_to url_for(@room.gallery_image4), tabindex: "0", role: "button", aria: { label: "View gallery image 4" }, data: lightbox_image_data(@room.gallery_image4, alt: room_photo_alt) do %>
+              <%= image_tag @room.gallery_image4, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded focus:outline focus:outline-2 focus:outline-blue-700", alt: room_photo_alt %>
+            <% end %>
           <% end %>
           <% if @room.gallery_image5.representable? %>
-            <a href="<%= url_for(@room.gallery_image5) %>" tabindex="0" role="button" aria-label="View gallery image 5">
-              <%= image_tag @room.gallery_image5, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded focus:outline focus:outline-2 focus:outline-blue-700", data: { src: @room.gallery_image5.representation(resize_to_limit: [24, 24]) }, alt: "room photo of #{@room.facility_code_heprod}" %>
-            </a>
+            <%= link_to url_for(@room.gallery_image5), tabindex: "0", role: "button", aria: { label: "View gallery image 5" }, data: lightbox_image_data(@room.gallery_image5, alt: room_photo_alt) do %>
+              <%= image_tag @room.gallery_image5, class: "lg:h-24 lg:w-24 h-12 w-12 m-2 cursor-pointer border border-blue-900 rounded focus:outline focus:outline-2 focus:outline-blue-700", alt: room_photo_alt %>
+            <% end %>
           <% end %>
         </div>
         <div>
