@@ -50,4 +50,7 @@ Rails.application.routes.draw do
   end
 
   delete "application/delete_file_attachment/:id", to: "application#delete_file_attachment", as: :delete_file
+
+# Mount the feedback gem engine
+  mount LsaTdxFeedback::Engine => "/lsa_tdx_feedback", as: "lsa_tdx_feedback"
 end
