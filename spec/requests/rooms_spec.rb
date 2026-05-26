@@ -109,9 +109,9 @@ RSpec.describe "Rooms", type: :request do
     end
 
     it "avoids per-row alert note lookups in room listings" do
-      create(:note, :alert, noteable: matching_room)
-      create(:note, :alert, noteable: other_room)
-      create(:note, :alert, noteable: building)
+      create(:note, :alert, noteable: matching_room, user: viewer)
+      create(:note, :alert, noteable: other_room, user: viewer)
+      create(:note, :alert, noteable: building, user: viewer)
 
       note_queries = capture_alert_note_queries do
         get rooms_path, params: {classroom_name: "USB"}
@@ -191,9 +191,9 @@ RSpec.describe "Rooms", type: :request do
     end
 
     it "avoids repeated alert note lookups on the room show page" do
-      create(:note, :alert, noteable: matching_room)
-      create(:note, :notice, noteable: matching_room)
-      create(:note, :alert, noteable: building)
+      create(:note, :alert, noteable: matching_room, user: viewer)
+      create(:note, :notice, noteable: matching_room, user: viewer)
+      create(:note, :alert, noteable: building, user: viewer)
 
       note_queries = capture_alert_note_queries do
         get room_path(matching_room)
