@@ -36,14 +36,7 @@ RSpec.describe "API update logs", type: :request do
   end
 
   before do
-    allow_any_instance_of(ActionView::Base).to receive(:stylesheet_link_tag).and_return("")
-    allow_any_instance_of(Importmap::ImportmapTagsHelper).to receive(:javascript_importmap_tags).and_return("")
-    allow_any_instance_of(ActionView::Base).to receive(:render).and_wrap_original do |method, *args, **kwargs, &block|
-      partial = args.first
-      next "" if partial == "layouts/header" || partial == "layouts/footer"
-
-      method.call(*args, **kwargs, &block)
-    end
+    stub_request_layout_partials
   end
 
   describe "GET /api_update_logs" do
