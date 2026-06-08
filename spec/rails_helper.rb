@@ -16,7 +16,14 @@ end
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
-Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
+# NOTE: test_seeds.rb is intentionally excluded here. It mutates the database at
+# load time (committing rows outside of DatabaseCleaner transactions), so it must
+# only be loaded explicitly by the specs that need it (see system specs).
+Dir[Rails.root.join("spec/support/**/*.rb")].sort.each do |f|
+  next if File.basename(f) == "test_seeds.rb"
+
+  require f
+end
 
 RSpec.configure do |config|
   config.before(:suite) do

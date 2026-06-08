@@ -1,3 +1,11 @@
+# Make seeding idempotent. This file is `load`ed directly by specs that use the
+# truncation strategy, and may run against a database that still contains rows
+# from a previous load. Clear children before parents to respect foreign keys.
+Room.delete_all
+Building.delete_all
+Announcement.delete_all
+CampusRecord.delete_all
+
 CampusRecord.create([
   {id: 1,
    campus_cd: 100,
