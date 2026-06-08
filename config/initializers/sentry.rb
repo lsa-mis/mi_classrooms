@@ -25,21 +25,19 @@ Sentry.init do |config|
 
   # Profile sampling is relative to traced requests.
   # In production this results in ~2% profiled requests (0.2 * 0.1).
-  config.profiles_sample_rate = Rails.env.production? ? 0.2 : 0.0
+  config.profiles_sample_rate = 0.0
 
-  # Custom tracing strategy.
   config.traces_sampler = lambda do |context|
     transaction_name = context.dig(:transaction_context, :name).to_s
 
-    # Ignore routine health checks.
     if transaction_name.include?("health_check") || transaction_name.include?("/up")
       0.0
+    elsif Rails.env.production?
+      0.03
     else
-      # Sample based on environment.
-      Rails.env.production? ? 0.1 : 1.0
+      0.0
     end
   end
-
   # Ignore noisy errors that are not actionable in app code.
   config.excluded_exceptions += [
     "ActionController::RoutingError",
