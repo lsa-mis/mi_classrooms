@@ -68,4 +68,33 @@ RSpec.describe BuildingsApi do
       expect(RoomCharacteristic.exists?(characteristic.id)).to be(true)
     end
   end
+
+  describe "#department_error_guidance" do
+    let(:api) { described_class.new }
+
+    it "explains rate limiting for a 429 status code" do
+      expect(api.send(:department_error_guidance, "HTTP 429")).to match(/Rate limited/i)
+    end
+
+    it "explains a missing department for a 404 status code" do
+      expect(api.send(:department_error_guidance, "HTTP 404")).to match(/not found/i)
+    end
+
+    it "explains an authorization failure for 401, 403, and AuthTokenError" do
+      expect(api.send(:department_error_guidance, "HTTP 401")).to match(/Authorization failed/i)
+      expect(api.send(:department_error_guidance, "HTTP 403")).to match(/Authorization failed/i)
+      expect(api.send(:department_error_guidance, "AuthTokenError")).to match(/Authorization failed/i)
+    end
+
+    it "explains a transient server error for 5xx, Exception, and Fault" do
+      expect(api.send(:department_error_guidance, "HTTP 500")).to match(/server error/i)
+      expect(api.send(:department_error_guidance, "Exception")).to match(/server error/i)
+      expect(api.send(:department_error_guidance, "Fault")).to match(/server error/i)
+    end
+
+    it "gives a generic fallback for an unrecognized error code" do
+      expect(api.send(:department_error_guidance, "Unknown error")).to match(/Unrecognized API response/i)
+      expect(api.send(:department_error_guidance, "")).to match(/Unrecognized API response/i)
+    end
+  end
 end

@@ -85,6 +85,143 @@ RSpec.describe UmApi::Connection do
         .ordered
     end
   end
+
+  describe "#extract_error_code" do
+    let(:connection) { described_class.new(access_token: "token") }
+
+    it "prefers the API errorCode when present" do
+      expect(connection.send(:extract_error_code, {"errorCode" => "BF-123"}, "500")).to eq("BF-123")
+    end
+
+    it "returns Fault when the body carries a fault object" do
+      expect(connection.send(:extract_error_code, {"fault" => {"faultstring" => "boom"}}, "500")).to eq("Fault")
+    end
+
+    it "falls back to the HTTP status code when no known error key is present" do
+      expect(connection.send(:extract_error_code, {}, "429")).to eq("HTTP 429")
+    end
+
+    it "returns Unknown error when there is neither a known key nor a status code" do
+      expect(connection.send(:extract_error_code, {}, nil)).to eq("Unknown error")
+    end
+  end
+
+  describe "#extract_error_message" do
+    let(:connection) { described_class.new(access_token: "token") }
+
+    it "prefers the API errorMessage when present" do
+      expect(connection.send(:extract_error_message, {"errorMessage" => "Not found"})).to eq("Not found")
+    end
+
+    it "uses the fault faultstring when present" do
+      expect(connection.send(:extract_error_message, {"fault" => {"faultstring" => "Rate limit exceeded"}}))
+        .to eq("Rate limit exceeded")
+    end
+
+    it "uses a generic error key when present" do
+      expect(connection.send(:extract_error_message, {"error" => "bad request"})).to eq("bad request")
+    end
+
+    it "falls back to a raw body snippet when no known message key is present" do
+      expect(connection.send(:extract_error_message, {"unexpected" => "shape"}))
+        .to eq("{\"unexpected\":\"shape\"}")
+    end
+  end
+
+  describe "#raw_body_snippet" do
+    let(:connection) { described_class.new(access_token: "token") }
+
+    it "reports when there is no usable response body" do
+      expect(connection.send(:raw_body_snippet, {})).to eq("no response body returned")
+      expect(connection.send(:raw_body_snippet, "")).to eq("no response body returned")
+    end
+
+    it "serializes a hash body to JSON" do
+      expect(connection.send(:raw_body_snippet, {"a" => 1})).to eq("{\"a\":1}")
+    end
+
+    it "returns a string body as-is" do
+      expect(connection.send(:raw_body_snippet, "upstream timeout")).to eq("upstream timeout")
+    end
+
+    it "truncates very long bodies to 200 characters" do
+      snippet = connection.send(:raw_body_snippet, "x" * 500)
+      expect(snippet.length).to eq(200)
+      expect(snippet).to end_with("...")
+    end
+  end
+
+  describe "#get_json (request_json behavior)" do
+    let(:connection) { described_class.new(access_token: "token") }
+
+    def fake_response(code:, body:, headers: {})
+      instance_double(Net::HTTPResponse, code: code, body: body, to_hash: headers)
+    end
+
+    def stub_http_response(response)
+      http = instance_double(Net::HTTP)
+      allow(connection).to receive(:http_for).and_return(http)
+      allow(http).to receive(:request).and_return(response)
+      http
+    end
+
+    before do
+      allow(connection).to receive(:credentials).and_return(buildings_client_id: "client-id")
+    end
+
+    it "returns a success result with parsed data and headers on a 200 response" do
+      stub_http_response(
+        fake_response(
+          code: "200",
+          body: {"DepartmentList" => {"DeptData" => []}}.to_json,
+          headers: {"content-type" => ["application/json"]}
+        )
+      )
+
+      result = connection.get_json("https://example.test/data")
+
+      expect(result["success"]).to be(true)
+      expect(result["data"]).to eq("DepartmentList" => {"DeptData" => []})
+      expect(result["headers"]).to eq("content-type" => ["application/json"])
+    end
+
+    it "returns a failure result carrying the HTTP status code when the body has no known error keys" do
+      stub_http_response(fake_response(code: "429", body: ""))
+
+      result = connection.get_json("https://example.test/data")
+
+      expect(result["success"]).to be(false)
+      expect(result["errorcode"]).to eq("HTTP 429")
+      expect(result["error"]).to eq("no response body returned")
+    end
+
+    it "surfaces the API errorCode and errorMessage on a structured error body" do
+      stub_http_response(
+        fake_response(
+          code: "404",
+          body: {"errorCode" => "BF-404", "errorMessage" => "Department not found"}.to_json
+        )
+      )
+
+      result = connection.get_json("https://example.test/data")
+
+      expect(result["success"]).to be(false)
+      expect(result["errorcode"]).to eq("BF-404")
+      expect(result["error"]).to eq("Department not found")
+    end
+
+    it "wraps unexpected exceptions as an Exception failure result" do
+      http = instance_double(Net::HTTP)
+      allow(connection).to receive(:http_for).and_return(http)
+      allow(http).to receive(:request).and_raise(SocketError.new("getaddrinfo failed"))
+
+      result = connection.get_json("https://example.test/data")
+
+      expect(result["success"]).to be(false)
+      expect(result["errorcode"]).to eq("Exception")
+      expect(result["error"]).to eq("getaddrinfo failed")
+    end
+  end
 end
 
 RSpec.describe AuthTokenApi do

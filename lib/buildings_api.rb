@@ -354,7 +354,7 @@ class BuildingsApi
     result = department_api.get_all_departments_info
     return [build_department_index(result["data"]), false] if result["success"]
 
-    add_warning("update_rooms, error: could not preload departments - #{result["errorcode"]}: #{result["error"]}. Falling back to per-department lookups.")
+    add_warning("update_rooms, error: could not preload departments - #{result["errorcode"]}: #{result["error"]}. Falling back to per-department lookups. Action: #{department_error_guidance(result["errorcode"])}")
     [{}, true]
   end
 
@@ -385,13 +385,30 @@ class BuildingsApi
       dept_info = dept_result.dig("data", "DeptData", 0)
       dept_info_array[dept_name] = dept_info.present? ? department_summary(dept_info) : nil
     else
-      add_warning("update_rooms, error: DepartmentApi: Error for building #{bld}, room #{room_record_number}, department #{dept_name} - #{dept_result["errorcode"]}: #{dept_result["error"]}")
+      add_warning("update_rooms, error: DepartmentApi: building #{bld}, room #{room_record_number}, department \"#{dept_name}\" - #{dept_result["errorcode"]}: #{dept_result["error"]}. Action: #{department_error_guidance(dept_result["errorcode"])}")
       sleep(61.seconds)
       increment(:rate_limit_sleeps)
       dept_info_array[dept_name] = nil
     end
 
     [dept_info_array[dept_name], number_of_api_calls_per_minutes]
+  end
+
+  # Maps an API errorcode (e.g. "HTTP 429", "Fault", "AuthTokenError") to a
+  # plain-language next step so an admin reading the log knows what to do.
+  def department_error_guidance(errorcode)
+    case errorcode.to_s
+    when /429/
+      "Rate limited by the U-M API. The sync paused and retried automatically; safe to ignore unless this repeats for many rooms."
+    when /404/
+      "Department not found in the U-M directory. Verify the department name/mapping for this room is still correct."
+    when /401/, /403/, "AuthTokenError"
+      "Authorization failed. Check the um_api credentials and scope in Rails credentials."
+    when /5\d\d/, "Exception", "Fault"
+      "U-M API server error or network issue. This is usually transient - re-run the sync."
+    else
+      "Unrecognized API response. Review the raw error detail above and the U-M API status before re-running."
+    end
   end
 
   def department_summary(dept_data_info)

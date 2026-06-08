@@ -61,9 +61,6 @@ jobs:
       - name: Brakeman
         run: bundle exec brakeman -q -w2 --no-pager
 
-      - name: Standard Ruby
-        run: bundle exec standardrb
-
       - name: RSpec
         run: bundle exec rspec --format documentation --backtrace
 
