@@ -77,7 +77,7 @@ end
 
 group :test do
   gem 'capybara'
-  gem 'database_cleaner'
+  gem 'database_cleaner-active_record'
   gem 'faker', '~> 2.19'
   gem 'ffaker'
   gem 'selenium-webdriver'
