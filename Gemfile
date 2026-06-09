@@ -23,7 +23,7 @@ gem 'order_as_specified', '~> 1.7'
 gem 'pagy', '~> 6.0'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'pg_search'
-gem 'puma', '~> 6.0'
+gem 'puma', '~> 7.2'
 gem 'solid_cable', '~> 3.0'
 gem 'solid_queue', '~> 1.2'
 
