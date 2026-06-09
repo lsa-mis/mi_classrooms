@@ -1,0 +1,137 @@
+#!/usr/bin/env bash
+#
+# bin/promote - Fast-forward promote staging -> main and keep the two branches
+#               byte-for-byte in sync.
+#
+# Why this exists:
+#   Merging staging into main with a GitHub "merge commit" writes a commit onto
+#   main that staging does not have, which makes staging perpetually "out of
+#   date" and forces a back-merge. Promoting by fast-forward instead keeps main
+#   and staging pointing at the exact same commit, eliminating that drift.
+#
+# What it does:
+#   1. Verifies the working tree is clean.
+#   2. Fetches the latest refs.
+#   3. Fast-forwards main up to staging (no new commit).
+#   4. Pushes main.
+#   5. Fast-forwards staging up to main and pushes it (keeps them identical).
+#
+# It refuses to run if any step is not a true fast-forward, so it can never
+# create a merge commit or rewrite history.
+#
+# Usage:
+#   bin/promote                 # promote SOURCE (staging) -> TARGET (main)
+#   bin/promote --dry-run       # show what would happen, change nothing
+#   SOURCE=staging TARGET=main bin/promote
+#
+set -euo pipefail
+
+SOURCE="${SOURCE:-staging}"
+TARGET="${TARGET:-main}"
+REMOTE="${REMOTE:-origin}"
+DRY_RUN=0
+
+for arg in "$@"; do
+  case "$arg" in
+    --dry-run|-n) DRY_RUN=1 ;;
+    -h|--help)
+      grep '^#' "$0" | grep -v '^#!' | sed 's/^# \{0,1\}//'
+      exit 0
+      ;;
+    *)
+      echo "Unknown argument: $arg" >&2
+      exit 2
+      ;;
+  esac
+done
+
+red()   { printf '\033[31m%s\033[0m\n' "$*"; }
+green() { printf '\033[32m%s\033[0m\n' "$*"; }
+blue()  { printf '\033[34m%s\033[0m\n' "$*"; }
+
+run() {
+  if [ "$DRY_RUN" -eq 1 ]; then
+    echo "  [dry-run] $*"
+  else
+    echo "  + $*"
+    "$@"
+  fi
+}
+
+# Always return the user to the branch they started on.
+ORIGINAL_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+restore_branch() {
+  local code=$?
+  if [ "$DRY_RUN" -eq 0 ] && [ "$(git rev-parse --abbrev-ref HEAD)" != "$ORIGINAL_BRANCH" ]; then
+    git checkout --quiet "$ORIGINAL_BRANCH" 2>/dev/null || true
+  fi
+  exit $code
+}
+trap restore_branch EXIT
+
+# 1. Clean working tree required (skipped for --dry-run since it changes nothing).
+if [ "$DRY_RUN" -eq 0 ] && [ -n "$(git status --porcelain)" ]; then
+  red "Working tree is not clean. Commit or stash your changes before promoting."
+  git status --short
+  exit 1
+fi
+
+blue "Fetching latest from $REMOTE..."
+run git fetch "$REMOTE" --quiet
+
+SRC_REF="$REMOTE/$SOURCE"
+TGT_REF="$REMOTE/$TARGET"
+
+if ! git rev-parse --verify --quiet "$SRC_REF" >/dev/null; then
+  red "Source ref $SRC_REF not found."
+  exit 1
+fi
+if ! git rev-parse --verify --quiet "$TGT_REF" >/dev/null; then
+  red "Target ref $TGT_REF not found."
+  exit 1
+fi
+
+SRC_SHA="$(git rev-parse --short "$SRC_REF")"
+TGT_SHA="$(git rev-parse --short "$TGT_REF")"
+blue "Source $SOURCE ($SRC_REF) = $SRC_SHA"
+blue "Target $TARGET ($TGT_REF) = $TGT_SHA"
+
+# Nothing to promote.
+if [ "$(git rev-parse "$SRC_REF")" = "$(git rev-parse "$TGT_REF")" ]; then
+  green "$SOURCE and $TARGET already point at the same commit. Nothing to do."
+  exit 0
+fi
+
+# 2. The promotion must be a true fast-forward: target must be an ancestor of source.
+if ! git merge-base --is-ancestor "$TGT_REF" "$SRC_REF"; then
+  red "Cannot fast-forward: $TARGET has commits that are not on $SOURCE."
+  red "This usually means something was committed directly to $TARGET."
+  echo "Commits on $TARGET not in $SOURCE:"
+  git log --oneline "$SRC_REF..$TGT_REF"
+  red "Resolve this manually (e.g. merge $TARGET into $SOURCE) before promoting."
+  exit 1
+fi
+
+echo
+green "Promotion is a clean fast-forward: $TARGET ($TGT_SHA) -> $SOURCE ($SRC_SHA)"
+git log --oneline "$TGT_REF..$SRC_REF"
+echo
+
+# 3 & 4. Fast-forward target up to source and push.
+blue "Promoting $SOURCE -> $TARGET ..."
+run git checkout --quiet "$TARGET"
+run git merge --ff-only "$SRC_REF"
+run git push "$REMOTE" "$TARGET"
+
+# 5. Fast-forward source up to target so they stay identical, then push.
+blue "Re-syncing $SOURCE up to $TARGET ..."
+run git checkout --quiet "$SOURCE"
+run git merge --ff-only "$TARGET"
+run git push "$REMOTE" "$SOURCE"
+
+echo
+if [ "$DRY_RUN" -eq 1 ]; then
+  green "Dry run complete. No changes were made."
+else
+  green "Done. $SOURCE and $TARGET are now in sync at $SRC_SHA."
+fi
