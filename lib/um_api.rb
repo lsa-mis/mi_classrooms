@@ -178,7 +178,7 @@ module UmApi
         success_result(response_body, headers: response.to_hash)
       else
         failure_result(
-          extract_error_code(response_body),
+          extract_error_code(response_body, response.code),
           extract_error_message(response_body),
           response_body,
           response.to_hash
@@ -248,9 +248,10 @@ module UmApi
       end
     end
 
-    def extract_error_code(response_body)
+    def extract_error_code(response_body, status_code = nil)
       return response_body["errorCode"] if response_body.is_a?(Hash) && response_body["errorCode"].present?
       return "Fault" if response_body.is_a?(Hash) && response_body["fault"].present?
+      return "HTTP #{status_code}" if status_code.present?
 
       "Unknown error"
     end
@@ -260,7 +261,15 @@ module UmApi
       return response_body.dig("fault", "faultstring") if response_body.is_a?(Hash) && response_body.dig("fault", "faultstring").present?
       return response_body["error"] if response_body.is_a?(Hash) && response_body["error"].present?
 
-      "Unknown error"
+      raw_body_snippet(response_body)
+    end
+
+    def raw_body_snippet(response_body)
+      snippet = response_body.is_a?(String) ? response_body : response_body.to_json
+      snippet = snippet.to_s.strip
+      return "no response body returned" if snippet.blank? || snippet == "{}"
+
+      snippet.truncate(200)
     end
 
     def success_result(data, headers: {})
