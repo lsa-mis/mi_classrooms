@@ -1,0 +1,5 @@
+<div class="flash-messages">
+  <% flash.each do |message_type, message| %>
+    <%= render partial: "layouts/flash_message", locals: { message_type: message_type, message: message } %>
+  <% end %>
+</div>

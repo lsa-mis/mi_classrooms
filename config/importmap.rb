@@ -17,10 +17,11 @@ pin "tailwindcss-stimulus-components", to: "https://ga.jspm.io/npm:tailwindcss-s
 # Third-party libraries
 pin "bigger-picture", to: "https://ga.jspm.io/npm:bigger-picture@1.1.17/dist/bigger-picture.mjs"
 pin "pannellum", to: "pannellum.js" # vendored
-pin "chart.js", to: "https://ga.jspm.io/npm:chart.js@4.4.8/dist/chart.umd.js"
+pin "chart.js" # @4.5.1 — self-contained ESM bundle (esbuild from chart.js/auto, no external imports)
 
 # Stimulus controllers (pin all from directory)
 pin_all_from "app/javascript/controllers", under: "controllers"
 
 # Channels
 pin_all_from "app/javascript/channels", under: "channels"
+# @kurkle/color is inlined in the chart.js bundle above — no separate pin needed

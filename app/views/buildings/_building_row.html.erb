@@ -1,0 +1,40 @@
+<%= turbo_frame_tag dom_id(building) do %>
+  <tr class="flex flex-wrap justify-between <%= cycle('row-even', 'row-odd') %>">
+    <%# basic info %>
+    <td class="px-6 pt-2 pb-6 whitespace-nowrap">
+      <div class="flex items-center">
+        <div class="flex-shrink-0 h-16 w-auto">
+          <img class="h-14 w-14 rounded-full" alt="head"
+               src="https://images.unsplash.com/photo-1606761568499-6d2451b23c66?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjJ8fGNsYXNzcm9vbXxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"/>
+          <span class="px-1 py-1 mr-1 mt-1 text-xs leading-5 font-semibold rounded-full bg-green-200 text-green-800">
+            Alerts?
+          </span>
+        </div>
+        <div class="ml-4 max-w-xs w-screen">
+          <div class="text-md font-medium text-gray-900">
+            <%= " #{building.name.titleize}" %>
+            <span class="flex justify-between">
+              <div class="text-md text-gray-600"><%= building.address %></div>
+              <div class="text-sm font-medium text-orange-700"><%= "#{building.bldrecnbr} " %></div>
+            </span>
+          </div>
+        </div>
+      </div>
+    </td>
+
+    <td class="px-6 py-4 whitespace-nowrap justify-between">
+      <div class="text-sm text-gray-900 text-right"></div>
+      <div class="text-xs text-gray-500 flex flex-col sm:ml-20">
+        <span>Schedule this building</span>
+        <span>Tech Support</span>
+      </div>
+
+      <td class="px-6 pt-3 whitespace-nowrap text-sm text-blue-600 hover:text-blue-500">
+        <%= link_to "Details", building_path(building) %>
+        <div class="hidden whitespace-nowrap text-right">
+          <a class="text-blue-600 hover:text-red-600" href="#">Edit</a>
+        </div>
+      </td>
+    </td>
+  </tr>
+<% end %>

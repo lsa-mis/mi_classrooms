@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
-import Chart from "chart.js"
+import { Chart } from "chart.js"
 
+// chart.js/auto is bundled — all chart types are pre-registered.
 export default class extends Controller {
   static values = {
     type: String,
