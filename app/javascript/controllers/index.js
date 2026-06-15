@@ -4,6 +4,7 @@
 import { Application } from "@hotwired/stimulus"
 
 // Custom controllers
+import AnalyticsChartController from "controllers/analytics_chart_controller"
 import AutosubmitController from "controllers/autosubmit_controller"
 import ConfirmationController from "controllers/confirmation_controller"
 import FeedbackController from "controllers/feedback_controller"
@@ -22,6 +23,7 @@ import { Alert, Autosave, Dropdown, Modal, Tabs, Popover, Toggle, Slideover } fr
 const application = Application.start()
 
 // Register custom controllers
+application.register("analytics-chart", AnalyticsChartController)
 application.register("autosubmit", AutosubmitController)
 application.register("confirmation", ConfirmationController)
 application.register("feedback", FeedbackController)

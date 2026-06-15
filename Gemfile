@@ -10,7 +10,6 @@ gem 'bootsnap', '>= 1.4.3', require: false
 gem 'rails', '~> 8.1.0'
 
 # Frontend / UI
-gem 'haml-rails'
 gem 'importmap-rails', '~> 2.2'
 gem 'jbuilder', '~> 2.11'
 gem 'sassc-rails'
@@ -69,7 +68,6 @@ group :development, :test do
 end
 
 group :development do
-  gem 'erb2haml'
   gem 'letter_opener_web', '~> 2.0'
   gem 'pry-rails'
   gem 'web-console', '>= 4.1.0'

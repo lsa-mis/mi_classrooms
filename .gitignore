@@ -47,3 +47,10 @@ node_modules
 
 # keep cursor configs out of repo
 .cursor/
+
+# DO NOT keep .OLD files
+*.old
+*.OLD
+
+# HAML removed — project uses ERB only
+*.haml
