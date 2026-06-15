@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   include Pagy::Backend
   include Pundit::Authorization
+  include Trackable
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_in_group
   before_action :set_membership
