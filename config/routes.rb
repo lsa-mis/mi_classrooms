@@ -31,7 +31,8 @@ Rails.application.routes.draw do
 
   resources :announcements
   resources :api_update_logs, only: [:index, :show]
-  get "analytics", to: "analytics_dashboard#index", as: :analytics_dashboard
+  get  "analytics",         to: "analytics_dashboard#index",   as: :analytics_dashboard
+  post "analytics/refresh", to: "analytics_dashboard#refresh", as: :analytics_dashboard_refresh
 
   get "legacy_crdb" => redirect("https://rooms.lsa.umich.edu")
 

@@ -43,7 +43,7 @@ class AnalyticsDailyRollup < ApplicationRecord
         "SUM(unique_sessions) AS unique_sessions",
         "SUM(unique_users) AS unique_users"
       )
-      .order("SUM(total_views) DESC")
+      .order(Arel.sql("SUM(total_views) DESC"))
       .limit(limit)
       .map { |r| {page: "#{r.controller_name}##{r.action_name}", total_views: r.total_views, unique_sessions: r.unique_sessions, unique_users: r.unique_users} }
   end
