@@ -17,6 +17,7 @@ pin "tailwindcss-stimulus-components", to: "https://ga.jspm.io/npm:tailwindcss-s
 # Third-party libraries
 pin "bigger-picture", to: "https://ga.jspm.io/npm:bigger-picture@1.1.17/dist/bigger-picture.mjs"
 pin "pannellum", to: "pannellum.js" # vendored
+pin "chart.js", to: "https://ga.jspm.io/npm:chart.js@4.4.8/dist/chart.umd.js"
 
 # Stimulus controllers (pin all from directory)
 pin_all_from "app/javascript/controllers", under: "controllers"

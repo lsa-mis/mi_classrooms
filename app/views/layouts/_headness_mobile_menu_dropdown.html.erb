@@ -11,6 +11,7 @@
       <%= link_to "About", about_path, class: "mobile-dropdown-link #{class_names(active: current_page?(about_path))} "  %>
       <%= link_to "Announcements", announcements_path, class: "mobile-dropdown-link #{class_names(active: current_page?(announcements_path))} " if user_signed_in? && policy(Announcement).edit? %>
       <%= link_to "API Updates", api_update_logs_path, class: "mobile-dropdown-link #{class_names(active: current_page?(api_update_logs_path))} " if user_signed_in? && policy(ApiUpdateLog).index? %>
+      <%= link_to "Analytics", analytics_dashboard_path, class: "mobile-dropdown-link #{class_names(active: current_page?(analytics_dashboard_path))} " if user_signed_in? && policy(:analytics_dashboard).index? %>
       <%= link_to "AdminDoc", "https://docs.google.com/document/d/1wg_MvJRzeZwl8x1292AYp3JoS4AHd1xSgw7THpqflCU/edit?usp=sharing", target: "_blank", class: "mobile-dropdown-link" if user_signed_in? && policy(Announcement).edit? %>
       <div class="grid grid-col-2 gap-2 justify-items-end mr-8">
         <div>
