@@ -9,6 +9,13 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: -
+--
+
+-- *not* creating schema, since initdb creates it
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -144,6 +151,82 @@ CREATE SEQUENCE public.active_storage_variant_records_id_seq
 --
 
 ALTER SEQUENCE public.active_storage_variant_records_id_seq OWNED BY public.active_storage_variant_records.id;
+
+
+--
+-- Name: analytics_daily_rollups; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.analytics_daily_rollups (
+    id bigint NOT NULL,
+    period_date date NOT NULL,
+    controller_name character varying(100) NOT NULL,
+    action_name character varying(100) NOT NULL,
+    total_views integer DEFAULT 0 NOT NULL,
+    unique_sessions integer DEFAULT 0 NOT NULL,
+    unique_users integer DEFAULT 0 NOT NULL,
+    authenticated_views integer DEFAULT 0 NOT NULL,
+    avg_duration_ms integer,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: analytics_daily_rollups_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.analytics_daily_rollups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: analytics_daily_rollups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.analytics_daily_rollups_id_seq OWNED BY public.analytics_daily_rollups.id;
+
+
+--
+-- Name: analytics_hourly_rollups; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.analytics_hourly_rollups (
+    id bigint NOT NULL,
+    period_start timestamp(6) without time zone NOT NULL,
+    controller_name character varying(100) NOT NULL,
+    action_name character varying(100) NOT NULL,
+    total_views integer DEFAULT 0 NOT NULL,
+    unique_sessions integer DEFAULT 0 NOT NULL,
+    unique_users integer DEFAULT 0 NOT NULL,
+    authenticated_views integer DEFAULT 0 NOT NULL,
+    avg_duration_ms integer,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: analytics_hourly_rollups_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.analytics_hourly_rollups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: analytics_hourly_rollups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.analytics_hourly_rollups_id_seq OWNED BY public.analytics_hourly_rollups.id;
 
 
 --
@@ -440,6 +523,44 @@ ALTER SEQUENCE public.omniauth_services_id_seq OWNED BY public.omniauth_services
 
 
 --
+-- Name: page_views; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.page_views (
+    id bigint NOT NULL,
+    session_token character varying(32) NOT NULL,
+    user_id bigint,
+    controller_name character varying(100) NOT NULL,
+    action_name character varying(100) NOT NULL,
+    path character varying(500) NOT NULL,
+    referrer_host character varying(255),
+    device_type character varying(20),
+    http_status smallint,
+    duration_ms integer,
+    occurred_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: page_views_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.page_views_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: page_views_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.page_views_id_seq OWNED BY public.page_views.id;
+
+
+--
 -- Name: pg_search_documents; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -678,6 +799,20 @@ ALTER TABLE ONLY public.active_storage_variant_records ALTER COLUMN id SET DEFAU
 
 
 --
+-- Name: analytics_daily_rollups id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.analytics_daily_rollups ALTER COLUMN id SET DEFAULT nextval('public.analytics_daily_rollups_id_seq'::regclass);
+
+
+--
+-- Name: analytics_hourly_rollups id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.analytics_hourly_rollups ALTER COLUMN id SET DEFAULT nextval('public.analytics_hourly_rollups_id_seq'::regclass);
+
+
+--
 -- Name: announcements id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -731,6 +866,13 @@ ALTER TABLE ONLY public.omni_auth_services ALTER COLUMN id SET DEFAULT nextval('
 --
 
 ALTER TABLE ONLY public.omniauth_services ALTER COLUMN id SET DEFAULT nextval('public.omniauth_services_id_seq'::regclass);
+
+
+--
+-- Name: page_views id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.page_views ALTER COLUMN id SET DEFAULT nextval('public.page_views_id_seq'::regclass);
 
 
 --
@@ -798,6 +940,22 @@ ALTER TABLE ONLY public.active_storage_blobs
 
 ALTER TABLE ONLY public.active_storage_variant_records
     ADD CONSTRAINT active_storage_variant_records_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: analytics_daily_rollups analytics_daily_rollups_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.analytics_daily_rollups
+    ADD CONSTRAINT analytics_daily_rollups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: analytics_hourly_rollups analytics_hourly_rollups_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.analytics_hourly_rollups
+    ADD CONSTRAINT analytics_hourly_rollups_pkey PRIMARY KEY (id);
 
 
 --
@@ -873,6 +1031,14 @@ ALTER TABLE ONLY public.omniauth_services
 
 
 --
+-- Name: page_views page_views_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.page_views
+    ADD CONSTRAINT page_views_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: pg_search_documents pg_search_documents_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -921,6 +1087,20 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: idx_daily_rollup_period_action; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX idx_daily_rollup_period_action ON public.analytics_daily_rollups USING btree (period_date, controller_name, action_name);
+
+
+--
+-- Name: idx_hourly_rollup_period_action; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX idx_hourly_rollup_period_action ON public.analytics_hourly_rollups USING btree (period_start, controller_name, action_name);
+
+
+--
 -- Name: index_action_text_rich_texts_uniqueness; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -953,6 +1133,20 @@ CREATE UNIQUE INDEX index_active_storage_blobs_on_key ON public.active_storage_b
 --
 
 CREATE UNIQUE INDEX index_active_storage_variant_records_uniqueness ON public.active_storage_variant_records USING btree (blob_id, variation_digest);
+
+
+--
+-- Name: index_analytics_daily_rollups_on_period_date; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_analytics_daily_rollups_on_period_date ON public.analytics_daily_rollups USING btree (period_date);
+
+
+--
+-- Name: index_analytics_hourly_rollups_on_period_start; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_analytics_hourly_rollups_on_period_start ON public.analytics_hourly_rollups USING btree (period_start);
 
 
 --
@@ -1002,6 +1196,27 @@ CREATE INDEX index_omni_auth_services_on_user_id ON public.omni_auth_services US
 --
 
 CREATE INDEX index_omniauth_services_on_user_id ON public.omniauth_services USING btree (user_id);
+
+
+--
+-- Name: index_page_views_on_occurred_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_page_views_on_occurred_at ON public.page_views USING btree (occurred_at);
+
+
+--
+-- Name: index_page_views_on_session_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_page_views_on_session_token ON public.page_views USING btree (session_token);
+
+
+--
+-- Name: index_page_views_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_page_views_on_user_id ON public.page_views USING btree (user_id);
 
 
 --
@@ -1183,6 +1398,9 @@ ALTER TABLE ONLY public.room_characteristics
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260615173332'),
+('20260615173331'),
+('20260615173329'),
 ('20260428192000'),
 ('20260422120000'),
 ('20250206205460'),
