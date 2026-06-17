@@ -43,4 +43,4 @@ production:
     class: AnalyticsRollupJob
     args:
       - period_type: prune
-    schedule: every week on Sunday at 02:30
+    schedule: at 2:30am every Sunday
