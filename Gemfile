@@ -47,7 +47,7 @@ gem 'draper', '~> 4.0'
 gem 'geocoder'
 gem 'image_processing'
 gem 'lsa_tdx_feedback'
-gem 'nokogiri', '~> 1.19.1'
+gem 'nokogiri', '~> 1.19.4'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 # Ruby 4.0 compatibility (extracted from stdlib)
