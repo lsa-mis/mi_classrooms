@@ -1,10 +1,9 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static values = { url: String }
-
   change(event) {
-    const range = encodeURIComponent(event.target.value)
-    window.location.assign(`${this.urlValue}?range=${range}`)
+    const url = new URL(window.location.href)
+    url.searchParams.set("range", event.target.value)
+    window.location.assign(url.toString())
   }
 }

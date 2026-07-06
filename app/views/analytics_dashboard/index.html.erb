@@ -20,7 +20,6 @@
   <select id="range"
           class="rounded border-gray-300 text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500"
           data-controller="analytics-range"
-          data-analytics-range-url-value="<%= analytics_dashboard_path %>"
           data-action="change->analytics-range#change">
     <%= options_for_select(
           [["Last 24 hours", "24h"], ["Last 7 days", "7d"], ["Last 30 days", "30d"]],
