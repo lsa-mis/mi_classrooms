@@ -1,5 +1,6 @@
 class AnalyticsDashboardController < ApplicationController
   before_action :authenticate_user!
+  before_action :prevent_browser_caching, only: :index
 
   def index
     authorize :analytics_dashboard, :index?
@@ -67,5 +68,11 @@ class AnalyticsDashboardController < ApplicationController
       AnalyticsRollupJob.perform_now(period_type: "daily", target: date.to_s)
       date += 1.day
     end
+  end
+
+  def prevent_browser_caching
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
   end
 end

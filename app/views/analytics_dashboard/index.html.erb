@@ -6,20 +6,27 @@
 <% daily_views  = @daily_series.map { |d| d[:total_views] } %>
 <% daily_users  = @daily_series.map { |d| d[:unique_users] } %>
 
+<% range_labels = { "24h" => "last 24 hours", "7d" => "last 7 days", "30d" => "last 30 days" } %>
+
 <h1 class="text-2xl font-bold text-gray-900 mb-2">Analytics Dashboard</h1>
 
 <p class="text-sm text-gray-500 mb-4">
-  First-party page-view data. Summary cards are always live; charts read pre-aggregated rollup tables (updated hourly).
+  First-party page-view data for the <strong><%= range_labels.fetch(@range) %></strong>.
+  Summary cards are always live; charts read pre-aggregated rollup tables (updated hourly).
 </p>
 
-<div class="flex flex-wrap items-center gap-3 mb-8">
-  <%= form_with url: analytics_dashboard_path, method: :get, local: true, class: "flex items-center gap-2" do |f| %>
-    <label class="text-sm font-medium text-gray-700" for="range">Time range:</label>
-    <%= f.select :range,
-        options_for_select([["Last 24 hours", "24h"], ["Last 7 days", "7d"], ["Last 30 days", "30d"]], @range),
-        {},
-        { id: "range", class: "rounded border-gray-300 text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500", onchange: "this.form.submit()" } %>
-  <% end %>
+<div class="flex flex-wrap items-center gap-3 mb-8" data-range="<%= @range %>">
+  <label class="text-sm font-medium text-gray-700" for="range">Time range:</label>
+  <select id="range"
+          class="rounded border-gray-300 text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          data-controller="analytics-range"
+          data-analytics-range-url-value="<%= analytics_dashboard_path %>"
+          data-action="change->analytics-range#change">
+    <%= options_for_select(
+          [["Last 24 hours", "24h"], ["Last 7 days", "7d"], ["Last 30 days", "30d"]],
+          @range
+        ) %>
+  </select>
 
   <% if @rollup_stale %>
     <%= form_with url: analytics_dashboard_refresh_path, method: :post, local: true do |f| %>
@@ -60,7 +67,9 @@
     <p class="text-gray-400 text-sm">No chart data yet &mdash; click Refresh Charts above.</p>
   <% else %>
     <div class="relative" style="height: 260px">
-      <canvas data-controller="analytics-chart"
+      <canvas id="hourly-chart-<%= @range %>"
+              data-controller="analytics-chart"
+              data-turbo-temporary
               data-analytics-chart-type-value="bar"
               data-analytics-chart-labels-value="<%= hourly_labels.to_json %>"
               data-analytics-chart-datasets-value="<%= [
@@ -79,7 +88,9 @@
     <p class="text-gray-400 text-sm">No chart data yet &mdash; click Refresh Charts above.</p>
   <% else %>
     <div class="relative" style="height: 260px">
-      <canvas data-controller="analytics-chart"
+      <canvas id="daily-chart-<%= @range %>"
+              data-controller="analytics-chart"
+              data-turbo-temporary
               data-analytics-chart-type-value="line"
               data-analytics-chart-labels-value="<%= daily_labels.to_json %>"
               data-analytics-chart-datasets-value="<%= [
