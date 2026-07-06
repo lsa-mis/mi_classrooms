@@ -70,6 +70,14 @@ RSpec.describe "Analytics Dashboard", type: :request do
         expect(response.body).to include('data-range="24h"')
         expect(response.headers["Cache-Control"]).to include("no-store")
       end
+
+      it "uses a Stimulus controller for range changes instead of inline handlers" do
+        get analytics_dashboard_path
+
+        expect(response.body).to include('data-controller="analytics-range"')
+        expect(response.body).to include('data-action="change->analytics-range#change"')
+        expect(response.body).not_to include("onchange=")
+      end
     end
 
     context "as a non-admin user" do
