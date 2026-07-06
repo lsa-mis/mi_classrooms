@@ -11,8 +11,26 @@ export default class extends Controller {
   }
 
   connect() {
-    const ctx = this.element.getContext("2d")
+    this.beforeCache = this.beforeCache.bind(this)
+    document.addEventListener("turbo:before-cache", this.beforeCache)
+    this.renderChart()
+  }
 
+  disconnect() {
+    document.removeEventListener("turbo:before-cache", this.beforeCache)
+    this.destroyChart()
+  }
+
+  // Turbo snapshots the page for back/forward; tear down Chart.js first so a
+  // cached canvas bitmap is not restored over fresh data on the next visit.
+  beforeCache() {
+    this.destroyChart()
+  }
+
+  renderChart() {
+    this.destroyChart()
+
+    const ctx = this.element.getContext("2d")
     this.chart = new Chart(ctx, {
       type: this.typeValue,
       data: {
@@ -37,7 +55,8 @@ export default class extends Controller {
     })
   }
 
-  disconnect() {
+  destroyChart() {
     this.chart?.destroy()
+    this.chart = null
   }
 }

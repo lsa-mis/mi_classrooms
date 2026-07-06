@@ -18,7 +18,7 @@ class AnalyticsDailyRollup < ApplicationRecord
   # Returns [{date:, total_views:, unique_sessions:, unique_users:, authenticated_views:}, ...]
   # summed across all controller+action combos per day.
   def self.totals_by_day
-    group(:period_date)
+    all.group(:period_date)
       .select(
         :period_date,
         "SUM(total_views) AS total_views",

@@ -18,7 +18,7 @@ class AnalyticsHourlyRollup < ApplicationRecord
   # Returns [{hour:, total_views:, unique_sessions:, unique_users:, authenticated_views:}, ...]
   # grouped by hour (summed across all controller+action combos).
   def self.totals_by_hour
-    group(:period_start)
+    all.group(:period_start)
       .select(
         :period_start,
         "SUM(total_views) AS total_views",
