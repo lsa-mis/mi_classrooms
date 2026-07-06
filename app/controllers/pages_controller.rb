@@ -2,6 +2,7 @@ class PagesController < ApplicationController
   before_action :authenticate_user!, only: [:room_filters_glossary]
   before_action :set_characteristics_array, only: [:room_filters_glossary]
   after_action :verify_authorized, except: [:index, :about]
+
   def about
     @about_page_announcement = Announcement.find_by(location: "about_page")
   end
@@ -16,17 +17,8 @@ class PagesController < ApplicationController
 
   def room_filters_glossary
     authorize :page
-    characteristics = RoomCharacteristic.all.pluck(:chrstc_descrshort, :chrstc_desc254).uniq
-    characteristics.delete_if { |x| x.include?(nil) }
-    characteristics.sort
-    @filters_hash = {}
-    characteristics.each do |key, value|
-      @filters_hash[key] = value
-    end
-    @category_letters = []
-    @all_characteristics_array.each do |c|
-      @category_letters << c[0][0]
-    end
-    @category_letters = @category_letters.uniq.sort
+    @page_title = "Room Filters Glossary"
+    @glossary_categories = @all_characteristics_array
+    @category_letters = @glossary_categories.keys.map { |category| category[0] }.uniq.sort
   end
 end

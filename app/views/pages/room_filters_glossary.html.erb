@@ -1,44 +1,33 @@
 <div class="container px-1 mb-20">
   <h1>Room Filters Glossary</h1>
-  <div class="flex-auto justify-center py-2 ml-4">
-    <% for char in 'A' ... 'Z' do %>
+  <p class="text-sm text-gray-700 mb-2">
+  Filter names and definitions match the categories used on the <%= link_to "classrooms page", rooms_path, class: "text-blue-800 hover:underline" %>.
+  </p>
+
+  <nav aria-label="Alphabetical index" class="flex flex-wrap py-2">
+    <% ("A".."Z").each do |char| %>
       <% if @category_letters.include?(char) %>
-        <span class="p-2 text-sm text-black hover:underline">
-          <a aria-label='link to #<%= "#{char}" %> heading' aria-describedby='Letter_<%= "#{char}" %>' href='room_filters_glossary#<%= "#{char}" %>'>
-          <span id='Letter_<%= "#{char}" %>'><%= "#{char}" %></span></a> 
-        </span>
+        <% first_category = @glossary_categories.keys.find { |category| category[0] == char } %>
+        <%= link_to char,
+          room_filters_glossary_path(anchor: glossary_category_anchor(first_category)),
+          class: "p-2 text-sm text-black hover:underline" %>
       <% else %>
-        <span class="p-2 text-sm text-gray-400"><%= "#{char}" %></span>
+        <span class="p-2 text-sm text-gray-400"><%= char %></span>
       <% end %>
-    <% end  %>
-  </div>
-  <div>
-    <% prev_cat = "" %> 
-    <% @all_characteristics_array.sort.each do |category, list| %>
-      <% cat = category[0] %>
-      <% if cat != prev_cat %>
-        <div class="mb-2" id="<%= cat %>">
-          <a href="<%= cat %>" style="display: none;"><%= cat %></a>
-          <% prev_cat = cat %>
-      <% else %>
-        <div class="mb-2">
-      <% end %>
-        <div class="flex items-center">
-          <div class="flex-1">
-            <h2><%= category %></h2>
-          </div>
-        </div>
-        <ul class="ml-4 text-base">
-          <% list.each do |filter, descr| %>
-            <li class="font-semibold ml-2">
-              <%= descr %>:
-              <div class="inline-block font-normal">
-                <%= @filters_hash[filter] %>
-              </div>
-            </li>
-          <% end %>
-        </ul>
-      </div>
     <% end %>
-  </div>
+  </nav>
+
+  <% @glossary_categories.each do |category, list| %>
+    <section id="<%= glossary_category_anchor(category) %>" class="mb-6 scroll-mt-4">
+      <h2 class="text-xl font-semibold border-b border-gray-200 pb-1 mb-3"><%= category %></h2>
+      <ul class="ml-4 text-base space-y-3">
+        <% list.each do |filter, label| %>
+          <li id="<%= glossary_filter_anchor(filter) %>" class="scroll-mt-4">
+            <span class="font-semibold"><%= label %>:</span>
+            <span class="font-normal"><%= room_characteristic_definitions[filter] %></span>
+          </li>
+        <% end %>
+      </ul>
+    </section>
+  <% end %>
 </div>

@@ -6,11 +6,21 @@
       </legend>
       <ul class="">
         <% list.each do |filter, descr| %>
+          <% definition = room_characteristic_definitions[filter] %>
           <li class="checkbox-filter">
             <%= check_box_tag "room_characteristics[]", "#{filter}", params[:room_characteristics].try(:include?, "#{filter}"), id: "#{filter.underscore}", class: "", data: { action: "input->autosubmit#checkboxSubmit" } %>
-            <label class="text-sm font-medium text-gray-700" for=<%= "#{filter.underscore}" %>>
+            <label class="text-sm font-medium text-gray-700" for="<%= filter.underscore %>"<% if definition.present? %> title="<%= definition %>"<% end %>>
               <%= descr %>
             </label>
+            <% if definition.present? && user_signed_in? %>
+              <%= link_to room_filters_glossary_path(anchor: glossary_filter_anchor(filter)),
+                class: "ml-1 text-xs text-blue-800 hover:underline align-top",
+                title: "View full definition",
+                data: { turbo_frame: "_top" },
+                aria: { label: "View definition for #{descr}" } do %>
+                ⓘ
+              <% end %>
+            <% end %>
           </li>
         <% end %>
       </ul>

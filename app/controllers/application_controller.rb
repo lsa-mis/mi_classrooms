@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
   before_action :set_membership
   after_action :verify_authorized, unless: :devise_controller?
 
+  helper_method :room_characteristic_definitions
+
   def delete_file_attachment
     @delete_file = ActiveStorage::Attachment.find(params[:id])
     authorize @delete_file
@@ -57,6 +59,25 @@ class ApplicationController < ActionController::Base
     else
       new_user_session_path
     end
+  end
+
+  def room_characteristic_definitions
+    @room_characteristic_definitions ||= Rails.cache.fetch(room_characteristic_definitions_cache_key, expires_in: 12.hours) do
+      RoomCharacteristic
+        .where.not(chrstc_descrshort: nil, chrstc_desc254: nil)
+        .pluck(:chrstc_descrshort, :chrstc_desc254)
+        .uniq
+        .to_h
+    end
+  end
+
+  def room_characteristic_definitions_cache_key
+    [
+      "v1",
+      "room_characteristic_definitions",
+      RoomCharacteristic.maximum(:updated_at),
+      RoomCharacteristic.count
+    ]
   end
 
   def set_characteristics_array

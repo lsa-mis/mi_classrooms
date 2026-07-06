@@ -1,6 +1,20 @@
-<li class="classroom-row-dropdown-feature" data-tippy-content="<%= characteristic.chrstc_desc254 %>">
+<li class="<%= local_assigns[:show_definition] ? "mb-3 flex items-start gap-1" : "classroom-row-dropdown-feature" %>"<% if characteristic.chrstc_desc254.present? %> title="<%= characteristic.chrstc_desc254 %>"<% end %>>
   <div class="flex-shrink-0">
     <div class="icon text-black"><%= svg("#{room_characteristic_icon(characteristic)}") %></div>
   </div>
-  <p class="ml-1 text-base truncate"><%= characteristic.characteristic_label %></p>
+  <div class="ml-1 min-w-0 <%= "flex-1" if local_assigns[:show_definition] %>">
+    <p class="<%= local_assigns[:show_definition] ? "text-base" : "text-base truncate" %>"><%= characteristic.characteristic_label %></p>
+    <% if local_assigns[:show_definition] && characteristic.chrstc_desc254.present? %>
+      <p class="text-sm text-gray-600 font-normal"><%= characteristic.chrstc_desc254 %></p>
+    <% end %>
+  </div>
+  <% if !local_assigns[:show_definition] && user_signed_in? && characteristic.chrstc_desc254.present? %>
+    <%= link_to room_filters_glossary_path(anchor: glossary_filter_anchor(characteristic.chrstc_descrshort)),
+      class: "flex-shrink-0 text-xs text-blue-800 hover:underline",
+      title: "View in glossary",
+      data: { turbo_frame: "_top" },
+      aria: { label: "View glossary definition for #{characteristic.characteristic_label}" } do %>
+      ⓘ
+    <% end %>
+  <% end %>
 </li>
