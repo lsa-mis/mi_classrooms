@@ -104,6 +104,14 @@ module ApplicationHelper
     end
   end
 
+  def glossary_category_anchor(category)
+    category.to_s.parameterize
+  end
+
+  def glossary_filter_anchor(filter)
+    filter.to_s.underscore
+  end
+
   def api_log_text
     if ApiUpdateLog.where("created_at >= ?", 24.hours.ago).last.result.present?
       ApiUpdateLog.where("created_at >= ?", 24.hours.ago).last.result

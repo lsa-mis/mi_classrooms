@@ -64,6 +64,8 @@ RSpec.describe "Pages", type: :request do
       get room_filters_glossary_path
 
       expect(response).to have_http_status(:ok)
+      expect(response.body).to include("Room Filters Glossary")
+      expect(response.body).to include("Projection display")
     end
   end
 end

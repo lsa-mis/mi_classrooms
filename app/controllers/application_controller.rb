@@ -7,11 +7,18 @@ class ApplicationController < ActionController::Base
   before_action :set_membership
   after_action :verify_authorized, unless: :devise_controller?
 
+  helper_method :room_characteristic_definitions
+
   def delete_file_attachment
     @delete_file = ActiveStorage::Attachment.find(params[:id])
     authorize @delete_file
+    record = @delete_file.record
     @delete_file.purge
+    redirect_to attachment_redirect_path(record), notice: "File removed."
+  rescue ActiveRecord::RecordNotFound
     redirect_back(fallback_location: rooms_path)
+  rescue ActionController::UrlGenerationError
+    redirect_back(fallback_location: rooms_path, notice: "File removed.")
   end
 
   def set_redirection_url
@@ -29,6 +36,19 @@ class ApplicationController < ActionController::Base
     redirect_to(request.referrer || root_path)
   end
 
+  def attachment_redirect_path(record)
+    polymorphic_path(record)
+  rescue NoMethodError, ActionController::UrlGenerationError
+    parent = attachment_redirect_parent(record)
+    return polymorphic_path([parent, record]) if parent
+
+    rooms_path
+  end
+
+  def attachment_redirect_parent(record)
+    record.building if record.respond_to?(:building) && record.building.present?
+  end
+
   def user_not_in_group
     flash[:alert] = "You are not authorized to perform this action."
     redirect_to about_path
@@ -41,6 +61,25 @@ class ApplicationController < ActionController::Base
     else
       new_user_session_path
     end
+  end
+
+  def room_characteristic_definitions
+    @room_characteristic_definitions ||= Rails.cache.fetch(room_characteristic_definitions_cache_key, expires_in: 12.hours) do
+      RoomCharacteristic
+        .where.not(chrstc_descrshort: nil, chrstc_desc254: nil)
+        .pluck(:chrstc_descrshort, :chrstc_desc254)
+        .uniq
+        .to_h
+    end
+  end
+
+  def room_characteristic_definitions_cache_key
+    [
+      "v1",
+      "room_characteristic_definitions",
+      RoomCharacteristic.maximum(:updated_at),
+      RoomCharacteristic.count
+    ]
   end
 
   def set_characteristics_array

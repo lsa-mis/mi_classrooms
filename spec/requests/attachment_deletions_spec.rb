@@ -61,8 +61,32 @@ RSpec.describe "Attachment deletions", type: :request do
     it "purges the attachment" do
       delete delete_file_path(attachment.id)
 
-      expect(response).to redirect_to(rooms_path)
+      expect(response).to redirect_to(room_path(room))
       expect(room.reload.room_image).not_to be_attached
+    end
+
+    it "purges a building image and redirects to the building page" do
+      building.building_image.attach(
+        io: StringIO.new("fake image"),
+        filename: "building.png",
+        content_type: "image/png"
+      )
+      building_attachment = building.building_image.attachment
+
+      delete delete_file_path(building_attachment.id)
+
+      expect(response).to redirect_to(building_path(building))
+      expect(building.reload.building_image).not_to be_attached
+    end
+
+    it "purges a floor plan and redirects to the nested floor page" do
+      floor = create(:floor, building_bldrecnbr: building.bldrecnbr)
+      floor_attachment = floor.floor_plan.attachment
+
+      delete delete_file_path(floor_attachment.id)
+
+      expect(response).to redirect_to(building_floor_path(building, floor))
+      expect(floor.reload.floor_plan).not_to be_attached
     end
   end
 end
