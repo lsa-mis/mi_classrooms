@@ -15,8 +15,10 @@ class ApplicationController < ActionController::Base
     record = @delete_file.record
     @delete_file.purge
     redirect_to attachment_redirect_path(record), notice: "File removed."
-  rescue NoMethodError, ActionController::UrlGenerationError
+  rescue ActiveRecord::RecordNotFound
     redirect_back(fallback_location: rooms_path)
+  rescue ActionController::UrlGenerationError
+    redirect_back(fallback_location: rooms_path, notice: "File removed.")
   end
 
   def set_redirection_url
@@ -38,9 +40,9 @@ class ApplicationController < ActionController::Base
     polymorphic_path(record)
   rescue NoMethodError, ActionController::UrlGenerationError
     parent = attachment_redirect_parent(record)
-    raise unless parent
+    return polymorphic_path([parent, record]) if parent
 
-    polymorphic_path([parent, record])
+    rooms_path
   end
 
   def attachment_redirect_parent(record)
