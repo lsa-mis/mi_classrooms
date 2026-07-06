@@ -10,7 +10,10 @@ class ApplicationController < ActionController::Base
   def delete_file_attachment
     @delete_file = ActiveStorage::Attachment.find(params[:id])
     authorize @delete_file
+    record = @delete_file.record
     @delete_file.purge
+    redirect_to attachment_redirect_path(record), notice: "File removed."
+  rescue NoMethodError, ActionController::UrlGenerationError
     redirect_back(fallback_location: rooms_path)
   end
 
@@ -27,6 +30,19 @@ class ApplicationController < ActionController::Base
   def user_not_authorized
     flash[:alert] = "Please sign in to perform this action."
     redirect_to(request.referrer || root_path)
+  end
+
+  def attachment_redirect_path(record)
+    polymorphic_path(record)
+  rescue NoMethodError, ActionController::UrlGenerationError
+    parent = attachment_redirect_parent(record)
+    raise unless parent
+
+    polymorphic_path([parent, record])
+  end
+
+  def attachment_redirect_parent(record)
+    record.building if record.respond_to?(:building) && record.building.present?
   end
 
   def user_not_in_group

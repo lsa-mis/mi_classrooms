@@ -63,16 +63,20 @@
               <div>
                 Upload or update a building image <br> <span class="text-xs text-gray-700" >NOTE: PNG, JPG or PDF and less than 10 MB</span>
               </div>
-              <%= form_for @building, html: { class: "sm:flex sm:items-center" }, data: { turbo: "false" } do |f| %>
-                <div class="field">
-                  <%= f.label :building_image, class: "sr-only" %>
-                  <%= f.file_field :building_image, class: "shadow- focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-sm" %>
-                </div>
-                <div class="actions">
-                  <%= f.submit 'Save', class: "my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black/5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
-                  <%= link_to 'Remove', delete_file_path(@building.building_image.id), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400/30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400"  if @building.building_image.attached? %>
-                </div>
-              <% end %>
+              <div class="sm:flex sm:items-center flex-wrap gap-y-2">
+                <%= form_for @building, html: { class: "sm:flex sm:items-center" }, data: { turbo: "false" } do |f| %>
+                  <div class="field">
+                    <%= f.label :building_image, class: "sr-only" %>
+                    <%= f.file_field :building_image, class: "shadow- focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-sm" %>
+                  </div>
+                  <div class="actions">
+                    <%= f.submit 'Save', class: "my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-black/5 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-gray-400" %>
+                  </div>
+                <% end %>
+                <% if @building.building_image.attached? %>
+                  <%= button_to 'Remove', delete_file_path(@building.building_image.id), method: :delete, data: { turbo_confirm: "Are you sure?", turbo_frame: "_top" }, form: { class: "inline" }, class: "ml-2 my-2 px-2 rounded-md shadow-sm bg-gray-100 text-sm text-black text-center ring-1 ring-red-400/30 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 hover:bg-gray-400" %>
+                <% end %>
+              </div>
               <hr>
               <div>
                 Update a building nickname
