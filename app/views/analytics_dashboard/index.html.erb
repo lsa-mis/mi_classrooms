@@ -13,7 +13,7 @@
 </p>
 
 <div class="flex flex-wrap items-center gap-3 mb-8">
-  <%= form_with url: analytics_dashboard_path, method: :get, local: true, class: "flex items-center gap-2" do |f| %>
+  <%= form_with url: analytics_dashboard_path, method: :get, local: true, class: "flex items-center gap-2", data: { turbo: false } do |f| %>
     <label class="text-sm font-medium text-gray-700" for="range">Time range:</label>
     <%= f.select :range,
         options_for_select([["Last 24 hours", "24h"], ["Last 7 days", "7d"], ["Last 30 days", "30d"]], @range),
@@ -61,6 +61,7 @@
   <% else %>
     <div class="relative" style="height: 260px">
       <canvas data-controller="analytics-chart"
+              data-turbo-temporary
               data-analytics-chart-type-value="bar"
               data-analytics-chart-labels-value="<%= hourly_labels.to_json %>"
               data-analytics-chart-datasets-value="<%= [
@@ -80,6 +81,7 @@
   <% else %>
     <div class="relative" style="height: 260px">
       <canvas data-controller="analytics-chart"
+              data-turbo-temporary
               data-analytics-chart-type-value="line"
               data-analytics-chart-labels-value="<%= daily_labels.to_json %>"
               data-analytics-chart-datasets-value="<%= [

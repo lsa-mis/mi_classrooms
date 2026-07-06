@@ -37,6 +37,31 @@ RSpec.describe "Analytics Dashboard", type: :request do
         get analytics_dashboard_path, params: {range: "bogus"}
         expect(response).to have_http_status(:ok)
       end
+
+      it "scopes hourly chart data to the selected range" do
+        now = Time.current.beginning_of_hour
+        (0..240).step(24) do |hours_ago|
+          AnalyticsHourlyRollup.create!(
+            period_start: now - hours_ago.hours,
+            controller_name: "rooms",
+            action_name: "index",
+            total_views: 1,
+            unique_sessions: 1,
+            unique_users: 1,
+            authenticated_views: 0
+          )
+        end
+
+        get analytics_dashboard_path, params: {range: "24h"}
+        doc24 = Nokogiri::HTML(response.body)
+        labels24 = JSON.parse(doc24.at("[data-analytics-chart-labels-value]")["data-analytics-chart-labels-value"])
+
+        get analytics_dashboard_path, params: {range: "7d"}
+        doc7 = Nokogiri::HTML(response.body)
+        labels7 = JSON.parse(doc7.at("[data-analytics-chart-labels-value]")["data-analytics-chart-labels-value"])
+
+        expect(labels24.length).to be < labels7.length
+      end
     end
 
     context "as a non-admin user" do
