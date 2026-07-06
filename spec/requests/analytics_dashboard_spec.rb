@@ -62,6 +62,14 @@ RSpec.describe "Analytics Dashboard", type: :request do
 
         expect(labels24.length).to be < labels7.length
       end
+
+      it "reflects the selected range in the page and disables caching" do
+        get analytics_dashboard_path, params: {range: "24h"}
+
+        expect(response.body).to include("last 24 hours")
+        expect(response.body).to include('data-range="24h"')
+        expect(response.headers["Cache-Control"]).to include("no-store")
+      end
     end
 
     context "as a non-admin user" do
