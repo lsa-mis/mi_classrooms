@@ -54,11 +54,11 @@ RSpec.describe "Analytics Dashboard", type: :request do
 
         get analytics_dashboard_path, params: {range: "24h"}
         doc24 = Nokogiri::HTML(response.body)
-        labels24 = JSON.parse(doc24.at("[data-analytics-chart-labels-value]")["data-analytics-chart-labels-value"])
+        labels24 = JSON.parse(doc24.at("#hourly-chart-24h")["data-analytics-chart-labels-value"])
 
         get analytics_dashboard_path, params: {range: "7d"}
         doc7 = Nokogiri::HTML(response.body)
-        labels7 = JSON.parse(doc7.at("[data-analytics-chart-labels-value]")["data-analytics-chart-labels-value"])
+        labels7 = JSON.parse(doc7.at("#hourly-chart-7d")["data-analytics-chart-labels-value"])
 
         expect(labels24.length).to be < labels7.length
       end
