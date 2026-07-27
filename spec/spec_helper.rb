@@ -1,3 +1,7 @@
+# Bootsnap's ISeq compile cache cannot run while coverage is enabled (Ruby 4+).
+# .rspec requires this file before config/boot.rb loads bootsnap.
+ENV["DISABLE_BOOTSNAP_COMPILE_CACHE"] = "1"
+
 require "simplecov"
 
 SimpleCov.start "rails" do
