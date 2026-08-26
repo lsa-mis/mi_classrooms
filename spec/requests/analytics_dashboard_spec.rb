@@ -98,6 +98,73 @@ RSpec.describe "Analytics Dashboard", type: :request do
         expect(response).to redirect_to(new_user_session_path)
       end
     end
+
+    context "with live page view data and no rollups" do
+      before do
+        sign_in admin, scope: :user
+        stub_membership(admin: true)
+
+        create(:page_view, session_token: "aaaa" * 8, controller_name: "rooms", action_name: "index", occurred_at: 1.hour.ago)
+        create(:page_view, :authenticated, session_token: "bbbb" * 8, controller_name: "rooms", action_name: "index", occurred_at: 2.hours.ago)
+        create(:page_view, session_token: "cccc" * 8, controller_name: "buildings", action_name: "show", occurred_at: 3.hours.ago)
+      end
+
+      it "renders live summary stats and top pages without waiting for rollups" do
+        get analytics_dashboard_path, params: {range: "7d"}
+
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include("Total Views")
+        expect(response.body).to include("rooms#index")
+        expect(response.body).to include("buildings#show")
+        expect(response.body).to include("Refresh Charts")
+      end
+    end
+  end
+
+  describe "POST /analytics/refresh" do
+    context "as an admin" do
+      before do
+        sign_in admin, scope: :user
+        stub_membership(admin: true)
+        allow(AnalyticsRollupJob).to receive(:perform_now)
+      end
+
+      it "runs rollups for the selected range and redirects with a notice" do
+        post analytics_dashboard_refresh_path, params: {range: "24h"}
+
+        expect(AnalyticsRollupJob).to have_received(:perform_now).at_least(:once)
+        expect(response).to redirect_to(analytics_dashboard_path(range: "24h"))
+        follow_redirect!
+        expect(response.body).to include("Charts refreshed")
+      end
+
+      it "defaults an unrecognized range to 7d when refreshing" do
+        post analytics_dashboard_refresh_path, params: {range: "bogus"}
+
+        expect(response).to redirect_to(analytics_dashboard_path(range: "7d"))
+      end
+    end
+
+    context "as a non-admin user" do
+      before do
+        sign_in viewer, scope: :user
+        stub_membership(admin: false)
+      end
+
+      it "does not allow refresh" do
+        post analytics_dashboard_refresh_path, params: {range: "7d"}
+
+        expect(response).to redirect_to(about_path)
+      end
+    end
+
+    context "when not signed in" do
+      it "redirects to sign in" do
+        post analytics_dashboard_refresh_path, params: {range: "7d"}
+
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
   end
 
   private
