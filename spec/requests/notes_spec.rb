@@ -111,6 +111,7 @@ RSpec.describe "Notes", type: :request do
       expect(response.body).to include('turbo-stream action="replace"')
       expect(response.body).to include("alert-danger")
       expect(response.body).to include("Body can&#39;t be blank")
+      expect(response.body).to include('name="note[body]"')
     end
 
     it "replaces the turbo note form with a blank form after a successful create" do
