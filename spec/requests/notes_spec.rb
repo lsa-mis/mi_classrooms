@@ -99,5 +99,32 @@ RSpec.describe "Notes", type: :request do
 
       expect(response).to redirect_to(room_path(room))
     end
+
+    it "re-renders the turbo note form with errors when body is blank" do
+      expect do
+        post room_notes_path(room),
+          params: {note: {body: "", alert: false}},
+          as: :turbo_stream
+      end.not_to change(Note, :count)
+
+      expect(response.media_type).to eq(Mime[:turbo_stream].to_s)
+      expect(response.body).to include('turbo-stream action="replace"')
+      expect(response.body).to include("alert-danger")
+      expect(response.body).to include("Body can&#39;t be blank")
+      expect(response.body).to include('name="note[body]"')
+    end
+
+    it "replaces the turbo note form with a blank form after a successful create" do
+      expect do
+        post room_notes_path(room),
+          params: {note: {body: "Turbo room note", alert: false}},
+          as: :turbo_stream
+      end.to change(Note, :count).by(1)
+
+      expect(response.media_type).to eq(Mime[:turbo_stream].to_s)
+      expect(response.body).to include('turbo-stream action="replace"')
+      expect(response.body).not_to include("alert-danger")
+      expect(Note.last.body.to_plain_text).to eq("Turbo room note")
+    end
   end
 end
