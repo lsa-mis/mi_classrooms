@@ -36,25 +36,37 @@ RSpec.describe AnalyticsHourlyRollup, type: :model do
         action_name: "index",
         total_views: 3
       )
+      described_class.create!(
+        period_start: 40.days.ago.beginning_of_hour,
+        controller_name: "rooms",
+        action_name: "index",
+        total_views: 1
+      )
     end
 
     it "returns rows within the 24h window" do
       result = described_class.for_range("24h")
       expect(result.map(&:total_views)).to include(10)
       expect(result.map(&:total_views)).not_to include(5)
-      expect(result.map(&:total_views)).not_to include(3)
+      expect(result.map(&:total_views)).not_to include(3, 1)
     end
 
     it "returns rows within the 7d window" do
       result = described_class.for_range("7d")
       expect(result.map(&:total_views)).to include(10, 5)
-      expect(result.map(&:total_views)).not_to include(3)
+      expect(result.map(&:total_views)).not_to include(3, 1)
+    end
+
+    it "returns rows within the 30d window" do
+      result = described_class.for_range("30d")
+      expect(result.map(&:total_views)).to include(10, 5, 3)
+      expect(result.map(&:total_views)).not_to include(1)
     end
 
     it "defaults unknown ranges to the 7d window" do
       result = described_class.for_range("bogus")
       expect(result.map(&:total_views)).to include(10, 5)
-      expect(result.map(&:total_views)).not_to include(3)
+      expect(result.map(&:total_views)).not_to include(3, 1)
     end
   end
 
@@ -107,13 +119,25 @@ RSpec.describe AnalyticsHourlyRollup, type: :model do
         unique_users: 60,
         authenticated_views: 90
       )
+      described_class.create!(
+        period_start: 2.hours.ago.beginning_of_hour,
+        controller_name: "buildings",
+        action_name: "show",
+        total_views: 20,
+        unique_sessions: 10,
+        unique_users: 5,
+        authenticated_views: 8
+      )
     end
 
-    it "sums across all rows" do
+    it "sums all four metrics across controller/action rows" do
       stats = described_class.all.summary_stats
-      expect(stats[:total_views]).to eq(100)
-      expect(stats[:unique_users]).to eq(60)
-      expect(stats[:authenticated_views]).to eq(90)
+      expect(stats).to eq(
+        total_views: 120,
+        unique_sessions: 90,
+        unique_users: 65,
+        authenticated_views: 98
+      )
     end
   end
 end
