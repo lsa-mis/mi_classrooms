@@ -62,6 +62,7 @@ group :development, :test do
   gem 'bullet'
   gem 'factory_bot_rails'
   gem 'pry'
+  gem 'rb-readline'
   gem 'rspec-rails', '~> 6.0'
   gem 'rubocop-performance'
   gem 'standard'
