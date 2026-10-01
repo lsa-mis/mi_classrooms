@@ -61,8 +61,7 @@ group :development, :test do
   gem 'brakeman', require: false
   gem 'bullet'
   gem 'factory_bot_rails'
-  gem 'pry'
-  gem 'rb-readline'
+  gem 'pry', '>= 0.16.0'
   gem 'rspec-rails', '~> 6.0'
   gem 'rubocop-performance'
   gem 'standard'
@@ -70,7 +69,7 @@ end
 
 group :development do
   gem 'letter_opener_web', '~> 2.0'
-  gem 'pry-rails'
+  gem 'pry-rails', '>= 0.3.11'
   gem 'web-console', '>= 4.1.0'
 end
 
