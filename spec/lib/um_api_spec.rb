@@ -1,25 +1,32 @@
 require "rails_helper"
 
 RSpec.describe UmApi::TokenStore do
+  def stub_token_store(token_store, connection:)
+    allow(UmApi::Connection).to receive(:new).and_return(connection)
+    allow(token_store).to receive(:credentials).and_return(
+      buildings_client_id: "client-id",
+      buildings_client_secret: "client-secret"
+    )
+  end
+
+  def successful_token_response(access_token:, expires_in: "3600")
+    {
+      "success" => true,
+      "error" => "",
+      "data" => {
+        "access_token" => access_token,
+        "expires_in" => expires_in
+      }
+    }
+  end
+
   describe "#fetch" do
     it "caches tokens by scope until they expire" do
       token_store = described_class.new
       connection = instance_double(UmApi::Connection)
-
-      allow(UmApi::Connection).to receive(:new).and_return(connection)
-      allow(token_store).to receive(:credentials).and_return(
-        buildings_client_id: "client-id",
-        buildings_client_secret: "client-secret"
-      )
+      stub_token_store(token_store, connection: connection)
       allow(connection).to receive(:post_form).and_return(
-        {
-          "success" => true,
-          "error" => "",
-          "data" => {
-            "access_token" => "buildings-token",
-            "expires_in" => "3600"
-          }
-        }
+        successful_token_response(access_token: "buildings-token")
       )
 
       first_result = token_store.fetch("buildings")
@@ -33,8 +40,84 @@ RSpec.describe UmApi::TokenStore do
       expect(second_result).to eq(first_result)
       expect(connection).to have_received(:post_form).once
     end
+
+    it "refreshes a cached token once it has expired" do
+      token_store = described_class.new
+      connection = instance_double(UmApi::Connection)
+      stub_token_store(token_store, connection: connection)
+      allow(connection).to receive(:post_form).and_return(
+        successful_token_response(access_token: "first-token", expires_in: "60"),
+        successful_token_response(access_token: "second-token")
+      )
+
+      first_result = token_store.fetch("buildings")
+      # expires_in of 60 becomes expires_at = now after the 60s buffer subtraction
+      expect(first_result["access_token"]).to eq("first-token")
+
+      second_result = token_store.fetch("buildings")
+
+      expect(second_result["access_token"]).to eq("second-token")
+      expect(connection).to have_received(:post_form).twice
+    end
+
+    it "returns a failure result when the token endpoint succeeds without an access_token" do
+      token_store = described_class.new
+      connection = instance_double(UmApi::Connection)
+      stub_token_store(token_store, connection: connection)
+      allow(connection).to receive(:post_form).and_return(
+        {
+          "success" => true,
+          "error" => "missing token",
+          "data" => {}
+        }
+      )
+
+      result = token_store.fetch("buildings")
+
+      expect(result).to eq(
+        "success" => false,
+        "error" => "missing token",
+        "access_token" => nil
+      )
+    end
+
+    it "returns a failure result when the token endpoint reports failure" do
+      token_store = described_class.new
+      connection = instance_double(UmApi::Connection)
+      stub_token_store(token_store, connection: connection)
+      allow(connection).to receive(:post_form).and_return(
+        {
+          "success" => false,
+          "error" => "invalid_client",
+          "data" => {}
+        }
+      )
+
+      result = token_store.fetch("buildings")
+
+      expect(result).to eq(
+        "success" => false,
+        "error" => "invalid_client",
+        "access_token" => nil
+      )
+    end
+
+    it "wraps unexpected exceptions as a failure result" do
+      token_store = described_class.new
+      connection = instance_double(UmApi::Connection)
+      stub_token_store(token_store, connection: connection)
+      allow(connection).to receive(:post_form).and_raise(SocketError.new("dns failed"))
+
+      result = token_store.fetch("buildings")
+
+      expect(result["success"]).to be(false)
+      expect(result["access_token"]).to be_nil
+      expect(result["error"]).to include("SocketError")
+      expect(result["error"]).to include("dns failed")
+    end
   end
 end
+
 
 RSpec.describe UmApi::Connection do
   describe "#paginated_get" do

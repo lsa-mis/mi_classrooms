@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Users::OmniauthCallbacks", type: :request do
-  def set_auth_hash(email:, uid: email, provider: "saml")
+  def set_auth_hash(email:, uid: email, provider: "saml", display_name: "Test User")
     OmniAuth.config.mock_auth[:saml] = OmniAuth::AuthHash.new(
       provider: provider,
       uid: uid,
@@ -9,11 +9,13 @@ RSpec.describe "Users::OmniauthCallbacks", type: :request do
         email: email,
         uid: uid,
         principal_name: email,
-        name: "Test User",
+        # Okta SAML maps the full name to display_name; auth.info.name is nil.
+        display_name: display_name,
         person_affiliation: "staff"
       }
     )
   end
+
 
   def stub_group_membership(admin:)
     allow(LdapLookup).to receive(:is_member_of_group?) do |uniqname, group|
@@ -37,7 +39,7 @@ RSpec.describe "Users::OmniauthCallbacks", type: :request do
     end
 
     it "creates a user session and membership data for admin users" do
-      set_auth_hash(email: "callbackuser@umich.edu")
+      set_auth_hash(email: "callbackuser@umich.edu", display_name: "Callback User")
       stub_group_membership(admin: true)
 
       post user_saml_omniauth_callback_path
@@ -46,7 +48,21 @@ RSpec.describe "Users::OmniauthCallbacks", type: :request do
       user = User.find_by(email: "callbackuser@umich.edu")
       expect(user).to be_present
       expect(user.uniqname).to eq("callbackuser")
+      expect(user.display_name).to eq("Callback User")
       expect(user.omni_auth_services.where(provider: "saml").exists?).to be(true)
+    end
+
+    it "does not persist a blank display_name when Okta leaves auth.info.name nil" do
+      set_auth_hash(email: "callbackuser@umich.edu", display_name: "Okta Display Name")
+      stub_group_membership(admin: true)
+      # Simulate Okta payload shape: name is absent/nil, display_name carries the value.
+      OmniAuth.config.mock_auth[:saml].info["name"] = nil
+
+      post user_saml_omniauth_callback_path
+
+      user = User.find_by!(email: "callbackuser@umich.edu")
+      expect(user.display_name).to eq("Okta Display Name")
+      expect(user.display_name).not_to be_blank
     end
 
     it "reuses and updates an existing omni auth service" do
