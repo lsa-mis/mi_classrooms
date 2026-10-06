@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe User, type: :model do
-  def auth_hash(email:, uid: "saml-uid-1", display_name: "Ada Lovelace", affiliation: "staff")
+  def auth_hash(email:, uid: "saml-uid-1", name: "Ada Lovelace", affiliation: "staff")
     OmniAuth::AuthHash.new(
       provider: "saml",
       uid: uid,
@@ -11,7 +11,7 @@ RSpec.describe User, type: :model do
         email: email,
         uid: uid,
         principal_name: email,
-        display_name: display_name,
+        name: name,
         person_affiliation: affiliation
       }
     )
@@ -20,7 +20,7 @@ RSpec.describe User, type: :model do
   describe ".user_attributes_from_auth" do
     it "maps SAML info fields onto user attributes and derives uniqname from email" do
       attrs = described_class.user_attributes_from_auth(
-        auth_hash(email: "alovelace@umich.edu", uid: "uid-42", display_name: "Ada Lovelace", affiliation: "faculty")
+        auth_hash(email: "alovelace@umich.edu", uid: "uid-42", name: "Ada Lovelace", affiliation: "faculty")
       )
 
       expect(attrs).to eq(
@@ -45,7 +45,7 @@ RSpec.describe User, type: :model do
   describe ".from_omniauth" do
     it "creates a persisted user with mapped attributes when none exists" do
       expect {
-        described_class.from_omniauth(auth_hash(email: "newuser@umich.edu", uid: "new-uid", display_name: "New User"))
+        described_class.from_omniauth(auth_hash(email: "newuser@umich.edu", uid: "new-uid", name: "New User"))
       }.to change(User, :count).by(1)
 
       user = User.find_by!(email: "newuser@umich.edu")
@@ -62,7 +62,7 @@ RSpec.describe User, type: :model do
 
       expect {
         user = described_class.from_omniauth(
-          auth_hash(email: "existing@umich.edu", uid: "other-uid", display_name: "Updated Name")
+          auth_hash(email: "existing@umich.edu", uid: "other-uid", name: "Updated Name")
         )
         expect(user.id).to eq(existing.id)
         expect(user.display_name).to eq("Original Name")

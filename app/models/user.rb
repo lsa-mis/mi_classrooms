@@ -52,7 +52,7 @@ class User < ApplicationRecord
       uniqname: auth.info.email.split("@").first,
       uid: auth.info.uid,
       principal_name: auth.info.principal_name,
-      display_name: auth.info.display_name,
+      display_name: auth.info.name,
       person_affiliation: auth.info.person_affiliation
     }
   end
