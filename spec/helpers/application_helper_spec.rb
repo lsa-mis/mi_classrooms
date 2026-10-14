@@ -48,9 +48,19 @@ RSpec.describe ApplicationHelper, type: :helper do
   describe '#api_log_text' do
     it 'returns the newest recent log result when present' do
       ApiUpdateLog.create!(
+        result: 'earlier result',
+        status: 'error',
+        created_at: 2.hours.ago
+      )
+      ApiUpdateLog.create!(
         result: 'Counts: updated=3',
         status: 'error',
         created_at: 1.hour.ago
+      )
+      ApiUpdateLog.create!(
+        result: 'stale result',
+        status: 'error',
+        created_at: 25.hours.ago
       )
 
       expect(helper.api_log_text).to eq('Counts: updated=3')
