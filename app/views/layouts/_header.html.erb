@@ -3,8 +3,8 @@
   <% if api_status == 'failed' %>
     <div class="flex flex-row bg-red-800 text-red-100 text-sm place-content-center py-1">
       The Classrooms Update Script failed to run today.
-      <%= link_to "View Summary", api_update_logs_path, class: "hover:underline px-1" %>
-      <a id="myCustomTrigger" class="hover:underline px-1" href="#" data-email="<%= session[:user_email]%>">Report an Issue</a>
+      <%= link_to "View Summary.", api_update_logs_path, class: "hover:underline px-1" %>
+      Use the Feedback button to report an issue.
     </div>
   <% elsif api_status == "error" %>
     <div id="options" data-controller="visibility">

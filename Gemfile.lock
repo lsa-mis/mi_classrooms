@@ -306,9 +306,10 @@ GEM
       prettyprint
     prettyprint (0.2.0)
     prism (1.9.0)
-    pry (0.15.2)
+    pry (0.16.0)
       coderay (~> 1.1)
       method_source (~> 1.0)
+      reline (>= 0.6.0)
     pry-rails (0.3.11)
       pry (>= 0.13.0)
     public_suffix (7.0.5)
@@ -501,8 +502,8 @@ GEM
     tailwindcss-rails (4.4.0)
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 4.0)
-    tailwindcss-ruby (4.1.18-arm64-darwin)
-    tailwindcss-ruby (4.1.18-x86_64-linux-gnu)
+    tailwindcss-ruby (4.3.3-arm64-darwin)
+    tailwindcss-ruby (4.3.3-x86_64-linux-gnu)
     thor (1.5.0)
     tilt (2.6.1)
     timeout (0.6.1)
@@ -573,8 +574,8 @@ DEPENDENCIES
   pagy (~> 6.0)
   pg (>= 0.18, < 2.0)
   pg_search
-  pry
-  pry-rails
+  pry (>= 0.16.0)
+  pry-rails (>= 0.3.11)
   puma (~> 7.2)
   pundit (~> 2.3)
   rails (~> 8.1.3)
