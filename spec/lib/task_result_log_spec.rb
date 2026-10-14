@@ -53,13 +53,14 @@ RSpec.describe TaskResultLog do
       api_log = instance_double(ApiLog)
       logger = instance_double(Logger)
       invalid_record = ApiUpdateLog.new(result: "x", status: "success")
+      invalid_record.errors.add(:base, "result is invalid")
 
       allow(ApiLog).to receive(:new).and_return(api_log)
       allow(api_log).to receive(:api_logger).and_return(logger)
       allow(ApiUpdateLog).to receive(:new).and_return(invalid_record)
       allow(invalid_record).to receive(:save).and_return(false)
       expect(logger).to receive(:debug).with(
-        "api_update_log, error: Could not save: record.errors.full_messages"
+        "api_update_log, error: Could not save: result is invalid"
       )
 
       expect {
