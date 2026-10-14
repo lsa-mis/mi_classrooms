@@ -78,13 +78,12 @@
             </div>
             <div class="text-sm font-medium highlight hover:underline">
               <% unless room.room_support_phone == "Not Available" && room.room_support_email == "Not Available" %>
-                <div data-controller="modal" data-modal-allow-background-close="true" >
-                  <a href="#" data-action="click->modal#open" class="h-highlight-item">
+                <div data-controller="modal">
+                  <button type="button" data-action="click->modal#open" class="h-highlight-item cursor-pointer border-0 bg-transparent p-0">
                     <%= svg("message_question") %>
                     <span>Support</span>
-                  </a>
-                  <!-- Modal Container -->
-                  <%= render 'support_info', room: room %>
+                  </button>
+                  <%= render "support_info", room: room %>
                 </div>
               <% end %>
             </div>
