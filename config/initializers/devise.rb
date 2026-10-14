@@ -64,6 +64,7 @@ Devise.setup do |config|
     private_key: service_provider_private_key,
     certificate: service_provider_certificate,
     security: {want_assertions_signed: true, want_assertions_encrypted: true},
+    allowed_clock_drift: 10,
     attribute_statements: {
       email: ['email', 'mail', 'User.Email'],
       first_name: ['first_name', 'givenName', 'User.FirstName'],
