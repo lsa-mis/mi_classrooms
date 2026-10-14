@@ -35,8 +35,9 @@ class TaskResultLog
     end
     record = ApiUpdateLog.new(result: result, status: status)
     unless record.save
-      # write it to the log
-      @log.api_logger.debug "api_update_log, error: Could not save: record.errors.full_messages"
+      @log.api_logger.debug(
+        "api_update_log, error: Could not save: #{record.errors.full_messages.join(', ')}"
+      )
     end
   end
 end
