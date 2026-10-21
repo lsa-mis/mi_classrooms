@@ -66,12 +66,13 @@ RSpec.describe ClassroomApi do
       api.instance_variable_set(:@rooms_in_db, [room.rmrecnbr, 9_999_999])
 
       expect(api.send(:deactivate_stale_rooms, "add_facility_id_to_classrooms")).to be(false)
+      expect(room.reload.visible).to be(true)
       expect(Room.exists?(room.rmrecnbr)).to be(true)
       expect(RoomContact.exists?(contact.id)).to be(true)
       expect(RoomCharacteristic.exists?(characteristic.id)).to be(true)
     end
 
-    it "fails closed when a listed classroom is already hidden" do
+    it "counts an already hidden classroom as deactivated" do
       building = create(:building, bldrecnbr: 5_000_205)
       room = create(
         :room,
@@ -83,7 +84,47 @@ RSpec.describe ClassroomApi do
       api = described_class.new
       api.instance_variable_set(:@rooms_in_db, [room.rmrecnbr])
 
-      expect(api.send(:deactivate_stale_rooms, "add_facility_id_to_classrooms")).to be(false)
+      expect(api.send(:deactivate_stale_rooms, "add_facility_id_to_classrooms")).to eq(0)
+      expect(room.reload.visible).to be(false)
+    end
+
+    it "hides the visible classrooms when some listed classrooms are already hidden" do
+      building = create(:building, bldrecnbr: 5_000_206)
+      hidden_room = create(
+        :room,
+        building_bldrecnbr: building.bldrecnbr,
+        rmrecnbr: 1_400_206,
+        rmtyp_description: "Classroom",
+        visible: false
+      )
+      visible_room = create(
+        :room,
+        building_bldrecnbr: building.bldrecnbr,
+        rmrecnbr: 1_400_207,
+        rmtyp_description: "Classroom",
+        visible: true
+      )
+      api = described_class.new
+      api.instance_variable_set(:@rooms_in_db, [hidden_room.rmrecnbr, visible_room.rmrecnbr])
+
+      expect(api.send(:deactivate_stale_rooms, "add_facility_id_to_classrooms")).to eq(1)
+      expect(hidden_room.reload.visible).to be(false)
+      expect(visible_room.reload.visible).to be(false)
+    end
+
+    it "hides a classroom whose visibility is unset" do
+      building = create(:building, bldrecnbr: 5_000_208)
+      room = create(
+        :room,
+        building_bldrecnbr: building.bldrecnbr,
+        rmrecnbr: 1_400_208,
+        rmtyp_description: "Classroom",
+        visible: nil
+      )
+      api = described_class.new
+      api.instance_variable_set(:@rooms_in_db, [room.rmrecnbr])
+
+      expect(api.send(:deactivate_stale_rooms, "add_facility_id_to_classrooms")).to eq(1)
       expect(room.reload.visible).to be(false)
     end
   end
