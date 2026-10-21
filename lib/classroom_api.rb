@@ -365,18 +365,20 @@ class ClassroomApi
   def deactivate_stale_rooms(context)
     room_ids = @rooms_in_db.uniq
     expected_count = room_ids.count
+    already_hidden_count = 0
     deactivated_count = 0
 
     ActiveRecord::Base.transaction do
-      deactivated_count = Room.where(rmrecnbr: room_ids).where.not(visible: false).update_all(visible: false)
+      already_hidden_count = Room.where(rmrecnbr: room_ids, visible: false).count
+      deactivated_count = Room.where(rmrecnbr: room_ids, visible: [true, nil]).update_all(visible: false)
 
-      if deactivated_count != expected_count
-        @log.api_logger.debug "#{context}, error: expected to deactivate #{expected_count} room(s), deactivated #{deactivated_count}"
+      if already_hidden_count + deactivated_count != expected_count
+        @log.api_logger.debug "#{context}, error: expected to deactivate #{expected_count} room(s), deactivated #{deactivated_count}, already hidden #{already_hidden_count}"
         raise ActiveRecord::Rollback
       end
     end
 
-    (deactivated_count == expected_count) ? deactivated_count : false
+    (already_hidden_count + deactivated_count == expected_count) ? deactivated_count : false
   end
 
   def start_result(phase)
