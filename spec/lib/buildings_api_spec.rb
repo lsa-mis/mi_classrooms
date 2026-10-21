@@ -110,6 +110,25 @@ RSpec.describe BuildingsApi do
       expect(visible_room.reload.visible).to be(false)
     end
 
+    it "locks the listed rooms before counting hidden rooms" do
+      building = create(:building, bldrecnbr: 5_000_308)
+      room = create(:room, building_bldrecnbr: building.bldrecnbr, rmrecnbr: 1_500_308, visible: true)
+      api = described_class.new
+      api.instance_variable_set(:@rooms_in_db, [room.rmrecnbr])
+      queries = []
+      callback = lambda do |_name, _start, _finish, _id, payload|
+        queries << payload[:sql]
+      end
+
+      ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
+        api.send(:deactivate_stale_rooms, "update_rooms")
+      end
+
+      lock_index = queries.index { |sql| sql.include?("FOR UPDATE") }
+      update_index = queries.index { |sql| sql.match?(/UPDATE "rooms"/) }
+      expect(lock_index).to be < update_index
+    end
+
     it "hides a room whose visibility is unset" do
       building = create(:building, bldrecnbr: 5_000_307)
       room = create(:room, building_bldrecnbr: building.bldrecnbr, rmrecnbr: 1_500_307, visible: nil)

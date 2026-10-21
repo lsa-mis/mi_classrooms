@@ -369,6 +369,7 @@ class ClassroomApi
     deactivated_count = 0
 
     ActiveRecord::Base.transaction do
+      Room.where(rmrecnbr: room_ids).order(:rmrecnbr).lock.pluck(:rmrecnbr)
       already_hidden_count = Room.where(rmrecnbr: room_ids, visible: false).count
       deactivated_count = Room.where(rmrecnbr: room_ids, visible: [true, nil]).update_all(visible: false)
 

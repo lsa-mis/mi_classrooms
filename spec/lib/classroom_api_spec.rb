@@ -112,6 +112,31 @@ RSpec.describe ClassroomApi do
       expect(visible_room.reload.visible).to be(false)
     end
 
+    it "locks the listed classrooms before counting hidden classrooms" do
+      building = create(:building, bldrecnbr: 5_000_209)
+      room = create(
+        :room,
+        building_bldrecnbr: building.bldrecnbr,
+        rmrecnbr: 1_400_209,
+        rmtyp_description: "Classroom",
+        visible: true
+      )
+      api = described_class.new
+      api.instance_variable_set(:@rooms_in_db, [room.rmrecnbr])
+      queries = []
+      callback = lambda do |_name, _start, _finish, _id, payload|
+        queries << payload[:sql]
+      end
+
+      ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
+        api.send(:deactivate_stale_rooms, "add_facility_id_to_classrooms")
+      end
+
+      lock_index = queries.index { |sql| sql.include?("FOR UPDATE") }
+      update_index = queries.index { |sql| sql.match?(/UPDATE "rooms"/) }
+      expect(lock_index).to be < update_index
+    end
+
     it "hides a classroom whose visibility is unset" do
       building = create(:building, bldrecnbr: 5_000_208)
       room = create(
