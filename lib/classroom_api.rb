@@ -173,6 +173,9 @@ class ClassroomApi
         elsif result["success"]
           characteristics = result["data"]["Classroom"]
           if characteristics.present?
+            # The feed can repeat the same Chrstc for one room. The unique
+            # index is (chrstc, rmrecnbr), so a second insert aborts this phase.
+            characteristics = unique_characteristics(characteristics)
             if RoomCharacteristic.where(rmrecnbr: rmrecnbr).present?
               db_chrstc_list = RoomCharacteristic.where(rmrecnbr: rmrecnbr).pluck(:chrstc)
               characteristics.each do |c|
@@ -181,7 +184,7 @@ class ClassroomApi
                   db_chrstc_list.delete(c["Chrstc"].to_i)
                   increment(:updated)
                 else
-                  add_classroom_characteristic(c)
+                  add_classroom_characteristic(c, rmrecnbr)
                 end
                 return finish_result if @debug
               end
@@ -190,7 +193,7 @@ class ClassroomApi
                 increment(:deleted, RoomCharacteristic.where(rmrecnbr: rmrecnbr).where(chrstc: c).delete_all)
               end
             else
-              create_classroom_characteristics(characteristics)
+              create_classroom_characteristics(characteristics, rmrecnbr)
             end
           else
             add_warning("update_all_classroom_characteristics, no characteristics for facility_id: #{facility_id}")
@@ -215,29 +218,28 @@ class ClassroomApi
     finish_result
   end
 
-  def add_classroom_characteristic(row)
-    chrstc_descrshort = row["ChrstcDescrShort"].gsub(/[^0-9A-Za-z]/, "")
-    room_char = RoomCharacteristic.new(rmrecnbr: row["RmRecNbr"], chrstc_desc254: row["ChrstcDescr254"],
-      chrstc_descr: row["ChrstcDescr"], chrstc_descrshort: chrstc_descrshort, chrstc: row["Chrstc"])
+  def add_classroom_characteristic(row, rmrecnbr = nil)
+    rmrecnbr = (rmrecnbr || row["RmRecNbr"]).to_i
+    chrstc = row["Chrstc"].to_i
+    room_char = RoomCharacteristic.find_or_initialize_by(rmrecnbr: rmrecnbr, chrstc: chrstc)
+    new_record = room_char.new_record?
+    room_char.assign_attributes(
+      chrstc_desc254: row["ChrstcDescr254"],
+      chrstc_descr: row["ChrstcDescr"],
+      chrstc_descrshort: characteristic_short_code(row["ChrstcDescrShort"])
+    )
     if room_char.save
-      increment(:created)
+      increment(new_record ? :created : :updated)
     else
-      add_error("update_all_classroom_characteristics, error: Could not add #{row["RmRecNbr"]} because : #{room_char.errors.messages}")
-      @debug
+      verb = new_record ? "create" : "add"
+      add_error("update_all_classroom_characteristics, error: Could not #{verb} #{rmrecnbr} because : #{room_char.errors.messages}")
     end
   end
 
-  def create_classroom_characteristics(characteristics)
-    characteristics.each do |row|
-      chrstc_descrshort = row["ChrstcDescrShort"].gsub(/[^0-9A-Za-z]/, "")
-      room_char = RoomCharacteristic.new(rmrecnbr: row["RmRecNbr"], chrstc_desc254: row["ChrstcDescr254"],
-        chrstc_descr: row["ChrstcDescr"], chrstc_descrshort: chrstc_descrshort, chrstc: row["Chrstc"])
-      if room_char.save
-        increment(:created)
-      else
-        add_error("update_all_classroom_characteristics, error: Could not create #{row["RmRecNbr"]} because : #{room_char.errors.messages}")
-        return @debug
-      end
+  def create_classroom_characteristics(characteristics, rmrecnbr = nil)
+    unique_characteristics(characteristics).each do |row|
+      add_classroom_characteristic(row, rmrecnbr || row["RmRecNbr"])
+      break if @debug
     end
   end
 
@@ -356,6 +358,21 @@ class ClassroomApi
 
   def success_result(data)
     {"success" => true, "errorcode" => "", "error" => "", "data" => data}
+  end
+
+  def unique_characteristics(characteristics)
+    seen = {}
+    characteristics.each_with_object([]) do |row, rows|
+      chrstc_id = row["Chrstc"].to_i
+      next if seen[chrstc_id]
+
+      seen[chrstc_id] = true
+      rows << row
+    end
+  end
+
+  def characteristic_short_code(value)
+    value.to_s.gsub(/[^0-9A-Za-z]/, "")
   end
 
   def strip_headers(result)

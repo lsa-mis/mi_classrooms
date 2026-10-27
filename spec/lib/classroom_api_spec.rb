@@ -136,7 +136,91 @@ RSpec.describe ClassroomApi do
       update_index = queries.index { |sql| sql.match?(/UPDATE "rooms"/) }
       expect(lock_index).to be < update_index
     end
+  end
 
+  describe "#update_all_classroom_characteristics" do
+    def characteristic_row(rmrecnbr, chrstc, short_code: "ProjDigit")
+      {
+        "RmRecNbr" => rmrecnbr.to_s,
+        "Chrstc" => chrstc.to_s,
+        "ChrstcDescr254" => "Digital projector",
+        "ChrstcDescr" => "Projection:Digital",
+        "ChrstcDescrShort" => short_code
+      }
+    end
+
+    def stub_characteristics(api, payloads)
+      allow(api).to receive(:get_classroom_characteristics) do |facility_id|
+        {
+          "success" => true,
+          "errorcode" => "",
+          "error" => "",
+          "data" => {"Classroom" => payloads.fetch(facility_id)}
+        }
+      end
+    end
+
+    it "stores one characteristic when the API repeats the same chrstc" do
+      building = create(:building, bldrecnbr: 5_000_510)
+      room = create(
+        :room,
+        building_bldrecnbr: building.bldrecnbr,
+        rmrecnbr: 2_324_309,
+        rmtyp_description: "Classroom",
+        facility_code_heprod: "LAW2170"
+      )
+      api = described_class.new
+      stub_characteristics(
+        api,
+        "LAW2170" => [
+          characteristic_row(room.rmrecnbr, 42),
+          characteristic_row(room.rmrecnbr, 42)
+        ]
+      )
+
+      expect(api.update_all_classroom_characteristics).to be(false)
+      expect(api.last_result).to be_success
+      expect(api.last_result.errors).to be_empty
+      expect(RoomCharacteristic.where(rmrecnbr: room.rmrecnbr, chrstc: 42).count).to eq(1)
+      expect(api.last_result.counters[:created]).to eq(1)
+    end
+
+    it "keeps syncing later rooms when a repeated characteristic is already stored" do
+      building = create(:building, bldrecnbr: 5_000_511)
+      room = create(
+        :room,
+        building_bldrecnbr: building.bldrecnbr,
+        rmrecnbr: 2_324_310,
+        rmtyp_description: "Classroom",
+        facility_code_heprod: "LAW2171"
+      )
+      other = create(
+        :room,
+        building_bldrecnbr: building.bldrecnbr,
+        rmrecnbr: 2_324_311,
+        rmtyp_description: "Classroom",
+        facility_code_heprod: "LAW2172"
+      )
+      create(:room_characteristic, rmrecnbr: room.rmrecnbr, chrstc: 42, chrstc_descrshort: "ProjDigit")
+      create(:room_characteristic, rmrecnbr: room.rmrecnbr, chrstc: 99, chrstc_descrshort: "VCR")
+      api = described_class.new
+      stub_characteristics(
+        api,
+        "LAW2171" => [
+          characteristic_row(room.rmrecnbr, 42),
+          characteristic_row(room.rmrecnbr, "42")
+        ],
+        "LAW2172" => [characteristic_row(other.rmrecnbr, 7, short_code: nil)]
+      )
+
+      expect(api.update_all_classroom_characteristics).to be(false)
+      expect(api.last_result).to be_success
+      expect(RoomCharacteristic.where(rmrecnbr: room.rmrecnbr).pluck(:chrstc)).to contain_exactly(42)
+      expect(RoomCharacteristic.find_by(rmrecnbr: other.rmrecnbr, chrstc: 7).chrstc_descrshort).to eq("")
+    end
+  end
+
+  describe "#deactivate_stale_rooms" do
     it "hides a classroom whose visibility is unset" do
       building = create(:building, bldrecnbr: 5_000_208)
       room = create(
