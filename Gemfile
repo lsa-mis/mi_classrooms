@@ -7,7 +7,7 @@ ruby '4.0.9'
 
 # Framework
 gem 'bootsnap', '>= 1.4.3', require: false
-gem 'rails', '~> 8.1.3'
+gem 'rails', '~> 8.1.4.1'
 
 # Frontend / UI
 gem 'importmap-rails', '~> 2.2'
